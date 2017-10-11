@@ -1,3 +1,111 @@
 page-home {
 
+	div.scroll-content{
+		font-size: 11px;
+		.placeholder{
+			border: 1px dashed #333;
+		}
+
+		section{
+			display: block;
+			clear: both;
+			width: 100%;
+			margin: auto;
+			position: relative;
+			text-align: center;
+			*{
+				position: relative;
+				text-align: center;
+			}
+
+			&.client-logo{
+				padding:4vh 2vw 2vw;
+				&>#neutrogena-logo{
+					display: inline-block;
+					width: 100%;
+					height: 11vh;
+				}
+
+				&>p{
+					width: 100%;
+					display: block;
+					text-align: center;
+					margin:0.5vh auto;
+				}
+
+				&>#aura-logo{
+					display: inline-block;
+					width: 100%;
+					height: 8vh;
+				}
+			}
+
+			&#guide-scan-container{
+
+				&>span{
+					display: inline-block;
+					width: 100%;
+					&.guide-images{
+
+						&>div{
+							display: inline-block;
+							height: 28vw;
+							width: 28vw;
+							margin:0 7vw;
+						}
+
+					}
+
+					&.guide-text-instructions{
+						padding:2rem 0;
+						color:rgb(238,107,30);
+						&>p{
+							margin:0 auto;
+							font-size: 14px;
+						}
+					}
+
+				}
+
+			}
+
+			&#scan-button-container{
+				text-align: center;
+				display: inline-block;
+				width: 100%;
+				margin-bottom: 2.5vh;
+				&>#scan-button{
+					width: 30.5vw;
+					height: 30.5vw;
+					display: inline-table;
+					clear: both;
+					vertical-align: middle;
+					padding:12vw 0;
+					border-radius:100%;
+				}
+
+			}
+
+			&#footer{
+				color:rgb(102,26,114);
+				&>.footer-links{
+					width: 100%;
+					display: inline-block;
+
+					&>a{
+						color:rgb(102,26,114);
+						display: inline-block;
+						margin: 1vw 2vw;
+					}
+				}
+
+				&>.disclaimer{
+					font-size: 10px;
+					padding:0 5vw;
+				}
+			}
+
+		} //end of section tags
+
+	}
 }
