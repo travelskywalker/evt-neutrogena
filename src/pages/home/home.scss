@@ -1,3 +1,182 @@
 page-home {
+	.section{
+	    width: 100vw;
+	    height: 100vh;
 
+	    .logo{
+	    	width: 100%;
+	    }
+	    .content-top{
+    	    margin: 0 auto;
+			padding: 0px 49px;
+			text-align: center;
+	    }
+
+	    p{
+			font-family: BrandonGrotesque;
+			font-size: 20px;
+			font-weight: 500;
+			line-height: 1;
+			letter-spacing: -0.7px;
+			color: #ffffff;
+	    }
+
+	    &.home{
+	    	background: url("/assets/images/background-01.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+
+	    	.content{
+		    	width:100%;
+		    	height:100%;
+		    	background-size: 100% 100% !important;
+    			background-position: center;
+				background: url("/assets/images/01-overlay.png");
+			}
+
+			.content-bottom{
+				p{
+					font-family: BrandonGrotesque;
+					font-size: 12px;
+					font-weight: 500;
+					line-height: 1.67;
+					letter-spacing: -0.2px;
+					text-align: center;
+					color: #ffffff;
+				}
+			}
+
+			.carousel {
+				border: 1px dashed;
+				height: 22vh;
+
+				.carousel-content{
+					height: 100%;
+					div {
+					    border: 1px dashed;
+					    height: 100%;
+					    display: inline-flex;
+					    width: 19%;
+					}
+				} 
+			}
+
+			.scroll-prompt {
+				color: #ffffff;
+				text-transform: uppercase;
+				font-family: BrandonGrotesque;
+				font-size: 10px;
+				font-weight: bold;
+				letter-spacing: 1.3px;
+				text-align: center;
+				bottom: 0;
+				position: absolute;
+				margin: 0 auto;
+				width: 100%;
+				padding-bottom: 2vh;
+
+				ion-icon{
+					margin-top: 12px;
+					border: 1px solid;
+				    width: 20px;
+				    height: 20px;
+				    border-radius: 20px;
+				    font-size: 16px;
+  					padding: 1px 0px 0px 1px;
+				}
+			}   
+	    }
+
+	    &.second{
+	    	background: url("/assets/images/background-02.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+
+	    	.content{
+	    		width: 100%;
+			    height: 100%;
+			    background-position: 51% 119% !important;
+			    background-size: 185vh !important;
+			    background-repeat: no-repeat !important;
+				background: url("/assets/images/02-l-overlay.png");
+
+				.content-container {
+				    height: 100vh;
+				    margin-top: 15vh;
+				    padding: 8vw;
+				    text-align: left;
+
+				    .content-title{
+						font-family: BrandonGrotesque;
+						font-size: 60px;
+						font-weight: 900;
+						line-height: 0.83;
+						letter-spacing: -2.1px;
+						text-align: left;
+						color: #ffffff;
+						text-transform: uppercase;
+				    }
+				}
+	    	}
+	    }
+
+	    &.third{
+	    	background: url("/assets/images/background-03.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+    		
+	    	.content{
+	    		width: 100%;
+			    height: 100%;
+			    background-position: 37% 133% !important;
+    			background-size: 188vh !important;
+			    background-repeat: no-repeat !important;
+				background: url("/assets/images/03-a-overlay.png");
+	    	}
+	    }
+
+	    &.fourth{
+	    	background: url("/assets/images/background-04.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+    		
+	    	.content{
+	    		width: 100%;
+			    height: 100%;
+			    background-position: 46% -1% !important;
+    			background-size: 181vh !important;
+			    background-repeat: no-repeat !important;
+				background: url("/assets/images/04-v-overlay.png");
+	    	}
+	    }
+	    &.fifth{
+	    	background: url("/assets/images/background-05.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+    		
+	    	.content{
+	    		width: 100%;
+			    height: 100%;
+			    background-position: 64% 18% !important;
+    			background-size: 129vh !important;
+			    background-repeat: no-repeat !important;
+				background: url("/assets/images/05-v-overlay.png");
+	    	}
+	    }
+
+	    &.sixth{
+	    	background: url("/assets/images/background-06.jpg");
+	    	background-size: 100% 100% !important;
+    		background-position: center;
+    		
+	    	.content{
+	    		width: 100%;
+			    height: 100%;
+			    background-position: 38% 40% !important;
+    			background-size: 188vh !important;
+			    background-repeat: no-repeat !important;
+				background: url("/assets/images/06-a-overlay.png");
+	    	}
+	    }
+	}
 }
