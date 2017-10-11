@@ -11,13 +11,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { EvtProvider } from '../providers/evt/evt';
 import { AppProvider } from '../providers/app/app';
 
+import {ComponentsModule} from '../components/components.module';
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
   ],
   imports: [
+    ComponentsModule,
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp,{}, {

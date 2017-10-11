@@ -1,0 +1,42 @@
+component-logo{
+  .toolbar-background, .toolbar-background-ios {
+    background: none;
+    border: none;
+  }
+
+  .toolbar, .toolbar-ios {
+    min-height: 60px !important;
+    padding: 10px !important;
+    background: none;
+  }
+
+  .toolbar-background{
+    border: none !important;
+  }
+
+  .left {
+    float: left;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    color: #ffffff;
+
+    ion-icon {
+        font-size: 2rem;
+
+        span {
+          font-family: BrandonGrotesque;
+          font-size: 10px;
+          text-transform: uppercase;
+          margin-left: 8px;
+          vertical-align: middle;
+        }
+    }
+  }
+
+  .right {
+    float: right;
+    height: 100%;
+    padding: 8px 10px;
+  }
+}
