@@ -16,6 +16,7 @@ page-home {
 			*{
 				position: relative;
 				text-align: center;
+				font-family: HelveticaNeue-Light;
 			}
 
 			&.client-logo{
@@ -23,7 +24,21 @@ page-home {
 				&>#neutrogena-logo{
 					display: inline-block;
 					width: 100%;
-					height: 11vh;
+					height: 50px;
+					width: 237px;
+				}
+
+				ion-img{
+					background:transparent;
+					position: relative;
+					max-width: 100%;
+					&>img{
+						position: relative;
+						object-fit: fill;
+						object-position: center;
+						max-height: 100%;
+						margin: auto;
+					}
 				}
 
 				&>p{
@@ -31,12 +46,16 @@ page-home {
 					display: block;
 					text-align: center;
 					margin:0.5vh auto;
+					font-size: 10px;
 				}
 
 				&>#aura-logo{
 					display: inline-block;
-					width: 100%;
-					height: 8vh;
+					//width: 100%;
+					height: 46px;
+					width: 127px;
+					margin: auto;
+					display: block;
 				}
 			}
 
@@ -49,19 +68,22 @@ page-home {
 
 						&>div{
 							display: inline-block;
-							height: 28vw;
-							width: 28vw;
-							margin:0 7vw;
+							height: 103px;
+							width: 103px;
+							&:first-of-type{
+								margin:0 26px 0 0 ;	
+							}
 						}
 
 					}
 
 					&.guide-text-instructions{
-						padding:2rem 0;
+						padding:32px 0 0;
 						color:rgb(238,107,30);
 						&>p{
 							margin:0 auto;
 							font-size: 14px;
+							line-height: 17px;
 						}
 					}
 
@@ -73,35 +95,40 @@ page-home {
 				text-align: center;
 				display: inline-block;
 				width: 100%;
-				margin-bottom: 2.5vh;
 				&>#scan-button{
-					width: 30.5vw;
-					height: 30.5vw;
+					width: 127px;
+					height: 127px;
 					display: inline-table;
 					clear: both;
 					vertical-align: middle;
-					padding:12vw 0;
+					margin:18px 0 34px;
 					border-radius:100%;
+					background-image:url('../assets/images/scanbtn.png');
+					background-position:center;
+					background-size:cover;
+					background-color:transparent;
 				}
 
 			}
 
 			&#footer{
-				color:rgb(102,26,114);
+				color:rgb(113,27,125);
 				&>.footer-links{
 					width: 100%;
 					display: inline-block;
 
 					&>a{
-						color:rgb(102,26,114);
+						color:rgb(113,27,125);
 						display: inline-block;
-						margin: 1vw 2vw;
+						margin: 11px 11px 0 0;
+						font-size: 9.4px;
 					}
 				}
 
 				&>.disclaimer{
-					font-size: 10px;
-					padding:0 5vw;
+					font-size: 9px;
+					line-height: 14px;
+					padding:0 20.5px;
 				}
 			}
 

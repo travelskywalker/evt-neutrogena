@@ -10,12 +10,16 @@
 <!-- No headers. We'll create
   a component for this instead -->
 
-<ion-content padding>
+<ion-content>
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
   <section id="client-logo" class="client-logo">
-    <span id="neutrogena-logo" class="placeholder" #neuLogo></span>
+    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
     <p>in partnership with </p>
-    <span id="aura-logo" class="placeholder" #auraLogo></span>
+    <!--<span id="aura-logo" class="placeholder" #auraLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>
   </section>
 
   <section id="guide-scan-container" class="">
@@ -23,9 +27,11 @@
     <span class="guide-images">
 
       <div id="qr-image" class="placeholder">
+        <img src="../assets/images/qrcode.png"/>
       </div>
 
       <div id="logo-image" class="placeholder">
+        <img src="../assets/images/activator.png"/>
       </div>
 
     </span>
@@ -42,14 +48,14 @@
 
   <section id="scan-button-container" #scanContainer>
     
-    <div id="scan-button" #scanButton class="placeholder">
-      Scan
-    </div>
+    <button ion-button id="scan-button" #scanButton>
+      
+    </button>
 
   </section>
 
 
-  <section id="footer" #footer class="placeholder">
+  <section id="footer" #footer>
     
     <nav id="footer-links" class="footer-links">
       <a *ngFor="let a of links" [href]="a?.href">{{a?.text}}
