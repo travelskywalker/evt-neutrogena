@@ -25515,8 +25515,61 @@ ion-navbar.toolbar {
 ion-menu div.menu-inner button[ion-button] {
   background-color: transparent;
   float: right;
-  color: #333;
+  color: rgba(0, 0, 0, 0.6);
   font-family: HelveticaNeue-Light;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: 0;
+  font-size: 21px;
+  padding: 0;
+  margin: 21px 21px 0 0;
+  height: auto;
+}
+
+notice {
+  z-index: 101;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  height: auto;
+}
+
+notice > section.body {
+  padding: 21px 35px 24px 28px;
+}
+
+notice > section.body span.title {
+  font-size: 16px;
+  display: block;
+  clear: both;
+  margin-bottom: 14px;
+}
+
+notice > section.body a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+notice > section.body button[ion-button] {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  height: auto;
+  position: absolute;
+  top: 13px;
+  right: 11px;
+  color: #fff;
+}
+
+notice > section.body button[ion-button] ion-icon {
+  font-size: 30px;
+  font-weight: bold;
+  width: auto;
 }
 
 side-menu ion-content > .scroll-content {
@@ -25602,7 +25655,7 @@ page-home div.scroll-content {
 }
 
 page-home div.scroll-content .placeholder {
-  border: 1px dashed #333;
+  border: 1px dashed rgba(0, 0, 0, 0.6);
 }
 
 page-home div.scroll-content section {
