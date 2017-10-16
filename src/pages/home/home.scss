@@ -111,27 +111,6 @@ page-home {
 
 			}
 
-			&#footer{
-				color:rgb(113,27,125);
-				&>.footer-links{
-					width: 100%;
-					display: inline-block;
-
-					&>a{
-						color:rgb(113,27,125);
-						display: inline-block;
-						margin: 11px 11px 0 0;
-						font-size: 9.4px;
-					}
-				}
-
-				&>.disclaimer{
-					font-size: 9px;
-					line-height: 14px;
-					padding:0 20.5px;
-				}
-			}
-
 		} //end of section tags
 
 	}

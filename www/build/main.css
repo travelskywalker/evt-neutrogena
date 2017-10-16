@@ -25526,6 +25526,30 @@ ion-menu div.menu-inner button[ion-button] {
   height: auto;
 }
 
+footer #footer {
+  color: #711b7d;
+  text-align: center;
+}
+
+footer #footer > .footer-links {
+  width: 100%;
+  display: inline-block;
+  padding: 0 43px;
+}
+
+footer #footer > .footer-links > a {
+  color: #711b7d;
+  display: inline-block;
+  margin: 11px 11px 0 0;
+  font-size: 9.4px;
+}
+
+footer #footer > .disclaimer {
+  font-size: 9px;
+  line-height: 14px;
+  padding: 0 43px;
+}
+
 notice {
   z-index: 101;
   position: absolute;
@@ -25762,24 +25786,148 @@ page-home div.scroll-content section#scan-button-container > #scan-button {
   background-color: transparent;
 }
 
-page-home div.scroll-content section#footer {
-  color: #711b7d;
+page-sign-up ion-content div.scroll-content {
+  background-color: #f0f0f0;
 }
 
-page-home div.scroll-content section#footer > .footer-links {
+page-sign-up div.space-40 {
+  display: block;
+  clear: both;
   width: 100%;
-  display: inline-block;
+  height: 40px;
+  text-align: center;
+  position: relative;
 }
 
-page-home div.scroll-content section#footer > .footer-links > a {
+page-sign-up div.space-40 a {
+  text-decoration: none;
+  font-size: 15px;
   color: #711b7d;
-  display: inline-block;
-  margin: 11px 11px 0 0;
-  font-size: 9.4px;
+  text-transform: uppercase;
+  width: auto;
+  height: auto;
+  display: inline-table;
+  margin: auto;
+  margin-top: 11.5px;
 }
 
-page-home div.scroll-content section#footer > .disclaimer {
+page-sign-up section.main {
+  position: relative;
+  padding-top: 81px;
+}
+
+page-sign-up section.main button[ion-button].xbtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-sign-up section.main p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+}
+
+page-sign-up section.main p.form-title {
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  font-size: 25px;
+  color: #bd0894;
+}
+
+page-sign-up section.main p.form-desc {
+  color: #f07721;
+  font-size: 14px;
+  margin-bottom: 14px;
+  padding: 0 27px;
+}
+
+page-sign-up section.main form {
+  text-align: center;
+}
+
+page-sign-up section.main form ion-row {
+  padding: 0 45px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+page-sign-up section.main form ion-row.extra-bottom {
+  margin-bottom: 27px;
+}
+
+page-sign-up section.main form ion-row ion-input {
+  font-family: 'HelveticaNeue-Light';
+  height: 46px;
+  background-color: #fff;
+  display: inline-block;
+  clear: both;
+  border-radius: 10px;
+}
+
+page-sign-up section.main form ion-row ion-input input {
+  margin-left: 19px;
+  font-size: 14px;
+  color: #f073ac;
+  line-height: 17px;
+}
+
+page-sign-up section.main form ion-row ion-input.focused {
+  -webkit-box-shadow: 1px 1px 0px 1px #f07721;
+  box-shadow: 1px 1px 0px 1px #f07721;
+}
+
+page-sign-up section.main form ion-row ion-input.focused[type=password]:after {
+  content: "Please enter a password of 8+ characters";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
   font-size: 9px;
-  line-height: 14px;
-  padding: 0 20.5px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+}
+
+page-sign-up section.main form button[ion-button] {
+  height: 50px;
+  width: 250px;
+  display: inline-table;
+  clear: both;
+  margin: auto;
+  color: #fff;
+  text-align: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: 'HelveticaNeue-Light';
+  border: 0;
+}
+
+page-sign-up section.main form button[ion-button]#signUp {
+  background-image: url("../assets/images/signup_btn.png");
+}
+
+page-sign-up section.main form button[ion-button]#signUpFB {
+  background-image: url("../assets/images/fbSignup_btn.png");
+  margin-bottom: 11px;
 }
