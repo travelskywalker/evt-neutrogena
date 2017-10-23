@@ -1,18 +1,62 @@
-<ion-header>
+<!--ion-header>
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Home</ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header-->
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+<!-- No headers. We'll create
+  a component for this instead -->
+<notice [title]="'Cookie Notice'" [style]="{'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'}">
+  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.
+</notice>
+<ion-content>
+  <!--button ion-button secondary menuToggle>Toggle Menu</button-->
+  <section id="client-logo" class="client-logo">
+    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
+    <p>in partnership with </p>
+    <!--<span id="aura-logo" class="placeholder" #auraLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>
+  </section>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <section id="guide-scan-container" class="">
+    
+    <span class="guide-images">
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+      <div id="qr-image" class="placeholder">
+        <img src="../assets/images/qrcode.png"/>
+      </div>
+
+      <div id="logo-image" class="placeholder">
+        <img src="../assets/images/activator.png"/>
+      </div>
+
+    </span>
+
+    <span class="guide-text-instructions">
+      <p>Scan the QR code</p>
+      <p><b>OR</b></p>
+      <p>Scan the Neutrogena&reg; logo on your</p>
+      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>
+      <p>Acne Mask Activator</p>
+    </span>
+
+  </section>
+
+  <section id="scan-button-container" #scanContainer>
+    
+    <button ion-button id="scan-button" #scanButton (tap)="scan()">
+      
+    </button>
+
+  </section>
+
+
+  <footer></footer>
+
 </ion-content>

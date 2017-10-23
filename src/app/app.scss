@@ -14,3 +14,22 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+ion-menu{
+	
+	div.menu-inner{
+		button[ion-button]{
+			background-color: transparent;
+			float: right;
+			color:rgba(0,0,0,0.6);
+			font-family: HelveticaNeue-Light;
+			box-shadow: none;
+			border:0;
+			font-size: 21px;
+			padding:0;
+			margin: 21px 21px 0 0;
+			height: auto;
+		}
+	}
+
+}
