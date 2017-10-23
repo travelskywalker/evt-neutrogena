@@ -1,5 +1,8 @@
 import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthService } from "../../providers/auth/auth.service";
+
+import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 /**
  * Generated class for the SignUpPage page.
@@ -14,8 +17,19 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'sign-up.html',
 })
 export class SignUpPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2) {
+	invalidReg : boolean = false;
+	private formGroup : FormGroup;
+  constructor(	public navCtrl: NavController,
+  				public navParams: NavParams, 
+  				private render: Renderer2, 
+  				private auth0: AuthService, 
+  				private formBuilder: FormBuilder) {
+  	this.formGroup = this.formBuilder.group({
+  		firstName: ['', Validators.required],
+  		lastName: ['', Validators.required],
+  		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+  		password: ['', Validators.compose([Validators.minLength(8),Validators.required])]
+  	});
   }
 
   ionViewDidLoad() {
@@ -38,5 +52,25 @@ export class SignUpPage {
 
   dismissThis(){
   	// should pop this page and then go to previous
+  	console.log("dismiss");
+  	if(this.navCtrl.canGoBack()){
+  		this.navCtrl.pop();
+  	}
+  }
+
+  signup(){
+  	let usr = this.formGroup.value;
+
+  	this.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{
+  		console.log(res)
+  	})
+  	.catch(err=>{
+  		console.log(err);
+  		this.invalidReg = true;
+  	});
+  }
+
+  FBauth(){
+  	this.auth0.fbAuth();
   }
 }

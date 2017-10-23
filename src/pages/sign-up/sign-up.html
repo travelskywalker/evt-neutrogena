@@ -1,26 +1,26 @@
 <ion-content>
 
 <section class="main">
-	<button ion-button class="xbtn" (click)="dismissThis()"></button>
+	<button ion-button class="xbtn" (tap)="dismissThis()"></button>
 	<p class="form-title">Sign Up</p>
 	<p class="form-desc">Let's get started with your free mindulness sessions.</p>
-	<form id="sign-up-form" #signUpForm>
+	<form [formGroup]="formGroup" id="sign-up-form" #signUpForm>
 		<ion-row>
-			<ion-input type="text" placeholder="First Name" (ionFocus)="focused($event)" (ionBlur)="blurred($event)"></ion-input>
+			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)"></ion-input>
 		</ion-row>
 		<ion-row>
-			<ion-input type="text" placeholder="Last Name" (ionFocus)="focused($event)" (ionBlur)="blurred($event)"></ion-input>
-		</ion-row>
-		<ion-row class="extra-bottom">
-			<ion-input type="email" placeholder="email@email.com" (ionFocus)="focused($event)" (ionBlur)="blurred($event)"></ion-input>
+			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)"></ion-input>
 		</ion-row>
 		<ion-row>
-			<ion-input type="password" placeholder="Password" (ionFocus)="focused($event)" (ionBlur)="blurred($event)"></ion-input>
+			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)"></ion-input>
+		</ion-row>
+		<ion-row>
+			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
 		</ion-row>
 		<div class="space-40"></div>
-		<button ion-button id="signUp" class="getStarted">Get Started</button>
+		<button ion-button id="signUp" class="getStarted" (tap)="signup()" [disabled]="!formGroup.valid">Get Started</button>
 		<div class="space-40"><a>OR</a></div>
-		<button ion-button id="signUpFB" class="fbReg">Sign Up with Facebook</button>
+		<button ion-button id="signUpFB" class="fbReg" (tap)="FBauth()">Sign Up with Facebook</button>
 	</form>
 
 </section>

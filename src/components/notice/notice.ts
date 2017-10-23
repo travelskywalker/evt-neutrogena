@@ -20,7 +20,6 @@ export class NoticeComponent {
   }
 
   ngOnInit(){
-  	let self = this;
   }
 
   destroy(){

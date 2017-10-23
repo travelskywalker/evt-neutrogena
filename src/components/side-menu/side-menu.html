@@ -1,7 +1,9 @@
 <!-- Generated template for the SideMenuComponent component -->
 <ion-content>
   <ion-list>
-  	<button menuClose class="main" ion-item>My Account</button>
+  	<!-- unused <button menuClose class="main" ion-item >My Account</button> -->
+  	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>
+  	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>
     <button menuClose ion-item *ngFor="let p of links" (click)="openPage(p)">
       {{p?.title}}
     </button>

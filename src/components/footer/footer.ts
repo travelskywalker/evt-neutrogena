@@ -14,14 +14,16 @@ export class FooterComponent {
 
 	links: any = [];
 
- 	constructor() {}
+ 	constructor() {
+ 		console.log(this);
+ 	}
 
  	ngOnInit(){
 		this.links = [
-  		{text:"Privacy Policy",href:"javascript:void()"},
-  		{text:"Cookie Policy",href:"javascript:void()"},
-  		{text:"Legal Notice",href:"javascript:void()"},
-  		{text:"Modern Slavery Act Statement",href:"javascript:void()"},
+	  		{text:"Privacy Policy",href:"javascript:void()"},
+	  		{text:"Cookie Policy",href:"javascript:void()"},
+	  		{text:"Legal Notice",href:"javascript:void()"},
+	  		{text:"Modern Slavery Act Statement",href:"javascript:void()"},
   		];
  	}
 

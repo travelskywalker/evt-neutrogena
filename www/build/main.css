@@ -25786,6 +25786,342 @@ page-home div.scroll-content section#scan-button-container > #scan-button {
   background-color: transparent;
 }
 
+page-login ion-content div.scroll-content {
+  background-color: #f0f0f0;
+}
+
+page-login div.space-40 {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  position: relative;
+}
+
+page-login div.space-40 a {
+  text-decoration: none;
+  font-size: 15px;
+  color: #711b7d;
+  text-transform: uppercase;
+  width: auto;
+  height: auto;
+  display: inline-table;
+  margin: auto;
+  margin-top: 11.5px;
+}
+
+page-login section.main {
+  position: relative;
+  padding-top: 81px;
+}
+
+page-login section.main button[ion-button].xbtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-login section.main p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+}
+
+page-login section.main p.form-title {
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  font-size: 25px;
+  color: #bd0894;
+}
+
+page-login section.main p.form-desc {
+  color: #f07721;
+  font-size: 14px;
+  margin-bottom: 14px;
+  padding: 0 27px;
+}
+
+page-login section.main a.linker {
+  font-size: 14px;
+  line-height: 17px;
+  color: #f07721;
+  font-family: 'HelveticaNeue-Light';
+  text-decoration: underline;
+}
+
+page-login section.main form {
+  text-align: center;
+}
+
+page-login section.main form ion-row {
+  padding: 0 45px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+page-login section.main form ion-row.extra-bottom {
+  margin-bottom: 27px;
+}
+
+page-login section.main form ion-row.extra-top {
+  margin-top: 43px;
+  margin-bottom: 28px;
+}
+
+page-login section.main form ion-row ion-input {
+  font-family: 'HelveticaNeue-Light';
+  height: 46px;
+  background-color: #fff;
+  display: inline-block;
+  clear: both;
+  border-radius: 10px;
+}
+
+page-login section.main form ion-row ion-input input {
+  margin-left: 19px;
+  font-size: 14px;
+  color: #f073ac;
+  line-height: 17px;
+}
+
+page-login section.main form ion-row ion-input[type=email].error:after {
+  content: "Email incorrect";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
+page-login section.main form ion-row ion-input.focused {
+  -webkit-box-shadow: 1px 1px 0px 1px #f07721;
+  box-shadow: 1px 1px 0px 1px #f07721;
+  /*&[type=password]{
+							&:after{
+								content:"Please enter a password of 8+ characters";
+								display: block;
+								clear: both;
+								width: 100%;
+								font-family: 'HelveticaNeue-Bold';
+								font-size: 9px;
+								text-transform: uppercase;
+								margin-top: 6px;
+								text-indent: 10px;
+								color: rgb(240,119,33);
+								text-align: left;
+							}
+						}*/
+}
+
+page-login section.main form button[ion-button] {
+  height: 50px;
+  width: 250px;
+  display: inline-table;
+  clear: both;
+  margin: auto;
+  color: #fff;
+  text-align: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: 'HelveticaNeue-Light';
+  border: 0;
+}
+
+page-login section.main form button[ion-button]#login {
+  background-image: url("../assets/images/signup_btn.png");
+}
+
+page-login section.main form button[ion-button]#loginFB {
+  background-image: url("../assets/images/fbSignup_btn.png");
+  margin-bottom: 11px;
+}
+
+page-my-account ion-content div.scroll-content {
+  background-color: #f0f0f0;
+}
+
+page-my-account div.space-40 {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  position: relative;
+  padding: 0 38px;
+}
+
+page-my-account div.space-40 hr {
+  background-color: #bd0894;
+  width: 100%;
+  height: 1px;
+  display: block;
+  margin: 14px auto 21px;
+}
+
+page-my-account section.main {
+  position: relative;
+  padding-top: 81px;
+}
+
+page-my-account section.main button[ion-button].xbtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-my-account section.main p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+}
+
+page-my-account section.main p.form-title {
+  margin-bottom: 31px;
+  text-transform: uppercase;
+  font-size: 25px;
+  color: #bd0894;
+}
+
+page-my-account section.main p.form-desc {
+  color: #f07721;
+  font-size: 14px;
+  margin-bottom: 14px;
+  padding: 0 27px;
+}
+
+page-my-account section.main form {
+  text-align: center;
+}
+
+page-my-account section.main form ion-row {
+  padding: 0 45px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+page-my-account section.main form ion-row.extra-bottom {
+  margin-bottom: 27px;
+}
+
+page-my-account section.main form ion-row ion-label {
+  margin: 0;
+  font-size: 10px;
+  color: #f073ac;
+  font-family: 'HelveticaNeue-Light';
+  text-align: left;
+  padding: 0 15px;
+}
+
+page-my-account section.main form ion-row ion-input {
+  font-family: 'HelveticaNeue-Light';
+  height: 46px;
+  display: inline-block;
+  clear: both;
+  padding: 0 15px;
+}
+
+page-my-account section.main form ion-row ion-input input {
+  font-size: 14px;
+  color: #bd0894;
+  line-height: 17px;
+  border-bottom: 1px solid #cacaca;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 12px;
+  width: 100%;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+page-my-account section.main form ion-row ion-input.focused {
+  -webkit-box-shadow: 1px 1px 0px 1px #f07721;
+  box-shadow: 1px 1px 0px 1px #f07721;
+}
+
+page-my-account section.main form ion-row ion-input.focused[type=password]:after {
+  content: "Please enter a password of 8+ characters";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+}
+
+page-my-account section.main form button[ion-button] {
+  height: 50px;
+  width: 250px;
+  display: inline-table;
+  clear: both;
+  margin: auto;
+  color: #fff;
+  text-align: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: 'HelveticaNeue-Light';
+  border: 0;
+  font-size: 15px;
+  line-height: 17px;
+}
+
+page-my-account section.main form button[ion-button]#saveChanges, page-my-account section.main form button[ion-button]#logout {
+  background-image: url("../assets/images/signup_btn.png");
+  margin-bottom: 11px;
+}
+
+page-my-account section.main form button[ion-button]#deleteAccount {
+  color: #711b7d;
+  background-image: url("../assets/images/transparent_btn.png");
+  margin-bottom: 11px;
+}
+
 page-sign-up ion-content div.scroll-content {
   background-color: #f0f0f0;
 }
