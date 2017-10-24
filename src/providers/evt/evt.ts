@@ -19,6 +19,7 @@ export class EvtProvider {
 
   constructor(public http: Http, private auth0: AuthService) {
     console.log('Hello EvtProvider Provider',Config.evt_app);
+    this.init();
   }
 
   init(){
@@ -41,20 +42,19 @@ export class EvtProvider {
   	//console.log(this.getUserContext());
   }
 
-  getUserContext(){
-  	let usr = this.auth0.getUserDetailsFromStorage();
-  	let userContext = usr['user_metadata'].evrythngUserData;
-
+  getUserContext():Promise<any> {
+  	//let usr = this.auth0.getUserDetailsFromStorage();
+  	let userContext = JSON.parse(localStorage.evrythngInfo);
   	return(
-
-        new EVT.User({
-            id: userContext.evrythngUser,
-            apiKey: userContext.evrythngApiKey
-        }, this.evtapp)
-		/*this.evtapp.$init.then(app => {
-   			app.appUser().		
-   			})*/
-  		);
+  		new Promise((resolve,reject)=>{
+  			resolve(
+		        new EVT.User({
+		            id: userContext.evrythngUser,
+		            apiKey: userContext.evrythngApiKey
+		        }, this.evtapp)	
+        	)
+  		})
+  	);
   }
 
   scan(){

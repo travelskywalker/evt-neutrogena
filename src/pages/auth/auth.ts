@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from "../home/home";
+import { LoginPage } from "../login/login";
 
 import { AuthService } from "../../providers/auth/auth.service";
 /**
@@ -22,8 +23,14 @@ export class AuthPage {
 
   ionViewDidLoad() {
     let data = this.navParams.get('data');
-    if(data == "") this.navCtrl.push(HomePage);
-    else{
+    if(data == ""){
+    	if(localStorage.access_token && localStorage.id_token){
+    		this.navCtrl.push(HomePage);
+    	}else{
+    		this.navCtrl.push(LoginPage);
+    	}
+
+    } else {
     	let authData = this.URLToArray(data);
     	//console.log(authData);
 		this.auth0.result(authData).then(res=>{

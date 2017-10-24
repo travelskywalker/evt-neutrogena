@@ -59,7 +59,7 @@ page-sign-up {
 				color:rgb(240,119,33);
 				font-size: 14px;
 				margin-bottom: 14px;
-				padding: 0 27px;
+				padding: 0 27vw;
 				&.log{
 					margin-bottom: 20px;
 				}
@@ -141,7 +141,7 @@ page-sign-up {
 
 			button[ion-button]{
 				height: 50px;
-				width: 250px;
+				width: calc(100% - 100px);
 				display: inline-table;
 				clear: both;
 				margin: auto;

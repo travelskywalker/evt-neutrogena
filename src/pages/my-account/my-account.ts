@@ -5,6 +5,7 @@ import { AuthService } from "../../providers/auth/auth.service";
 import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
 import { HomePage } from '../home/home';
+import { DeleteAccountPage } from '../delete-account/delete-account';
 
 /**
  * Generated class for the SignUpPage page.
@@ -83,7 +84,8 @@ export class MyAccountPage {
   	let usr = this.formGroup.value;
   	let self = this;
   	this.auth0.updateUser({firstName:usr.firstName,lastName:usr.lastName}).then(res=>{
-        self.auth0.setUserMetadata(res);
+        self.auth0.setUserMetadata(res['user_metadata']);
+        self.navCtrl.push(HomePage);
   	})
   	.catch(err=>{
   		console.log(err);
@@ -91,8 +93,7 @@ export class MyAccountPage {
   }
 
   deleteAccount(){
-  	console.log("Delete me");
-  	//GO TO DELETE
+  	this.navCtrl.push(DeleteAccountPage);
   }
 
   toFB(){

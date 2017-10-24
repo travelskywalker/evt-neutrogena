@@ -86,6 +86,7 @@ export class AuthService {
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('evrythngInfo');
         reject(authResult.error);
       }
       /* Proceed with authentication */
@@ -108,6 +109,7 @@ export class AuthService {
             localStorage.removeItem('access_token');
             localStorage.removeItem('id_token');
             localStorage.removeItem('userInfo');
+        localStorage.removeItem('evrythngInfo');
             reject(err);
           }
         })
@@ -117,11 +119,11 @@ export class AuthService {
   }
 
   setEVTInfo(){
-    if((localStorage.access_token && localStorage.id_token) && !localStorage.evrythngInfo){
+    if( (localStorage.access_token && localStorage.id_token) && (!localStorage.evrythngInfo || localStorage.evrythngInfo === "undefined") ){
       let user = this.getUserDetailsFromStorage();
       let res = Object.keys(user).filter((a)=>{ return (a.indexOf("user_metadata") > -1) });
       console.log(user,res);
-      localStorage.setItem('evrythngInfo',JSON.stringify(user[res[0]]));
+      localStorage.setItem('evrythngInfo',JSON.stringify(user[res[0]].evrythngUserData));
     }
   }
 
@@ -152,6 +154,7 @@ export class AuthService {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
+    localStorage.removeItem('evrythngInfo');
     this.webAuth.logout();
   }
 

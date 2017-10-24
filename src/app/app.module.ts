@@ -9,6 +9,8 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { AuthPage } from '../pages/auth/auth';
 import { LoginPage } from '../pages/login/login';
 import { MyAccountPage } from '../pages/my-account/my-account';
+import { DeleteAccountPage } from '../pages/delete-account/delete-account';
+import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -27,6 +29,8 @@ import { ComponentsModule } from '../components/components.module';
     AuthPage,
     LoginPage,
     MyAccountPage,
+    DeleteAccountPage,
+    ForgotPasswordPage,
   ],
   imports: [
     ComponentsModule,
@@ -40,6 +44,8 @@ import { ComponentsModule } from '../components/components.module';
         { component: AuthPage, name: 'Auth0Page', segment: ':data' },
         { component: LoginPage, name: 'LoginPage', segment: 'login' },
         { component: MyAccountPage, name: 'MyAccountPage', segment: 'my-account' },
+        { component: DeleteAccountPage, name: 'DeleteAccountPage', segment: 'delete-account' },
+        { component: ForgotPasswordPage, name: 'ForgotPasswordPage', segment: 'forgot-password' },
       ]
     }),
   ],
@@ -52,6 +58,8 @@ import { ComponentsModule } from '../components/components.module';
     AuthPage,
     LoginPage,
     MyAccountPage,
+    DeleteAccountPage,
+    ForgotPasswordPage,
   ],
   providers: [
     StatusBar,
