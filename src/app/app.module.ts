@@ -11,7 +11,7 @@ import { LoginPage } from '../pages/login/login';
 import { MyAccountPage } from '../pages/my-account/my-account';
 import { DeleteAccountPage } from '../pages/delete-account/delete-account';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
-
+import { AgeGatePage } from '../pages/age-gate/age-gate';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { EvtProvider } from '../providers/evt/evt';
@@ -31,6 +31,7 @@ import { ComponentsModule } from '../components/components.module';
     MyAccountPage,
     DeleteAccountPage,
     ForgotPasswordPage,
+    AgeGatePage
   ],
   imports: [
     ComponentsModule,
@@ -46,6 +47,7 @@ import { ComponentsModule } from '../components/components.module';
         { component: MyAccountPage, name: 'MyAccountPage', segment: 'my-account' },
         { component: DeleteAccountPage, name: 'DeleteAccountPage', segment: 'delete-account' },
         { component: ForgotPasswordPage, name: 'ForgotPasswordPage', segment: 'forgot-password' },
+        { component: AgeGatePage, name: 'AgeGatePage', segment: 'age-gate' }
       ]
     }),
   ],
@@ -60,6 +62,7 @@ import { ComponentsModule } from '../components/components.module';
     MyAccountPage,
     DeleteAccountPage,
     ForgotPasswordPage,
+    AgeGatePage
   ],
   providers: [
     StatusBar,

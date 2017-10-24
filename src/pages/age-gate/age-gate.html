@@ -1,0 +1,25 @@
+<ion-content>
+
+<section class="main">
+	<button ion-button class="xbtn" (tap)="dismissThis()"></button>
+  <ion-img src="../assets/images/logo_neutrogena.png"></ion-img>
+
+	<p class="text">Let's get started with your free mindulness sessions. Sign up <a class="linker" (tap)="toSignup()">here</a></p>
+	<form [formGroup]="formGroup" id="login-form" #loginForm>
+		<ion-row>
+			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin}"></ion-input>
+		</ion-row>
+		<ion-row>
+			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
+		</ion-row>
+		<ion-row class="extra-top">
+			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>
+		</ion-row>
+		<button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button>
+		<div class="space-40"><a>OR</a></div>
+		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button>
+	</form>
+
+</section>
+<footer></footer>
+</ion-content>
