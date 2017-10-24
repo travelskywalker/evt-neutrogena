@@ -51,12 +51,12 @@ export class LoginPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.push(HomePage);
+  		this.navCtrl.setRoot(HomePage);
   	}
   }
 
   toSignup(){
-  	this.navCtrl.push(SignUpPage);
+  	this.navCtrl.setRoot(SignUpPage);
   }
 
   login(){

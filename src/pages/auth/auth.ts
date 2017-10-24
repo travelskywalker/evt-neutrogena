@@ -25,9 +25,9 @@ export class AuthPage {
     let data = this.navParams.get('data');
     if(data == ""){
     	if(localStorage.access_token && localStorage.id_token){
-    		this.navCtrl.push(HomePage);
+    		this.navCtrl.setRoot(HomePage);
     	}else{
-    		this.navCtrl.push(LoginPage);
+    		this.navCtrl.setRoot(LoginPage);
     	}
 
     } else {
@@ -35,7 +35,7 @@ export class AuthPage {
     	//console.log(authData);
 		this.auth0.result(authData).then(res=>{
 			console.log(res);
-			this.navCtrl.push(HomePage);
+			this.navCtrl.setRoot(HomePage);
 		}).catch(err=>{
 			console.log(err);
 			//GO TO ERROR PAGE

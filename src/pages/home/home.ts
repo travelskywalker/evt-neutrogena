@@ -14,7 +14,7 @@ import { LoginPage } from '../login/login';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  mobileVersion : any;
+  mobileVersion : boolean;
 	links: any = [];
 
   noticeViewed : boolean;
@@ -34,11 +34,12 @@ export class HomePage {
       this.noticeViewed = false;
     }
       if(!localStorage.access_token || !localStorage.id_token){
-        this.navCtrl.push(LoginPage);
+        this.navCtrl.setRoot(LoginPage);
       }
     // console.log(this.platform.is('mobile'));
 
     this.mobileVersion = this.platform.is('mobile');
+    console.log(this.mobileVersion);
   }
 
   scan(){

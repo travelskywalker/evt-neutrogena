@@ -60,7 +60,7 @@ export class SignUpPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.push(HomePage);
+  		this.navCtrl.setRoot(HomePage);
   	}
   }
 
@@ -81,6 +81,6 @@ export class SignUpPage {
   }
 
   toLogin(){
-  	this.navCtrl.push(LoginPage);
+  	this.navCtrl.setRoot(LoginPage);
   }
 }

@@ -51,7 +51,7 @@ export class ForgotPasswordPage {
   }
 
   toSignup(){
-  	this.navCtrl.push(SignUpPage);
+  	this.navCtrl.setRoot(SignUpPage);
   }
 
   reset_pass(){
@@ -65,7 +65,7 @@ export class ForgotPasswordPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.push(LoginPage);
+  		this.navCtrl.setRoot(LoginPage);
   	}
   }
 

@@ -72,7 +72,7 @@ export class MyAccountPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.push(HomePage);
+  		this.navCtrl.setRoot(HomePage);
   	}
   }
 
@@ -85,7 +85,7 @@ export class MyAccountPage {
   	let self = this;
   	this.auth0.updateUser({firstName:usr.firstName,lastName:usr.lastName}).then(res=>{
         self.auth0.setUserMetadata(res['user_metadata']);
-        self.navCtrl.push(HomePage);
+        self.navCtrl.setRoot(HomePage);
   	})
   	.catch(err=>{
   		console.log(err);
@@ -93,7 +93,7 @@ export class MyAccountPage {
   }
 
   deleteAccount(){
-  	this.navCtrl.push(DeleteAccountPage);
+  	this.navCtrl.setRoot(DeleteAccountPage);
   }
 
   toFB(){
