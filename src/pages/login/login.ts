@@ -16,9 +16,9 @@ export class LoginPage {
 	private formGroup : FormGroup;
 	invalidLogin : boolean = false;
   constructor(	public navCtrl: NavController,
-  				public navParams: NavParams, 
-  				private render: Renderer2, 
-  				private auth0: AuthService, 
+  				public navParams: NavParams,
+  				private render: Renderer2,
+  				private auth0: AuthService,
   				private formBuilder: FormBuilder) {
   	this.formGroup = this.formBuilder.group({
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
