@@ -25,12 +25,14 @@ export class AuthPage {
     if(data == "") this.navCtrl.push(HomePage);
     else{
     	let authData = this.URLToArray(data);
-    	console.log(authData);
-		if(this.auth0.result(authData)){
+    	//console.log(authData);
+		this.auth0.result(authData).then(res=>{
+			console.log(res);
 			this.navCtrl.push(HomePage);
-		}else{
+		}).catch(err=>{
+			console.log(err);
 			//GO TO ERROR PAGE
-		}
+		})
     }
   }
 

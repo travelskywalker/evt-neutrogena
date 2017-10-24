@@ -2,6 +2,9 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
+import { LoginPage } from "../login/login";
+import { HomePage } from "../home/home";
+
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 /**
@@ -28,7 +31,7 @@ export class SignUpPage {
   		firstName: ['', Validators.required],
   		lastName: ['', Validators.required],
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-  		password: ['', Validators.compose([Validators.minLength(8),Validators.required])]
+  		password: ['', Validators.compose([Validators.minLength(8),Validators.required, Validators.pattern(/.*([A-Z+]|[0-9+]).*$/)])]
   	});
   }
 
@@ -56,6 +59,9 @@ export class SignUpPage {
   	if(this.navCtrl.canGoBack()){
   		this.navCtrl.pop();
   	}
+  	else{
+  		this.navCtrl.push(HomePage);
+  	}
   }
 
   signup(){
@@ -72,5 +78,9 @@ export class SignUpPage {
 
   FBauth(){
   	this.auth0.fbAuth();
+  }
+
+  toLogin(){
+  	this.navCtrl.push(LoginPage);
   }
 }

@@ -5,6 +5,7 @@ import { AuthService } from "../../providers/auth/auth.service";
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 import { SignUpPage } from '../sign-up/sign-up';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
@@ -48,6 +49,9 @@ export class LoginPage {
   	console.log("dismiss");
   	if(this.navCtrl.canGoBack()){
   		this.navCtrl.pop();
+  	}
+  	else{
+  		this.navCtrl.push(HomePage);
   	}
   }
 

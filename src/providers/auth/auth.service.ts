@@ -10,7 +10,8 @@ declare var Auth0Lock;
 
 @Injectable()
 export class AuthService {
-  
+  clientDefId:string = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
+  clientDefSecret:string = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
   projectId : string;
   webAuth = new auth0.WebAuth({
     clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
@@ -51,7 +52,7 @@ export class AuthService {
   public fbAuth(): void{
     this.webAuth.authorize({
       connection: 'facebook',
-      scope:'openid profile email phone'
+      scope:'openid profile email phone user_metadata'
     });
   }
 
@@ -76,34 +77,52 @@ export class AuthService {
 
   }
   // Parse the authentication result
-  result(authResult) : boolean{
+  result(authResult) {
     let self = this;
-    if(authResult.error){
-      console.log(authResult.error);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('id_token');
-      localStorage.removeItem('userInfo');
-      return false;
-    }
-    localStorage.setItem('access_token', authResult.access_token);
-    localStorage.setItem('id_token', authResult.id_token);
-    this.webAuth.client.userInfo(authResult.access_token,function(err, user){
-      if (user) {
-        console.log(user);
-        localStorage.setItem('userInfo',JSON.stringify(user));
-        self.userInfo = user;
-        return true;
-        // Save the tokens from the authResult in local storage or a cookie
-
-      } else if (err) {
-        // Handle errors
-        console.log(err);
+    return new Promise((resolve,reject)=>{
+      /* The user did not allow auth0 to access his/her data */
+      if(authResult.error){
+        console.log(authResult.error);
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('userInfo');
-        return false;
+        reject(authResult.error);
       }
-    });
+      /* Proceed with authentication */
+      else{
+        localStorage.setItem('access_token', authResult.access_token);
+        localStorage.setItem('id_token', authResult.id_token);
+        this.webAuth.client.userInfo(authResult.access_token,function(err, user){
+
+          /* Successful auth */
+          if (user) {
+            console.log(user);
+            localStorage.setItem('userInfo',JSON.stringify(user));
+            self.userInfo = user;
+            resolve(user);
+
+          /* Failure at auth */
+          } else if (err) {
+            // Handle errors
+            console.log(err);
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('id_token');
+            localStorage.removeItem('userInfo');
+            reject(err);
+          }
+        })
+      }
+    }
+    );
+  }
+
+  setEVTInfo(){
+    if((localStorage.access_token && localStorage.id_token) && !localStorage.evrythngInfo){
+      let user = this.getUserDetailsFromStorage();
+      let res = Object.keys(user).filter((a)=>{ return (a.indexOf("user_metadata") > -1) });
+      console.log(user,res);
+      localStorage.setItem('evrythngInfo',JSON.stringify(user[res[0]]));
+    }
   }
 
   getUserDetails(){
@@ -114,8 +133,19 @@ export class AuthService {
     });
   }
 
-  public getUserDetailsFromStorage(): void{
+  public getUserDetailsFromStorage() {
     return JSON.parse(localStorage.getItem('userInfo'));
+  }
+
+  public setUserMetadata(meta) {
+    let usr = this.getUserDetailsFromStorage();
+    usr.user_metadata = meta;
+    console.log(usr);
+    localStorage.setItem('userInfo',JSON.stringify(usr));
+  }
+
+  public getUserMetadataFromStorage() {
+    return JSON.parse(localStorage.getItem('userInfo'))['user_metadata'];
   }
 
   public logout():void {
@@ -125,29 +155,37 @@ export class AuthService {
     this.webAuth.logout();
   }
 
-  customSignup(usr:{email:string,pass:string}){
-    let url = "https://evt-demo.eu.auth0.com/dbconnections/signup";
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    let options = new RequestOptions({ headers: headers });
-
-    let data = {
-                client_id: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
-                email: usr.email,
-                password: usr.pass
-              };
-
-    return new Promise((resolve,reject)=>{
-      this.http.post(url,data,options).toPromise().then(res=>{
-        resolve(res);
-        console.log(res)
-      }).catch(err=>{
-        reject(err);
-        console.log(err)
-      })
+  public updateUser(usrMetaData) {
+    let umd = this.getUserMetadataFromStorage();
+    umd["firstName"] = usrMetaData.firstName;
+    umd["lastName"] = usrMetaData.lastName;
+    let auth0Manage = new auth0.Management({
+      domain: 'evt-demo.eu.auth0.com',
+      token: localStorage.getItem('id_token')
     });
 
+    let usrInfo = this.getUserDetailsFromStorage();
+    //console.log(usrInfo);
+    return new Promise((resolve,reject)=>{
+        auth0Manage.patchUserMetadata(usrInfo['user_id'],
+        umd,
+        function(err, resp){
+          if(err){
+            reject(err);
+          }else{
+            resolve(resp);
+          }
+        }
+       )
+     }
+    );
+
   }
+
+  isFB():boolean{
+    return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
+  }
+
 
 /*
   public login(): void {

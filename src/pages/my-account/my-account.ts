@@ -2,7 +2,9 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the SignUpPage page.
@@ -17,21 +19,29 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
   templateUrl: 'my-account.html',
 })
 export class MyAccountPage {
-	invalidReg : boolean = false;
+	FBreg : boolean = false;
 	private formGroup : FormGroup;
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams, 
   				private render: Renderer2, 
   				private auth0: AuthService, 
   				private formBuilder: FormBuilder) {
+  }
 
-  	let usr = auth0.getUserDetailsFromStorage();
+  ngOnInit(){
+
+  	this.FBreg = this.auth0.isFB();
+  	console.log(this.FBreg);
+  	let usr = this.auth0.getUserDetailsFromStorage();
+  	let usrFName = this.FBreg ? usr['given_name'] : usr['user_metadata'].firstName; 
+  	let usrLName = this.FBreg ? usr['family_name'] : usr['user_metadata'].lastName; 
   	this.formGroup = this.formBuilder.group({
-  		firstName: [usr['user_metadata'].firstName, Validators.required],
-  		lastName: [usr['user_metadata'].lastName, Validators.required],
-  		email: [usr['email'], Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+  		firstName: [usrFName, Validators.required],
+  		lastName: [usrLName, Validators.required],
+  		email: new FormControl({value:usr['email'],disabled:!this.FBreg}, Validators.required),
   		password: ['', Validators.compose([Validators.minLength(8),Validators.required])]
   	});
+
   }
 
   ionViewDidLoad() {
@@ -60,21 +70,32 @@ export class MyAccountPage {
   	if(this.navCtrl.canGoBack()){
   		this.navCtrl.pop();
   	}
+  	else{
+  		this.navCtrl.push(HomePage);
+  	}
   }
 
-  signup(){
-  	let usr = this.formGroup.value;
+  logout(){
+  	this.auth0.logout();
+  }
 
-  	this.auth0.signup({email:usr.email,pass:usr.password}).then(res=>{
-  		console.log(res)
+  updateUser(){
+  	let usr = this.formGroup.value;
+  	let self = this;
+  	this.auth0.updateUser({firstName:usr.firstName,lastName:usr.lastName}).then(res=>{
+        self.auth0.setUserMetadata(res);
   	})
   	.catch(err=>{
   		console.log(err);
-  		this.invalidReg = true;
   	});
   }
 
-  FBauth(){
-  	this.auth0.fbAuth();
+  deleteAccount(){
+  	console.log("Delete me");
+  	//GO TO DELETE
+  }
+
+  toFB(){
+  	window.location.href = "//facebook.com";
   }
 }

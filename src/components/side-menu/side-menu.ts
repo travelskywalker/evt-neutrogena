@@ -4,6 +4,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 
 //import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { LoginPage } from '../../pages/login/login';
+import { MyAccountPage } from '../../pages/my-account/my-account';
 
 /**
  * Generated class for the SideMenuComponent component.
@@ -58,6 +59,11 @@ export class SideMenuComponent {
     else{
       return false;
     }
+  }
+
+  myAccount(){
+    let nav = this.app.getRootNav();
+    nav.setRoot(MyAccountPage);
   }
 
 }

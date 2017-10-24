@@ -30,6 +30,9 @@ side-menu {
 
 					&.main{
 						margin-bottom: 66px;
+						&.dbl{
+							margin-bottom: 0;
+						}
 						&>.item-inner{
 							ion-label{
 								font-family: HelveticaNeue-Bold;
