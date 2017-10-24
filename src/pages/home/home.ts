@@ -23,7 +23,6 @@ export class HomePage {
 
   }
 
-
   ngOnInit(){
     // console.log(this.navParams.data);
     let self = this;
