@@ -25678,6 +25678,7 @@ side-menu ion-content > .scroll-content section.footer > ion-row > ion-col img {
   bottom: 0;
 }
 
+<<<<<<< HEAD
 page-delete-account ion-content div.scroll-content {
   background-color: #f0f0f0;
   vertical-align: middle;
@@ -25956,14 +25957,21 @@ page-forgot-password footer {
 }
 
 page-home div.scroll-content {
+=======
+page-home ion-content.content {
+  background-color: #f0f0f0;
+}
+
+page-home ion-content#homeMobile div.scroll-content {
+>>>>>>> dev_jeremie
   font-size: 11px;
 }
 
-page-home div.scroll-content .placeholder {
+page-home ion-content#homeMobile div.scroll-content .placeholder {
   border: 1px dashed rgba(0, 0, 0, 0.6);
 }
 
-page-home div.scroll-content section {
+page-home ion-content#homeMobile div.scroll-content section {
   display: block;
   clear: both;
   width: 100%;
@@ -25972,30 +25980,30 @@ page-home div.scroll-content section {
   text-align: center;
 }
 
-page-home div.scroll-content section * {
+page-home ion-content#homeMobile div.scroll-content section * {
   position: relative;
   text-align: center;
   font-family: HelveticaNeue-Light;
 }
 
-page-home div.scroll-content section.client-logo {
+page-home ion-content#homeMobile div.scroll-content section.client-logo {
   padding: 4vh 2vw 2vw;
 }
 
-page-home div.scroll-content section.client-logo > #neutrogena-logo {
+page-home ion-content#homeMobile div.scroll-content section.client-logo > #neutrogena-logo {
   display: inline-block;
   width: 100%;
   height: 50px;
   width: 237px;
 }
 
-page-home div.scroll-content section.client-logo ion-img {
+page-home ion-content#homeMobile div.scroll-content section.client-logo ion-img {
   background: transparent;
   position: relative;
   max-width: 100%;
 }
 
-page-home div.scroll-content section.client-logo ion-img > img {
+page-home ion-content#homeMobile div.scroll-content section.client-logo ion-img > img {
   position: relative;
   -o-object-fit: fill;
   object-fit: fill;
@@ -26005,7 +26013,7 @@ page-home div.scroll-content section.client-logo ion-img > img {
   margin: auto;
 }
 
-page-home div.scroll-content section.client-logo > p {
+page-home ion-content#homeMobile div.scroll-content section.client-logo > p {
   width: 100%;
   display: block;
   text-align: center;
@@ -26013,7 +26021,7 @@ page-home div.scroll-content section.client-logo > p {
   font-size: 10px;
 }
 
-page-home div.scroll-content section.client-logo > #aura-logo {
+page-home ion-content#homeMobile div.scroll-content section.client-logo > #aura-logo {
   display: inline-block;
   height: 46px;
   width: 127px;
@@ -26021,39 +26029,39 @@ page-home div.scroll-content section.client-logo > #aura-logo {
   display: block;
 }
 
-page-home div.scroll-content section#guide-scan-container > span {
+page-home ion-content#homeMobile div.scroll-content section#guide-scan-container > span {
   display: inline-block;
   width: 100%;
 }
 
-page-home div.scroll-content section#guide-scan-container > span.guide-images > div {
+page-home ion-content#homeMobile div.scroll-content section#guide-scan-container > span.guide-images > div {
   display: inline-block;
   height: 103px;
   width: 103px;
 }
 
-page-home div.scroll-content section#guide-scan-container > span.guide-images > div:first-of-type {
+page-home ion-content#homeMobile div.scroll-content section#guide-scan-container > span.guide-images > div:first-of-type {
   margin: 0 26px 0 0;
 }
 
-page-home div.scroll-content section#guide-scan-container > span.guide-text-instructions {
+page-home ion-content#homeMobile div.scroll-content section#guide-scan-container > span.guide-text-instructions {
   padding: 32px 0 0;
   color: #ee6b1e;
 }
 
-page-home div.scroll-content section#guide-scan-container > span.guide-text-instructions > p {
+page-home ion-content#homeMobile div.scroll-content section#guide-scan-container > span.guide-text-instructions > p {
   margin: 0 auto;
   font-size: 14px;
   line-height: 17px;
 }
 
-page-home div.scroll-content section#scan-button-container {
+page-home ion-content#homeMobile div.scroll-content section#scan-button-container {
   text-align: center;
   display: inline-block;
   width: 100%;
 }
 
-page-home div.scroll-content section#scan-button-container > #scan-button {
+page-home ion-content#homeMobile div.scroll-content section#scan-button-container > #scan-button {
   width: 127px;
   height: 127px;
   display: inline-table;
@@ -26065,6 +26073,161 @@ page-home div.scroll-content section#scan-button-container > #scan-button {
   background-position: center;
   background-size: cover;
   background-color: transparent;
+}
+
+page-home ion-content#homeDesktop h3 {
+  color: #bd0894;
+}
+
+page-home ion-content#homeDesktop div.scroll-content {
+  font-size: 11px;
+}
+
+page-home ion-content#homeDesktop div.scroll-content .placeholder {
+  border: 1px dashed rgba(0, 0, 0, 0.6);
+}
+
+page-home ion-content#homeDesktop div.scroll-content section {
+  display: block;
+  clear: both;
+  width: 100%;
+  margin: auto;
+  position: relative;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section * {
+  position: relative;
+  font-family: HelveticaNeue-Light;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section.client-logo {
+  padding: 4vh 2vw 2vw;
+  height: 23vh;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section.client-logo span {
+  height: 100%;
+  width: 2px;
+  background-color: #bd0894;
+  display: inline-block;
+  margin: 0 2vw;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section.client-logo ion-img {
+  background-color: transparent;
+  contain: inherit;
+  height: 11vh;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section.client-logo ion-img img {
+  height: 100%;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section.client-logo #aura-logo {
+  height: 16vh;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content {
+  height: 50vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  overflow: visible;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img {
+  background-color: transparent;
+  contain: inherit;
+  width: 30vw;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img img {
+  height: auto;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content p {
+  width: 30vw;
+  text-align: center;
+  color: #f07721;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span {
+  display: inline-block;
+  width: 100%;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-images > div {
+  display: inline-block;
+  height: 103px;
+  width: 103px;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-images > div:first-of-type {
+  margin: 0 26px 0 0;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-text-instructions {
+  padding: 32px 0 0;
+  color: #ee6b1e;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-text-instructions > p {
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#scan-button-container {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#scan-button-container > #scan-button {
+  width: 127px;
+  height: 127px;
+  display: inline-table;
+  clear: both;
+  vertical-align: middle;
+  margin: 18px 0 34px;
+  border-radius: 100%;
+  background-image: url("../assets/images/scanbtn.png");
+  background-position: center;
+  background-size: cover;
+  background-color: transparent;
+}
+
+page-home ion-content#homeDesktop div.scroll-content footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 page-login ion-content div.scroll-content {

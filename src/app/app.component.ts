@@ -40,5 +40,13 @@ export class MyApp {
       //self.evt.init();
       console.log("EVT");
     });
+
+    // if(this.platform.is('mobile')){
+    //   this.rootPage = HomePage;
+    // }
+    // else{
+    //   this.rootPage = '';
+    // }
+
   }
 }
