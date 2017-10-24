@@ -25678,7 +25678,6 @@ side-menu ion-content > .scroll-content section.footer > ion-row > ion-col img {
   bottom: 0;
 }
 
-<<<<<<< HEAD
 page-delete-account ion-content div.scroll-content {
   background-color: #f0f0f0;
   vertical-align: middle;
@@ -25956,14 +25955,11 @@ page-forgot-password footer {
   left: 0;
 }
 
-page-home div.scroll-content {
-=======
 page-home ion-content.content {
   background-color: #f0f0f0;
 }
 
 page-home ion-content#homeMobile div.scroll-content {
->>>>>>> dev_jeremie
   font-size: 11px;
 }
 

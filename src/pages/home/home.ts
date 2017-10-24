@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams,Platform } from 'ionic-angular';
+import { NavController,Platform } from 'ionic-angular';
 import { EvtProvider} from '../../providers/evt/evt';
 import { AuthService } from '../../providers/auth/auth.service';
 
@@ -18,14 +18,14 @@ export class HomePage {
 	links: any = [];
 
   noticeViewed : boolean;
-  constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private navParams : NavParams, private auth0: AuthService) {
+  constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private auth0: AuthService) {
     this.auth0.setEVTInfo();
 
   }
 
   ngOnInit(){
     // console.log(this.navParams.data);
-    let self = this;
+
     if(Cookie.get('cookie_notice') && Cookie.get('cookie_notice') == '1'){
       this.noticeViewed = true;
     }

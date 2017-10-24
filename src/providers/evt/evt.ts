@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Config } from '../../config/environment.dev';
 
-import { AuthService } from '../auth/auth.service';
+// import { AuthService } from '../auth/auth.service';
 declare var EVT : any;
 
 /*
@@ -17,7 +17,9 @@ export class EvtProvider {
 
  evtapp : any;
 
-  constructor(public http: Http, private auth0: AuthService) {
+  constructor(public http: Http
+    // private auth0: AuthService
+  ) {
     console.log('Hello EvtProvider Provider',Config.evt_app);
     this.init();
   }
@@ -51,7 +53,7 @@ export class EvtProvider {
 		        new EVT.User({
 		            id: userContext.evrythngUser,
 		            apiKey: userContext.evrythngApiKey
-		        }, this.evtapp)	
+		        }, this.evtapp)
         	)
   		})
   	);

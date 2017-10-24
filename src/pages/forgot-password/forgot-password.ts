@@ -2,7 +2,7 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
-import { AuthService } from "../../providers/auth/auth.service";
+// import { AuthService } from "../../providers/auth/auth.service";
 
 import { SignUpPage } from "../sign-up/sign-up";
 import { LoginPage } from "../login/login";
@@ -23,8 +23,8 @@ export class ForgotPasswordPage {
 	private formGroup : FormGroup;
 	invalidLogin : boolean = false;
  	constructor(public navCtrl: NavController,
-  				public navParams: NavParams, 
-  				private auth0: AuthService, 
+  				public navParams: NavParams,
+  				// private auth0: AuthService,
   				private formBuilder: FormBuilder,
   				private render: Renderer2) {
 	  	this.formGroup = this.formBuilder.group({

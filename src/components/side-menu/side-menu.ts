@@ -1,5 +1,5 @@
-import { Component, ViewChild, Inject, AfterViewInit } from '@angular/core';
-import { App, Platform } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { App } from 'ionic-angular';
 import { AuthService } from '../../providers/auth/auth.service';
 
 //import { SignUpPage } from '../../pages/sign-up/sign-up';
@@ -49,7 +49,7 @@ export class SideMenuComponent {
   }
 
   logout(){
-   this.auth0.logout(); 
+   this.auth0.logout();
   }
 
   loggedIn() : boolean{

@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
@@ -23,9 +23,9 @@ export class MyAccountPage {
 	FBreg : boolean = false;
 	private formGroup : FormGroup;
   constructor(	public navCtrl: NavController,
-  				public navParams: NavParams, 
-  				private render: Renderer2, 
-  				private auth0: AuthService, 
+  				public navParams: NavParams,
+  				// private render: Renderer2,
+  				private auth0: AuthService,
   				private formBuilder: FormBuilder) {
   }
 
@@ -34,8 +34,8 @@ export class MyAccountPage {
   	this.FBreg = this.auth0.isFB();
   	console.log(this.FBreg);
   	let usr = this.auth0.getUserDetailsFromStorage();
-  	let usrFName = this.FBreg ? usr['given_name'] : usr['user_metadata'].firstName; 
-  	let usrLName = this.FBreg ? usr['family_name'] : usr['user_metadata'].lastName; 
+  	let usrFName = this.FBreg ? usr['given_name'] : usr['user_metadata'].firstName;
+  	let usrLName = this.FBreg ? usr['family_name'] : usr['user_metadata'].lastName;
   	this.formGroup = this.formBuilder.group({
   		firstName: [usrFName, Validators.required],
   		lastName: [usrLName, Validators.required],

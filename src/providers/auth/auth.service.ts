@@ -1,9 +1,9 @@
 // src/app/auth/auth.service.ts
 import { Config } from '../../config/environment.dev';
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
-import { HomePage } from '../../pages/home/home';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+// import { HomePage } from '../../pages/home/home';
+// import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 declare var Auth0Lock;
@@ -18,14 +18,14 @@ export class AuthService {
     domain: 'evt-demo.eu.auth0.com',
     responseType: 'token id_token',
     audience: 'https://evt-demo.eu.auth0.com/userinfo',
-    redirectUri: 'http://localhost:8100',      
+    redirectUri: 'http://localhost:8100',
     scope: 'openid'
   });
 
   lock = new Auth0Lock('NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH','evt-demo.eu.auth0.com');
   userInfo : any;
 
-  constructor(private http: Http) {
+  constructor() {
     this.projectId = Config.projectId;
   }
 
