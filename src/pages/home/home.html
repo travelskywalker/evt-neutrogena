@@ -9,10 +9,10 @@
 
 <!-- No headers. We'll create
   a component for this instead -->
-<notice [title]="'Cookie Notice'" [style]="{'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'}">
+<!-- <notice [title]="'Cookie Notice'" [style]="{'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'}">
   This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.
-</notice>
-<ion-content>
+</notice> -->
+<ion-content id="homeMobile" *ngIf="mobileVersion">
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
   <section id="client-logo" class="client-logo">
     <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>
@@ -25,7 +25,7 @@
   </section>
 
   <section id="guide-scan-container" class="">
-    
+
     <span class="guide-images">
 
       <div id="qr-image" class="placeholder">
@@ -49,12 +49,40 @@
   </section>
 
   <section id="scan-button-container" #scanContainer>
-    
+
     <button ion-button id="scan-button" #scanButton (tap)="scan()">
-      
+
     </button>
 
   </section>
+
+
+  <footer></footer>
+
+</ion-content>
+
+
+
+<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">
+
+  <section id="client-logo" class="client-logo">
+
+    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
+    <span></span>
+    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>
+  </section>
+
+  <section  id="client-content" class="client-content">
+      <h3 padding>This site is best viewed on mobile.</h3>
+
+      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>
+      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your
+Visibly Clear&copy; Light Therapy Acne Mask Activator</p>
+
+
+  </section>
+
+
 
 
   <footer></footer>

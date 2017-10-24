@@ -1,117 +1,265 @@
 page-home {
+  ion-content{
 
-	div.scroll-content{
-		font-size: 11px;
-		.placeholder{
-			border: 1px dashed rgba(0,0,0,0.6);
-		}
+    &.content{
+    background-color: #f0f0f0;
+    }
 
-		section{
-			display: block;
-			clear: both;
-			width: 100%;
-			margin: auto;
-			position: relative;
-			text-align: center;
-			*{
-				position: relative;
-				text-align: center;
-				font-family: HelveticaNeue-Light;
-			}
+      &#homeMobile{
+        div.scroll-content{
+          font-size: 11px;
+          .placeholder{
+            border: 1px dashed rgba(0,0,0,0.6);
+          }
 
-			&.client-logo{
-				padding:4vh 2vw 2vw;
-				&>#neutrogena-logo{
-					display: inline-block;
-					width: 100%;
-					height: 50px;
-					width: 237px;
-				}
+          section{
+            display: block;
+            clear: both;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            text-align: center;
+            *{
+              position: relative;
+              text-align: center;
+              font-family: HelveticaNeue-Light;
+            }
 
-				ion-img{
-					background:transparent;
-					position: relative;
-					max-width: 100%;
-					&>img{
-						position: relative;
-						object-fit: fill;
-						object-position: center;
-						max-height: 100%;
-						margin: auto;
-					}
-				}
+            &.client-logo{
+              padding:4vh 2vw 2vw;
+              &>#neutrogena-logo{
+                display: inline-block;
+                width: 100%;
+                height: 50px;
+                width: 237px;
+              }
 
-				&>p{
-					width: 100%;
-					display: block;
-					text-align: center;
-					margin:0.5vh auto;
-					font-size: 10px;
-				}
+              ion-img{
+                background:transparent;
+                position: relative;
+                max-width: 100%;
+                &>img{
+                  position: relative;
+                  object-fit: fill;
+                  object-position: center;
+                  max-height: 100%;
+                  margin: auto;
+                }
+              }
 
-				&>#aura-logo{
-					display: inline-block;
-					//width: 100%;
-					height: 46px;
-					width: 127px;
-					margin: auto;
-					display: block;
-				}
-			}
+              &>p{
+                width: 100%;
+                display: block;
+                text-align: center;
+                margin:0.5vh auto;
+                font-size: 10px;
+              }
 
-			&#guide-scan-container{
+              &>#aura-logo{
+                display: inline-block;
+                //width: 100%;
+                height: 46px;
+                width: 127px;
+                margin: auto;
+                display: block;
+              }
+            }
 
-				&>span{
-					display: inline-block;
-					width: 100%;
-					&.guide-images{
+            &#guide-scan-container{
 
-						&>div{
-							display: inline-block;
-							height: 103px;
-							width: 103px;
-							&:first-of-type{
-								margin:0 26px 0 0 ;	
-							}
-						}
+              &>span{
+                display: inline-block;
+                width: 100%;
+                &.guide-images{
 
-					}
+                  &>div{
+                    display: inline-block;
+                    height: 103px;
+                    width: 103px;
+                    &:first-of-type{
+                      margin:0 26px 0 0 ;
+                    }
+                  }
 
-					&.guide-text-instructions{
-						padding:32px 0 0;
-						color:rgb(238,107,30);
-						&>p{
-							margin:0 auto;
-							font-size: 14px;
-							line-height: 17px;
-						}
-					}
+                }
 
-				}
+                &.guide-text-instructions{
+                  padding:32px 0 0;
+                  color:rgb(238,107,30);
+                  &>p{
+                    margin:0 auto;
+                    font-size: 14px;
+                    line-height: 17px;
+                  }
+                }
 
-			}
+              }
 
-			&#scan-button-container{
-				text-align: center;
-				display: inline-block;
-				width: 100%;
-				&>#scan-button{
-					width: 127px;
-					height: 127px;
-					display: inline-table;
-					clear: both;
-					vertical-align: middle;
-					margin:18px 0 34px;
-					border-radius:100%;
-					background-image:url('../assets/images/scanbtn.png');
-					background-position:center;
-					background-size:cover;
-					background-color:transparent;
-				}
+            }
 
-			}
+            &#scan-button-container{
+              text-align: center;
+              display: inline-block;
+              width: 100%;
+              &>#scan-button{
+                width: 127px;
+                height: 127px;
+                display: inline-table;
+                clear: both;
+                vertical-align: middle;
+                margin:18px 0 34px;
+                border-radius:100%;
+                background-image:url('../assets/images/scanbtn.png');
+                background-position:center;
+                background-size:cover;
+                background-color:transparent;
+              }
 
-		} //end of section tags
+            }
 
-	}
+          } //end of section tags
+
+        }
+      }
+      &#homeDesktop{
+
+          h3{
+            color:rgba(189,8,148,1);
+          }
+
+        div.scroll-content{
+          font-size: 11px;
+          .placeholder{
+            border: 1px dashed rgba(0,0,0,0.6);
+          }
+
+          section{
+            display: block;
+            clear: both;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            *{
+              position: relative;
+              // text-align: center;
+              font-family: HelveticaNeue-Light;
+            }
+
+            &.client-logo{
+              padding:4vh 2vw 2vw;
+              height:23vh;
+              text-align:center;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              span{
+                height:100%;
+                width:2px;
+                background-color:rgba(189,8,148,1);
+                display: inline-block;
+                margin:0 2vw;
+              }
+
+              ion-img{
+                background-color:transparent;
+                contain:inherit;
+                height:11vh;
+
+                img{
+                  height:100%;
+                }
+              }
+              #aura-logo{
+                height:16vh;
+              }
+            }
+
+            &#client-content{
+              height:50vh;
+              display:flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction:column;
+              overflow: visible;
+              ion-img{
+                background-color:transparent;
+                contain:inherit;
+                width:30vw;
+
+                img{
+                  height:auto;
+                }
+              }
+              p{
+                width:30vw;
+                text-align: center;
+                color:rgba(240,119,33,1);
+              }
+            }
+
+            &#guide-scan-container{
+
+              &>span{
+                display: inline-block;
+                width: 100%;
+                &.guide-images{
+
+                  &>div{
+                    display: inline-block;
+                    height: 103px;
+                    width: 103px;
+                    &:first-of-type{
+                      margin:0 26px 0 0 ;
+                    }
+                  }
+
+                }
+
+                &.guide-text-instructions{
+                  padding:32px 0 0;
+                  color:rgb(238,107,30);
+                  &>p{
+                    margin:0 auto;
+                    font-size: 14px;
+                    line-height: 17px;
+                  }
+                }
+
+              }
+
+            }
+
+            &#scan-button-container{
+              text-align: center;
+              display: inline-block;
+              width: 100%;
+              &>#scan-button{
+                width: 127px;
+                height: 127px;
+                display: inline-table;
+                clear: both;
+                vertical-align: middle;
+                margin:18px 0 34px;
+                border-radius:100%;
+                background-image:url('../assets/images/scanbtn.png');
+                background-position:center;
+                background-size:cover;
+                background-color:transparent;
+              }
+
+            }
+
+          } //end of section tags
+          footer{
+            position:absolute;
+            bottom:0;
+            width:100%;
+          }
+        }
+      }
+  }
+
+
+
 }
