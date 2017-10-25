@@ -2,7 +2,7 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
-// import { AuthService } from "../../providers/auth/auth.service";
+ import { AuthService } from "../../providers/auth/auth.service";
 
 import { SignUpPage } from "../sign-up/sign-up";
 import { LoginPage } from "../login/login";
@@ -21,10 +21,11 @@ import { LoginPage } from "../login/login";
 export class ForgotPasswordPage {
 
 	private formGroup : FormGroup;
-	invalidLogin : boolean = false;
+	invalidEmail : boolean = false;
+	emailSent : boolean = false;
  	constructor(public navCtrl: NavController,
   				public navParams: NavParams,
-  				// private auth0: AuthService,
+  				private auth0: AuthService,
   				private formBuilder: FormBuilder,
   				private render: Renderer2) {
 	  	this.formGroup = this.formBuilder.group({
@@ -55,7 +56,22 @@ export class ForgotPasswordPage {
   }
 
   reset_pass(){
-  	//TODO: add auth0's reset password
+  	let self = this;
+  	this.auth0.searchUser("email:"+this.formGroup.value.email)
+  				.then(res=>{
+  					if(res){
+  						console.log(res);
+  						self.invalidEmail = false;
+  						self.emailSent = true;
+  						//proceed to new password
+  						//send an email
+  					}else{
+  						self.invalidEmail = true;
+  					}
+  				})
+  				.catch(err=>{
+  					console.log(err)
+  				})
   }
 
   dismissThis(){

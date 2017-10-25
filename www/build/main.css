@@ -26078,7 +26078,7 @@ page-forgot-password section.main form ion-row {
 
 page-forgot-password section.main form ion-row ion-input {
   font-family: 'HelveticaNeue-Light';
-  height: 46px;
+  height: 40px;
   background-color: #fff;
   display: inline-block;
   clear: both;
@@ -26092,9 +26092,9 @@ page-forgot-password section.main form ion-row ion-input input {
   line-height: 17px;
 }
 
-page-forgot-password section.main form ion-row ion-input[type=email].error:after {
-  content: "Email incorrect";
-  display: block;
+page-forgot-password section.main form ion-row ion-input:after {
+  content: "";
+  display: table;
   clear: both;
   width: 100%;
   font-family: 'HelveticaNeue-Bold';
@@ -26105,6 +26105,14 @@ page-forgot-password section.main form ion-row ion-input[type=email].error:after
   color: #f07721;
   text-align: left;
   position: relative;
+}
+
+page-forgot-password section.main form ion-row ion-input[type=email].error:after {
+  content: "We don't have that email registered. Please sign up.";
+}
+
+page-forgot-password section.main form ion-row ion-input[type=email].mailed:after {
+  content: "Email sent";
 }
 
 page-forgot-password section.main form ion-row ion-input.focused {

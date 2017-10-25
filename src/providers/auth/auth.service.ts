@@ -3,7 +3,7 @@ import { Config } from '../../config/environment.dev';
 import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
 // import { HomePage } from '../../pages/home/home';
-// import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 declare var Auth0Lock;
@@ -14,18 +14,18 @@ export class AuthService {
   clientDefSecret:string = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
   projectId : string;
   webAuth = new auth0.WebAuth({
-    clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
-    domain: 'evt-demo.eu.auth0.com',
-    responseType: 'token id_token',
-    audience: 'https://evt-demo.eu.auth0.com/userinfo',
-    redirectUri: 'http://localhost:8100',
+    clientID: Config.auth0.clientID,
+    domain: Config.auth0.domain,
+    responseType: Config.auth0.responseType,
+    audience: Config.auth0.audience,
+    redirectUri: Config.auth0.redirectUri,
     scope: 'openid'
   });
 
-  lock = new Auth0Lock('NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH','evt-demo.eu.auth0.com');
+  lock = new Auth0Lock(Config.auth0.clientID,Config.auth0.domain);
   userInfo : any;
 
-  constructor() {
+  constructor(private http: Http) {
     this.projectId = Config.projectId;
   }
 
@@ -187,6 +187,104 @@ export class AuthService {
 
   isFB():boolean{
     return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
+  }
+
+  deleteUser(){
+    let self = this;
+    let id = this.getUserDetailsFromStorage()['user_id'];
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+        hdr.append("Authorization", "Bearer "+res['access_token']);
+        let opts = new RequestOptions({headers:hdr});
+        self.http.delete("https://evt-demo.eu.auth0.com/api/v2/users/"+id,opts)
+                  .toPromise()
+                  .then(res=>{
+                    resolve(res)
+                  })
+                  .catch(err=>{
+                    reject(err)
+                  })
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+    );
+  }
+
+  updatePassword(newPass : string){
+    let self = this;
+    let id = this.getUserDetailsFromStorage()['user_id'];
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = {"password":newPass};
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+        hdr.append("Authorization", "Bearer "+res['access_token']);
+        let opts = new RequestOptions({headers:hdr});
+        self.http.patch("https://evt-demo.eu.auth0.com/api/v2/users/"+id,body,opts)
+                  .toPromise()
+                  .then(res=>{
+                    resolve(res)
+                  })
+                  .catch(err=>{
+                    reject(err)
+                  })
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+    );
+
+  }
+
+  requestMgmtToken(){
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = {
+      grant_type: Config.auth0Mgmt.grant_type,
+      client_id: Config.auth0Mgmt.client_id,
+      client_secret: Config.auth0Mgmt.client_secret,
+      audience: Config.auth0Mgmt.audience 
+    };
+
+    let opts = new RequestOptions({headers:hdr});
+    return new Promise((resolve,reject)=>{
+    this.http.post('https://evt-demo.eu.auth0.com/oauth/token',body,opts)
+             .toPromise()
+             .then(res=>{
+               localStorage.setItem('managementToken',JSON.stringify(res.json()))
+               resolve(res.json())
+             })
+             .catch(err=>{
+               reject(err)
+             })
+           });
+  }
+
+  searchUser(q){
+    let self = this;
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = `q=${encodeURIComponent(q)}&search_engine=v2`;
+
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+          hdr.append("Authorization", "Bearer "+res['access_token']);
+          let opts = new RequestOptions({headers:hdr});
+          self.http.get("https://evt-demo.eu.auth0.com/api/v2/users?"+body,opts)
+              .toPromise()
+              .then(res=>{
+                resolve(res.json()[0])
+              })
+              .catch(err=>{
+                reject(err)
+              })
+      }).catch(err=>{
+        console.log(err)
+      })
+    });
   }
 
 
