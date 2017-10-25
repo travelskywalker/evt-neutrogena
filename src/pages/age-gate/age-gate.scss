@@ -1,4 +1,39 @@
 page-age-gate {
+
+  ion-header{
+    &.header{
+      ion-navbar{
+          &>div.toolbar-background{
+              background-color:#f0f0f0;
+              border-color:transparent;
+              border-style:none;
+          }
+          ion-buttons{
+            	padding: 5px;
+						button{
+							&.bar-button{
+
+
+							}
+						}
+					}
+      }
+    }
+
+    button[ion-button].xbtn{
+
+			height:20px;
+			width: 20px;
+			display: table;
+			padding:5px;
+			margin: 0;
+			background-image:url('../assets/images/xbtn.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-color: transparent;
+			box-shadow:none;
+		}
+  }
 	ion-content{
 		div.scroll-content{
 			background-color:rgb(240,240,240);
@@ -45,6 +80,10 @@ page-age-gate {
 			background-color: transparent;
 			box-shadow:none;
 		}
+
+    .content{
+      margin:1rem 0;
+    }
     ion-img{
       background-color:transparent;
       contain:inherit;

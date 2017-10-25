@@ -21,7 +21,7 @@ export class AgeGatePage {
 
   				private formBuilder: FormBuilder) {
   	this.formGroup = this.formBuilder.group({
-  		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+  		day: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
   		password: ['', Validators.required ],
   	});
   }

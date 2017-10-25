@@ -25678,6 +25678,213 @@ side-menu ion-content > .scroll-content section.footer > ion-row > ion-col img {
   bottom: 0;
 }
 
+page-age-gate ion-header.header ion-navbar > div.toolbar-background {
+  background-color: #f0f0f0;
+  border-color: transparent;
+  border-style: none;
+}
+
+page-age-gate ion-header.header ion-navbar ion-buttons {
+  padding: 5px;
+}
+
+page-age-gate ion-header button[ion-button].xbtn {
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 5px;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-age-gate ion-content div.scroll-content {
+  background-color: #f0f0f0;
+}
+
+page-age-gate div.space-40 {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  position: relative;
+}
+
+page-age-gate div.space-40 a {
+  text-decoration: none;
+  font-size: 15px;
+  color: #711b7d;
+  text-transform: uppercase;
+  width: auto;
+  height: auto;
+  display: inline-table;
+  margin: auto;
+  margin-top: 11.5px;
+}
+
+page-age-gate section.main {
+  position: relative;
+  padding-top: 81px;
+}
+
+page-age-gate section.main * {
+  color: #721c7d;
+}
+
+page-age-gate section.main button[ion-button].xbtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-age-gate section.main .content {
+  margin: 1rem 0;
+}
+
+page-age-gate section.main ion-img {
+  background-color: transparent;
+  contain: inherit;
+  height: auto;
+  width: 100%;
+}
+
+page-age-gate section.main ion-img img {
+  max-height: 100%;
+  height: 50px;
+  margin: 0 auto;
+}
+
+page-age-gate section.main p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+}
+
+page-age-gate section.main a.linker {
+  font-size: 14px;
+  line-height: 17px;
+  color: #f07721;
+  font-family: 'HelveticaNeue-Light';
+  text-decoration: underline;
+}
+
+page-age-gate section.main form {
+  text-align: center;
+}
+
+page-age-gate section.main form ion-row {
+  padding: 0 45px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+page-age-gate section.main form ion-row.extra-bottom {
+  margin-bottom: 27px;
+}
+
+page-age-gate section.main form ion-row.extra-top {
+  margin-top: 43px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+page-age-gate section.main form ion-row ion-input {
+  font-family: 'HelveticaNeue-Light';
+  height: 46px;
+  background-color: #fff;
+  display: inline-block;
+  clear: both;
+  border-radius: 10px;
+}
+
+page-age-gate section.main form ion-row ion-input input {
+  margin-left: 19px;
+  font-size: 14px;
+  color: #f073ac;
+  line-height: 17px;
+}
+
+page-age-gate section.main form ion-row ion-input[type=email].error:after {
+  content: "Email incorrect";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
+page-age-gate section.main form ion-row ion-input.focused {
+  -webkit-box-shadow: 1px 1px 0px 1px #f07721;
+  box-shadow: 1px 1px 0px 1px #f07721;
+  /*&[type=password]{
+							&:after{
+								content:"Please enter a password of 8+ characters";
+								display: block;
+								clear: both;
+								width: 100%;
+								font-family: 'HelveticaNeue-Bold';
+								font-size: 9px;
+								text-transform: uppercase;
+								margin-top: 6px;
+								text-indent: 10px;
+								color: rgb(240,119,33);
+								text-align: left;
+							}
+						}*/
+}
+
+page-age-gate section.main form button[ion-button] {
+  height: 50px;
+  width: calc(100% - 100px);
+  display: inline-table;
+  clear: both;
+  margin: auto;
+  color: #fff;
+  text-align: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: 'HelveticaNeue-Light';
+  border: 0;
+}
+
+page-age-gate section.main form button[ion-button]#login {
+  background-image: url("../assets/images/signup_btn.png");
+}
+
+page-age-gate section.main form button[ion-button]#loginFB {
+  background-image: url("../assets/images/fbSignup_btn.png");
+  margin-bottom: 11px;
+}
+
 page-delete-account ion-content div.scroll-content {
   background-color: #f0f0f0;
   vertical-align: middle;
