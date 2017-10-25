@@ -13,24 +13,28 @@
   <ion-img src="../assets/images/logo_neutrogena.png"></ion-img>
 
 	<p class="content">Please enter your date of birth:</p>
-	<form [formGroup]="formGroup" id="login-form" #loginForm>
+	<!-- <form [formGroup]="formGroup" id="login-form" #loginForm> -->
+
 		<ion-row>
-      <!-- <ion-select>
-       <ion-option *ngFor="let month of monthDate" [value]="employee">{{month}}</ion-option>
-    </ion-select> -->
-    <ion-datetime displayFormat="MMM DD, YYYY"></ion-datetime>
+
+<input type="text" maxlength="2" placeholder="MM" [(ngModel)]="selectedDate.month" [readonly]='true'/>
+<input type="text" maxlength="2" placeholder="DD" [(ngModel)]="selectedDate.day" [readonly]='true'/>
+<input type="text" maxlength="4" placeholder="YYYY" [(ngModel)]="selectedDate.year" [readonly]='true'/>
+
+<ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="inputDate" (ionChange)="changedDate()"></ion-datetime>
 			<!-- <ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin}"></ion-input> -->
 		</ion-row>
+
 		<!-- <ion-row>
 			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
 		</ion-row>
 		<ion-row class="extra-top">
 			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>
 		</ion-row> -->
-		<button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button>
-		<div class="space-40"><a>OR</a></div>
-		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button>
-	</form>
+		<!-- <button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button> -->
+		<!-- <div class="space-40"><a>OR</a></div>
+		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button> -->
+	<!-- </form> -->
 
 </section>
 <footer></footer>

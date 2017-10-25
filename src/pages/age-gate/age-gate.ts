@@ -15,16 +15,23 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 export class AgeGatePage {
 	private formGroup : FormGroup;
 	invalidLogin : boolean = false;
-  monthDate: any = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  selectedDate: any;
+  inputDate: any;
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
   				private render: Renderer2,
 
   				private formBuilder: FormBuilder) {
-  	this.formGroup = this.formBuilder.group({
-  		day: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-  		password: ['', Validators.required ],
-  	});
+  	// this.formGroup = this.formBuilder.group({
+  	// 	day: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+  	// 	password: ['', Validators.required ],
+    //   date: ['']
+  	// });
+    this.selectedDate = {
+      'day':'',
+      'month':'',
+      'year':''
+    };
   }
 
   ionViewDidLoad() {
@@ -37,7 +44,16 @@ export class AgeGatePage {
   	this.render.addClass(node,"focused");
   	//this.render.setStyle(node,"box-shadow","2px 2px 3px 1px rgb(240,119,33)");
   }
+  changedDate(){
+    // console.log(this.inputDate);
 
+
+       this.selectedDate.year = this.inputDate.split("-")[0];
+       this.selectedDate.month = this.inputDate.split("-")[1];
+       this.selectedDate.day = this.inputDate.split("-")[2];
+
+       console.log(this.selectedDate);
+  }
   blurred(event){
   	//console.log(event._elementRef.nativeElement);
   	let node = event._elementRef.nativeElement;

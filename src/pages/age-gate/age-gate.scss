@@ -17,6 +17,10 @@ page-age-gate {
 							}
 						}
 					}
+
+      }
+      &::after{
+        display:none;
       }
     }
 
@@ -107,114 +111,39 @@ page-age-gate {
 			}
 
 		}
+    ion-row{
+        &.row{
+          position: relative;
+            justify-content: center;
+            align-items: center;
+        }
 
-		a.linker{
-			font-size: 14px;
-			line-height: 17px;
-			color:rgb(240,119,33);
-			font-family: 'HelveticaNeue-Light';
-			text-decoration: underline;
-		}
+        ion-datetime{
+          width:0;
+          height:0;
+          padding:0;
+        }
+    }
 
-
-		form{
-			text-align: center;
-			ion-row{
-				padding:0 45px;
-				display: inline-block;
-				width: 100%;
-				margin-bottom: 7px;
-
-				&.extra-bottom{
-					margin-bottom:27px;
-				}
-				&.extra-top{
-					margin-top:43px;
-					margin-bottom: 28px;
-					text-align: left;
-				}
-
-				ion-input{
-					font-family: 'HelveticaNeue-Light';
-					height: 46px;
-					background-color:#fff;
-					display: inline-block;
-					clear: both;
-					border-radius: 10px;
-					input{
-						margin-left: 19px;
-						font-size: 14px;
-						color:rgb(240,115,172);
-						line-height: 17px;
-						//&.error{
-						//}
-					}
-							&[type=email].error{
-
-								&:after{
-									content:"Email incorrect";
-									display: block;
-									clear: both;
-									width: 100%;
-									font-family: 'HelveticaNeue-Bold';
-									font-size: 9px;
-									text-transform: uppercase;
-									margin-top: 6px;
-									text-indent: 10px;
-									color: rgb(240,119,33);
-									text-align: left;
-									position: relative;
-								}
-							}
-					&.focused{
-						box-shadow:1px 1px 0px 1px rgb(240,119,33);
-						/*&[type=password]{
-							&:after{
-								content:"Please enter a password of 8+ characters";
-								display: block;
-								clear: both;
-								width: 100%;
-								font-family: 'HelveticaNeue-Bold';
-								font-size: 9px;
-								text-transform: uppercase;
-								margin-top: 6px;
-								text-indent: 10px;
-								color: rgb(240,119,33);
-								text-align: left;
-							}
-						}*/
-					}
-
-				}
-
-			}// end of ion-row
-
-			button[ion-button]{
-				height: 50px;
-				width: calc(100% - 100px);
-				display: inline-table;
-				clear: both;
-				margin: auto;
-				color:#fff;
-				text-align: center;
-				background-size:contain;
-				background-repeat:no-repeat;
-				background-position:center;
-				background-color:transparent;
-				box-shadow:none;
-				font-family: 'HelveticaNeue-Light';
-				border:0;
-				&#login{
-					background-image:url('../assets/images/signup_btn.png');
-				}
-
-				&#loginFB{
-					background-image:url('../assets/images/fbSignup_btn.png');
-					margin-bottom: 11px;
-				}
-			}
-
-		}// end of form
-
+    input{
+      width:65px;
+      text-align: center;
+      padding:15px 20px;
+      border-radius:10px;
+      border:none;
+      margin:20px 10px;
+      font-size:15px;
+      color:rgba(189,8,148,1);
+      font-weight: bold;
+      -webkit-box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      -moz-box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      &::placeholder{
+        color:rgba(189,8,148,1);
+      }
+      &[maxlength='4']{
+        width:80px;
+      }
+    }
 	}// end of section.main
 }
