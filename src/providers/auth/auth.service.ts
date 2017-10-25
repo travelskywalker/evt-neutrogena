@@ -3,7 +3,7 @@ import { Config } from '../../config/environment.dev';
 import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
 // import { HomePage } from '../../pages/home/home';
-// import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 declare var Auth0Lock;
@@ -19,13 +19,13 @@ export class AuthService {
     responseType: 'token id_token',
     audience: 'https://evt-demo.eu.auth0.com/userinfo',
     redirectUri: 'http://localhost:8100',
-    scope: 'openid'
+    scope: 'openid users:delete'
   });
 
   lock = new Auth0Lock('NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH','evt-demo.eu.auth0.com');
   userInfo : any;
 
-  constructor() {
+  constructor(private http: Http) {
     this.projectId = Config.projectId;
   }
 
@@ -187,6 +187,80 @@ export class AuthService {
 
   isFB():boolean{
     return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
+  }
+
+  deleteUser(){
+    let self = this;
+    let id = this.getUserDetailsFromStorage()['user_id'];
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+        hdr.append("Authorization", "Bearer "+res['access_token']);
+        let opts = new RequestOptions({headers:hdr});
+        self.http.delete("https://evt-demo.eu.auth0.com/api/v2/users/"+id,opts)
+                  .toPromise()
+                  .then(res=>{
+                    resolve(res)
+                  })
+                  .catch(err=>{
+                    reject(err)
+                  })
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+    );
+  }
+
+  updatePassword(newPass : string){
+    let self = this;
+    let id = this.getUserDetailsFromStorage()['user_id'];
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = {"password":newPass};
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+        hdr.append("Authorization", "Bearer "+res['access_token']);
+        let opts = new RequestOptions({headers:hdr});
+        self.http.patch("https://evt-demo.eu.auth0.com/api/v2/users/"+id,body,opts)
+                  .toPromise()
+                  .then(res=>{
+                    resolve(res)
+                  })
+                  .catch(err=>{
+                    reject(err)
+                  })
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+    );
+
+  }
+
+  requestMgmtToken(){
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = {
+      grant_type: 'client_credentials',
+      client_id: 'LPon98XtIsM2H3zzW85AppjgZxM5GeZE',
+      client_secret: 'ZH-rOjkdGcLjSgYBCN2oxhVCp4oJaWsfe8U_JVaMu7c-QrWHG-vTu0CB7e3q_zR4',
+      audience: 'https://evt-demo.eu.auth0.com/api/v2/' 
+    };
+
+    let opts = new RequestOptions({headers:hdr});
+    return new Promise((resolve,reject)=>{
+    this.http.post('https://evt-demo.eu.auth0.com/oauth/token',body,opts)
+             .toPromise()
+             .then(res=>{
+               localStorage.setItem('managementToken',JSON.stringify(res.json()))
+               resolve(res.json())
+             })
+             .catch(err=>{
+               reject(err)
+             })
+           });
   }
 
 

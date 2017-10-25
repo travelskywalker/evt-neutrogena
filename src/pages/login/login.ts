@@ -6,6 +6,7 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
+import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 
 @IonicPage()
 @Component({
@@ -74,5 +75,9 @@ export class LoginPage {
 
   FBauth(){
   	this.auth0.fbAuth();
+  }
+
+  passwordReset(){
+  	this.navCtrl.setRoot(ForgotPasswordPage);
   }
 }
