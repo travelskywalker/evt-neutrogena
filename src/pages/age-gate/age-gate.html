@@ -13,7 +13,7 @@
   <ion-img src="../assets/images/logo_neutrogena.png"></ion-img>
 
 	<p class="content">Please enter your date of birth:</p>
-	<!-- <form [formGroup]="formGroup" id="login-form" #loginForm> -->
+
 
 		<ion-row>
 
@@ -22,19 +22,16 @@
 <input type="text" maxlength="4" placeholder="YYYY" [(ngModel)]="selectedDate.year" [readonly]='true'/>
 
 <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="inputDate" (ionChange)="changedDate()"></ion-datetime>
-			<!-- <ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin}"></ion-input> -->
-		</ion-row>
-
-		<!-- <ion-row>
-			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
-		</ion-row>
-		<ion-row class="extra-top">
-			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>
-		</ion-row> -->
-		<!-- <button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button> -->
-		<!-- <div class="space-40"><a>OR</a></div>
-		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button> -->
-	<!-- </form> -->
+			</ion-row>
+<p class="content small width-70">By submitting your data, you are accepting our Privacy Policy and Cookie Policy.</p>
+	<ion-row>
+    <ion-item >
+    <ion-label>
+Please remember me on this site.</ion-label>
+    <ion-checkbox ></ion-checkbox>
+  </ion-item>
+  </ion-row>
+  <button ion-button (click)="submitAge()">Enter</button>
 
 </section>
 <footer></footer>

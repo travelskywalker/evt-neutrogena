@@ -25757,6 +25757,26 @@ page-age-gate section.main button[ion-button].xbtn {
   box-shadow: none;
 }
 
+page-age-gate section.main button[ion-button].button-default {
+  margin: 0 auto;
+  display: block;
+  background-color: transparent;
+  background-image: url("../assets/images/button-bg.jpg");
+  background-repeat: repeat-x;
+  background-size: contain;
+  width: 70%;
+}
+
+@media (min-width: 768px) {
+  page-age-gate section.main button[ion-button].button-default {
+    width: 40%;
+  }
+}
+
+page-age-gate section.main button[ion-button].button-default .button-inner {
+  color: #fff;
+}
+
 page-age-gate section.main .content {
   margin: 1rem 0;
 }
@@ -25780,6 +25800,11 @@ page-age-gate section.main p {
   text-align: center;
   line-height: 17px;
   font-family: 'HelveticaNeue-Light';
+  margin: 0 auto;
+}
+
+page-age-gate section.main p.small {
+  font-size: 9px;
 }
 
 page-age-gate section.main ion-row.row {
@@ -25798,6 +25823,30 @@ page-age-gate section.main ion-row ion-datetime {
   width: 0;
   height: 0;
   padding: 0;
+}
+
+page-age-gate section.main ion-row ion-item.item {
+  background-color: transparent;
+  width: auto;
+  margin: 10px 0 20px 0;
+}
+
+page-age-gate section.main ion-row ion-item.item .item-inner {
+  border-bottom: none;
+}
+
+page-age-gate section.main ion-row ion-item.item ion-checkbox.checkbox {
+  margin: 9px 20px 9px 4px;
+}
+
+page-age-gate section.main ion-row ion-item.item ion-checkbox .checkbox-icon {
+  border-radius: 30%;
+  border-color: transparent;
+}
+
+page-age-gate section.main ion-row ion-item ion-label {
+  font-size: 10px;
+  color: #f17722;
 }
 
 page-age-gate section.main input {
@@ -25828,6 +25877,16 @@ page-age-gate section.main input::placeholder {
 
 page-age-gate section.main input[maxlength='4'] {
   width: 80px;
+}
+
+page-age-gate section.main .width-70 {
+  width: 70%;
+  margin: 0 auto;
+}
+
+page-age-gate footer {
+  position: absolute;
+  bottom: 0;
 }
 
 page-delete-account ion-content div.scroll-content {
@@ -26321,7 +26380,7 @@ page-home ion-content#homeDesktop div.scroll-content section#client-content {
 page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img {
   background-color: transparent;
   contain: inherit;
-  width: 30vw;
+  width: 40%;
 }
 
 page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img img {
@@ -26329,7 +26388,7 @@ page-home ion-content#homeDesktop div.scroll-content section#client-content ion-
 }
 
 page-home ion-content#homeDesktop div.scroll-content section#client-content p {
-  width: 30vw;
+  width: 50%;
   text-align: center;
   color: #f07721;
 }

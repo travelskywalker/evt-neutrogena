@@ -84,9 +84,28 @@ page-age-gate {
 			background-color: transparent;
 			box-shadow:none;
 		}
+    button{
+      &[ion-button]{
+        &.button-default{
+          margin:0 auto;
+          display:block;
+          background-color:transparent;
+          background-image:url('../assets/images/button-bg.jpg');
+          background-repeat:repeat-x;
+          background-size:contain;
+          width:70%;
+          @media (min-width:768px){
+            width:40%;
+          }
+          .button-inner{
+            color:#fff;
+          }
 
+        }
+      }
+    }
     .content{
-      margin:1rem 0;
+        margin:1rem 0;
     }
     ion-img{
       background-color:transparent;
@@ -101,14 +120,17 @@ page-age-gate {
       }
     }
 		p{
+
 			width: 100%;
 			margin: 0;
 			text-align: center;
 			line-height: 17px;
 			font-family: 'HelveticaNeue-Light';
-			&.text{
-
+      margin:0 auto;
+			&.small{
+        font-size:9px;
 			}
+
 
 		}
     ion-row{
@@ -122,6 +144,31 @@ page-age-gate {
           width:0;
           height:0;
           padding:0;
+        }
+
+        ion-item{
+          &.item{
+              background-color:transparent;
+              width:auto;
+              margin: 10px 0 20px 0;
+              .item-inner{
+                border-bottom:none;
+              }
+              ion-checkbox{
+                &.checkbox{
+                  margin:9px 20px 9px 4px;
+                }
+                .checkbox-icon{
+                  border-radius:30%;
+                  border-color:transparent;
+                }
+              }
+          }
+
+          ion-label{
+            font-size:10px;
+            color:rgba(241,119,34,1);
+          }
         }
     }
 
@@ -145,5 +192,16 @@ page-age-gate {
         width:80px;
       }
     }
+
+
+    .width-70{
+      width:70%;
+      margin:0 auto;
+    }
 	}// end of section.main
+
+  footer{
+    position: absolute;
+    bottom: 0;
+  }
 }
