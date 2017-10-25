@@ -21,6 +21,7 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 })
 export class SignUpPage {
 	invalidReg : boolean = false;
+	emailTaken : boolean = false;
 	private formGroup : FormGroup;
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams, 
@@ -66,15 +67,24 @@ export class SignUpPage {
 
   signup(){
   	let usr = this.formGroup.value;
+  	let self = this;
 
-  	this.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{
-  		this.navCtrl.setRoot(LoginPage);
-  		console.log(res)
+  	this.auth0.searchUser("email:"+usr.email).then(found=>{
+  		if(found){
+  			self.emailTaken = true;
+  		}else{
+		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{
+		  		this.navCtrl.setRoot(LoginPage);
+		  		console.log(res)
+		  	})
+		  	.catch(err=>{
+		  		console.log(err);
+		  		self.invalidReg = true;
+		  	});
+  		}
+  	}).catch(err=>{
+  		console.log("Something went wrong.")
   	})
-  	.catch(err=>{
-  		console.log(err);
-  		this.invalidReg = true;
-  	});
   }
 
   FBauth(){

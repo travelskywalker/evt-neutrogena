@@ -25956,7 +25956,7 @@ page-delete-account section.main a#delete {
 
 page-delete-account section.main button[ion-button] {
   height: 50px;
-  width: 250px;
+  width: calc(100% - 100px);
   display: block;
   clear: both;
   margin: auto;
@@ -26136,7 +26136,7 @@ page-forgot-password section.main form ion-row ion-input.focused {
 }
 
 page-forgot-password section.main button[ion-button] {
-  height: 55px;
+  height: 50px;
   width: calc(100vw - 100px);
   display: block;
   clear: both;
@@ -26144,7 +26144,7 @@ page-forgot-password section.main button[ion-button] {
   color: #fff;
   text-align: center;
   text-transform: uppercase;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
@@ -26160,6 +26160,7 @@ page-forgot-password section.main button[ion-button]#reset {
 
 page-forgot-password section.main button[ion-button]#signup_btn {
   color: #711b7d;
+  background-size: 100% 100%;
   background-image: url("../assets/images/transparent_btn.png");
   margin-bottom: 11px;
 }
@@ -26598,7 +26599,7 @@ page-login section.main form button[ion-button] {
   margin: auto;
   color: #fff;
   text-align: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
@@ -26733,7 +26734,7 @@ page-my-account section.main form ion-row ion-label {
 
 page-my-account section.main form ion-row ion-input {
   font-family: 'HelveticaNeue-Light';
-  height: 46px;
+  height: 40px;
   display: inline-block;
   clear: both;
   padding: 0 15px;
@@ -26779,7 +26780,7 @@ page-my-account section.main form button[ion-button] {
   margin: auto;
   color: #fff;
   text-align: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
@@ -26798,6 +26799,7 @@ page-my-account section.main form button[ion-button]#saveChanges, page-my-accoun
 
 page-my-account section.main form button[ion-button]#deleteAccount {
   color: #711b7d;
+  background-size: 100% 100%;
   background-image: url("../assets/images/transparent_btn.png");
   margin-bottom: 11px;
 }
@@ -26900,7 +26902,7 @@ page-sign-up section.main form ion-row.extra-bottom {
 
 page-sign-up section.main form ion-row ion-input {
   font-family: 'HelveticaNeue-Light';
-  height: 46px;
+  height: 40px;
   background-color: #fff;
   display: inline-block;
   clear: both;
@@ -26908,11 +26910,34 @@ page-sign-up section.main form ion-row ion-input {
   position: relative;
 }
 
+page-sign-up section.main form ion-row ion-input.taken {
+  margin-bottom: 20px;
+}
+
 page-sign-up section.main form ion-row ion-input input {
   margin-left: 19px;
   font-size: 14px;
   color: #f073ac;
   line-height: 17px;
+}
+
+page-sign-up section.main form ion-row ion-input[type=email]:after {
+  content: "";
+  display: table;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
+page-sign-up section.main form ion-row ion-input[type=email].taken:after {
+  content: "You've already registered with us. Log in instead.";
 }
 
 page-sign-up section.main form ion-row ion-input[type=password]:after {

@@ -113,7 +113,7 @@ page-my-account {
 				}
 				ion-input{
 					font-family: 'HelveticaNeue-Light';
-					height: 46px;
+					height: 40px;
 					//background-color:#fff;
 					display: inline-block;
 					clear: both;
@@ -161,7 +161,7 @@ page-my-account {
 				margin: auto;
 				color:#fff;
 				text-align: center;
-				background-size:contain;
+				background-size:cover;
 				background-repeat:no-repeat;
 				background-position:center;
 				background-color:transparent;
@@ -177,6 +177,7 @@ page-my-account {
 
 				&#deleteAccount{
 					color:rgb(113,27,125);
+					background-size: 100% 100%;
 					background-image:url('../assets/images/transparent_btn.png');
 					margin-bottom: 11px;
 				}

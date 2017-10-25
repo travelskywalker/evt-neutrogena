@@ -122,7 +122,6 @@ export class AuthService {
     if( (localStorage.access_token && localStorage.id_token) && (!localStorage.evrythngInfo || localStorage.evrythngInfo === "undefined") ){
       let user = this.getUserDetailsFromStorage();
       let res = Object.keys(user).filter((a)=>{ return (a.indexOf("user_metadata") > -1) });
-      console.log(user,res);
       localStorage.setItem('evrythngInfo',JSON.stringify(user[res[0]].evrythngUserData));
     }
   }
@@ -191,7 +190,7 @@ export class AuthService {
 
   deleteUser(){
     let self = this;
-    let id = this.getUserDetailsFromStorage()['user_id'];
+    let id = (self.isFB() ? this.getUserDetailsFromStorage()['sub'] : self.getUserDetailsFromStorage()['user_id']);
     let hdr = new Headers();
     hdr.append("Content-Type","application/json");
     return new Promise((resolve,reject)=>{
