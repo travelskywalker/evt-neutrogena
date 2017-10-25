@@ -68,6 +68,7 @@ export class SignUpPage {
   	let usr = this.formGroup.value;
 
   	this.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{
+  		this.navCtrl.setRoot(LoginPage);
   		console.log(res)
   	})
   	.catch(err=>{

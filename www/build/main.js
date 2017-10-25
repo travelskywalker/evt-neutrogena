@@ -76,6 +76,7 @@ var SignUpPage = (function () {
         var _this = this;
         var usr = this.formGroup.value;
         this.auth0.signup({ email: usr.email, pass: usr.password }, usr.firstName, usr.lastName).then(function (res) {
+            _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */]);
             console.log(res);
         })
             .catch(function (err) {
@@ -95,13 +96,10 @@ SignUpPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-sign-up',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/sign-up/sign-up.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Sign Up</p>\n	<p class="form-desc">Let\'s get started with your free mindulness sessions.</p>\n	<form [formGroup]="formGroup" id="sign-up-form" #signUpForm>\n		<ion-row>\n			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<div class="space-40"></div>\n		<p class="form-desc log">Already registered? Log in <a class="linker" (tap)="toLogin()">here</a>.</p>\n		<button ion-button id="signUp" class="getStarted" (tap)="signup()" [disabled]="!formGroup.valid">Get Started</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signUpFB" class="fbReg" (tap)="FBauth()">Sign Up with Facebook</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/sign-up/sign-up.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */]) === "function" && _e || Object])
 ], SignUpPage);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=sign-up.js.map
 
 /***/ }),
@@ -348,7 +346,21 @@ var Config = {
     //evt_operator: "87NneGCimPPb5eZTr6nKPudKMhKzkGiqf8mvCF2N1hY2R3nOQA3sijF8KOkiZCdV9KTUpeZ3PkGacWQG",
     //evt_operator_apikey: "hohzaKH7VbVp659Pnr5m3xg2DpKBivg9rFh6PttT5AnBtEn3s17B8OPAOpBjNTWdoRlosLTxJmUrpjTi",
     projectId: "U3NNqQhUe6s7QraRakG4fpNc",
-    appId: "UG7N6Q2yVMsrtNRaak34fprg"
+    appId: "UG7N6Q2yVMsrtNRaak34fprg",
+    auth0: {
+        clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
+        domain: 'evt-demo.eu.auth0.com',
+        responseType: 'token id_token',
+        audience: 'https://evt-demo.eu.auth0.com/userinfo',
+        redirectUri: 'http://localhost:8100',
+        scope: 'openid'
+    },
+    auth0Mgmt: {
+        grant_type: 'client_credentials',
+        client_id: 'LPon98XtIsM2H3zzW85AppjgZxM5GeZE',
+        client_secret: 'ZH-rOjkdGcLjSgYBCN2oxhVCp4oJaWsfe8U_JVaMu7c-QrWHG-vTu0CB7e3q_zR4',
+        audience: 'https://evt-demo.eu.auth0.com/api/v2/'
+    }
 };
 //# sourceMappingURL=environment.dev.js.map
 
@@ -362,8 +374,9 @@ var Config = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sign_up_sign_up__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -376,7 +389,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import { AuthService } from "../../providers/auth/auth.service";
+
 
 
 /**
@@ -386,14 +399,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var ForgotPasswordPage = (function () {
-    function ForgotPasswordPage(navCtrl, navParams, 
-        // private auth0: AuthService,
-        formBuilder, render) {
+    function ForgotPasswordPage(navCtrl, navParams, auth0, formBuilder, render) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.auth0 = auth0;
         this.formBuilder = formBuilder;
         this.render = render;
-        this.invalidLogin = false;
+        this.invalidEmail = false;
+        this.emailSent = false;
         this.formGroup = this.formBuilder.group({
             email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
         });
@@ -414,10 +427,26 @@ var ForgotPasswordPage = (function () {
         //this.render.removeStyle(node,"box-shadow");
     };
     ForgotPasswordPage.prototype.toSignup = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__sign_up_sign_up__["a" /* SignUpPage */]);
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__["a" /* SignUpPage */]);
     };
     ForgotPasswordPage.prototype.reset_pass = function () {
-        //TODO: add auth0's reset password
+        var self = this;
+        this.auth0.searchUser("email:" + this.formGroup.value.email)
+            .then(function (res) {
+            if (res) {
+                console.log(res);
+                self.invalidEmail = false;
+                self.emailSent = true;
+                //proceed to new password
+                //send an email
+            }
+            else {
+                self.invalidEmail = true;
+            }
+        })
+            .catch(function (err) {
+            console.log(err);
+        });
     };
     ForgotPasswordPage.prototype.dismissThis = function () {
         // should pop this page and then go to previous
@@ -426,21 +455,19 @@ var ForgotPasswordPage = (function () {
             this.navCtrl.pop();
         }
         else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__login_login__["a" /* LoginPage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
         }
     };
     return ForgotPasswordPage;
 }());
 ForgotPasswordPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
+        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail,\'mailed\':emailSent}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()" [disabled]="!formGroup.valid">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _e || Object])
 ], ForgotPasswordPage);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=forgot-password.js.map
 
 /***/ }),
@@ -736,14 +763,14 @@ var AuthService = (function () {
         this.clientDefId = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
         this.clientDefSecret = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
         this.webAuth = new __WEBPACK_IMPORTED_MODULE_2_auth0_js__["WebAuth"]({
-            clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
-            domain: 'evt-demo.eu.auth0.com',
-            responseType: 'token id_token',
-            audience: 'https://evt-demo.eu.auth0.com/userinfo',
-            redirectUri: 'http://localhost:8100',
-            scope: 'openid users:delete'
+            clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.clientID,
+            domain: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain,
+            responseType: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.responseType,
+            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.audience,
+            redirectUri: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.redirectUri,
+            scope: 'openid'
         });
-        this.lock = new Auth0Lock('NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH', 'evt-demo.eu.auth0.com');
+        this.lock = new Auth0Lock(__WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.clientID, __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain);
         this.projectId = __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].projectId;
     }
     AuthService.prototype.signup = function (usr, fName, lName) {
@@ -943,10 +970,10 @@ var AuthService = (function () {
         var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         hdr.append("Content-Type", "application/json");
         var body = {
-            grant_type: 'client_credentials',
-            client_id: 'LPon98XtIsM2H3zzW85AppjgZxM5GeZE',
-            client_secret: 'ZH-rOjkdGcLjSgYBCN2oxhVCp4oJaWsfe8U_JVaMu7c-QrWHG-vTu0CB7e3q_zR4',
-            audience: 'https://evt-demo.eu.auth0.com/api/v2/'
+            grant_type: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.grant_type,
+            client_id: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.client_id,
+            client_secret: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.client_secret,
+            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.audience
         };
         var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
         return new Promise(function (resolve, reject) {
@@ -961,13 +988,37 @@ var AuthService = (function () {
             });
         });
     };
+    AuthService.prototype.searchUser = function (q) {
+        var _this = this;
+        var self = this;
+        var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
+        hdr.append("Content-Type", "application/json");
+        var body = "q=" + encodeURIComponent(q) + "&search_engine=v2";
+        return new Promise(function (resolve, reject) {
+            _this.requestMgmtToken().then(function (res) {
+                hdr.append("Authorization", "Bearer " + res['access_token']);
+                var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
+                self.http.get("https://evt-demo.eu.auth0.com/api/v2/users?" + body, opts)
+                    .toPromise()
+                    .then(function (res) {
+                    resolve(res.json()[0]);
+                })
+                    .catch(function (err) {
+                    reject(err);
+                });
+            }).catch(function (err) {
+                console.log(err);
+            });
+        });
+    };
     return AuthService;
 }());
 AuthService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]) === "function" && _a || Object])
 ], AuthService);
 
+var _a;
 //# sourceMappingURL=auth.service.js.map
 
 /***/ }),

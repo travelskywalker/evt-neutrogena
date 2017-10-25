@@ -14,15 +14,15 @@ export class AuthService {
   clientDefSecret:string = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
   projectId : string;
   webAuth = new auth0.WebAuth({
-    clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
-    domain: 'evt-demo.eu.auth0.com',
-    responseType: 'token id_token',
-    audience: 'https://evt-demo.eu.auth0.com/userinfo',
-    redirectUri: 'http://localhost:8100',
-    scope: 'openid users:delete'
+    clientID: Config.auth0.clientID,
+    domain: Config.auth0.domain,
+    responseType: Config.auth0.responseType,
+    audience: Config.auth0.audience,
+    redirectUri: Config.auth0.redirectUri,
+    scope: 'openid'
   });
 
-  lock = new Auth0Lock('NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH','evt-demo.eu.auth0.com');
+  lock = new Auth0Lock(Config.auth0.clientID,Config.auth0.domain);
   userInfo : any;
 
   constructor(private http: Http) {
@@ -243,10 +243,10 @@ export class AuthService {
     let hdr = new Headers();
     hdr.append("Content-Type","application/json");
     let body = {
-      grant_type: 'client_credentials',
-      client_id: 'LPon98XtIsM2H3zzW85AppjgZxM5GeZE',
-      client_secret: 'ZH-rOjkdGcLjSgYBCN2oxhVCp4oJaWsfe8U_JVaMu7c-QrWHG-vTu0CB7e3q_zR4',
-      audience: 'https://evt-demo.eu.auth0.com/api/v2/' 
+      grant_type: Config.auth0Mgmt.grant_type,
+      client_id: Config.auth0Mgmt.client_id,
+      client_secret: Config.auth0Mgmt.client_secret,
+      audience: Config.auth0Mgmt.audience 
     };
 
     let opts = new RequestOptions({headers:hdr});
@@ -261,6 +261,30 @@ export class AuthService {
                reject(err)
              })
            });
+  }
+
+  searchUser(q){
+    let self = this;
+    let hdr = new Headers();
+    hdr.append("Content-Type","application/json");
+    let body = `q=${encodeURIComponent(q)}&search_engine=v2`;
+
+    return new Promise((resolve,reject)=>{
+      this.requestMgmtToken().then(res=>{
+          hdr.append("Authorization", "Bearer "+res['access_token']);
+          let opts = new RequestOptions({headers:hdr});
+          self.http.get("https://evt-demo.eu.auth0.com/api/v2/users?"+body,opts)
+              .toPromise()
+              .then(res=>{
+                resolve(res.json()[0])
+              })
+              .catch(err=>{
+                reject(err)
+              })
+      }).catch(err=>{
+        console.log(err)
+      })
+    });
   }
 
 
