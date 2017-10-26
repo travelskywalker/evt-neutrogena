@@ -24,7 +24,7 @@ export class AuthPage {
   ionViewDidLoad() {
     let data = this.navParams.get('data');
     if(data == ""){
-    	if(localStorage.access_token && localStorage.id_token){
+    	if(localStorage.getItem('access_token') && localStorage.getItem('id_token')){
     		this.navCtrl.setRoot(HomePage);
     	}else{
     		this.navCtrl.setRoot(LoginPage);

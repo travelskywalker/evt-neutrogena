@@ -57,14 +57,17 @@ export class ForgotPasswordPage {
 
   reset_pass(){
   	let self = this;
-  	this.auth0.searchUser("email:"+this.formGroup.value.email)
+  	this.auth0.searchUser(this.formGroup.value.email)
   				.then(res=>{
   					if(res){
-  						console.log(res);
   						self.invalidEmail = false;
-  						self.emailSent = true;
-  						//proceed to new password
-  						//send an email
+  						self.auth0.changePassword(self.formGroup.value.email)
+  								  .then(res=>{
+  									self.emailSent = true;
+  								  })
+  								  .catch(err=>{
+  								  	console.log(err);
+  								  })
   					}else{
   						self.invalidEmail = true;
   					}

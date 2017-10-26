@@ -16,6 +16,8 @@ import { LoginPage } from '../login/login';
 export class HomePage {
   mobileVersion : boolean;
 	links: any = [];
+  scanFailed : boolean = false;
+  logos : any;
 
   noticeViewed : boolean;
   constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private auth0: AuthService) {
@@ -49,11 +51,13 @@ export class HomePage {
       self.evt.getUserContext().then(usr=>{
         console.log(usr);
         usr.thng(item.id).read().then(thng=>{
+          self.scanFailed = false;
           console.log(thng);
           usr.update({customFields:{myThng:thng.id}}).then(console.log);
           //TODO: Redirect to content page. Still in progress
         })
         .catch(err=>{
+          self.scanFailed = true;
           console.log(err,'thng error')
         })
       })
@@ -61,7 +65,8 @@ export class HomePage {
         console.log(err)
       })
     }).catch(err=>{
-      console.log(err)
+      self.scanFailed = true;
+      console.log('scan failed',err)
     });
   }
 

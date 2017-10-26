@@ -29,6 +29,15 @@ export class AuthService {
     this.projectId = Config.projectId;
   }
 
+  loggedIn() : boolean{
+    if(localStorage.getItem('access_token') && localStorage.getItem('access_token') != ""){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   public signup(usr:{email:string,pass:string},fName='',lName='') {
     return new Promise((resolve,reject)=>{
       this.webAuth.signup({
@@ -262,11 +271,11 @@ export class AuthService {
            });
   }
 
-  searchUser(q){
+  searchUser(mail){
     let self = this;
     let hdr = new Headers();
     hdr.append("Content-Type","application/json");
-    let body = `q=${encodeURIComponent(q)}&search_engine=v2`;
+    let body = `q=email%3A%22${encodeURIComponent(mail)}%22&search_engine=v2`;
 
     return new Promise((resolve,reject)=>{
       this.requestMgmtToken().then(res=>{
@@ -286,49 +295,22 @@ export class AuthService {
     });
   }
 
+  changePassword(mail:string){
+    return new Promise((resolve,reject)=>{
 
-/*
-  public login(): void {
-    this.auth0.authorize();
+      this.webAuth.changePassword({
+        connection: 'Username-Password-Authentication',
+        email: mail
+      }, function(err,resp){
+        if(err){
+          reject(err.message);
+        }else{
+          resolve(resp);
+        }
+
+      })
+
+    })
   }
 
-
- // ...
-  public handleAuthentication(): void {
-    let self = this;
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
-        self.setSession(authResult);
-        self.nav.push(HomePage);
-      } else if (err) {
-        self.nav.push(HomePage);
-        console.log(err);
-      }
-    });
-  }
-
-  private setSession(authResult): void {
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
-  }
-
-  public logout(): void {
-    // Remove tokens and expiry time from localStorage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-    // Go back to the home route
-    this.nav.push(HomePage);
-  }
-
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // access token's expiry time
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
-  }*/
 }

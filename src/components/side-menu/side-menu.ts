@@ -53,12 +53,7 @@ export class SideMenuComponent {
   }
 
   loggedIn() : boolean{
-    if(localStorage.getItem('access_token') && localStorage.getItem('access_token') != ""){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return this.auth0.loggedIn();
   }
 
   myAccount(){

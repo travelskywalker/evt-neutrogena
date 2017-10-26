@@ -1,0 +1,92 @@
+sub-course {
+	div.container{
+		display: inline-block;
+		box-shadow: 0 0 1px 0 #333;
+		width: 68.8vw;
+		height: 63.52vw;
+		position: relative;
+
+		span.image-container{
+			height:calc(63.52vw - 11.64vw);
+			width: 100%;
+			position: relative;
+			//background-image:url('../assets/images/courseImage.png');
+			background-size:cover;
+			background-position: top;
+			display: block;
+			clear: both;
+			&>p{
+				margin:0;
+				color:#fff;
+				font-size: 16px;
+				line-height: 20px;
+				font-family: 'HelveticaNeue-Light';
+				padding-left:23px;
+				&.title{
+					padding-top: 16.365vw;
+				}
+				&.duration{
+
+				}
+				&.sign-in{
+					margin-top: 26px;
+					font-size: 11px;
+					color:rgb(240,119,33);
+					line-height: 17px;
+					font-family: 'HelveticaNeue-Bold'
+				}
+			}
+
+			span.progress{
+				display: inline-block;
+				padding-top:17px;
+				margin-left: 23px;
+				width: calc(100% - 41px);
+				position: relative;
+				div.main-bar{
+					display: block;
+					position:relative;
+					width: 100%;
+					height: 20px;
+					border-radius:4px;
+					background-color:#fff;
+					overflow: hidden;
+					div.progress-bar{
+						position: absolute;
+						top:0;
+						left: 0;
+						height:100%;
+						display: inline-block;
+						background-color:rgb(240,115,172);
+					}
+				}
+				p.completion{
+					margin:4px 0 0 0;
+					font-size: 9px;
+					line-height: 17px;
+					color:rgb(240,115,172);
+					font-family: 'HelveticaNeue-Light';
+				}
+			}
+		}
+
+		button[ion-button]{
+			position: relative;
+			width: 100%;
+			height: 11.64vw;
+			background-image:url('../assets/images/signup_btn.png');
+			background-size:105% auto;
+			background-position: center;
+			color:#fff;
+			font-size: 16px;
+			text-transform: uppercase;
+			text-align: center;
+			line-height: 20px;
+			margin:0;
+			padding:0;
+			background-color:transparent;
+			border-radius: 0;
+		}
+	}
+
+}

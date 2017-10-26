@@ -3,6 +3,10 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+
+/* Pages */
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { SignUpPage } from '../pages/sign-up/sign-up';
@@ -11,13 +15,15 @@ import { LoginPage } from '../pages/login/login';
 import { MyAccountPage } from '../pages/my-account/my-account';
 import { DeleteAccountPage } from '../pages/delete-account/delete-account';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { AgeGatePage } from '../pages/age-gate/age-gate';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+
+/* Providers */
 import { EvtProvider } from '../providers/evt/evt';
 import { AppProvider } from '../providers/app/app';
 import { AuthService } from '../providers/auth/auth.service';
 
+/* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
@@ -31,7 +37,8 @@ import { ComponentsModule } from '../components/components.module';
     MyAccountPage,
     DeleteAccountPage,
     ForgotPasswordPage,
-    AgeGatePage
+    AgeGatePage,
+    ResetPasswordPage
   ],
   imports: [
     ComponentsModule,
@@ -47,7 +54,8 @@ import { ComponentsModule } from '../components/components.module';
         { component: MyAccountPage, name: 'MyAccountPage', segment: 'my-account' },
         { component: DeleteAccountPage, name: 'DeleteAccountPage', segment: 'delete-account' },
         { component: ForgotPasswordPage, name: 'ForgotPasswordPage', segment: 'forgot-password' },
-        { component: AgeGatePage, name: 'AgeGatePage', segment: 'age-gate' }
+        { component: AgeGatePage, name: 'AgeGatePage', segment: 'age-gate' },
+        { component: ResetPasswordPage, name: 'ResetPasswordPage', segment: 'reset-password' }
       ]
     }),
   ],
@@ -62,7 +70,8 @@ import { ComponentsModule } from '../components/components.module';
     MyAccountPage,
     DeleteAccountPage,
     ForgotPasswordPage,
-    AgeGatePage
+    AgeGatePage,
+    ResetPasswordPage
   ],
   providers: [
     StatusBar,

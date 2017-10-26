@@ -25,6 +25,27 @@ page-home {
               font-family: HelveticaNeue-Light;
             }
 
+            &.scan_failed{
+            	padding:4vh 5vw 2vw;
+            	&>h2{
+            		font-size: 8vw;
+            		line-height: 33px;
+            		color:rgb(189,8,148);
+            		text-transform: uppercase;
+            		font-family: 'HelveticaNeue-Light';
+            		margin:0 auto 2.8vh;
+            	}
+
+            	&>h3{
+            		font-size: 5vw;
+            		line-height: 20px;
+            		color:rgb(189,8,148);
+            		font-family: 'HelveticaNeue-Light';
+            		text-transform: uppercase;
+            		margin: 0 auto 3.3vh;
+            	}
+            }
+
             &.client-logo{
               padding:4vh 2vw 2vw;
               &>#neutrogena-logo{

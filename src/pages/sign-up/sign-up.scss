@@ -88,20 +88,21 @@ page-sign-up {
 				}
 				ion-input{
 					font-family: 'HelveticaNeue-Light';
-					height: 40px;
+					height: 46px;
 					background-color:#fff;
 					display: inline-block;
 					clear: both;
 					border-radius: 10px;
-					position: relative;
-					&.taken{
-						margin-bottom: 20px;
-					}
 					input{
-						margin-left: 19px;
+						margin:5.5px 0 5.5px 19px;
 						font-size: 14px;
 						color:rgb(240,115,172);
 						line-height: 17px;
+						height: 35px;
+						width: calc(100% - 19px);
+					}
+					&.taken{
+						margin-bottom: 20px;
 					}
 					&[type=email]:after{
 						content:"";
