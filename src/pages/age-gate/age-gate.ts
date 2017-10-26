@@ -2,7 +2,6 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
 // import { AuthService } from "../../providers/auth/auth.service";
 
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 //
 // import { SignUpPage } from '../sign-up/sign-up';
 // import { HomePage } from '../home/home';
@@ -13,21 +12,17 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
   templateUrl: 'age-gate.html',
 })
 export class AgeGatePage {
-	private formGroup : FormGroup;
-	invalidLogin : boolean = false;
+
+	invalidAge : boolean = false;
   selectedDate: any;
   inputDate: any;
 
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
   				private render: Renderer2,
-          public alertCtrl: AlertController,
-  				private formBuilder: FormBuilder) {
-  	// this.formGroup = this.formBuilder.group({
-  	// 	day: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-  	// 	password: ['', Validators.required ],
-    //   date: ['']
-  	// });
+          public alertCtrl: AlertController
+  				) {
+
     this.selectedDate = {
       'day':'',
       'month':'',
@@ -68,7 +63,17 @@ export class AgeGatePage {
     }
     else{
       let currentDate = new Date().getFullYear();
-      console.log(currentDate - this.selectedDate.year);
+      console.log((currentDate - this.selectedDate.year) > 18);
+
+      if((currentDate - this.selectedDate.year) > 18){
+
+          this.invalidAge = false;
+      }
+      else{
+
+          this.invalidAge = true;
+
+      }
     }
   }
 

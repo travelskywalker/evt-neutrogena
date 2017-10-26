@@ -69,6 +69,24 @@ page-age-gate {
     *{
       color:rgba(114,28,125,1);
     }
+    div.invalid-age-container{
+      height:50vh;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      display:flex;
+
+      *{
+        color:rgba(189,8,148,1);
+        text-transform: uppercase;
+      }
+
+      p{
+        margin:0;
+      }
+
+    }
 		button[ion-button].xbtn{
 			position:absolute;
 			top: 18px;
@@ -106,6 +124,7 @@ page-age-gate {
     }
     .content{
         margin:1rem 0;
+
     }
     ion-img{
       background-color:transparent;
@@ -198,10 +217,15 @@ page-age-gate {
       width:70%;
       margin:0 auto;
     }
+    .color-orange{
+      color:rgba(240,119,33,1) !important;
+    }
+
+
 	}// end of section.main
 
   footer{
-    position: absolute;
-    bottom: 0;
+    // position: absolute;
+    // bottom: 0;
   }
 }
