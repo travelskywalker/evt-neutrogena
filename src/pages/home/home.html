@@ -10,13 +10,13 @@
 <!-- No headers. We'll create
   a component for this instead -->
 
-<notice [title]="'Cookie Notice'" [style]="{'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'}">
+<notice [title]="'Cookie Notice'" [style]="{'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'}" *ngIf="!noticeViewed">
 
   This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.
 </notice>
 <ion-content id="homeMobile" *ngIf="mobileVersion">
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
-  <section id="client-logo" class="client-logo">
+  <section id="client-logo" [ngClass] = "{ 'hidden':scanFailed,'client-logo':true }">
     <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>
     </span>-->
     <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
@@ -24,6 +24,10 @@
     <!--<span id="aura-logo" class="placeholder" #auraLogo>
     </span>-->
     <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>
+  </section>
+  <section class="scan_failed" *ngIf="scanFailed">
+    <h2>It looks like that didn't work</h2>
+    <h3>Please try again to enter site</h3>
   </section>
 
   <section id="guide-scan-container" class="">

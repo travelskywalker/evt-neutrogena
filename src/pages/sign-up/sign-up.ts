@@ -69,8 +69,9 @@ export class SignUpPage {
   	let usr = this.formGroup.value;
   	let self = this;
 
-  	this.auth0.searchUser("email:"+usr.email).then(found=>{
+  	this.auth0.searchUser(usr.email).then(found=>{
   		if(found){
+  			console.log(usr,found);
   			self.emailTaken = true;
   		}else{
 		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{

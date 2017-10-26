@@ -33,3 +33,9 @@ ion-menu{
 	}
 
 }
+
+	.hidden{
+		display: none !important;
+		opacity: 0 !important;
+		z-index: -1 !important;
+	}

@@ -97,12 +97,12 @@ page-login {
 					clear: both;
 					border-radius: 10px;
 					input{
-						margin-left: 19px;
+						margin:5.5px 0 5.5px 19px;
 						font-size: 14px;
 						color:rgb(240,115,172);
 						line-height: 17px;
-						//&.error{
-						//}
+						height: 35px;
+						width: calc(100% - 19px);
 					}
 							&[type=email].error{
 

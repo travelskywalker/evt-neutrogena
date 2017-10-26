@@ -25526,6 +25526,12 @@ ion-menu div.menu-inner button[ion-button] {
   height: auto;
 }
 
+.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+}
+
 footer #footer {
   color: #711b7d;
   text-align: center;
@@ -25676,6 +25682,99 @@ side-menu ion-content > .scroll-content section.footer > ion-row > ion-col img {
   top: 0;
   left: 0;
   bottom: 0;
+}
+
+sub-course div.container {
+  display: inline-block;
+  -webkit-box-shadow: 0 0 1px 0 #333;
+  box-shadow: 0 0 1px 0 #333;
+  width: 68.8vw;
+  height: 63.52vw;
+  position: relative;
+}
+
+sub-course div.container span.image-container {
+  height: calc(63.52vw - 11.64vw);
+  width: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: top;
+  display: block;
+  clear: both;
+}
+
+sub-course div.container span.image-container > p {
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+  line-height: 20px;
+  font-family: 'HelveticaNeue-Light';
+  padding-left: 23px;
+}
+
+sub-course div.container span.image-container > p.title {
+  padding-top: 16.365vw;
+}
+
+sub-course div.container span.image-container > p.sign-in {
+  margin-top: 26px;
+  font-size: 11px;
+  color: #f07721;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Bold';
+}
+
+sub-course div.container span.image-container span.progress {
+  display: inline-block;
+  padding-top: 17px;
+  margin-left: 23px;
+  width: calc(100% - 41px);
+  position: relative;
+}
+
+sub-course div.container span.image-container span.progress div.main-bar {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 20px;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+sub-course div.container span.image-container span.progress div.main-bar div.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: inline-block;
+  background-color: #f073ac;
+}
+
+sub-course div.container span.image-container span.progress p.completion {
+  margin: 4px 0 0 0;
+  font-size: 9px;
+  line-height: 17px;
+  color: #f073ac;
+  font-family: 'HelveticaNeue-Light';
+}
+
+sub-course div.container button[ion-button] {
+  position: relative;
+  width: 100%;
+  height: 11.64vw;
+  background-image: url("../assets/images/signup_btn.png");
+  background-size: 105% auto;
+  background-position: center;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
 }
 
 page-age-gate ion-header.header ion-navbar > div.toolbar-background {
@@ -26082,7 +26181,7 @@ page-forgot-password section.main form ion-row {
 
 page-forgot-password section.main form ion-row ion-input {
   font-family: 'HelveticaNeue-Light';
-  height: 40px;
+  height: 46px;
   background-color: #fff;
   display: inline-block;
   clear: both;
@@ -26090,10 +26189,12 @@ page-forgot-password section.main form ion-row ion-input {
 }
 
 page-forgot-password section.main form ion-row ion-input input {
-  margin-left: 19px;
+  margin: 5.5px 0 5.5px 19px;
   font-size: 14px;
   color: #f073ac;
   line-height: 17px;
+  height: 35px;
+  width: calc(100% - 19px);
 }
 
 page-forgot-password section.main form ion-row ion-input:after {
@@ -26141,14 +26242,14 @@ page-forgot-password section.main form ion-row ion-input.focused {
 
 page-forgot-password section.main button[ion-button] {
   height: 50px;
-  width: calc(100vw - 100px);
+  width: calc(100vw - 125px);
   display: block;
   clear: both;
   margin: auto;
   color: #fff;
   text-align: center;
   text-transform: uppercase;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
@@ -26167,6 +26268,7 @@ page-forgot-password section.main button[ion-button]#signup_btn {
   background-size: 100% 100%;
   background-image: url("../assets/images/transparent_btn.png");
   margin-bottom: 11px;
+  background-size: 100% 100%;
 }
 
 page-forgot-password footer {
@@ -26200,6 +26302,28 @@ page-home ion-content#homeMobile div.scroll-content section * {
   position: relative;
   text-align: center;
   font-family: HelveticaNeue-Light;
+}
+
+page-home ion-content#homeMobile div.scroll-content section.scan_failed {
+  padding: 4vh 5vw 2vw;
+}
+
+page-home ion-content#homeMobile div.scroll-content section.scan_failed > h2 {
+  font-size: 8vw;
+  line-height: 33px;
+  color: #bd0894;
+  text-transform: uppercase;
+  font-family: 'HelveticaNeue-Light';
+  margin: 0 auto 2.8vh;
+}
+
+page-home ion-content#homeMobile div.scroll-content section.scan_failed > h3 {
+  font-size: 5vw;
+  line-height: 20px;
+  color: #bd0894;
+  font-family: 'HelveticaNeue-Light';
+  text-transform: uppercase;
+  margin: 0 auto 3.3vh;
 }
 
 page-home ion-content#homeMobile div.scroll-content section.client-logo {
@@ -26554,10 +26678,12 @@ page-login section.main form ion-row ion-input {
 }
 
 page-login section.main form ion-row ion-input input {
-  margin-left: 19px;
+  margin: 5.5px 0 5.5px 19px;
   font-size: 14px;
   color: #f073ac;
   line-height: 17px;
+  height: 35px;
+  width: calc(100% - 19px);
 }
 
 page-login section.main form ion-row ion-input[type=email].error:after {
@@ -26741,7 +26867,7 @@ page-my-account section.main form ion-row ion-input {
   height: 40px;
   display: inline-block;
   clear: both;
-  padding: 0 15px;
+  padding-right: 12px;
 }
 
 page-my-account section.main form ion-row ion-input input {
@@ -26806,6 +26932,193 @@ page-my-account section.main form button[ion-button]#deleteAccount {
   background-size: 100% 100%;
   background-image: url("../assets/images/transparent_btn.png");
   margin-bottom: 11px;
+}
+
+page-reset-password ion-content div.scroll-content {
+  background-color: #f0f0f0;
+}
+
+page-reset-password div.space-40 {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  position: relative;
+}
+
+page-reset-password div.space-40 a {
+  text-decoration: none;
+  font-size: 15px;
+  color: #711b7d;
+  text-transform: uppercase;
+  width: auto;
+  height: auto;
+  display: inline-table;
+  margin: auto;
+  margin-top: 11.5px;
+}
+
+page-reset-password section.main {
+  position: relative;
+  padding-top: 81px;
+}
+
+page-reset-password section.main button[ion-button].xbtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 20px;
+  width: 20px;
+  display: table;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets/images/xbtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+page-reset-password section.main p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+}
+
+page-reset-password section.main p.form-title {
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  font-size: 25px;
+  color: #bd0894;
+}
+
+page-reset-password section.main p.form-desc {
+  color: #f07721;
+  font-size: 14px;
+  margin-bottom: 14px;
+  padding: 0 12vw;
+}
+
+page-reset-password section.main p.instructions {
+  font-size: 11px;
+  color: #a2a2a2;
+  margin-bottom: 8px;
+  padding: 0 12vw;
+}
+
+page-reset-password section.main p.instructions.reset {
+  opacity: 0;
+}
+
+page-reset-password section.main p.reset-successful {
+  color: #f07721;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 54px auto 45px;
+}
+
+page-reset-password section.main p.reset-successful > b {
+  font-family: 'HelveticaNeue-Bold';
+  display: block;
+  clear: both;
+}
+
+page-reset-password section.main p.reset-successful > a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+page-reset-password section.main a.linker {
+  font-size: 14px;
+  line-height: 17px;
+  color: #f07721;
+  font-family: 'HelveticaNeue-Light';
+  text-decoration: underline;
+}
+
+page-reset-password section.main form {
+  text-align: center;
+}
+
+page-reset-password section.main form ion-row {
+  padding: 0 45px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 34px;
+}
+
+page-reset-password section.main form ion-row.extra-bottom {
+  margin-bottom: 27px;
+}
+
+page-reset-password section.main form ion-row.extra-top {
+  margin-top: 43px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+page-reset-password section.main form ion-row ion-input {
+  font-family: 'HelveticaNeue-Light';
+  height: 46px;
+  background-color: #fff;
+  display: inline-block;
+  clear: both;
+  border-radius: 10px;
+}
+
+page-reset-password section.main form ion-row ion-input input {
+  margin: 5.5px 0 5.5px 19px;
+  font-size: 14px;
+  color: #f073ac;
+  line-height: 17px;
+  height: 35px;
+  width: calc(100% - 19px);
+}
+
+page-reset-password section.main form ion-row ion-input.error:after {
+  content: "Passwords do not match";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
+page-reset-password section.main form ion-row ion-input.focused {
+  -webkit-box-shadow: 1px 1px 0px 1px #f07721;
+  box-shadow: 1px 1px 0px 1px #f07721;
+}
+
+page-reset-password section.main form button[ion-button] {
+  height: 50px;
+  width: calc(100% - 100px);
+  display: inline-table;
+  clear: both;
+  margin: 7px auto 0;
+  color: #fff;
+  text-align: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: 'HelveticaNeue-Light';
+  border: 0;
+}
+
+page-reset-password section.main form button[ion-button]#resetPass {
+  background-image: url("../assets/images/signup_btn.png");
 }
 
 page-sign-up ion-content div.scroll-content {
@@ -26906,23 +27219,24 @@ page-sign-up section.main form ion-row.extra-bottom {
 
 page-sign-up section.main form ion-row ion-input {
   font-family: 'HelveticaNeue-Light';
-  height: 40px;
+  height: 46px;
   background-color: #fff;
   display: inline-block;
   clear: both;
   border-radius: 10px;
-  position: relative;
+}
+
+page-sign-up section.main form ion-row ion-input input {
+  margin: 5.5px 0 5.5px 19px;
+  font-size: 14px;
+  color: #f073ac;
+  line-height: 17px;
+  height: 35px;
+  width: calc(100% - 19px);
 }
 
 page-sign-up section.main form ion-row ion-input.taken {
   margin-bottom: 20px;
-}
-
-page-sign-up section.main form ion-row ion-input input {
-  margin-left: 19px;
-  font-size: 14px;
-  color: #f073ac;
-  line-height: 17px;
 }
 
 page-sign-up section.main form ion-row ion-input[type=email]:after {
