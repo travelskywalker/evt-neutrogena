@@ -4,8 +4,11 @@ import { AuthService } from "../../providers/auth/auth.service";
 
 import { LoginPage } from "../login/login";
 import { HomePage } from "../home/home";
+import { AgeGatePage } from "../age-gate/age-gate";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+
+import { Cookie } from "ng2-cookies";
 
 /**
  * Generated class for the SignUpPage page.
@@ -34,10 +37,19 @@ export class SignUpPage {
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
   		password: ['', Validators.compose([Validators.minLength(8),Validators.required, Validators.pattern(/.*([A-Z+]|[0-9+]).*$/)])]
   	});
+  	console.log(navParams.data);
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SignUpPage');
+  }
+
+  ionViewWillEnter(){
+    if(Cookie.get('age_gate') === "true" || this.navParams.get('age_gate') == true){
+    	console.log('Passed age gate!');
+    }
+    else{
+    	this.navCtrl.setRoot(AgeGatePage);
+    }
   }
 
   focused(event){

@@ -2,9 +2,9 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
 // import { AuthService } from "../../providers/auth/auth.service";
 
-//
-// import { SignUpPage } from '../sign-up/sign-up';
-// import { HomePage } from '../home/home';
+import { Cookie } from "ng2-cookies";
+import { SignUpPage } from '../sign-up/sign-up';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
@@ -16,6 +16,7 @@ export class AgeGatePage {
 	invalidAge : boolean = false;
   selectedDate: any;
   inputDate: any;
+  cookiesOn: boolean = false;
 
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
@@ -49,14 +50,9 @@ export class AgeGatePage {
 
   dismissThis(){
   	// should pop this page and then go to previous
-  	console.log("dismiss");
-  	if(this.navCtrl.canGoBack()){
-  		this.navCtrl.pop();
-  	}
-  	else{
-  		// this.navCtrl.push(HomePage);
-  	}
+  	this.navCtrl.setRoot(HomePage);
   }
+
   submitAge(){
     if(this.inputDate.length === 0){
       this.showAlert('Please input your birth date.');
@@ -68,9 +64,15 @@ export class AgeGatePage {
       if((currentDate - this.selectedDate.year) > 18){
 
           this.invalidAge = false;
+        /* We're all good. Proceed to sign up */
+
+        if(this.cookiesOn){ // remember the user
+          Cookie.set('age_gate',"true");
+          Cookie.set('birthdate',JSON.stringify(this.selectedDate));
+        }
+        this.navCtrl.setRoot(SignUpPage,{age_gate:true});
       }
       else{
-
           this.invalidAge = true;
 
       }
@@ -88,6 +90,7 @@ export class AgeGatePage {
   checkAge(data){
 
   }
+
   FBauth(){
   	// this.auth0.fbAuth();
   }

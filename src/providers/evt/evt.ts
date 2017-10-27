@@ -63,4 +63,21 @@ export class EvtProvider {
   	return this.evtapp.scan();
   }
 
+  getUserCustomFields():Promise<any>{
+  	return new Promise((resolve,reject)=>{
+	  	this.getUserContext().then(usr=>{
+	  		usr.$init.then(user=>{
+		  		if(typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')){
+		  			resolve(user.customFields);
+		  		}
+		  		else{
+		  			resolve(false);
+		  		}
+	  		})
+	  	}).catch(err=>{
+	  		reject(err);
+	  	})	
+  	})
+  }
+
 }
