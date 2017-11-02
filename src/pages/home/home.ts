@@ -7,6 +7,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Cookie } from 'ng2-cookies';
 
 import { LoginPage } from '../login/login';
+import { AuraContentPage } from '../aura-content/aura-content';
 
 
 @Component({
@@ -35,10 +36,9 @@ export class HomePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
-      if(!localStorage.access_token || !localStorage.id_token){
-        this.navCtrl.setRoot(LoginPage);
-      }
-    // console.log(this.platform.is('mobile'));
+    if(!localStorage.access_token || !localStorage.id_token){
+      this.navCtrl.setRoot(LoginPage);
+    }
 
     this.mobileVersion = this.platform.is('mobile');
   }
@@ -71,6 +71,7 @@ export class HomePage {
             thng.action("scans").create().catch(err=>console.error(err));
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
+            self.navCtrl.setRoot(AuraContentPage);
           })
           .catch(err=>{
             self.scanFailed = true;
@@ -94,6 +95,8 @@ export class HomePage {
               if(cf){
                 /* Already has a thng */
                 console.log('You already have a thng!');
+                /* REDIRECT TO MAIN PAGE */
+                self.navCtrl.setRoot(AuraContentPage);
                 let thngId = cf.myThng;
 
               }else{
@@ -107,6 +110,9 @@ export class HomePage {
 
                   /* Assign the newly created thng to the user */
                   usr.update({customFields:{myThng:th.id}}).then(console.log);
+
+                  /* REDIRECT TO MAIN PAGE */
+                  self.navCtrl.setRoot(AuraContentPage);
                 })
                 .catch(err=>{
                   console.log("Failed to create a thng");

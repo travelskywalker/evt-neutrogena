@@ -1,0 +1,88 @@
+page-aura-content {
+	ion-content{
+		margin-top: 50px;
+		margin-bottom: 50px;
+		height: calc(100% - 100px);
+
+
+		#aura-widget-div{
+			max-height: 320px;
+			position:relative;
+
+			span.title{
+				position: absolute;
+				display: inline-block;
+				height: 85px;
+				width: 100%;
+				left:0;
+				bottom:90px;
+				background-color: rgba(113,27,125,0.66);
+				z-index: 3;
+				p{
+					line-height: 17px;
+					color:#fff;
+					margin-left:24px;
+					margin-bottom: 0;
+					&.progress{
+						font-family: "HelveticaNeue-Bold";
+						font-size: 12px;
+						margin-top: 15px;
+					}
+
+					&.module-title{
+						font-family: "HelveticaNeue-Light";
+						font-size: 25px;
+						text-transform: capitalize;
+						margin-top: 9px;
+					}
+				}
+			}
+
+			div.audio-con{
+
+
+				div.logo{
+
+				}
+
+				div.text-div{
+					opacity: 0;
+				} //end of .text-div 
+
+				div.audio-main{
+					position:absolute;
+					bottom:5px;
+					left:0;
+					height:75px;
+				} //end of .audio-main div : CONTROLS
+
+			}//end of .audio-con div
+
+		}// end of div#aura-widget-div
+
+
+		section.description{
+			display: inline-block;
+			position: relative;
+			padding:27px 29px;
+			p{
+				margin:0 auto;
+				line-height: 17px;
+				&.title{
+					font-size: 18px;
+					color:rgb(189,8,147);
+					font-size:"HelveticaNeue-Bold";
+					text-transform: uppercase;
+				}
+
+				&.body{
+					margin-top: 18px;
+					font-size: 12px;
+					color:rgb(90,90,90);
+					font-size:"HelveticaNeue-Light";
+				}
+			}
+		}// end of description
+
+	}// end of ion-content
+}

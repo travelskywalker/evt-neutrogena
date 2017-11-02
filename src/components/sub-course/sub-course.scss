@@ -22,6 +22,7 @@ sub-course {
 				line-height: 20px;
 				font-family: 'HelveticaNeue-Light';
 				padding-left:23px;
+				text-align: left;
 				&.title{
 					padding-top: 16.365vw;
 				}
@@ -61,11 +62,13 @@ sub-course {
 					}
 				}
 				p.completion{
+					text-align: left;
 					margin:4px 0 0 0;
 					font-size: 9px;
 					line-height: 17px;
 					color:rgb(240,115,172);
 					font-family: 'HelveticaNeue-Light';
+					text-indent: 0;
 				}
 			}
 		}

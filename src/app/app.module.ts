@@ -17,11 +17,14 @@ import { DeleteAccountPage } from '../pages/delete-account/delete-account';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { AgeGatePage } from '../pages/age-gate/age-gate';
+import { AuraContentPage } from '../pages/aura-content/aura-content';
+import { AuraMainPage } from '../pages/aura-main/aura-main';
 
 /* Providers */
 import { EvtProvider } from '../providers/evt/evt';
 import { AppProvider } from '../providers/app/app';
 import { AuthService } from '../providers/auth/auth.service';
+import { ScriptService } from '../providers/app/script.service';
 
 /* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
@@ -38,7 +41,9 @@ import { ComponentsModule } from '../components/components.module';
     DeleteAccountPage,
     ForgotPasswordPage,
     AgeGatePage,
-    ResetPasswordPage
+    ResetPasswordPage,
+    AuraContentPage,
+    AuraMainPage
   ],
   imports: [
     ComponentsModule,
@@ -55,7 +60,9 @@ import { ComponentsModule } from '../components/components.module';
         { component: DeleteAccountPage, name: 'DeleteAccountPage', segment: 'delete-account' },
         { component: ForgotPasswordPage, name: 'ForgotPasswordPage', segment: 'forgot-password' },
         { component: AgeGatePage, name: 'AgeGatePage', segment: 'age-gate' },
-        { component: ResetPasswordPage, name: 'ResetPasswordPage', segment: 'reset-password' }
+        { component: ResetPasswordPage, name: 'ResetPasswordPage', segment: 'reset-password' },
+        { component: AuraContentPage, name: 'AuraContentPage', segment: 'aura-content' },
+        { component: AuraMainPage, name: 'AuraMainPage', segment: 'aura' },
       ]
     }),
   ],
@@ -71,7 +78,9 @@ import { ComponentsModule } from '../components/components.module';
     DeleteAccountPage,
     ForgotPasswordPage,
     AgeGatePage,
-    ResetPasswordPage
+    ResetPasswordPage,
+    AuraContentPage,
+    AuraMainPage
   ],
   providers: [
     StatusBar,
@@ -79,7 +88,8 @@ import { ComponentsModule } from '../components/components.module';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     EvtProvider,
     AppProvider,
-    AuthService
+    AuthService,
+    ScriptService
   ]
 })
 export class AppModule {}

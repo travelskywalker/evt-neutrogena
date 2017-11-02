@@ -7,17 +7,17 @@ export const Config = {
   projectId: "U3NNqQhUe6s7QraRakG4fpNc",
   appId: "UG7N6Q2yVMsrtNRaak34fprg",
   auth0:{
-  	clientID: 'NamR3nF2CPlOtgeF1Gsz1DXUZUYYe9JH',
-    domain: 'evt-demo.eu.auth0.com',
+  	clientID: 'w9VzQPQgiQaldMl3MaGkfEph63N6VJhi',
+    domain: 'demo-evt.eu.auth0.com',
     responseType: 'token id_token',
-    audience: 'https://evt-demo.eu.auth0.com/userinfo',
+    audience: 'https://demo-evt.eu.auth0.com/userinfo',
     redirectUri: 'http://localhost:8100',
     scope: 'openid'
   },
   auth0Mgmt:{
   	grant_type: 'client_credentials',
-    client_id: 'LPon98XtIsM2H3zzW85AppjgZxM5GeZE',
-    client_secret: 'ZH-rOjkdGcLjSgYBCN2oxhVCp4oJaWsfe8U_JVaMu7c-QrWHG-vTu0CB7e3q_zR4',
-    audience: 'https://evt-demo.eu.auth0.com/api/v2/' 
+    client_id: 'iFF5t1pmHIXS9vsOV14KGt5V4XfEh37n',
+    client_secret: '4gAx_w6YVA-uC1CtOGEvwCqyKoxRgKqyvf39i2axHVmOuZLr0U2fRCghMholpQqy',
+    audience: 'https://demo-evt.eu.auth0.com/api/v2/' 
   }
 };

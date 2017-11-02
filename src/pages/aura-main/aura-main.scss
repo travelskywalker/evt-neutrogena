@@ -1,0 +1,29 @@
+page-aura-main {
+	ion-content{
+		margin-top: 50px;
+		margin-bottom: 50px;
+		height: calc(100% - 100px);
+
+
+		ion-slides{
+
+			.swiper-container{
+				overflow-x: visible;
+			}
+
+			ion-slide{
+				&:first-of-type{
+					margin-left:30px;
+				}
+				&:not(.space-10){
+					width:calc(68.8vw) !important;
+				}
+				&.space-10{
+					width:10px;
+				}
+			}
+
+		}
+
+	}// end of ion-content
+}

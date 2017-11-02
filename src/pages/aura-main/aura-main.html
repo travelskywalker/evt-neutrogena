@@ -1,0 +1,47 @@
+<aura-head></aura-head>
+
+<ion-content >
+
+	<section class="track-preview">
+		<a class="progress-days">
+			Day 1 of 30
+		</a>
+		<p class="section-title">
+			Morning Meditations
+		</p>
+
+		<div class="day-tracker container">
+		</div>
+		<p class="label-intro">
+			Start this course
+		</p>
+
+		<div class="expandable">
+			<a class="desc-trigger" (tap)="expand()">Description <img id="caret" #caret/></a>
+			Lorem ipsum dolor sit amet, consectetur adipscing elit. Pellentesque non erat eu nuno placerat tempus et at nulla.
+			<a class="link">About AURA</a>
+		</div>
+
+
+	</section>
+	<p class="more-courses">Additional Courses</p>
+
+	<section class="sliders">
+		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">
+			<ion-slide>
+				<sub-course [progress]="25" [enabled]="true" (begin)="tryMe($event)"></sub-course>
+			</ion-slide>
+			<ion-slide>
+				<sub-course [title]="'Mindfulness'" [progress]="0" [enabled]="true" (begin)="tryMe($event)"></sub-course>
+			</ion-slide>
+			<ion-slide>
+				<sub-course [title]="'Focus'" [progress]="0" [enabled]="true" (begin)="tryMe($event)"></sub-course>
+			</ion-slide>
+
+		</ion-slides>
+	</section>
+
+    <footer></footer>
+</ion-content>
+
+<aura-foot></aura-foot>

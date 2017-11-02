@@ -1,0 +1,19 @@
+<!-- Generated template for the AuraHeadComponent component -->
+<div class="body">
+	
+	<ion-row>
+
+		<ion-col col-7>
+			<span><img src="../assets/images/neutrogena_white.png"/></span>
+			<span><img src="../assets/images/auraLogo_white.png"/></span>
+		</ion-col>
+
+		<ion-col col-5 menuToggle>
+			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>
+			<a *ngIf = "logged">Hi, {{name}}</a>
+			<span><img src="../assets/images/person.png"/></span>
+		</ion-col>
+
+	</ion-row>
+  
+</div>

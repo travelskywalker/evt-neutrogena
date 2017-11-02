@@ -25532,6 +25532,133 @@ ion-menu div.menu-inner button[ion-button] {
   z-index: -1 !important;
 }
 
+aura-foot {
+  display: inline-block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+}
+
+aura-foot div.body {
+  background-color: #f0f0f0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+aura-foot div.body ion-row {
+  padding: 0;
+}
+
+aura-foot div.body ion-row ion-col {
+  text-align: center;
+  position: relative;
+  height: 50px;
+  padding: 0;
+  vertical-align: middle;
+}
+
+aura-foot div.body ion-row ion-col div {
+  display: inline-table;
+  position: relative;
+}
+
+aura-foot div.body ion-row ion-col div img {
+  display: block;
+  clear: both;
+  max-height: 26px;
+  margin-top: 7px;
+}
+
+aura-foot div.body ion-row ion-col div p {
+  margin: 0;
+  color: #808184;
+  font-size: 9px;
+  line-height: 17px;
+  text-align: center;
+}
+
+aura-head {
+  display: inline-block;
+  position: relative;
+  height: 50px;
+  width: 100%;
+}
+
+aura-head div.body {
+  background-image: url("../assets/images/gradBackCopy.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+aura-head div.body ion-row {
+  position: relative;
+  max-height: 100%;
+  padding: 0;
+}
+
+aura-head div.body ion-row ion-col {
+  position: relative;
+  padding: 0;
+}
+
+aura-head div.body ion-row ion-col span {
+  padding: 15px 0 13px;
+  display: inline-block;
+  position: relative;
+}
+
+aura-head div.body ion-row ion-col span img {
+  max-height: 21px;
+}
+
+aura-head div.body ion-row ion-col[col-7] {
+  text-align: center;
+  white-space: nowrap;
+}
+
+aura-head div.body ion-row ion-col[col-7] span:first-of-type {
+  padding-right: 8px;
+}
+
+aura-head div.body ion-row ion-col[col-7] span:first-of-type:after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  height: 26px;
+  width: 1px;
+  border-right: 1px solid #fff;
+  right: 0;
+}
+
+aura-head div.body ion-row ion-col[col-5] {
+  text-align: right;
+}
+
+aura-head div.body ion-row ion-col[col-5] span {
+  padding-right: 16px;
+}
+
+aura-head div.body ion-row ion-col[col-5] a {
+  position: absolute;
+  top: 17px;
+  right: 56px;
+  color: #fff;
+  line-height: 17px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: 'HelveticaNeue-Light';
+}
+
 footer #footer {
   color: #711b7d;
   text-align: center;
@@ -25710,6 +25837,7 @@ sub-course div.container span.image-container > p {
   line-height: 20px;
   font-family: 'HelveticaNeue-Light';
   padding-left: 23px;
+  text-align: left;
 }
 
 sub-course div.container span.image-container > p.title {
@@ -25752,11 +25880,13 @@ sub-course div.container span.image-container span.progress div.main-bar div.pro
 }
 
 sub-course div.container span.image-container span.progress p.completion {
+  text-align: left;
   margin: 4px 0 0 0;
   font-size: 9px;
   line-height: 17px;
   color: #f073ac;
   font-family: 'HelveticaNeue-Light';
+  text-indent: 0;
 }
 
 sub-course div.container button[ion-button] {
@@ -26016,6 +26146,106 @@ page-age-gate section.main .width-70 {
 
 page-age-gate section.main .color-orange {
   color: #f07721 !important;
+}
+
+page-aura-content ion-content {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  height: calc(100% - 100px);
+}
+
+page-aura-content ion-content #aura-widget-div {
+  max-height: 320px;
+  position: relative;
+}
+
+page-aura-content ion-content #aura-widget-div span.title {
+  position: absolute;
+  display: inline-block;
+  height: 85px;
+  width: 100%;
+  left: 0;
+  bottom: 90px;
+  background-color: rgba(113, 27, 125, 0.66);
+  z-index: 3;
+}
+
+page-aura-content ion-content #aura-widget-div span.title p {
+  line-height: 17px;
+  color: #fff;
+  margin-left: 24px;
+  margin-bottom: 0;
+}
+
+page-aura-content ion-content #aura-widget-div span.title p.progress {
+  font-family: "HelveticaNeue-Bold";
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+page-aura-content ion-content #aura-widget-div span.title p.module-title {
+  font-family: "HelveticaNeue-Light";
+  font-size: 25px;
+  text-transform: capitalize;
+  margin-top: 9px;
+}
+
+page-aura-content ion-content #aura-widget-div div.audio-con div.text-div {
+  opacity: 0;
+}
+
+page-aura-content ion-content #aura-widget-div div.audio-con div.audio-main {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  height: 75px;
+}
+
+page-aura-content ion-content section.description {
+  display: inline-block;
+  position: relative;
+  padding: 27px 29px;
+}
+
+page-aura-content ion-content section.description p {
+  margin: 0 auto;
+  line-height: 17px;
+}
+
+page-aura-content ion-content section.description p.title {
+  font-size: 18px;
+  color: #bd0893;
+  font-size: "HelveticaNeue-Bold";
+  text-transform: uppercase;
+}
+
+page-aura-content ion-content section.description p.body {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #5a5a5a;
+  font-size: "HelveticaNeue-Light";
+}
+
+page-aura-main ion-content {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  height: calc(100% - 100px);
+}
+
+page-aura-main ion-content ion-slides .swiper-container {
+  overflow-x: visible;
+}
+
+page-aura-main ion-content ion-slides ion-slide:first-of-type {
+  margin-left: 30px;
+}
+
+page-aura-main ion-content ion-slides ion-slide:not(.space-10) {
+  width: calc(68.8vw) !important;
+}
+
+page-aura-main ion-content ion-slides ion-slide.space-10 {
+  width: 10px;
 }
 
 page-delete-account ion-content div.scroll-content {
