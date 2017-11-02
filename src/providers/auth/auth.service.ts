@@ -171,7 +171,7 @@ export class AuthService {
     umd["firstName"] = usrMetaData.firstName;
     umd["lastName"] = usrMetaData.lastName;
     let auth0Manage = new auth0.Management({
-      domain: 'evt-demo.eu.auth0.com',
+      domain: Config.auth0.domain,
       token: localStorage.getItem('id_token')
     });
 
@@ -206,7 +206,7 @@ export class AuthService {
       this.requestMgmtToken().then(res=>{
         hdr.append("Authorization", "Bearer "+res['access_token']);
         let opts = new RequestOptions({headers:hdr});
-        self.http.delete("https://evt-demo.eu.auth0.com/api/v2/users/"+id,opts)
+        self.http.delete("https://"+Config.auth0.domain+"/api/v2/users/"+id,opts)
                   .toPromise()
                   .then(res=>{
                     resolve(res)
@@ -231,7 +231,7 @@ export class AuthService {
       this.requestMgmtToken().then(res=>{
         hdr.append("Authorization", "Bearer "+res['access_token']);
         let opts = new RequestOptions({headers:hdr});
-        self.http.patch("https://evt-demo.eu.auth0.com/api/v2/users/"+id,body,opts)
+        self.http.patch("https://"+Config.auth0.domain+"/api/v2/users/"+id,body,opts)
                   .toPromise()
                   .then(res=>{
                     resolve(res)
@@ -259,7 +259,7 @@ export class AuthService {
 
     let opts = new RequestOptions({headers:hdr});
     return new Promise((resolve,reject)=>{
-    this.http.post('https://evt-demo.eu.auth0.com/oauth/token',body,opts)
+    this.http.post('https://'+Config.auth0.domain+'/oauth/token',body,opts)
              .toPromise()
              .then(res=>{
                localStorage.setItem('managementToken',JSON.stringify(res.json()))
@@ -281,7 +281,7 @@ export class AuthService {
       this.requestMgmtToken().then(res=>{
           hdr.append("Authorization", "Bearer "+res['access_token']);
           let opts = new RequestOptions({headers:hdr});
-          self.http.get("https://evt-demo.eu.auth0.com/api/v2/users?"+body,opts)
+          self.http.get("https://"+Config.auth0.domain+"/api/v2/users?"+body,opts)
               .toPromise()
               .then(res=>{
                 resolve(res.json()[0])

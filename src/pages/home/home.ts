@@ -7,7 +7,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Cookie } from 'ng2-cookies';
 
 import { LoginPage } from '../login/login';
-import { AuraContentPage } from '../aura-content/aura-content';
+import { AuraMainPage } from '../aura-main/aura-main';
 
 
 @Component({
@@ -71,7 +71,7 @@ export class HomePage {
             thng.action("scans").create().catch(err=>console.error(err));
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
-            self.navCtrl.setRoot(AuraContentPage);
+            self.navCtrl.setRoot(AuraMainPage);
           })
           .catch(err=>{
             self.scanFailed = true;
@@ -96,7 +96,7 @@ export class HomePage {
                 /* Already has a thng */
                 console.log('You already have a thng!');
                 /* REDIRECT TO MAIN PAGE */
-                self.navCtrl.setRoot(AuraContentPage);
+                self.navCtrl.setRoot(AuraMainPage);
                 let thngId = cf.myThng;
 
               }else{
@@ -112,7 +112,7 @@ export class HomePage {
                   usr.update({customFields:{myThng:th.id}}).then(console.log);
 
                   /* REDIRECT TO MAIN PAGE */
-                  self.navCtrl.setRoot(AuraContentPage);
+                  self.navCtrl.setRoot(AuraMainPage);
                 })
                 .catch(err=>{
                   console.log("Failed to create a thng");

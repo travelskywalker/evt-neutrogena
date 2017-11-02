@@ -23,6 +23,8 @@ sub-course {
 				font-family: 'HelveticaNeue-Light';
 				padding-left:23px;
 				text-align: left;
+				text-shadow: 0 0 0 #000;
+				font-weight: 500;
 				&.title{
 					padding-top: 16.365vw;
 				}
@@ -41,9 +43,12 @@ sub-course {
 			span.progress{
 				display: inline-block;
 				padding-top:17px;
-				margin-left: 23px;
+				margin-left: 9px;
 				width: calc(100% - 41px);
 				position: relative;
+				&.no-prog{
+					display: none !important;
+				}
 				div.main-bar{
 					display: block;
 					position:relative;
@@ -69,6 +74,7 @@ sub-course {
 					color:rgb(240,115,172);
 					font-family: 'HelveticaNeue-Light';
 					text-indent: 0;
+					text-shadow: 0 0 0 #ddd;
 				}
 			}
 		}

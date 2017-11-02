@@ -4,7 +4,7 @@
 		<p class="title">{{title}}</p>
 		<p class="duration">(Duration) {{duration}} days</p>
 		<p class="sign-in" *ngIf="!loggedIn()">Sign in to track progress</p>
-		<span class="progress" *ngIf="loggedIn()">
+		<span class="progress" *ngIf="loggedIn()" [ngClass]="{'no-prog':(getProg() == 0)}">
 			<div class="main-bar">
 				<div class="progress-bar" #prog></div>
 			</div>

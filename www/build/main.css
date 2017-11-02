@@ -25838,6 +25838,8 @@ sub-course div.container span.image-container > p {
   font-family: 'HelveticaNeue-Light';
   padding-left: 23px;
   text-align: left;
+  text-shadow: 0 0 0 #000;
+  font-weight: 500;
 }
 
 sub-course div.container span.image-container > p.title {
@@ -25855,9 +25857,13 @@ sub-course div.container span.image-container > p.sign-in {
 sub-course div.container span.image-container span.progress {
   display: inline-block;
   padding-top: 17px;
-  margin-left: 23px;
+  margin-left: 9px;
   width: calc(100% - 41px);
   position: relative;
+}
+
+sub-course div.container span.image-container span.progress.no-prog {
+  display: none !important;
 }
 
 sub-course div.container span.image-container span.progress div.main-bar {
@@ -25887,6 +25893,7 @@ sub-course div.container span.image-container span.progress p.completion {
   color: #f073ac;
   font-family: 'HelveticaNeue-Light';
   text-indent: 0;
+  text-shadow: 0 0 0 #ddd;
 }
 
 sub-course div.container button[ion-button] {
@@ -26173,6 +26180,7 @@ page-aura-content ion-content #aura-widget-div span.title {
 page-aura-content ion-content #aura-widget-div span.title p {
   line-height: 17px;
   color: #fff;
+  text-shadow: 0 0 0px #333;
   margin-left: 24px;
   margin-bottom: 0;
 }
@@ -26226,10 +26234,150 @@ page-aura-content ion-content section.description p.body {
   font-size: "HelveticaNeue-Light";
 }
 
+page-aura-main div.play {
+  height: 38px;
+  width: 95px;
+  display: inline-block;
+  background-image: url("../assets/images/signup_btn.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  position: relative;
+  margin-left: 27px;
+}
+
+page-aura-main div.play ion-col {
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  line-height: 17px;
+  font-size: 14px;
+  font-family: 'HelveticaNeue-Bold';
+  display: table;
+  text-align: center;
+  position: relative;
+}
+
+page-aura-main div.play ion-col ion-icon {
+  margin-right: 3px;
+  padding-top: 4px;
+}
+
+page-aura-main div.play ion-col img {
+  max-height: 18px;
+  margin-top: 4px;
+}
+
+page-aura-main div.play ion-col.rng {
+  color: #f07721;
+}
+
+page-aura-main div.play ion-col.rng:after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 1px);
+  height: 1px;
+  left: 100%;
+  width: 35px;
+  border-bottom: 1px solid #f07721;
+}
+
 page-aura-main ion-content {
   margin-top: 50px;
   margin-bottom: 50px;
   height: calc(100% - 100px);
+}
+
+page-aura-main ion-content section.track-preview {
+  min-height: 241px;
+  height: 80vw;
+  background-image: url("../assets/images/meditate.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  display: inline-block;
+  margin: 0;
+  padding: 45px 0 0 0;
+}
+
+page-aura-main ion-content section.track-preview a.progress-days {
+  color: #f07721;
+  line-height: 17px;
+  font-size: 2.8vw;
+  font-family: 'HelveticaNeue-Bold';
+  text-decoration: none;
+  margin-left: 33px;
+}
+
+page-aura-main ion-content section.track-preview > p {
+  line-height: 17px;
+  font-family: 'HelveticaNeue-Light';
+  color: #fff;
+  margin-left: 33px;
+}
+
+page-aura-main ion-content section.track-preview > p.section-title {
+  margin-top: 9px;
+  font-size: 25px;
+}
+
+page-aura-main ion-content section.track-preview > p.label-intro {
+  font-size: 2.6vw;
+}
+
+page-aura-main ion-content section.track-preview div.expandable {
+  margin-left: 33px;
+  margin-top: 18px;
+  font-size: 2.8vw;
+  color: #fff;
+  text-shadow: 0 0 0px #333;
+  line-height: 17px;
+}
+
+page-aura-main ion-content section.track-preview div.expandable a.desc-trigger {
+  font-size: 2.8vw;
+  display: block;
+  clear: both;
+  color: #fff;
+}
+
+page-aura-main ion-content section.track-preview div.expandable a.desc-trigger img#caret {
+  max-width: 15px;
+  width: 15px;
+}
+
+page-aura-main ion-content section.track-preview div.expandable a.link {
+  color: #fff;
+  display: block;
+  clear: both;
+  text-decoration: underline;
+}
+
+page-aura-main ion-content section.track-preview div.expandable p.content {
+  display: none;
+}
+
+page-aura-main ion-content section.track-preview div.expandable p.content.show {
+  margin-top: 2.6vw;
+  font-size: 2.6vw;
+  display: inline-block;
+}
+
+page-aura-main ion-content section.track-preview div.day-tracker.container {
+  width: 100%;
+  white-space: nowrap;
+  overflow: scroll;
+  display: block;
+  padding-right: calc(100vw - 122px);
+}
+
+page-aura-main ion-content p.more-courses {
+  color: #711b7d;
+  font-family: 'HelveticaNeue-Light';
+  line-height: 17px;
+  font-size: 25px;
+  margin: 25px 0 16px 30px;
 }
 
 page-aura-main ion-content ion-slides .swiper-container {
@@ -26245,7 +26393,7 @@ page-aura-main ion-content ion-slides ion-slide:not(.space-10) {
 }
 
 page-aura-main ion-content ion-slides ion-slide.space-10 {
-  width: 10px;
+  width: 2.6vw;
 }
 
 page-delete-account ion-content div.scroll-content {
