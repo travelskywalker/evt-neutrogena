@@ -26382,10 +26382,6 @@ page-aura-main ion-content p.more-courses {
   margin: 25px 0 16px 30px;
 }
 
-page-aura-main ion-content ion-slides .swiper-container {
-  overflow-x: visible;
-}
-
 page-aura-main ion-content ion-slides ion-slide:first-of-type {
   margin-left: 30px;
 }

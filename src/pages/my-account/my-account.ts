@@ -5,6 +5,7 @@ import { AuthService } from "../../providers/auth/auth.service";
 import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
 import { HomePage } from '../home/home';
+import { AuraMainPage } from '../aura-main/aura-main';
 import { DeleteAccountPage } from '../delete-account/delete-account';
 
 /**
@@ -72,7 +73,7 @@ export class MyAccountPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.setRoot(HomePage);
+  		this.navCtrl.setRoot(AuraMainPage);
   	}
   }
 
@@ -85,7 +86,7 @@ export class MyAccountPage {
   	let self = this;
   	this.auth0.updateUser({firstName:usr.firstName,lastName:usr.lastName}).then(res=>{
         self.auth0.setUserMetadata(res['user_metadata']);
-        self.navCtrl.setRoot(HomePage);
+        self.navCtrl.setRoot(AuraMainPage);
   	})
   	.catch(err=>{
   		console.log(err);

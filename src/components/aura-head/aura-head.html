@@ -8,9 +8,9 @@
 			<span><img src="../assets/images/auraLogo_white.png"/></span>
 		</ion-col>
 
-		<ion-col col-5 menuToggle>
+		<ion-col col-5>
 			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>
-			<a *ngIf = "logged">Hi, {{name}}</a>
+			<a *ngIf = "logged" menuToggle>Hi, {{name}}</a>
 			<span><img src="../assets/images/person.png"/></span>
 		</ion-col>
 

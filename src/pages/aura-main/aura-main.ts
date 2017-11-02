@@ -58,7 +58,8 @@ export class AuraMainPage {
   }
 
   evtScroll($event){
-  	console.log($event.target.scrollLeft, $event.target);
+  	//console.log($event.target.scrollLeft, $event.target);
+  	return true;
   }
 
 }

@@ -79,7 +79,7 @@ export class AuraContentPage {
   		let auraWidget = fp['contentWindow'].document.getElementById('aura-widget-div');
   		auraWidget.style.maxHeight = "100%";
   		auraWidget.style.height = "100%";
-  		console.log(fp,frm);
+  		//console.log(fp,frm);
   	}
   	//this.appendVal();
   }
