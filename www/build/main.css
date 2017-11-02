@@ -26163,6 +26163,8 @@ page-aura-content ion-content {
 
 page-aura-content ion-content #aura-widget-div {
   max-height: 320px;
+  height: 320px;
+  width: 100vw;
   position: relative;
 }
 

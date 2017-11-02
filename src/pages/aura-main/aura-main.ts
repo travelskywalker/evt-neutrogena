@@ -23,7 +23,7 @@ export class AuraMainPage {
 	@ViewChild(Slides) slider: Slides;
 	expanded: boolean = false;
 	def : string = "down";
-	day : number = 1;
+	day : number = 18;
 	arrDay : any = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService) {
   }
@@ -58,7 +58,7 @@ export class AuraMainPage {
   }
 
   evtScroll($event){
-  	console.log($event.target.scrollLeft);
+  	console.log($event.target.scrollLeft, $event.target);
   }
 
 }

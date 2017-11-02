@@ -11,7 +11,7 @@ export const Config = {
     domain: 'demo-evt.eu.auth0.com',
     responseType: 'token id_token',
     audience: 'https://demo-evt.eu.auth0.com/userinfo',
-    redirectUri: 'http://localhost:8100',
+    redirectUri: window.location.origin,//'http://localhost:8100',
     scope: 'openid'
   },
   auth0Mgmt:{

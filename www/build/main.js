@@ -517,10 +517,9 @@ var AuthService = (function () {
 }());
 AuthService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]])
 ], AuthService);
 
-var _a;
 //# sourceMappingURL=auth.service.js.map
 
 /***/ }),
@@ -655,7 +654,7 @@ var Config = {
         domain: 'demo-evt.eu.auth0.com',
         responseType: 'token id_token',
         audience: 'https://demo-evt.eu.auth0.com/userinfo',
-        redirectUri: 'http://localhost:8100',
+        redirectUri: window.location.origin,
         scope: 'openid'
     },
     auth0Mgmt: {
@@ -1025,7 +1024,7 @@ __decorate([
 ], AuraContentPage.prototype, "content", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n    <!--div id="aura-widget-div" #aura></div-->\n    <iframe id="aura-widget-div" src="../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html"></iframe>\n    \n    <section class="description">\n    	<p class="title" (tap)="playNext()">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
+        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n    <!--div id="aura-widget-div" #aura></div-->\n    <iframe id="aura-widget-div" src="../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html"></iframe>\n    \n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ViewController */], __WEBPACK_IMPORTED_MODULE_3__providers_app_script_service__["a" /* ScriptService */]])
 ], AuraContentPage);
@@ -1176,7 +1175,7 @@ DeleteAccountPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(342);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_content_aura_content__ = __webpack_require__(227);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1240,7 +1239,7 @@ var HomePage = (function () {
                         thng.action("scans").create().catch(function (err) { return console.error(err); });
                         usr.update({ customFields: { myThng: thng.id } }).then(console.log);
                         //TODO: Redirect to content page. Still in progress
-                        self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
+                        self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_content_aura_content__["a" /* AuraContentPage */]);
                     })
                         .catch(function (err) {
                         self.scanFailed = true;
@@ -1263,7 +1262,7 @@ var HomePage = (function () {
                                 /* Already has a thng */
                                 console.log('You already have a thng!');
                                 /* REDIRECT TO MAIN PAGE */
-                                self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
+                                self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_content_aura_content__["a" /* AuraContentPage */]);
                                 var thngId = cf.myThng;
                             }
                             else {
@@ -1277,7 +1276,7 @@ var HomePage = (function () {
                                     /* Assign the newly created thng to the user */
                                     usr.update({ customFields: { myThng: th.id } }).then(console.log);
                                     /* REDIRECT TO MAIN PAGE */
-                                    self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
+                                    self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_content_aura_content__["a" /* AuraContentPage */]);
                                 })
                                     .catch(function (err) {
                                     console.log("Failed to create a thng");
@@ -1307,10 +1306,9 @@ HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-home',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/home/home.html"*/'<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [style]="{\'color\':\'#fff\',\'font-size\':\'13px\',\'line-height\':\'20px\',\'background-color\':\'rgb(69,69,69)\'}" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>\n      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your\nVisibly Clear&copy; Light Therapy Acne Mask Activator</p>\n\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */]])
 ], HomePage);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -2595,7 +2593,7 @@ var AuraMainPage = (function () {
         this.scr = scr;
         this.expanded = false;
         this.def = "down";
-        this.day = 1;
+        this.day = 18;
         this.arrDay = [];
     }
     AuraMainPage.prototype.ionViewDidLoad = function () {
@@ -2625,7 +2623,7 @@ var AuraMainPage = (function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__["a" /* AuraContentPage */]);
     };
     AuraMainPage.prototype.evtScroll = function ($event) {
-        console.log($event.target.scrollLeft);
+        console.log($event.target.scrollLeft, $event.target);
     };
     return AuraMainPage;
 }());
@@ -3367,7 +3365,7 @@ AuraFootComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(342);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_home_home__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3394,7 +3392,11 @@ var AuraFootComponent = (function () {
         this.text = 'Hello World';
     }
     AuraFootComponent.prototype.toHome = function () {
-        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */]);
+        var _this = this;
+        this.nav.push(__WEBPACK_IMPORTED_MODULE_2__pages_home_home__["a" /* HomePage */]).then(function () {
+            var index = _this.view.index;
+            _this.nav.remove(index);
+        });
     };
     AuraFootComponent.prototype.reorder = function () {
     };
@@ -3404,10 +3406,9 @@ AuraFootComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'aura-foot',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder" (tap)="reorder()">\n  			<img src="../assets/images/reorder.png"/>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ViewController */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ViewController */]])
 ], AuraFootComponent);
 
-var _a, _b;
 //# sourceMappingURL=aura-foot.js.map
 
 /***/ }),
