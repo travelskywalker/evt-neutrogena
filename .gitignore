@@ -35,5 +35,5 @@ src/assets/aura/testPage
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-www/assets/aura/Neutrogena_widgets
+#www/assets/aura/Neutrogena_widgets
 www/assets/aura/testPage
