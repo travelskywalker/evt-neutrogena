@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
 import { LoginPage } from "../login/login";
@@ -30,7 +30,8 @@ export class SignUpPage {
   				public navParams: NavParams, 
   				private render: Renderer2, 
   				private auth0: AuthService, 
-  				private formBuilder: FormBuilder) {
+  				private formBuilder: FormBuilder,
+  				private loader : LoadingController) {
   	this.formGroup = this.formBuilder.group({
   		firstName: ['', Validators.required],
   		lastName: ['', Validators.required],
@@ -80,6 +81,13 @@ export class SignUpPage {
   signup(){
   	let usr = this.formGroup.value;
   	let self = this;
+  	let load = this.loader.create({
+      spinner: 'crescent',
+      dismissOnPageChange: true,
+      showBackdrop: true,
+      content: `Please wait...`,
+      enableBackdropDismiss:true});
+  	load.present();
 
   	this.auth0.searchUser(usr.email).then(found=>{
   		if(found){
@@ -93,6 +101,7 @@ export class SignUpPage {
 		  	.catch(err=>{
 		  		console.log(err);
 		  		self.invalidReg = true;
+		  		load.dismiss();
 		  	});
   		}
   	}).catch(err=>{

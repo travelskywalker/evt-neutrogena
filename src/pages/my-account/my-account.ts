@@ -73,7 +73,7 @@ export class MyAccountPage {
   		this.navCtrl.pop();
   	}
   	else{
-  		this.navCtrl.setRoot(AuraMainPage);
+  		this.navCtrl.setRoot(HomePage);
   	}
   }
 
@@ -86,7 +86,7 @@ export class MyAccountPage {
   	let self = this;
   	this.auth0.updateUser({firstName:usr.firstName,lastName:usr.lastName}).then(res=>{
         self.auth0.setUserMetadata(res['user_metadata']);
-        self.navCtrl.setRoot(AuraMainPage);
+        self.navCtrl.setRoot(HomePage);
   	})
   	.catch(err=>{
   		console.log(err);

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,Platform } from 'ionic-angular';
+import { NavController,Platform, LoadingController } from 'ionic-angular';
 import { EvtProvider} from '../../providers/evt/evt';
 import { AuthService } from '../../providers/auth/auth.service';
 
@@ -21,7 +21,7 @@ export class HomePage {
   logos : any;
 
   noticeViewed : boolean;
-  constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private auth0: AuthService) {
+  constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private auth0: AuthService, private loader: LoadingController) {
     this.auth0.setEVTInfo();
 
   }
@@ -36,16 +36,24 @@ export class HomePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
-    if(!localStorage.access_token || !localStorage.id_token){
+    /*if(!localStorage.access_token || !localStorage.id_token){
       this.navCtrl.setRoot(LoginPage);
-    }
+    }*/
 
     this.mobileVersion = this.platform.is('mobile');
   }
 
   scan(){
     let self = this;
+    let load = this.loader.create({
+      spinner: 'crescent',
+      dismissOnPageChange: true,
+      showBackdrop: true,
+      content: `Please wait...`,
+      enableBackdropDismiss:true});
+    load.present();
     this.evt.scan().then(res=>{
+      load.data.enableBackdropDismiss = false;
       if(res.length === 0) {
         /* Scan failed. we should create a 'not recognized' action */
 
@@ -53,9 +61,11 @@ export class HomePage {
         self.scanFailed = true;
         self.evt.getUserContext().then(usr=>{
           usr.action("_NotRecognised").create().catch(err=>console.error(err));
+          load.dismiss();
         })
         .catch(err=>{
-          console.log(err)
+          console.log(err);
+          load.dismiss();
         })
 
 

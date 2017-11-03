@@ -20,13 +20,23 @@ export class SubCourseComponent {
   @Input('progress') progress ?: number = 0;
   @ViewChild('prog') prog : ElementRef;
   @Output('begin') bgn = new EventEmitter;
-
+  @Input('activeCourse') crs : any;
+  //daysLength ?: number = 0;
 
   constructor(private auth0: AuthService, private render: Renderer2) {
   }
 
-  begin($event){
-  	this.bgn.emit($event);
+  begin(tes){
+  	tes['progress'] = this.progress;
+  	tes['title'] = this.title;
+  	this.bgn.emit(tes);
+  }
+
+  ngOnInit(){
+  	this.duration = Object.keys(this.crs).length;
+
+  	// THIS SHOULDNT BE RANDOM
+  	this.progress = Math.round(Math.random()*this.duration);
   }
 
   ngAfterViewInit(){

@@ -6,7 +6,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 
-// import { EvtProvider } from "../providers/evt/evt";
 
 @Component({
   templateUrl: 'app.html'
@@ -31,7 +30,7 @@ export class MyApp {
   }
 
   initializeApp() {
-    // let self = this;
+    let self = this;
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ViewController } from "ionic-angular";
 
 import { AuraMainPage } from "../../pages/aura-main/aura-main";
+import { HomePage } from "../../pages/home/home";
 /**
  * Generated class for the AuraFootComponent component.
  *
@@ -22,7 +23,7 @@ export class AuraFootComponent {
   }
 
   toHome(){
-  	this.nav.setRoot(AuraMainPage);
+  	this.nav.setRoot(HomePage);
   }
 
   reorder(){

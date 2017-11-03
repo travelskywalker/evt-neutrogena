@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
@@ -20,7 +20,8 @@ export class LoginPage {
   				public navParams: NavParams,
   				private render: Renderer2,
   				private auth0: AuthService,
-  				private formBuilder: FormBuilder) {
+  				private formBuilder: FormBuilder,
+  				private loader : LoadingController) {
   	this.formGroup = this.formBuilder.group({
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
   		password: ['', Validators.required ],
@@ -62,6 +63,13 @@ export class LoginPage {
 
   login(){
   	let usr = this.formGroup.value;
+  	let load = this.loader.create({
+      spinner: 'crescent',
+      dismissOnPageChange: true,
+      showBackdrop: true,
+      content: `Please wait...`,
+      enableBackdropDismiss:true});
+  	load.present();
   	//console.log(usr);
 
   	this.auth0.login({email:usr.email,pass:usr.password}).then(res=>{
@@ -70,6 +78,7 @@ export class LoginPage {
   	.catch(err=>{
   		console.log(err);
   		this.invalidLogin = true;
+  		load.dismiss();
   	});
   }
 

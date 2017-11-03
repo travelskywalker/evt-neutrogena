@@ -7,12 +7,12 @@
 			Day {{day}} of 30
 		</a>
 		<p class="section-title">
-			Morning Meditations
+			{{courseTitle}}
 		</p>
 
 		<div class="day-tracker container" (scroll)="evtScroll($event)">
 			<div class="play" *ngFor="let dy of arrDay">
-				<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(!dy?.status)">
+				<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(!dy?.status,dy?.day)">
 					<ion-icon name="play" *ngIf="!dy?.status"></ion-icon>
 					Day {{dy?.day}}
 					<img src="../assets/images/tick.png" *ngIf="dy?.status"/>
@@ -26,7 +26,7 @@
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
 			<p class="content" [ngClass]="{'show':expanded}">
-				Lorem ipsum dolor sit amet, consectetur adipscing elit. Pellentesque non erat eu nuno placerat tempus et at nulla.
+				{{activeCourse[day]?.desc}}
 				<a class="link">About AURA</a>
 			</p>
 		</div>
@@ -37,15 +37,15 @@
 
 	<section class="sliders">
 		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">
-			<ion-slide>
-				<sub-course [title]="'Morning Meditations'" [progress]="25" [enabled]="true" (begin)="tryMe($event)"></sub-course>
+			<ion-slide *ngFor = "let crs of courseKeys; let i=index">
+				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="courses[crs]"></sub-course>
 			</ion-slide>
-			<ion-slide>
+			<!--ion-slide>
 				<sub-course [title]="'Mindfulness'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>
 			</ion-slide>
 			<ion-slide>
 				<sub-course [title]="'Focus'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>
-			</ion-slide>
+			</ion-slide-->
 
 		</ion-slides>
 	</section>

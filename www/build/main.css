@@ -26300,7 +26300,7 @@ page-aura-main ion-content section.track-preview {
   width: 100vw;
   display: inline-block;
   margin: 0;
-  padding: 45px 0 0 0;
+  padding: 10vw 0 0 0;
 }
 
 page-aura-main ion-content section.track-preview a.progress-days {
@@ -26330,7 +26330,7 @@ page-aura-main ion-content section.track-preview > p.label-intro {
 
 page-aura-main ion-content section.track-preview div.expandable {
   margin-left: 33px;
-  margin-top: 18px;
+  margin-top: 2vw;
   font-size: 2.8vw;
   color: #fff;
   text-shadow: 0 0 0px #333;
@@ -26361,7 +26361,9 @@ page-aura-main ion-content section.track-preview div.expandable p.content {
 }
 
 page-aura-main ion-content section.track-preview div.expandable p.content.show {
-  margin-top: 2.6vw;
+  line-height: 13px;
+  margin-top: 1vw;
+  width: calc(100% - 5vw);
   font-size: 2.6vw;
   display: inline-block;
 }
@@ -26382,8 +26384,8 @@ page-aura-main ion-content p.more-courses {
   margin: 25px 0 16px 30px;
 }
 
-page-aura-main ion-content ion-slides ion-slide:first-of-type {
-  margin-left: 30px;
+page-aura-main ion-content ion-slides ion-slide {
+  padding-left: 30px;
 }
 
 page-aura-main ion-content ion-slides ion-slide:not(.space-10) {
@@ -26392,6 +26394,10 @@ page-aura-main ion-content ion-slides ion-slide:not(.space-10) {
 
 page-aura-main ion-content ion-slides ion-slide.space-10 {
   width: 2.6vw;
+}
+
+page-aura-main ion-content ion-slides ion-slide:last-of-type {
+  margin-right: 30px;
 }
 
 page-delete-account ion-content div.scroll-content {
