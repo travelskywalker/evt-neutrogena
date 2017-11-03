@@ -1,46 +1,59 @@
 page-aura-main {
 
-	div.play{
-		height: 38px;
-		width: 95px;
-		display: inline-block;
-		background-image:url('../assets/images/signup_btn.png');
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 100% 100%;
-		position:relative;
-		ion-col{
-			height: 100%;
-			width: 100%;
-			color:#fff;
-			line-height: 17px;
-			font-size: 14px;
-			font-family: 'HelveticaNeue-Bold';
-			display: table;
-			text-align: center;
-			position: relative;
-			ion-icon{
-				margin-right: 3px;
-				padding-top:4px;
-			}
-			img{
-				max-height: 18px;
-				margin-top:4px;
-			}
-			&.rng{
-				color:rgb(240,119,33);
-				&:after{
-					content:"";
-					position: absolute;
-					top:calc(50% - 1px);
-					height:1px;
-					left:100%;
-					width:35px;
-					border-bottom:1px solid rgb(240,119,33);
+
+	.btns{
+
+		ion-slide{
+			&:nth-of-type(10){
+				ion-col.rng{
+					&:after{
+						display:none !important;
+					}
 				}
 			}
 		}
-	}
+		div.play{
+			height: 38px;
+			width: 95px;
+			display: inline-block;
+			background-image:url('../assets/images/signup_btn.png');
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: 100% 100%;
+			position:relative;
+			ion-col{
+				height: 100%;
+				width: 100%;
+				color:#fff;
+				line-height: 17px;
+				font-size: 14px;
+				font-family: 'HelveticaNeue-Bold';
+				display: table;
+				text-align: center;
+				position: relative;
+				ion-icon{
+					margin-right: 3px;
+					padding-top:4px;
+				}
+				img{
+					max-height: 18px;
+					margin-top:4px;
+				}
+				&.rng{
+					color:rgb(240,119,33);
+					&:after{
+						content:"";
+						position: absolute;
+						top:calc(50% - 1px);
+						height:1px;
+						left:100%;
+						width:35px;
+						border-bottom:1px solid rgb(240,119,33);
+					}
+				}
+			}
+		}//end of div play
+	}// end of btns
 
 	ion-content{
 		margin-top: 50px;

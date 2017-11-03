@@ -7,6 +7,8 @@ import { aura } from "../../assets/aura/config/aura.config";
 
 import { ScriptService } from "../../providers/app/script.service";
 
+import { AuraMainPage } from "../aura-main/aura-main";
+
 /**
  * Generated class for the AuraContentPage page.
  *
@@ -23,10 +25,10 @@ export class AuraContentPage {
 	@ViewChild('aura') auraComponent : ElementRef;
 	@ViewChild(Content) content: Content;
 	auraLoc = aura;
-	module :{title:string,description:string,link:any} = {
+	module :{title?:string,description?:string,link?:any} = {
 			title:"Morning Meditations",
 			description:`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips`,
-			link:"../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html"
+			link:this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html")
 		};
 	auraRef : any;
 	auraSelect: any;
@@ -34,9 +36,16 @@ export class AuraContentPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private sanitizer: DomSanitizer) {
   	
   	let data = this.navParams.get('data');
-  		this.module.title = data.title;
-  		this.module.description = data.desc;
-  		this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));
+  	console.log(data);
+  	if(typeof data == "undefined"){
+  		
+  		this.navCtrl.setRoot(AuraMainPage);
+  	}else{
+	  	this.module.title = data.title;
+	  	this.module.description = data.desc;
+	  	this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));	
+  	}
+
   }
 
   ionViewWillEnter(){

@@ -26236,7 +26236,11 @@ page-aura-content ion-content section.description p.body {
   font-size: "HelveticaNeue-Light";
 }
 
-page-aura-main div.play {
+page-aura-main .btns ion-slide:nth-of-type(10) ion-col.rng:after {
+  display: none !important;
+}
+
+page-aura-main .btns div.play {
   height: 38px;
   width: 95px;
   display: inline-block;
@@ -26247,7 +26251,7 @@ page-aura-main div.play {
   position: relative;
 }
 
-page-aura-main div.play ion-col {
+page-aura-main .btns div.play ion-col {
   height: 100%;
   width: 100%;
   color: #fff;
@@ -26259,21 +26263,21 @@ page-aura-main div.play ion-col {
   position: relative;
 }
 
-page-aura-main div.play ion-col ion-icon {
+page-aura-main .btns div.play ion-col ion-icon {
   margin-right: 3px;
   padding-top: 4px;
 }
 
-page-aura-main div.play ion-col img {
+page-aura-main .btns div.play ion-col img {
   max-height: 18px;
   margin-top: 4px;
 }
 
-page-aura-main div.play ion-col.rng {
+page-aura-main .btns div.play ion-col.rng {
   color: #f07721;
 }
 
-page-aura-main div.play ion-col.rng:after {
+page-aura-main .btns div.play ion-col.rng:after {
   content: "";
   position: absolute;
   top: calc(50% - 1px);

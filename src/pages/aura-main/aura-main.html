@@ -4,7 +4,7 @@
 
 	<section class="track-preview">
 		<a class="progress-days">
-			Day {{day+1}} of {{dur+1}}
+			Day {{day < dur ? (day+1):day}} of {{dur+1}}
 		</a>
 		<p class="section-title">
 			{{courseTitle}}
@@ -20,7 +20,7 @@
 					</ion-col>
 				</div>
 			</ion-slide>
-			<ion-slide>
+			<ion-slide *ngIf="day < dur">
 				<div class="play">
 					<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(true,day+1)">
 						<ion-icon name="play"></ion-icon>
