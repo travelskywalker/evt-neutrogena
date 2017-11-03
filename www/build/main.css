@@ -25694,7 +25694,7 @@ notice {
 }
 
 notice > section.body {
-  padding: 21px 35px 24px 28px;
+  padding: 21px 15vw 24px;
 }
 
 notice > section.body span.title {
@@ -26245,7 +26245,6 @@ page-aura-main div.play {
   background-position: center;
   background-size: 100% 100%;
   position: relative;
-  margin-left: 27px;
 }
 
 page-aura-main div.play ion-col {
@@ -26384,19 +26383,28 @@ page-aura-main ion-content p.more-courses {
   margin: 25px 0 16px 30px;
 }
 
-page-aura-main ion-content ion-slides ion-slide {
+page-aura-main ion-content ion-slides.btns {
+  height: 40px;
+}
+
+page-aura-main ion-content ion-slides.btns ion-slide {
+  width: 95px;
   padding-left: 30px;
 }
 
-page-aura-main ion-content ion-slides ion-slide:not(.space-10) {
+page-aura-main ion-content ion-slides:not(.btns) ion-slide {
+  padding-left: 30px;
+}
+
+page-aura-main ion-content ion-slides:not(.btns) ion-slide:not(.space-10) {
   width: calc(68.8vw) !important;
 }
 
-page-aura-main ion-content ion-slides ion-slide.space-10 {
+page-aura-main ion-content ion-slides:not(.btns) ion-slide.space-10 {
   width: 2.6vw;
 }
 
-page-aura-main ion-content ion-slides ion-slide:last-of-type {
+page-aura-main ion-content ion-slides:not(.btns) ion-slide:last-of-type {
   margin-right: 30px;
 }
 

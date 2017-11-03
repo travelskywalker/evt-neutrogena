@@ -1,4 +1,4 @@
-import { Component, Input, Renderer2, ElementRef } from '@angular/core';
+import { Component, Input, Renderer2, ElementRef, AfterViewInit } from '@angular/core';
 
 
 /**
@@ -14,12 +14,22 @@ import { Component, Input, Renderer2, ElementRef } from '@angular/core';
 export class NoticeComponent {
 
 	@Input("title") title?: string = "";
-	@Input("style") style ?: any;
+	@Input("class") class ?: any;
+  style: any;
 	//@ViewChild(this) content ?: NoticeComponent;
   constructor(private render: Renderer2, public element:ElementRef) {
   }
 
   ngOnInit(){
+  }
+
+  ngAfterViewInit(){
+    if(this.class == "pink"){
+      this.style = {'color':'#fff','font-size':'15px','line-height':'20px','background-color':'rgb(240,115,172)','text-align':'center'};
+    }
+    else{
+      this.style = {'color':'#fff','font-size':'13px','line-height':'20px','background-color':'rgb(69,69,69)'};
+    }
   }
 
   destroy(){

@@ -9,7 +9,6 @@ page-aura-main {
 		background-position: center;
 		background-size: 100% 100%;
 		position:relative;
-		margin-left: 27px;
 		ion-col{
 			height: 100%;
 			width: 100%;
@@ -142,23 +141,32 @@ page-aura-main {
 		}
 
 		ion-slides{
-
-			.swiper-container{
+			&.btns{
+				height:40px;
+				ion-slide{
+					width:95px;
+					padding-left:30px;
+				}
 			}
 
-			ion-slide{
-				&:first-of-type{
+			&:not(.btns){
+				.swiper-container{
 				}
-				padding-left:30px;
-				//transform:translate3d(0,0,0) translateX(30px) !important;
-				&:not(.space-10){
-					width:calc(68.8vw) !important;
-				}
-				&.space-10{
-					width:2.6vw;
-				}
-				&:last-of-type{
-					margin-right: 30px;
+
+				ion-slide{
+					&:first-of-type{
+					}
+					padding-left:30px;
+					//transform:translate3d(0,0,0) translateX(30px) !important;
+					&:not(.space-10){
+						width:calc(68.8vw) !important;
+					}
+					&.space-10{
+						width:2.6vw;
+					}
+					&:last-of-type{
+						margin-right: 30px;
+					}
 				}
 			}
 

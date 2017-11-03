@@ -4,21 +4,38 @@
 
 	<section class="track-preview">
 		<a class="progress-days">
-			Day {{day}} of 30
+			Day {{day+1}} of {{dur+1}}
 		</a>
 		<p class="section-title">
 			{{courseTitle}}
 		</p>
 
-		<div class="day-tracker container" (scroll)="evtScroll($event)">
-			<div class="play" *ngFor="let dy of arrDay">
-				<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(!dy?.status,dy?.day)">
-					<ion-icon name="play" *ngIf="!dy?.status"></ion-icon>
-					Day {{dy?.day}}
-					<img src="../assets/images/tick.png" *ngIf="dy?.status"/>
-				</ion-col>
-			</div>
-		</div>
+		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
+		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">
+			<ion-slide *ngFor="let dy of arrDay">
+				<div class="play">
+					<ion-col [ngClass]="{'rng':true}" (tap)="intoTheContent(!dy?.status,dy?.day)">
+						Day {{dy?.day}}
+						<img src="../assets/images/tick.png"/>
+					</ion-col>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="play">
+					<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(true,day+1)">
+						<ion-icon name="play"></ion-icon>
+						Day {{day + 1}}
+					</ion-col>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				&nbsp;
+			</ion-slide>
+			<ion-slide>
+				&nbsp;
+			</ion-slide>
+		</ion-slides>
+		<!--/div-->
 		<p class="label-intro">
 			Start this course
 		</p>

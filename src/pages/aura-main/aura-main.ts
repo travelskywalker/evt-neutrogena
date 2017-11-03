@@ -20,9 +20,11 @@ import { AuraContentPage } from "../../pages/aura-content/aura-content";
 })
 export class AuraMainPage {
 	@ViewChild(Slides) slider: Slides;
+	@ViewChild('btns') btnSlide : Slides;
 	expanded: boolean = false;
 	def : string = "down";
 	day ?: number = 8;
+	dur ?: number = 10;
 	arrDay ?: any = [];
 	courses ?: any;
 	courseKeys ?: any;
@@ -34,7 +36,6 @@ export class AuraMainPage {
   ionViewDidLoad() {
     //console.log('ionViewDidLoad AuraMainPage');
     //console.log(this.slider);
-    this.popDays();
   }
 
   popDays(){
@@ -43,6 +44,15 @@ export class AuraMainPage {
     	let st = !(i==this.day);
     	this.arrDay.push({day:i,status:st});
     }
+
+    setTimeout(()=>{
+    	try{
+    		this.btnSlide.slideTo(this.day);
+    		console.log(this.day);
+    	}catch(e){
+    		console.log(e);
+    	}
+    },100);
   }
 
   expand(){
@@ -53,6 +63,7 @@ export class AuraMainPage {
 
   ngAfterViewInit(){
   	console.log(this.slider.width);
+    this.popDays();
   }
 
   ngOnInit(){
@@ -61,6 +72,7 @@ export class AuraMainPage {
   		self.courses = res;
   		self.courseKeys = Object.keys(res);
   		self.activeCourse = res[self.courseTitle];
+  		self.dur = self.courseKeys.length;
   	})
   }
 
@@ -68,6 +80,7 @@ export class AuraMainPage {
   	this.activeCourse = $event;
   	this.day = $event.progress;
   	this.courseTitle = $event.title;
+  	this.dur = this.courseKeys.length;
   	this.popDays();
   }
 
