@@ -31,7 +31,6 @@ import { ComponentsModule } from '../components/components.module';
 const pages = [
             MyApp,
             HomePage,
-            ListPage,
             SignUpPage,
             AuthPage,
             LoginPage,
