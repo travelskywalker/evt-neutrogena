@@ -47,7 +47,7 @@ export class AppProvider {
   	this.activeCourse = val;
   	let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
   	
-  	this.activeDur = ll.length - 2; //subtract 2 because there are 2 extra fields: current progress and title
+  	this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
 
   }
 
@@ -61,7 +61,7 @@ export class AppProvider {
   		self.initProgArr();
   		self.courses = res;
   		self.activeCourse = res['Mindfulness'];
-  		self.activeDur = self.progressKeys.length;
+  		self.activeDur = Object.keys(self.activeCourse).length;
   	})
   }
 
