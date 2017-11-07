@@ -45,7 +45,10 @@ export class AppProvider {
   /* set the active course for the top component in the main page */
   setActiveCourse(val){
   	this.activeCourse = val;
-  	this.activeDur = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]}).length;
+  	let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
+  	
+  	this.activeDur = ll.length - 2; //subtract 2 because there are 2 extra fields: current progress and title
+
   }
 
   setDur(val:number){
