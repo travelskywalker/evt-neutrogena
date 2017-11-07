@@ -8,13 +8,6 @@ import { HomePage } from '../home/home';
 import { AuraMainPage } from '../aura-main/aura-main';
 import { DeleteAccountPage } from '../delete-account/delete-account';
 
-/**
- * Generated class for the SignUpPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-my-account',
@@ -51,19 +44,11 @@ export class MyAccountPage {
   }
 
   focused(event){
-  	//console.log(event._elementRef.nativeElement);
   	let node = event._elementRef.nativeElement;
-  	console.log(node);
-  	//this.render.addClass(node,"focused");
-  	//this.render.setStyle(node,"box-shadow","2px 2px 3px 1px rgb(240,119,33)");
   }
 
   blurred(event){
-  	//console.log(event._elementRef.nativeElement);
   	let node = event._elementRef.nativeElement;
-  	console.log(node);
-  	//this.render.removeClass(node,"focused");
-  	//this.render.removeStyle(node,"box-shadow");
   }
 
   dismissThis(){

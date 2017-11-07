@@ -26,7 +26,8 @@ export class AuraFootComponent {
   }
 
   toHome(){
-  	this.nav.setRoot(HomePage);
+    console.log(this.nav);
+  	this.nav.setRoot(AuraMainPage);
   }
 
 }

@@ -5,10 +5,10 @@ import { LoginPage } from "../login/login";
 
 import { AuthService } from "../../providers/auth/auth.service";
 /**
- * Generated class for the AuthPage page.
+ * This is the catch-all page. All paths are checked here first.
+ * The access_token and id_token variables are stored in localstorage
+ * for processing. 
  *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
  */
 
 @IonicPage()

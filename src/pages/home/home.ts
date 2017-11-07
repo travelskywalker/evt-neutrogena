@@ -9,6 +9,10 @@ import { Cookie } from 'ng2-cookies';
 import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';
 
+/*
+ *  This is the scan page. Where scanning happens.
+ *
+ */
 
 @Component({
   selector: 'page-home',
@@ -27,8 +31,7 @@ export class HomePage {
   }
 
   ngOnInit(){
-    // console.log(this.navParams.data);
-
+    // if noticeViewed is true, the cookie policy notification will no longer be displayed
     if(Cookie.get('cookie_notice') && Cookie.get('cookie_notice') == '1'){
       this.noticeViewed = true;
     }
@@ -36,9 +39,6 @@ export class HomePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
-    /*if(!localStorage.access_token || !localStorage.id_token){
-      this.navCtrl.setRoot(LoginPage);
-    }*/
 
     this.mobileVersion = this.platform.is('mobile');
   }
