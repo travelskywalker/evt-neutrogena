@@ -6,7 +6,13 @@ side-menu {
 			max-height: calc(100% - 3.8em);
 			&>ion-list{
 				margin-top:46px;
-				&>button{
+				a{
+					text-decoration: none;
+					color:inherit;
+					display: block;
+					clear:both;
+				}
+				button{
 
 					border:0 !important;
 					padding-left: 38px;

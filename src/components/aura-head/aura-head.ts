@@ -4,6 +4,9 @@ import { NavController } from 'ionic-angular';
 
 import { LoginPage } from "../../pages/login/login";
 import { AuthService } from "../../providers/auth/auth.service";
+
+import { SignUpPage } from "../../pages/sign-up/sign-up";
+import { MyAccountPage } from "../../pages/my-account/my-account";
 /**
  * Generated class for the AuraHeadComponent component.
  *
@@ -26,7 +29,14 @@ export class AuraHeadComponent {
   toLogin(){
   	/*let nav = this.app.getRootNav();
   	nav.setRoot(LoginPage);*/
-  	this.navCtrl.setRoot(LoginPage);
+  	
+  	//this.navCtrl.setRoot(LoginPage);
+
+  	this.navCtrl.push(SignUpPage);
+  }
+
+  myAccount(){
+  	this.navCtrl.push(MyAccountPage);
   }
 
   ngOnInit(){

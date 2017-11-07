@@ -25729,6 +25729,95 @@ notice > section.body button[ion-button] ion-icon {
   width: auto;
 }
 
+progress-modal {
+  z-index: 10;
+  position: fixed;
+  display: inline-block;
+  height: calc(100% - 50px);
+  width: 100%;
+  padding: 16px 20px;
+  top: 50px;
+  left: 0;
+  background-color: rgba(50, 50, 50, 0.4);
+}
+
+progress-modal .overlay {
+  content: "";
+  z-index: 9;
+  display: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+progress-modal div.container {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10pt;
+  display: inline-block;
+}
+
+progress-modal div.container > * {
+  display: block;
+  clear: both;
+  width: 100%;
+  text-align: center;
+}
+
+progress-modal div.container > h3 {
+  padding: 185px 0 0;
+  color: #bd0894;
+  line-height: 16px;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+progress-modal div.container > h4 {
+  padding: 11px 0 0;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 18px;
+  line-height: 20px;
+  color: #f07721;
+}
+
+progress-modal div.container > p {
+  margin: 36px auto 0;
+  font-size: 14px;
+  font-family: 'HelveticaNeue-Light';
+  color: #808184;
+  line-height: 17px;
+}
+
+progress-modal div.container > p > a {
+  text-decoration: none;
+  color: #f07721;
+  font-size: 18px;
+  font-family: 'HelveticaNeue-Bold';
+}
+
+progress-modal div.container > button[ion-button] {
+  max-width: calc(100% - 70px);
+  height: 50px;
+  background-image: url("../assets/images/signup_btn.png");
+  background-size: contain;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 15px;
+  line-height: 17px;
+  display: block;
+  margin: 60px auto 0;
+  background-color: transparent;
+}
+
 side-menu ion-content > .scroll-content {
   max-height: calc(100% - 3.8em);
 }
@@ -25737,31 +25826,38 @@ side-menu ion-content > .scroll-content > ion-list {
   margin-top: 46px;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button {
+side-menu ion-content > .scroll-content > ion-list a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  clear: both;
+}
+
+side-menu ion-content > .scroll-content > ion-list button {
   border: 0 !important;
   padding-left: 38px;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button > .item-inner {
+side-menu ion-content > .scroll-content > ion-list button > .item-inner {
   border-bottom: 0 !important;
   background: none !important;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button > .item-inner > .input-wrapper ion-label {
+side-menu ion-content > .scroll-content > ion-list button > .item-inner > .input-wrapper ion-label {
   font-family: HelveticaNeue-Light;
   font-size: 16px;
   color: #f07721;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button.main {
+side-menu ion-content > .scroll-content > ion-list button.main {
   margin-bottom: 66px;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button.main.dbl {
+side-menu ion-content > .scroll-content > ion-list button.main.dbl {
   margin-bottom: 0;
 }
 
-side-menu ion-content > .scroll-content > ion-list > button.main > .item-inner ion-label {
+side-menu ion-content > .scroll-content > ion-list button.main > .item-inner ion-label {
   font-family: HelveticaNeue-Bold;
   font-size: 20px;
   color: #bd0894;

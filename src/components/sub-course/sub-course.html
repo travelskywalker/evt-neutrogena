@@ -3,7 +3,7 @@
 	<span class="image-container" [ngStyle]="{'background-image':'url('+bgImg+')'}">
 		<p class="title">{{title}}</p>
 		<p class="duration">(Duration) {{duration}} days</p>
-		<p class="sign-in" *ngIf="!loggedIn()">Sign in to track progress</p>
+		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>
 		<span class="progress" *ngIf="loggedIn()" [ngClass]="{'no-prog':(getProg() == 0)}">
 			<div class="main-bar">
 				<div class="progress-bar" #prog></div>

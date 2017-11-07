@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { App } from 'ionic-angular';
 import { AuthService } from '../../providers/auth/auth.service';
 
-//import { SignUpPage } from '../../pages/sign-up/sign-up';
+import { Config } from '../../config/environment.dev';
 import { LoginPage } from '../../pages/login/login';
 import { MyAccountPage } from '../../pages/my-account/my-account';
+import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 
 /**
  * Generated class for the SideMenuComponent component.
@@ -18,18 +19,33 @@ import { MyAccountPage } from '../../pages/my-account/my-account';
 })
 export class SideMenuComponent {
   links : any = [];
-
-  constructor(private auth0 : AuthService, private app: App) {
+  ext ?: any = Config.ext_links;
+  constructor(private auth0 : AuthService, private app: App, private dom: DomSanitizer) {
 
   }
 
   ngOnInit(){
   	this.links = [
-  					{title: "Privacy Policy", /* component: Page */ },
-  					{title: "Cookie Policy", /* component: Page */ },
-  					{title: "Modern Slavery Act Statement", /* component: Page */ },
-  					{title: "Legal Notice", /* component: Page */ },
-  					{title: "About AURA", /* component: Page */ }
+  					{
+              title: "Privacy Policy",
+              link:this.dom.bypassSecurityTrustResourceUrl(this.ext.privacyPolicy)
+            },
+  					{
+              title: "Cookie Policy",
+              link:this.dom.bypassSecurityTrustResourceUrl(this.ext.cookiePolicy)
+            },
+  					{
+              title: "Modern Slavery Act Statement",
+              link:this.dom.bypassSecurityTrustResourceUrl(this.ext.slaveryAct)
+            },
+  					{
+              title: "Legal Notice",
+              link:this.dom.bypassSecurityTrustResourceUrl(this.ext.legalNotice)
+            },
+  					{
+              title: "About AURA",
+              link:""
+            }
   				 ];
   }
 

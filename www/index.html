@@ -2,9 +2,6 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <script data-ionic="inject">
-    (function(w){var i=w.Ionic=w.Ionic||{};i.version='3.7.1';i.angular='4.4.3';i.staticDir='build/';})(window);
-  </script>
   <meta charset="UTF-8">
   <title>Neutrogena</title>
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -35,10 +32,12 @@
         .then(() => console.log('service worker installed'))
         .catch(err => console.error('Error', err));
     }
-  </script>-->
+  </script><-->
 
   <link href="build/main.css" rel="stylesheet">
-
+  <!-- -->
+  <script src="//assets.adobedtm.com/bf12630c02a44df137a783f39cdb4dbd09e2b5d7/satelliteLib-a77040281e8ad94d1a2e4c30d4df757c9e6fed98.js"></script>
+  <!-- -->
 </head>
 
 <body>
@@ -62,7 +61,9 @@
 
   <!-- The main bundle js is generated during the build process -->
   <script src="build/main.js"></script>
-
+  <!--
+  <script type="text/javascript">_satellite.pageBottom();</script>
+  -->
 </body>
 
 </html>

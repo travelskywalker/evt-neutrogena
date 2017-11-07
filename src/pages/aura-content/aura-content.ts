@@ -8,6 +8,7 @@ import { aura } from "../../assets/aura/config/aura.config";
 import { ScriptService } from "../../providers/app/script.service";
 
 import { AuraMainPage } from "../aura-main/aura-main";
+import { ProgressModalComponent } from "../../components/progress-modal/progress-modal";
 
 /**
  * Generated class for the AuraContentPage page.
@@ -32,6 +33,7 @@ export class AuraContentPage {
 		};
 	auraRef : any;
 	auraSelect: any;
+	@ViewChild(ProgressModalComponent) pmc : ProgressModalComponent;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private sanitizer: DomSanitizer) {
   	
@@ -72,18 +74,39 @@ export class AuraContentPage {
   }
 
   ngAfterViewInit(){
-  	console.log("afterview init");
   	let self = this;
+  	self.pmc.toggleView(false);
   	document.getElementById("aura-widget-div").onload = function(e){
-  		let fp = e.srcElement;
-  		let frm = fp['contentWindow'].document.getElementsByTagName('body')[0];
+  		let fp = <HTMLIFrameElement> e.srcElement;
+  		let hed : HTMLHeadElement = fp.contentWindow.document.getElementsByTagName('head')[0];
+  		let frm : HTMLBodyElement = fp.contentWindow.document.getElementsByTagName('body')[0];
   		frm.style.maxHeight = "100%";
   		frm.style.margin = "0px";
 
-  		let auraWidget = fp['contentWindow'].document.getElementById('aura-widget-div');
+  		let auraWidget = <HTMLDivElement> fp.contentWindow.document.getElementById('aura-widget-div');
   		auraWidget.style.maxHeight = "100%";
   		auraWidget.style.height = "100%";
   		//console.log(fp,frm);
+
+  		fp.contentWindow.addEventListener('DOMContentLoaded', function(e){
+  			console.log(e);
+
+  		})
+
+
+  		/* Append scripts from adobe to the iframe. Uncomment once okay *
+  		let scr1 = document.createElement("script");
+  		let scr2 = document.createElement("script");
+  		scr1.setAttribute("src","//assets.adobedtm.com/bf12630c02a44df137a783f39cdb4dbd09e2b5d7/satelliteLib-a77040281e8ad94d1a2e4c30d4df757c9e6fed98.js");
+  		scr1.setAttribute("type","text/javascript");
+  		scr2.setAttribute("type","text/javascript");
+
+  		scr2.innerText = "_satellite.pageBottom();";
+
+  		hed.appendChild(scr1);
+  		frm.appendChild(scr2);
+  		*/
+
   	}
 
 
