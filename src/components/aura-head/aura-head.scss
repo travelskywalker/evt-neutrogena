@@ -1,0 +1,71 @@
+aura-head {
+	display:inline-block;
+	position:relative;
+	height: 50px;
+	width: 100%;
+	div.body{
+		background-image:url('../assets/images/gradBackCopy.png');
+		background-size:cover;
+		background-repeat:no-repeat;
+		background-position:center;
+		position:relative;
+		height: 100%;
+		width: 100%;
+
+		ion-row{
+			position: relative;
+			max-height: 100%;
+			padding:0;
+			ion-col{
+				position: relative;
+				padding:0;
+				span{
+					padding:15px 0 13px;
+					display: inline-block;
+					position: relative;
+					img{
+						max-height: 21px;
+					}
+
+				}
+				&[col-7]{
+					text-align: center;
+					white-space: nowrap;
+					span{
+						&:first-of-type{
+							padding-right:8px;
+
+							&:after{
+								content:"";
+								position: absolute;
+								top:11px;
+								height:26px;
+								width:1px;
+								border-right: 1px solid #fff;
+								right:0;
+							}	
+						}
+					}
+				}
+				&[col-5]{
+					span{
+						padding-right:16px;
+					}
+					text-align: right;
+					a{
+						position: absolute;
+						top:17px;
+						right:56px;
+						color:#fff;
+						line-height: 17px;
+						text-decoration: none;
+						font-size: 14px;
+						font-family: 'HelveticaNeue-Light';
+					}
+				}
+
+			}
+
+		}
+	}
+}

@@ -1,0 +1,23 @@
+<!-- Generated template for the SideMenuComponent component -->
+<ion-content>
+  <ion-list>
+  	<!-- unused <button menuClose class="main" ion-item >My Account</button> -->
+  	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>
+  	<button menuClose class="main dbl" ion-item *ngIf="loggedIn()" (tap)="myAccount()">My Account</button>
+  	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>
+    <button menuClose ion-item *ngFor="let p of links" (click)="openPage(p)">
+      {{p?.title}}
+    </button>
+  </ion-list>
+
+  <section class="footer">
+  	<ion-row class="container">
+  		<ion-col class="neutrogena">
+  			<img src="../assets/images/logo_neutrogena.png"/>
+  		</ion-col>
+  		<ion-col class="aura">
+  			<img src="../assets/images/logo_aura_blue.png"/>
+  		</ion-col>
+  	</ion-row>
+  </section>
+</ion-content>

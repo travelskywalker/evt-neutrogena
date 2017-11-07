@@ -1,0 +1,67 @@
+{
+  "_from": "evrythng-extended",
+  "_id": "evrythng-extended@4.7.1",
+  "_inBundle": false,
+  "_integrity": "sha1-VgCMiq9hdig+rtt6ZWmP0zgD3HQ=",
+  "_location": "/evrythng-extended",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "evrythng-extended",
+    "name": "evrythng-extended",
+    "escapedName": "evrythng-extended",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/evrythng-extended/-/evrythng-extended-4.7.1.tgz",
+  "_shasum": "56008c8aaf6176283eaedb7a65698fd33803dc74",
+  "_spec": "evrythng-extended",
+  "_where": "/Users/van/Repos/ionicStarter",
+  "bugs": {
+    "url": "https://github.com/evrythng/evrythng-extended.js/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "request": "^2.53.0"
+  },
+  "deprecated": false,
+  "description": "Javascript SDK to communicate with EVRYTHNG REST API",
+  "homepage": "https://github.com/evrythng/evrythng-extended.js#readme",
+  "ignore": [
+    "dist"
+  ],
+  "keywords": [
+    "evrythng",
+    "everything",
+    "thng",
+    "evt",
+    "iot",
+    "internet of things",
+    "wot",
+    "web of things",
+    "thng-hub",
+    "hub",
+    "mqtt",
+    "thng-scan",
+    "scanthng"
+  ],
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://github.com/evrythng/evrythng-extended.js/blob/master/LICENSE"
+    }
+  ],
+  "main": "lib/evrythng-extended.js",
+  "name": "evrythng-extended",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/evrythng/evrythng-extended.js.git"
+  },
+  "version": "4.7.1"
+}

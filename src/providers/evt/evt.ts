@@ -3,6 +3,9 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Config } from '../../config/environment.dev';
 
+// import { AuthService } from '../auth/auth.service';
+declare var EVT : any;
+
 /*
   Generated class for the EvtProvider provider.
 
@@ -12,8 +15,69 @@ import { Config } from '../../config/environment.dev';
 @Injectable()
 export class EvtProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello EvtProvider Provider',atob(Config.evt_app));
+ evtapp : any;
+
+  constructor(public http: Http
+    // private auth0: AuthService
+  ) {
+    console.log('Hello EvtProvider Provider',Config.evt_app);
+    this.init();
+  }
+
+  init(){
+
+  	EVT.use(EVT.Scan);
+
+  	EVT.setup({
+	  apiUrl: Config.evt_base_url,
+	  geolocation: false
+	});
+
+	EVT.Scan.setup({
+		filter: {
+			method: ["ir", "2d"]
+		}
+	});
+
+  	this.evtapp = new EVT.App(Config.evt_app);
+
+  	//console.log(this.getUserContext());
+  }
+
+  getUserContext():Promise<any> {
+  	//let usr = this.auth0.getUserDetailsFromStorage();
+  	let userContext = JSON.parse(localStorage.evrythngInfo);
+  	return(
+  		new Promise((resolve,reject)=>{
+  			resolve(
+		        new EVT.User({
+		            id: userContext.evrythngUser,
+		            apiKey: userContext.evrythngApiKey
+		        }, this.evtapp)
+        	)
+  		})
+  	);
+  }
+
+  scan(){
+  	return this.evtapp.scan();
+  }
+
+  getUserCustomFields():Promise<any>{
+  	return new Promise((resolve,reject)=>{
+	  	this.getUserContext().then(usr=>{
+	  		usr.$init.then(user=>{
+		  		if(typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')){
+		  			resolve(user.customFields);
+		  		}
+		  		else{
+		  			resolve(false);
+		  		}
+	  		})
+	  	}).catch(err=>{
+	  		reject(err);
+	  	})	
+  	})
   }
 
 }

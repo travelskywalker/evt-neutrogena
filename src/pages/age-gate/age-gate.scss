@@ -1,0 +1,231 @@
+page-age-gate {
+
+  ion-header{
+    &.header{
+      ion-navbar{
+          &>div.toolbar-background{
+              background-color:#f0f0f0;
+              border-color:transparent;
+              border-style:none;
+          }
+          ion-buttons{
+            	padding: 5px;
+						button{
+							&.bar-button{
+
+
+							}
+						}
+					}
+
+      }
+      &::after{
+        display:none;
+      }
+    }
+
+    button[ion-button].xbtn{
+
+			height:20px;
+			width: 20px;
+			display: table;
+			padding:5px;
+			margin: 0;
+			background-image:url('../assets/images/xbtn.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-color: transparent;
+			box-shadow:none;
+		}
+  }
+	ion-content{
+		div.scroll-content{
+			background-color:rgb(240,240,240);
+		}
+	}
+	div.space-40{
+		display: block;
+		clear: both;
+		width: 100%;
+		height: 40px;
+		text-align: center;
+		position:relative;
+		a{
+			text-decoration: none;
+			font-size: 15px;
+			color:rgb(113,27,125);
+			text-transform: uppercase;
+			width:auto;
+			height: auto;
+			display: inline-table;
+			margin:auto;
+			margin-top: 11.5px;
+		}
+	}
+
+	section.main{
+		position: relative;
+		padding-top: 81px;
+    *{
+      color:rgba(114,28,125,1);
+    }
+    div.invalid-age-container{
+      height:50vh;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      display:flex;
+
+      *{
+        color:rgba(189,8,148,1);
+        text-transform: uppercase;
+      }
+
+      p{
+        margin:0;
+      }
+
+    }
+		button[ion-button].xbtn{
+			position:absolute;
+			top: 18px;
+			right: 18px;
+			height:20px;
+			width: 20px;
+			display: table;
+			padding:0;
+			margin: 0;
+			background-image:url('../assets/images/xbtn.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-color: transparent;
+			box-shadow:none;
+		}
+    button{
+      &[ion-button]{
+        &.button-default{
+          margin:0 auto;
+          display:block;
+          background-color:transparent;
+          background-image:url('../assets/images/button-bg.jpg');
+          background-repeat:repeat-x;
+          background-size:contain;
+          width:70%;
+          @media (min-width:768px){
+            width:40%;
+          }
+          .button-inner{
+            color:#fff;
+          }
+
+        }
+      }
+    }
+    .content{
+        margin:1rem 0;
+
+    }
+    ion-img{
+      background-color:transparent;
+      contain:inherit;
+      height:auto;
+      width:100%;
+
+      img{
+        max-height:100%;
+        height:50px;
+        margin:0 auto;
+      }
+    }
+		p{
+
+			width: 100%;
+			margin: 0;
+			text-align: center;
+			line-height: 17px;
+			font-family: 'HelveticaNeue-Light';
+      margin:0 auto;
+			&.small{
+        font-size:9px;
+			}
+
+
+		}
+    ion-row{
+        &.row{
+          position: relative;
+            justify-content: center;
+            align-items: center;
+        }
+
+        ion-datetime{
+          width:0;
+          height:0;
+          padding:0;
+        }
+
+        ion-item{
+          &.item{
+              background-color:transparent;
+              width:auto;
+              margin: 10px 0 20px 0;
+              .item-inner{
+                border-bottom:none;
+              }
+              ion-checkbox{
+                &.checkbox{
+                  margin:9px 20px 9px 4px;
+                }
+                .checkbox-icon{
+                  border-radius:30%;
+                  border-color:transparent;
+                }
+              }
+          }
+
+          ion-label{
+            font-size:10px;
+            color:rgba(241,119,34,1);
+          }
+        }
+    }
+
+    input{
+      width:65px;
+      text-align: center;
+      padding:15px 20px;
+      border-radius:10px;
+      border:none;
+      margin:20px 10px;
+      font-size:15px;
+      color:rgba(189,8,148,1);
+      font-weight: bold;
+      -webkit-box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      -moz-box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      box-shadow: 2px 2px 1px 0px rgba(238,118,173,1);
+      &::placeholder{
+        color:rgba(189,8,148,1);
+      }
+      &[maxlength='4']{
+        width:80px;
+      }
+    }
+
+
+    .width-70{
+      width:70%;
+      margin:0 auto;
+    }
+    .color-orange{
+      color:rgba(240,119,33,1) !important;
+    }
+
+
+	}// end of section.main
+
+  footer{
+    // position: absolute;
+    // bottom: 0;
+  }
+}

@@ -1,62 +1,97 @@
-<ion-header>
-  <component-logo></component-logo>
-</ion-header>
-<ion-content>
-  <div class="section home">
-    <div class="content vertical-center">
-      <div class="content-top">
-        <img class="logo" src="/assets/images/logo/lavva-logo-white.svg">
-        <p>Luscious plant-based yogurt cleanly crafted with nourishing whole food ingredients and no added sugar.</p>
 
-        <p>Welcome to The New Culture.</p>
+<!--ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header-->
+
+<!-- No headers. We'll create
+  a component for this instead -->
+
+<notice [title]="'Cookie Notice'" [class]="'black'" *ngIf="!noticeViewed">
+
+  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.
+</notice>
+<ion-content id="homeMobile" *ngIf="mobileVersion">
+  <!--button ion-button secondary menuToggle>Toggle Menu</button-->
+  <section id="client-logo" [ngClass] = "{ 'hidden':scanFailed,'client-logo':true }">
+    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
+    <p>in partnership with </p>
+    <!--<span id="aura-logo" class="placeholder" #auraLogo>
+    </span>-->
+    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>
+  </section>
+  <section class="scan_failed" *ngIf="scanFailed">
+    <h2>It looks like that didn't work</h2>
+    <h3>Please try again to enter site</h3>
+  </section>
+
+  <section id="guide-scan-container" class="">
+
+    <span class="guide-images">
+
+      <div id="qr-image" class="placeholder">
+        <img src="../assets/images/qrcode.png"/>
       </div>
-      <div class="content-bottom">
-        <p>click the cups to learn more about each of our flavvors</p>
+
+      <div id="logo-image" class="placeholder">
+        <img src="../assets/images/activator.png"/>
       </div>
-      <div class="carousel">
-        <div class="carousel-content">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-      <div class="scroll-prompt" text-center>
-        <div>
-          Scroll down
-        </div>
-        <ion-icon name="md-arrow-round-down"></ion-icon>
-      </div>
-    
-    </div>
-  </div>
-  <div class="section second">
-    <div class="content vertical-center">
-      <div class="content-container">
-        <div class="content-title">
-        What WE're Made of
-        </div>
-        <p>we thoughtfully source plant-based, whole foods and transform them into mmmagic, using a densely nourishing blend of pili nuts, coconut, plantains, and livve probiotic cultures.</p>
-        <p>Say hello to swoon on a spoon</p>
-      </div>
-    </div>
-  </div>
-  <div class="section third">
-    <div class="content">
-    </div>
-  </div>
-  <div class="section fourth">
-    <div class="content">
-    </div>
-  </div>
-  <div class="section fifth">
-    <div class="content">
-    </div>
-  </div>
-  <div class="section sixth">
-    <div class="content">
-    </div>
-  </div>
+
+    </span>
+
+    <span class="guide-text-instructions">
+      <p>Scan the QR code</p>
+      <p><b>OR</b></p>
+      <p>Scan the Neutrogena&reg; logo on your</p>
+      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>
+      <p>Acne Mask Activator</p>
+    </span>
+
+  </section>
+
+  <section id="scan-button-container" #scanContainer>
+
+    <button ion-button id="scan-button" #scanButton (tap)="scan()">
+
+    </button>
+
+  </section>
+
+
+  <footer></footer>
+
+</ion-content>
+
+
+
+<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">
+
+  <section id="client-logo" class="client-logo">
+
+    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>
+    <span></span>
+    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>
+  </section>
+
+  <section  id="client-content" class="client-content">
+      <h3 padding>This site is best viewed on mobile.</h3>
+
+      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>
+      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your
+Visibly Clear&copy; Light Therapy Acne Mask Activator</p>
+
+
+  </section>
+
+
+
+
+  <footer></footer>
 
 </ion-content>

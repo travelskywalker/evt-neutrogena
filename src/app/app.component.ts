@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -15,6 +16,8 @@ export class MyApp {
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;
+  text?: string = "Don't forget to track your progress with a photo.";
+  show?: boolean = false;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
@@ -25,20 +28,26 @@ export class MyApp {
       { title: 'List', component: ListPage }
     ];
 
+    //this.evt.init();
   }
 
   initializeApp() {
+    let self = this;
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      //self.evt.init();
+      console.log("EVT");
     });
-  }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    // if(this.platform.is('mobile')){
+    //   this.rootPage = HomePage;
+    // }
+    // else{
+    //   this.rootPage = '';
+    // }
+
   }
 }

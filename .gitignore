@@ -27,9 +27,13 @@ platforms/
 plugins/
 plugins/android.json
 plugins/ios.json
-www/
+#www/
 $RECYCLE.BIN/
+src/assets/aura/Neutrogena_widgets
+src/assets/aura/testPage
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+#www/assets/aura/Neutrogena_widgets
+www/assets/aura/testPage

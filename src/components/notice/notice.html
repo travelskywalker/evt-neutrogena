@@ -1,0 +1,12 @@
+<!-- Generated template for the NoticeComponent component -->
+<section class="body" [ngStyle]="style">
+	<button ion-button id="btnClose" (click)="destroy()"><ion-icon name="close"></ion-icon></button>  
+	<span class="title" *ngIf="title">
+		{{title}}
+	</span>
+	<div class="body">
+		<ng-content>
+		  
+		</ng-content>
+	</div>
+</section>

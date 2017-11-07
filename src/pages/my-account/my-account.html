@@ -1,0 +1,32 @@
+<ion-content>
+
+<section class="main">
+	<button ion-button class="xbtn" (tap)="dismissThis()"></button>
+	<p class="form-title">My Account</p>
+	<form [formGroup]="formGroup" id="my-account-form" #signUpForm [ngClass]="{'fbreg':FBreg}">
+		<ion-row>
+			<ion-label>First Name</ion-label>
+			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>
+		</ion-row>
+		<ion-row>
+			<ion-label>Last Name</ion-label>
+			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>
+		</ion-row>
+		<ion-row>
+			<ion-label>Email Address</ion-label>
+			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>
+		</ion-row>
+		<ion-row *ngIf="!FBreg">
+			<ion-label>Password</ion-label>
+			<ion-input type="text" formControlName="password" placeholder="********" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
+		</ion-row>
+		<p class="fb-edit" *ngIf="FBreg">You can edit first name, last name, and email address on your Facebook <a (tap)="toFB()" class="linker">account page</a>.</p>
+		<button ion-button id="saveChanges" class="getStarted" (tap)="updateUser()" *ngIf="!FBreg">Save Changes</button>
+		<button ion-button id="logout" class="getStarted" (tap)="logout()">Log out</button>
+		<div class="space-40"><hr></div>
+		<button ion-button id="deleteAccount" class="fbReg" (tap)="deleteAccount()">Delete Account</button>
+	</form>
+
+</section>
+<footer></footer>
+</ion-content>

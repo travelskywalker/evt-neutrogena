@@ -34,4 +34,8 @@ export class ListPage {
       item: item
     });
   }
+
+  tryMe($event){
+    console.log($event);
+  }
 }

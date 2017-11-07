@@ -1,182 +1,288 @@
 page-home {
-	.section{
-	    width: 100vw;
-	    height: 100vh;
+  ion-content{
 
-	    .logo{
-	    	width: 100%;
-	    }
-	    .content-top{
-    	    margin: 0 auto;
-			padding: 0px 49px;
-			text-align: center;
-	    }
+    &.content{
+    background-color: #f0f0f0;
+    }
 
-	    p{
-			font-family: BrandonGrotesque;
-			font-size: 20px;
-			font-weight: 500;
-			line-height: 1;
-			letter-spacing: -0.7px;
-			color: #ffffff;
-	    }
+      &#homeMobile{
+        div.scroll-content{
+          font-size: 11px;
+          .placeholder{
+            border: 1px dashed rgba(0,0,0,0.6);
+          }
 
-	    &.home{
-	    	background: url("/assets/images/background-01.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
+          section{
+            display: block;
+            clear: both;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            text-align: center;
+            *{
+              position: relative;
+              text-align: center;
+              font-family: HelveticaNeue-Light;
+            }
 
-	    	.content{
-		    	width:100%;
-		    	height:100%;
-		    	background-size: 100% 100% !important;
-    			background-position: center;
-				background: url("/assets/images/01-overlay.png");
-			}
+            &.scan_failed{
+            	padding:4vh 5vw 2vw;
+            	&>h2{
+            		font-size: 8vw;
+            		line-height: 33px;
+            		color:rgb(189,8,148);
+            		text-transform: uppercase;
+            		font-family: 'HelveticaNeue-Light';
+            		margin:0 auto 2.8vh;
+            	}
 
-			.content-bottom{
-				p{
-					font-family: BrandonGrotesque;
-					font-size: 12px;
-					font-weight: 500;
-					line-height: 1.67;
-					letter-spacing: -0.2px;
-					text-align: center;
-					color: #ffffff;
-				}
-			}
+            	&>h3{
+            		font-size: 5vw;
+            		line-height: 20px;
+            		color:rgb(189,8,148);
+            		font-family: 'HelveticaNeue-Light';
+            		text-transform: uppercase;
+            		margin: 0 auto 3.3vh;
+            	}
+            }
 
-			.carousel {
-				border: 1px dashed;
-				height: 22vh;
+            &.client-logo{
+              padding:4vh 2vw 2vw;
+              &>#neutrogena-logo{
+                display: inline-block;
+                width: 100%;
+                height: 50px;
+                width: 237px;
+              }
 
-				.carousel-content{
-					height: 100%;
-					div {
-					    border: 1px dashed;
-					    height: 100%;
-					    display: inline-flex;
-					    width: 19%;
-					}
-				} 
-			}
+              ion-img{
+                background:transparent;
+                position: relative;
+                max-width: 100%;
+                &>img{
+                  position: relative;
+                  object-fit: fill;
+                  object-position: center;
+                  max-height: 100%;
+                  margin: auto;
+                }
+              }
 
-			.scroll-prompt {
-				color: #ffffff;
-				text-transform: uppercase;
-				font-family: BrandonGrotesque;
-				font-size: 10px;
-				font-weight: bold;
-				letter-spacing: 1.3px;
-				text-align: center;
-				bottom: 0;
-				position: absolute;
-				margin: 0 auto;
-				width: 100%;
-				padding-bottom: 2vh;
+              &>p{
+                width: 100%;
+                display: block;
+                text-align: center;
+                margin:0.5vh auto;
+                font-size: 10px;
+              }
 
-				ion-icon{
-					margin-top: 12px;
-					border: 1px solid;
-				    width: 20px;
-				    height: 20px;
-				    border-radius: 20px;
-				    font-size: 16px;
-  					padding: 1px 0px 0px 1px;
-				}
-			}   
-	    }
+              &>#aura-logo{
+                display: inline-block;
+                //width: 100%;
+                height: 46px;
+                width: 127px;
+                margin: auto;
+                display: block;
+              }
+            }
 
-	    &.second{
-	    	background: url("/assets/images/background-02.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
+            &#guide-scan-container{
 
-	    	.content{
-	    		width: 100%;
-			    height: 100%;
-			    background-position: 51% 119% !important;
-			    background-size: 185vh !important;
-			    background-repeat: no-repeat !important;
-				background: url("/assets/images/02-l-overlay.png");
+              &>span{
+                display: inline-block;
+                width: 100%;
+                &.guide-images{
 
-				.content-container {
-				    height: 100vh;
-				    margin-top: 15vh;
-				    padding: 8vw;
-				    text-align: left;
+                  &>div{
+                    display: inline-block;
+                    height: 103px;
+                    width: 103px;
+                    &:first-of-type{
+                      margin:0 26px 0 0 ;
+                    }
+                  }
 
-				    .content-title{
-						font-family: BrandonGrotesque;
-						font-size: 60px;
-						font-weight: 900;
-						line-height: 0.83;
-						letter-spacing: -2.1px;
-						text-align: left;
-						color: #ffffff;
-						text-transform: uppercase;
-				    }
-				}
-	    	}
-	    }
+                }
 
-	    &.third{
-	    	background: url("/assets/images/background-03.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
-    		
-	    	.content{
-	    		width: 100%;
-			    height: 100%;
-			    background-position: 37% 133% !important;
-    			background-size: 188vh !important;
-			    background-repeat: no-repeat !important;
-				background: url("/assets/images/03-a-overlay.png");
-	    	}
-	    }
+                &.guide-text-instructions{
+                  padding:32px 0 0;
+                  color:rgb(238,107,30);
+                  &>p{
+                    margin:0 auto;
+                    font-size: 14px;
+                    line-height: 17px;
+                  }
+                }
 
-	    &.fourth{
-	    	background: url("/assets/images/background-04.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
-    		
-	    	.content{
-	    		width: 100%;
-			    height: 100%;
-			    background-position: 46% -1% !important;
-    			background-size: 181vh !important;
-			    background-repeat: no-repeat !important;
-				background: url("/assets/images/04-v-overlay.png");
-	    	}
-	    }
-	    &.fifth{
-	    	background: url("/assets/images/background-05.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
-    		
-	    	.content{
-	    		width: 100%;
-			    height: 100%;
-			    background-position: 64% 18% !important;
-    			background-size: 129vh !important;
-			    background-repeat: no-repeat !important;
-				background: url("/assets/images/05-v-overlay.png");
-	    	}
-	    }
+              }
 
-	    &.sixth{
-	    	background: url("/assets/images/background-06.jpg");
-	    	background-size: 100% 100% !important;
-    		background-position: center;
-    		
-	    	.content{
-	    		width: 100%;
-			    height: 100%;
-			    background-position: 38% 40% !important;
-    			background-size: 188vh !important;
-			    background-repeat: no-repeat !important;
-				background: url("/assets/images/06-a-overlay.png");
-	    	}
-	    }
-	}
+            }
+
+            &#scan-button-container{
+              text-align: center;
+              display: inline-block;
+              width: 100%;
+              &>#scan-button{
+                width: 127px;
+                height: 127px;
+                display: inline-table;
+                clear: both;
+                vertical-align: middle;
+                margin:18px 0 34px;
+                border-radius:100%;
+                background-image:url('../assets/images/scanbtn.png');
+                background-position:center;
+                background-size:cover;
+                background-color:transparent;
+              }
+
+            }
+
+          } //end of section tags
+
+        }
+      }
+      &#homeDesktop{
+
+          h3{
+            color:rgba(189,8,148,1);
+          }
+
+        div.scroll-content{
+          font-size: 11px;
+          .placeholder{
+            border: 1px dashed rgba(0,0,0,0.6);
+          }
+
+          section{
+            display: block;
+            clear: both;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            *{
+              position: relative;
+              // text-align: center;
+              font-family: HelveticaNeue-Light;
+            }
+
+            &.client-logo{
+              padding:4vh 2vw 2vw;
+              height:23vh;
+              text-align:center;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              span{
+                height:100%;
+                width:2px;
+                background-color:rgba(189,8,148,1);
+                display: inline-block;
+                margin:0 2vw;
+              }
+
+              ion-img{
+                background-color:transparent;
+                contain:inherit;
+                height:11vh;
+
+                img{
+                  height:100%;
+                }
+              }
+              #aura-logo{
+                height:16vh;
+              }
+            }
+
+            &#client-content{
+              height:50vh;
+              display:flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction:column;
+              overflow: visible;
+              ion-img{
+                background-color:transparent;
+                contain:inherit;
+                width:40%;
+
+                img{
+                  height:auto;
+                }
+              }
+              p{
+                width:50%;
+                text-align: center;
+                color:rgba(240,119,33,1);
+
+              }
+            }
+
+            &#guide-scan-container{
+
+              &>span{
+                display: inline-block;
+                width: 100%;
+                &.guide-images{
+
+                  &>div{
+                    display: inline-block;
+                    height: 103px;
+                    width: 103px;
+                    &:first-of-type{
+                      margin:0 26px 0 0 ;
+                    }
+                  }
+
+                }
+
+                &.guide-text-instructions{
+                  padding:32px 0 0;
+                  color:rgb(238,107,30);
+                  &>p{
+                    margin:0 auto;
+                    font-size: 14px;
+                    line-height: 17px;
+                  }
+                }
+
+              }
+
+            }
+
+            &#scan-button-container{
+              text-align: center;
+              display: inline-block;
+              width: 100%;
+              &>#scan-button{
+                width: 127px;
+                height: 127px;
+                display: inline-table;
+                clear: both;
+                vertical-align: middle;
+                margin:18px 0 34px;
+                border-radius:100%;
+                background-image:url('../assets/images/scanbtn.png');
+                background-position:center;
+                background-size:cover;
+                background-color:transparent;
+              }
+
+            }
+
+          } //end of section tags
+          footer{
+            position:absolute;
+            bottom:0;
+            width:100%;
+          }
+        }
+      }
+  }
+
+
+	
+
 }

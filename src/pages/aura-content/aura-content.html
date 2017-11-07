@@ -1,0 +1,19 @@
+<aura-head></aura-head>
+
+<ion-content >
+    <!--div id="aura-widget-div" #aura></div-->
+    <iframe id="aura-widget-div" [src]="module?.link"></iframe>
+    
+    <section class="description">
+    	<p class="title">
+    		Description
+    	</p>
+    	<p class="body">
+    		{{module?.description}}
+    	</p>
+    </section>
+
+    <footer></footer>
+</ion-content>
+
+<aura-foot></aura-foot>

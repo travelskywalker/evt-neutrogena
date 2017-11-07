@@ -25,3 +25,27 @@
 	justify-content: center;
 	flex-direction: column;
 }
+ion-menu{
+	
+	div.menu-inner{
+		button[ion-button]{
+			background-color: transparent;
+			float: right;
+			color:rgba(0,0,0,0.6);
+			font-family: HelveticaNeue-Light;
+			box-shadow: none;
+			border:0;
+			font-size: 21px;
+			padding:0;
+			margin: 21px 21px 0 0;
+			height: auto;
+		}
+	}
+
+}
+
+	.hidden{
+		display: none !important;
+		opacity: 0 !important;
+		z-index: -1 !important;
+	}

@@ -1,0 +1,98 @@
+page-delete-account {
+	ion-content{
+		div.scroll-content{
+			background-color:rgb(240,240,240);	
+			vertical-align: middle;
+		}
+	}
+	div.space-40{
+		display: block;
+		clear: both;
+		width: 100%;
+		height: 40px;
+		text-align: center;
+		position:relative;
+		a{
+			text-decoration: none;
+			font-size: 15px;
+			color:rgb(113,27,125);
+			text-transform: uppercase;
+			width:auto;
+			height: auto;
+			display: inline-table;
+			margin:auto;
+			margin-top: 11.5px;
+		}
+	}
+
+	section.main{
+		position: relative;
+		display: table;
+		margin: calc(100% - 250px) auto 0;
+		button[ion-button].xbtn{
+			display: none;
+		}
+
+		p{
+			width: 100%;
+			margin: 0;
+			text-align: center;
+			line-height: 18px;
+			font-family: 'HelveticaNeue-Light';
+			margin-bottom: 40px;
+			&.form-title{
+				//margin-top: 200px;
+				font-size: 25px;
+				line-height: 26px;
+				color:rgb(189,8,148);
+				padding:0 43px;
+			}
+			&.form-desc{
+				color:rgb(240,119,33);
+				font-size: 17px;
+				padding: 0 53px;
+			}
+		}
+
+		a#delete{
+			font-size: 15px;
+			line-height: 17px;
+			color:rgb(113,27,125);
+			font-family: 'HelveticaNeue-Light';
+			width: 100%;
+			display: inline-block;
+			text-align: center;
+			margin-top: 16px;
+		}
+
+
+
+		button[ion-button]{
+			height: 50px;
+			width: calc(100% - 100px);
+			display: block;
+			clear: both;
+			margin: auto;
+			color:#fff;
+			text-align: center;
+			background-size:cover;
+			background-repeat:no-repeat;
+			background-position:center;
+			background-color:transparent;
+			box-shadow:none;
+			font-family: 'HelveticaNeue-Light';
+			border:0;
+			&#cancel{
+				background-image:url('../assets/images/signup_btn.png');
+			}
+		}
+
+
+	}// end of section.main
+
+	footer{
+		position: absolute;
+		bottom:0;
+		left: 0;
+	}
+}

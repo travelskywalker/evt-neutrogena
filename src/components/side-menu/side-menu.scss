@@ -1,0 +1,94 @@
+side-menu {
+
+	ion-content{
+
+		&>.scroll-content{
+			max-height: calc(100% - 3.8em);
+			&>ion-list{
+				margin-top:46px;
+				&>button{
+
+					border:0 !important;
+					padding-left: 38px;
+					&>.item-inner{
+						border-bottom:0 !important;
+						background:none !important;
+						&>.input-wrapper{
+
+							ion-label{
+								font-family: HelveticaNeue-Light;
+								font-size: 16px;
+								color:rgb(240,119,33);
+							}
+
+
+						}
+
+
+					}
+
+
+					&.main{
+						margin-bottom: 66px;
+						&.dbl{
+							margin-bottom: 0;
+						}
+						&>.item-inner{
+							ion-label{
+								font-family: HelveticaNeue-Bold;
+								font-size: 20px;
+								color:rgb(189,8,148);
+							}
+
+						}
+					}
+
+				}//end of button
+
+			} // end of ion-list
+
+
+			section.footer{
+				position: absolute;
+				bottom:29px;
+				left: 0;
+				display: inline-block;
+				width: 100%;
+				&>ion-row{
+					padding-left:38px;
+					width:176px;
+					&>ion-col{
+						position: relative;
+						height: 47px;
+						margin: auto;
+						padding:0;
+						table-layout: fixed;
+						display: inline-table;
+						width: 116px;
+						&.aura{
+							width: 60px;
+							border-left:1px solid rgb(160,160,160);
+							img{
+								max-height: 47px;
+								right: 0;
+								left: auto;
+							}
+						}
+						img{
+							max-height: 22px;
+							display: block;
+							position: absolute;
+							margin: auto;
+							top:0;
+							left: 0;
+							bottom: 0;
+						}
+					}
+				}
+			}
+
+		} // end of .scroll-content
+
+	}// end of ion-content
+
+}// end of side-menu
