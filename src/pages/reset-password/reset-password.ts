@@ -52,11 +52,13 @@ export class ResetPasswordPage {
   	}
   }
 
+  /* check if new passwords match */
   checkMatch(): boolean{
   	let formVal = this.formGroup.value;
   	return formVal.password == formVal.confirm;
   }
 
+  /* check if form has been tampered with */
   checkDirty(): boolean{
   	return this.formGroup.get('password').dirty && this.formGroup.get('confirm').dirty;
   }

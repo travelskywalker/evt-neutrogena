@@ -33,17 +33,13 @@ export class LoginPage {
   }
 
   focused(event){
-  	//console.log(event._elementRef.nativeElement);
   	let node = event._elementRef.nativeElement;
   	this.render.addClass(node,"focused");
-  	//this.render.setStyle(node,"box-shadow","2px 2px 3px 1px rgb(240,119,33)");
   }
 
   blurred(event){
-  	//console.log(event._elementRef.nativeElement);
   	let node = event._elementRef.nativeElement;
   	this.render.removeClass(node,"focused");
-  	//this.render.removeStyle(node,"box-shadow");
   }
 
   dismissThis(){

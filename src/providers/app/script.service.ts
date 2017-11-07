@@ -6,7 +6,10 @@ declare var document: any;
 export class ScriptService {
 
 private scripts: any = {};
-
+/*
+ * AS of now, this not used.
+ * This dynamically updates/creates the aura script js
+ */
 constructor() {
     [{name:"aura",src:"http://app.aurahealth.io/static/widget.js"}].forEach((script: any) => {
         this.scripts[script.name] = {
