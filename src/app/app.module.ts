@@ -29,22 +29,24 @@ import { ScriptService } from '../providers/app/script.service';
 /* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
 
+const pages = [
+            MyApp,
+            HomePage,
+            ListPage,
+            SignUpPage,
+            AuthPage,
+            LoginPage,
+            MyAccountPage,
+            DeleteAccountPage,
+            ForgotPasswordPage,
+            AgeGatePage,
+            ResetPasswordPage,
+            AuraContentPage,
+            AuraMainPage
+          ];
+
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    ListPage,
-    SignUpPage,
-    AuthPage,
-    LoginPage,
-    MyAccountPage,
-    DeleteAccountPage,
-    ForgotPasswordPage,
-    AgeGatePage,
-    ResetPasswordPage,
-    AuraContentPage,
-    AuraMainPage
-  ],
+  declarations: pages,
   imports: [
     ComponentsModule,
     BrowserModule,
@@ -67,21 +69,7 @@ import { ComponentsModule } from '../components/components.module';
     }),
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    ListPage,
-    SignUpPage,
-    AuthPage,
-    LoginPage,
-    MyAccountPage,
-    DeleteAccountPage,
-    ForgotPasswordPage,
-    AgeGatePage,
-    ResetPasswordPage,
-    AuraContentPage,
-    AuraMainPage
-  ],
+  entryComponents: pages,
   providers: [
     StatusBar,
     SplashScreen,
