@@ -26417,7 +26417,7 @@ page-aura-main ion-content section.track-preview {
   min-height: 241px;
   height: 80vw;
   background-image: url("../assets/images/meditate.jpg");
-  background-size: 100% 100%;
+  background-size: auto 100%;
   background-repeat: no-repeat;
   background-position: center;
   width: 100vw;
