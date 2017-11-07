@@ -79,6 +79,7 @@ export class HomePage {
             self.scanFailed = false;
 
             thng.action("scans").create().catch(err=>console.error(err));
+            thng.action("_Activated").create().then(console.log).catch(console.error);
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
             self.navCtrl.setRoot(AuraMainPage);
@@ -120,6 +121,9 @@ export class HomePage {
 
                   /* Assign the newly created thng to the user */
                   usr.update({customFields:{myThng:th.id}}).then(console.log);
+
+                  /* Create activated action */
+                  th.action("_Activated").create().then(console.log).catch(console.error);
 
                   /* REDIRECT TO MAIN PAGE */
                   self.navCtrl.setRoot(AuraMainPage);

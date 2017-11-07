@@ -1,6 +1,7 @@
 import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
+import { EvtProvider } from "../../providers/evt/evt";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
@@ -21,7 +22,8 @@ export class LoginPage {
   				private render: Renderer2,
   				private auth0: AuthService,
   				private formBuilder: FormBuilder,
-  				private loader : LoadingController) {
+  				private loader : LoadingController,
+  				private evt : EvtProvider) {
   	this.formGroup = this.formBuilder.group({
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
   		password: ['', Validators.required ],
@@ -58,6 +60,7 @@ export class LoginPage {
   }
 
   login(){
+  	let self = this;
   	let usr = this.formGroup.value;
   	let load = this.loader.create({
       spinner: 'crescent',
@@ -69,7 +72,8 @@ export class LoginPage {
   	//console.log(usr);
 
   	this.auth0.login({email:usr.email,pass:usr.password}).then(res=>{
-  		console.log(res)
+  		//console.log(res)
+  		self.evt.createUserAction("_Login");
   	})
   	.catch(err=>{
   		console.log(err);

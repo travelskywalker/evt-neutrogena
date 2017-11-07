@@ -8,7 +8,7 @@
   	</ion-col>
   	<ion-col col-6>
   		<div class="reorder">
-  			<a [href]="ext_url" target="_blank">
+  			<a (tap)="logAction()" [href]="ext_url" target="_blank">
   				<img src="../assets/images/reorder.png"/>
   			</a>
   			<p>Re-Order</p>

@@ -24,6 +24,20 @@ export class EvtProvider {
     this.init();
   }
 
+  createAppAction(actionType:string='',action:any = {}){
+  	this.evtapp.$init.then(res=>{
+  		res.action(actionType).create(action).then(console.log);
+  	}).catch(err=>{
+  		console.log(err);
+  	});
+  }
+
+  createUserAction(actionType:string='',action:any = {}){
+  	this.getUserContext().then(usr=>{
+  		usr.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
+  	})
+  }
+
   init(){
 
   	EVT.use(EVT.Scan);
