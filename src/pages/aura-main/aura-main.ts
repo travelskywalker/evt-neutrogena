@@ -23,7 +23,7 @@ export class AuraMainPage {
 	@ViewChild('btns') btnSlide : Slides;
 	expanded: boolean = false;
 	def : string = "down";
-	day ?: number = 8;
+	day ?: number = 0;
 	dur ?: number = 10;
 	arrDay ?: any = [];
 	courses ?: any;
@@ -47,7 +47,6 @@ export class AuraMainPage {
     setTimeout(()=>{
     	try{
     		this.btnSlide.slideTo(this.day);
-    		console.log(this.day);
     	}catch(e){
     		//console.log(e);
     	}
@@ -76,9 +75,11 @@ export class AuraMainPage {
  * transfers the data from the sub-course to 	  *
  * the top area (slider of buttons).     	 	  */
   tryMe($event){
-  	this.app.setActiveCourse($event);
   	this.day = $event.progress;
   	this.courseTitle = $event.title;
+  	delete $event['progress'];
+  	delete $event['title'];
+  	this.app.setActiveCourse($event);
   	//this.dur = this.app.progressKeys.length;
   	this.popDays();
   }

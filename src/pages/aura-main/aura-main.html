@@ -43,7 +43,7 @@
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
 			<p class="content" [ngClass]="{'show':expanded}">
-				{{app?.activeCourse[day]?.desc.trim().substring(0,300)}}
+				{{app?.activeCourse[day+1]?.desc.trim().substring(0,300)}}
 				<a class="link">About AURA</a>
 			</p>
 		</div>

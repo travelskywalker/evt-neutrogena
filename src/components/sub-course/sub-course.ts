@@ -46,7 +46,11 @@ export class SubCourseComponent {
   	 * Once the progress tracking system 	*
   	 * has been implemented, fetch user 	*
   	 * progress and then assign here 		*/
-  	this.progress = Math.round(Math.random()*this.duration);
+  	if(this.auth0.loggedIn){
+  		this.progress = Math.round(Math.random()*this.duration);
+  	}else{
+  		this.progress = 0;
+  	}
   }
 
   ngAfterViewInit(){
