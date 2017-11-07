@@ -5,9 +5,11 @@
   	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>
   	<button menuClose class="main dbl" ion-item *ngIf="loggedIn()" (tap)="myAccount()">My Account</button>
   	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>
-    <button menuClose ion-item *ngFor="let p of links" (click)="openPage(p)">
-      {{p?.title}}
-    </button>
+    <a target="_blank" *ngFor="let p of links" [href]="p?.link">
+    	<button menuClose ion-item>
+    		{{p?.title}}
+    	</button>
+    </a>
   </ion-list>
 
   <section class="footer">

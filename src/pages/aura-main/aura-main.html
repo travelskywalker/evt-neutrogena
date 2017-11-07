@@ -4,7 +4,7 @@
 
 	<section class="track-preview">
 		<a class="progress-days">
-			Day {{day < dur ? (day+1):day}} of {{dur+1}}
+			Day {{day < app?.activeDur ? (day+1):day}} of {{app?.activeDur+1}}
 		</a>
 		<p class="section-title">
 			{{courseTitle}}
@@ -20,7 +20,7 @@
 					</ion-col>
 				</div>
 			</ion-slide>
-			<ion-slide *ngIf="day < dur">
+			<ion-slide *ngIf="day < app?.activeDur">
 				<div class="play">
 					<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(true,day+1)">
 						<ion-icon name="play"></ion-icon>
@@ -43,7 +43,7 @@
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
 			<p class="content" [ngClass]="{'show':expanded}">
-				{{activeCourse[day]?.desc}}
+				{{app?.activeCourse[day]?.desc.trim().substring(0,300)}}
 				<a class="link">About AURA</a>
 			</p>
 		</div>
@@ -54,8 +54,8 @@
 
 	<section class="sliders">
 		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">
-			<ion-slide *ngFor = "let crs of courseKeys; let i=index">
-				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="courses[crs]"></sub-course>
+			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">
+				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.courses[crs]"></sub-course>
 			</ion-slide>
 			<!--ion-slide>
 				<sub-course [title]="'Mindfulness'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>

@@ -163,7 +163,10 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('evrythngInfo');
-    this.webAuth.logout();
+    this.webAuth.logout({
+      returnTo: Config.auth0.redirectUri,
+      clientID: Config.auth0.clientID
+    });
   }
 
   public updateUser(usrMetaData) {

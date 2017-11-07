@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Config } from "../../config/environment.dev";
+import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 
 /**
  * Generated class for the FooterComponent component.
@@ -14,16 +16,28 @@ export class FooterComponent {
 
 	links: any = [];
 
- 	constructor() {
+ 	constructor(private dom:DomSanitizer) {
  		console.log(this);
  	}
 
  	ngOnInit(){
 		this.links = [
-	  		{text:"Privacy Policy",href:"javascript:void()"},
-	  		{text:"Cookie Policy",href:"javascript:void()"},
-	  		{text:"Legal Notice",href:"javascript:void()"},
-	  		{text:"Modern Slavery Act Statement",href:"javascript:void()"},
+	  		{
+	  			text:"Privacy Policy",
+	  			href:this.dom.bypassSecurityTrustResourceUrl(Config.ext_links.privacyPolicy)
+	  		},
+	  		{
+	  			text:"Cookie Policy",
+	  			href:this.dom.bypassSecurityTrustResourceUrl(Config.ext_links.cookiePolicy)
+	  		},
+	  		{
+	  			text:"Legal Notice",
+	  			href:this.dom.bypassSecurityTrustResourceUrl(Config.ext_links.legalNotice)
+	  		},
+	  		{
+	  			text:"Modern Slavery Act Statement",
+	  			href:this.dom.bypassSecurityTrustResourceUrl(Config.ext_links.slaveryAct)
+	  		},
   		];
  	}
 

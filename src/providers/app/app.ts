@@ -7,14 +7,18 @@ import { aura } from "../../assets/aura/config/aura.config";
 /*
   Generated class for the AppProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
+  This is the main service for handling user progress
 */
 @Injectable()
 export class AppProvider {
-
+	progressArr ?: Array<any> = [];
+	progressKeys ?: Array<any> = [];
+	courses ?: Array<any> = [];
+	activeCourse : any;
+	activeDur : number = 1;
   constructor(public http: Http) {
     console.log(aura);
+    this.initCourses();
   }
 
   toGroup():Promise<any>{
@@ -30,9 +34,37 @@ export class AppProvider {
 			}
 	  	})
 	  
-  	return Promise.all(promises).then(()=>{return mast});
+  	return Promise.all(promises).then(()=>{ this.progressKeys = Object.keys(mast); return mast});
 
 
+  }
+
+  setActiveCourse(val){
+  	this.activeCourse = val;
+  	this.activeDur = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]}).length;
+  	console.log(this.activeCourse,this.activeDur);
+  }
+
+  setDur(val:number){
+  	this.activeDur = val;
+  }
+
+  initCourses(){
+  	let self = this;
+  	self.toGroup().then(res=>{
+  		self.initProgArr();
+  		self.courses = res;
+  		self.activeCourse = res['Mindfulness'];
+  		self.activeDur = self.progressKeys.length;
+  	})
+  }
+
+  initProgArr(){
+  	let self = this;
+  	this.progressKeys.forEach((val,ind)=>{
+  		let init = {val:[]};
+  		self.progressArr.push(init);
+  	});
   }
 
   updateUserProgress(){

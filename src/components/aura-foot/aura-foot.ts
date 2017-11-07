@@ -16,7 +16,7 @@ import { HomePage } from "../../pages/home/home";
 export class AuraFootComponent {
 
   text: string;
-
+  ext_url ?: string = "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator";
   constructor(private nav: NavController, private view: ViewController) {
     console.log('Hello AuraFootComponent Component');
     this.text = 'Hello World';
@@ -24,10 +24,6 @@ export class AuraFootComponent {
 
   toHome(){
   	this.nav.setRoot(HomePage);
-  }
-
-  reorder(){
-
   }
 
 }

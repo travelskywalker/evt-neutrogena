@@ -19,5 +19,11 @@ export const Config = {
     client_id: 'iFF5t1pmHIXS9vsOV14KGt5V4XfEh37n',
     client_secret: '4gAx_w6YVA-uC1CtOGEvwCqyKoxRgKqyvf39i2axHVmOuZLr0U2fRCghMholpQqy',
     audience: 'https://demo-evt.eu.auth0.com/api/v2/' 
+  },
+  ext_links:{
+    privacyPolicy:"//www.neutrogena.co.uk/privacypolicy",
+    cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
+    legalNotice:"//www.neutrogena.co.uk/legal-statement",
+    slaveryAct:"//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf"
   }
 };

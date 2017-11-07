@@ -29,8 +29,6 @@ import { ScriptService } from '../providers/app/script.service';
 /* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
 
-import {ComponentsModule} from '../components/components.module';
-
 @NgModule({
   declarations: [
     MyApp,

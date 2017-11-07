@@ -27,7 +27,6 @@ export class AuraMainPage {
 	dur ?: number = 10;
 	arrDay ?: any = [];
 	courses ?: any;
-	courseKeys ?: any;
 	activeCourse ?: [{desc:string,id:string,path:string,title:string}] = [{desc:"",id:"",path:"",title:""}];
 	courseTitle?: string = "Mindfulness";
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private app:AppProvider) {
@@ -68,30 +67,26 @@ export class AuraMainPage {
 
   ngOnInit(){
   	let self = this;
-  	this.app.toGroup().then(res=>{
+  	this.app.initProgArr()
+  	/*this.app.toGroup().then(res=>{
+  		self.app.initProgArr();
   		self.courses = res;
-  		self.courseKeys = Object.keys(res);
   		self.activeCourse = res[self.courseTitle];
-  		self.dur = self.courseKeys.length;
-  	})
+  		self.dur = self.app.progressKeys.length;
+  	})*/
   }
 
   tryMe($event){
-  	this.activeCourse = $event;
+  	this.app.setActiveCourse($event);
   	this.day = $event.progress;
   	this.courseTitle = $event.title;
-  	this.dur = this.courseKeys.length;
+  	//this.dur = this.app.progressKeys.length;
   	this.popDays();
   }
 
   intoTheContent(stat,ind:number = 1){
   	//console.log(this.activeCourse[ind]);
-  	this.navCtrl.setRoot(AuraContentPage,{data:this.activeCourse[ind]});
-  }
-
-  evtScroll($event){
-  	//console.log($event.target.scrollLeft, $event.target);
-  	return true;
+  	this.navCtrl.setRoot(AuraContentPage,{data:this.app.activeCourse[ind]});
   }
 
 }

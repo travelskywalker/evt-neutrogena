@@ -1,0 +1,94 @@
+progress-modal {
+	z-index: 10;
+	position: fixed;
+	display:inline-block;
+	height:calc(100% - 50px);
+	width:100%;
+	padding:16px 20px;
+	top:50px;
+	left:0;
+	background-color:rgba(50,50,50,0.4);
+
+	.overlay{
+		content:"";
+		z-index: 9;
+		display: none;
+		position: relative;
+		top:0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+	}
+
+	div.container{
+		position: relative;
+		top:0;
+		left: 0;
+		z-index: 11;
+		height: 100%;
+		width:100%;
+		background-color: #fff;
+		border-radius: 10pt;
+		display: inline-block;
+		&>*{
+			display: block;
+			clear:	both;
+			width: 100%;
+			text-align: center;
+		}
+
+		&>h3{
+			padding:185px 0 0;
+			color:rgb(189,8,148);
+			line-height: 16px;
+			font-family: 'HelveticaNeue-Light';
+			font-size: 30px;
+			text-transform:  uppercase;
+		}
+
+		&>h4{
+			padding: 11px 0 0;
+			font-family: 'HelveticaNeue-Light';
+			font-size: 18px;
+			line-height: 20px;
+			color:rgb(240,119,33);
+		}
+
+		&>p{
+			margin:36px auto 0;
+			font-size: 14px;
+			font-family: 'HelveticaNeue-Light';
+			color:rgb(128,129,132);
+			line-height: 17px;
+			&>a{
+				text-decoration: none;
+				color:rgb(240,119,33);
+				font-size: 18px;
+				font-family: 'HelveticaNeue-Bold';
+			}
+		}
+
+		&>button[ion-button]{
+			max-width: calc(100% - 70px);
+			height: 50px;
+			background-image:url('../assets/images/signup_btn.png');
+			background-size:contain;
+			color:#fff;
+			text-transform: uppercase;
+			font-family: 'HelveticaNeue-Light';
+			font-size: 15px;
+			line-height: 17px;
+			display: block;
+			margin:60px auto 0;
+			background-color: transparent;
+		}
+	}
+
+}
+
+page-aura-content{
+	ion-content{
+		div.scroll-content{
+		}
+	}	
+}

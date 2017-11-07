@@ -8,6 +8,7 @@ import { FooterComponentModule } from './footer/footer.module';
 import { SubCourseComponentModule } from './sub-course/sub-course.module';
 import { AuraHeadComponentModule } from './aura-head/aura-head.module';
 import { AuraFootComponentModule } from './aura-foot/aura-foot.module';
+import { ProgressModalComponentModule } from './progress-modal/progress-modal.module';
 @NgModule({
 	declarations: [ScanComponent,],
 	imports: [SideMenuComponentModule],
@@ -18,6 +19,6 @@ import { AuraFootComponentModule } from './aura-foot/aura-foot.module';
     SubCourseComponentModule,
     AuraHeadComponentModule,
     AuraFootComponentModule,
-    LogoComponentModule]
+    ProgressModalComponentModule,]
 })
 export class ComponentsModule {}

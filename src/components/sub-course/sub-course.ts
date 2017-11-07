@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter, Renderer2, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 
+import { NavController } from "ionic-angular";
 import { AuthService } from "../../providers/auth/auth.service";
+import { AppProvider } from "../../providers/app/app";
+
+import { SignUpPage } from "../../pages/sign-up/sign-up";
 
 /**
  * Generated class for the SubCourseComponent component.
@@ -23,7 +27,7 @@ export class SubCourseComponent {
   @Input('activeCourse') crs : any;
   //daysLength ?: number = 0;
 
-  constructor(private auth0: AuthService, private render: Renderer2) {
+  constructor(private auth0: AuthService, private appService: AppProvider, private render: Renderer2, private nav: NavController) {
   }
 
   begin(tes){
@@ -52,6 +56,10 @@ export class SubCourseComponent {
 
   getProg(){
   	return Math.round((this.progress*100) / this.duration);
+  }
+
+  toSignUp(){
+  	this.nav.push(SignUpPage);
   }
 
 }

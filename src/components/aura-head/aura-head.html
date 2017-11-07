@@ -10,7 +10,7 @@
 
 		<ion-col col-5>
 			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>
-			<a *ngIf = "logged" menuToggle>Hi, {{name}}</a>
+			<a *ngIf = "logged" (tap)="myAccount()">Hi, {{name}}</a>
 			<span><img src="../assets/images/person.png"/></span>
 		</ion-col>
 
