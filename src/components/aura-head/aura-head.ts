@@ -40,6 +40,7 @@ export class AuraHeadComponent {
   }
 
   ngOnInit(){
+  	/* If logged in, populate user data with details from storage */
   	if(this.auth0.loggedIn()){
   		this.userData = this.auth0.getUserDetailsFromStorage();
   		this.logged = true;

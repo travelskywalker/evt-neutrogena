@@ -33,13 +33,18 @@ export class SubCourseComponent {
   begin(tes){
   	tes['progress'] = this.progress;
   	tes['title'] = this.title;
+  	/* this assigns the progress and title 	*
+  	 * to the top element 					*/
   	this.bgn.emit(tes);
   }
 
   ngOnInit(){
   	this.duration = Object.keys(this.crs).length;
 
-  	// THIS SHOULDNT BE RANDOM
+  	/* THIS SHOULDNT BE RANDOM 				*
+  	 * Once the progress tracking system 	*
+  	 * has been implemented, fetch user 	*
+  	 * progress and then assign here 		*/
   	this.progress = Math.round(Math.random()*this.duration);
   }
 

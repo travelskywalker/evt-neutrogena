@@ -52,13 +52,6 @@ export class SideMenuComponent {
   ngAfterViewInit(){
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    let nav = this.app.getRootNav();
-    nav.setRoot(page.component);
-  }
-
   login(){
     let nav = this.app.getRootNav();
     nav.setRoot(LoginPage);
