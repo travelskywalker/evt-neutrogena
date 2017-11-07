@@ -33,10 +33,10 @@ export class AuraMainPage {
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad AuraMainPage');
-    //console.log(this.slider);
   }
 
+  /* Add buttons depending on number of days *
+   * Animate for effect to the current day 	 */
   popDays(){
   	this.arrDay = [];
     for(let i=1;i<=this.day;i++){
@@ -49,11 +49,12 @@ export class AuraMainPage {
     		this.btnSlide.slideTo(this.day);
     		console.log(this.day);
     	}catch(e){
-    		console.log(e);
+    		//console.log(e);
     	}
     },100);
   }
 
+/* Expand description */
   expand(){
   	this.expanded = !this.expanded;
   	if(this.expanded) this.def = "up";
@@ -61,21 +62,19 @@ export class AuraMainPage {
   }
 
   ngAfterViewInit(){
-  	console.log(this.slider.width);
     this.popDays();
   }
 
   ngOnInit(){
   	let self = this;
   	this.app.initProgArr()
-  	/*this.app.toGroup().then(res=>{
-  		self.app.initProgArr();
-  		self.courses = res;
-  		self.activeCourse = res[self.courseTitle];
-  		self.dur = self.app.progressKeys.length;
-  	})*/
   }
 
+
+ /* This is triggered by the sub-course component *
+ * when it is tapped (begin / continue) and 	  *
+ * transfers the data from the sub-course to 	  *
+ * the top area (slider of buttons).     	 	  */
   tryMe($event){
   	this.app.setActiveCourse($event);
   	this.day = $event.progress;
@@ -84,6 +83,7 @@ export class AuraMainPage {
   	this.popDays();
   }
 
+  /* Go to the aura content */
   intoTheContent(stat,ind:number = 1){
   	//console.log(this.activeCourse[ind]);
   	this.navCtrl.setRoot(AuraContentPage,{data:this.app.activeCourse[ind]});

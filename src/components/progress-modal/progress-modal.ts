@@ -29,6 +29,7 @@ export class ProgressModalComponent {
   	this.nav.setRoot(AuraMainPage);
   }
 
+/* toggle visibility of this component */
   toggleView(stat: boolean = !this.show){
   	this.show = stat;
 

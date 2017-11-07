@@ -272,11 +272,13 @@
  {
    "Day": 1,
    "Course": "Happiness",
-   "Title": "10-Minute Gratitude Practice",
-   "Description": "We often focus on the challenges and difficulties in life and forget, often overlooking, what's good and positive in our lives. This practice helps you to remember what's good in your life.\nby Jiva Masheder\nAbout AURA",
-   "Author": "Jiva Masheder",
-   "ID": "-KsIjHRn5I70dSoLqzSS",
-   "path": "3-Minute Gratitude Practice.html"
+   "Title": "Heart Light",
+   "Description": `Find your true heart light
+                  by C + D (Christina + Darrin)
+                  About AURA`,
+   "Author": "C + D (Christina + Darrin)",
+   "ID": "cd9(3)",
+   "path": "Heart Light.html"
  },
  {
    "Day": 2,
@@ -731,11 +733,13 @@
  {
    "Day": 2,
    "Course": "Anxiety",
-   "Title": "10-Minute Finding Calm",
-   "Description": "This is a 10-minute practice designed to help you find some calm in a hectic day.\nby Jiva Masheder\nAbout AURA",
-   "Author": "Jiva Masheder",
-   "ID": "-Ksrx_RsEsd4aH6Xkdc3",
-   "path": "3-Minute Finding Calm.html"
+   "Title": "Slowing Down",
+   "Description": `When you're feeling stressed or anxious, everything seems to be moving quickly: thoughts race through your mind, and your heart may feel like it is going to explode in your chest. In this meditation, you'll intentionally slow down the breath, and then check in with your thoughts and your heart rate to see if they have also slowed.
+                     by C + D (Christina + Darrin)
+                  About AURA`,
+   "Author": "C + D (Christina + Darrin)",
+   "ID": "-KqoTTpIs4i6PHKsTaIF",
+   "path": "Slowing Down.html"
  },
  {
    "Day": 3,

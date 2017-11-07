@@ -38,35 +38,18 @@ export class AuraContentPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private sanitizer: DomSanitizer) {
   	
   	let data = this.navParams.get('data');
-  	console.log(data);
+  	
+  	/* If there are no data in navparams *
+  	 * redirect to main page			 */
   	if(typeof data == "undefined"){
-  		
   		this.navCtrl.setRoot(AuraMainPage);
   	}else{
+  		/* set the content details */
 	  	this.module.title = data.title;
 	  	this.module.description = data.desc;
 	  	this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));	
   	}
 
-  }
-
-  ionViewWillEnter(){
-  	console.log("will enter");
-  	/*this.auraSelect = this.auraLoc.splice(0,1)[0];
-  	let hed = document.getElementsByTagName("script")[0];
-  	console.log(hed);
-  	let nscr = this.render.createElement("script","script");
-  	this.render.setAttribute(nscr,"id","aura-widget");
-  	this.render.setAttribute(nscr,"data-content-id",this.auraSelect.ID);
-  	this.render.setAttribute(nscr,"type","text/javascript");
-  	this.render.setAttribute(nscr,"async","true");
-  	this.render.setAttribute(nscr,"charset","utf-8");
-  	this.render.setAttribute(nscr,"src","http://app.aurahealth.io/static/widget.js");
-
-  	this.render.insertBefore(hed.parentElement,nscr,hed);
-  	nscr.onload = function(e){
-  		console.log(e);
-  	}*/
   }
 
   ionViewDidLoad() {
@@ -76,20 +59,22 @@ export class AuraContentPage {
   ngAfterViewInit(){
   	let self = this;
   	self.pmc.toggleView(false);
+  	/* check if iframe has loaded */
   	document.getElementById("aura-widget-div").onload = function(e){
   		let fp = <HTMLIFrameElement> e.srcElement;
   		let hed : HTMLHeadElement = fp.contentWindow.document.getElementsByTagName('head')[0];
   		let frm : HTMLBodyElement = fp.contentWindow.document.getElementsByTagName('body')[0];
-  		frm.style.maxHeight = "100%";
-  		frm.style.margin = "0px";
+  		frm.style.maxHeight = "100%";	// assign max height
+  		frm.style.margin = "0px";		// and margin css details
 
   		let auraWidget = <HTMLDivElement> fp.contentWindow.document.getElementById('aura-widget-div');
   		auraWidget.style.maxHeight = "100%";
   		auraWidget.style.height = "100%";
-  		//console.log(fp,frm);
 
+  		/* TO DO: Add listener to aura player to track	*
+  		 * play, pause, and audio completion			*/
   		fp.contentWindow.addEventListener('DOMContentLoaded', function(e){
-  			console.log(e);
+  			// add event listener here
 
   		})
 
@@ -109,15 +94,10 @@ export class AuraContentPage {
 
   	}
 
-
-  	//this.appendVal();
   }
 
-  appendVal(){
-
-
-  }
-
+  /* If page leave is triggered before audio finishes playing, *
+   * make sure to pause/stop all aura audio					 */
   ionViewDidLeave(){
   	//audio.ontimeupdate = null;
   }
