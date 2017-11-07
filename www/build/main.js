@@ -1540,24 +1540,23 @@ var AuraContentPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('aura'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
 ], AuraContentPage.prototype, "auraComponent", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]) === "function" && _b || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */])
 ], AuraContentPage.prototype, "content", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_6__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]),
-    __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_6__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]) === "function" && _c || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_6__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */])
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-aura-content',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n<progress-modal></progress-modal>\n    <!--div id="aura-widget-div" #aura></div-->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n    \n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]) === "function" && _j || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */], __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */], __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
 ], AuraContentPage);
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 //# sourceMappingURL=aura-content.js.map
 
 /***/ }),
@@ -1632,10 +1631,9 @@ ProgressModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'progress-modal',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome()">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
 ], ProgressModalComponent);
 
-var _a, _b, _c;
 //# sourceMappingURL=progress-modal.js.map
 
 /***/ }),
@@ -2786,10 +2784,9 @@ SideMenuComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'side-menu',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/side-menu/side-menu.html"*/'<!-- Generated template for the SideMenuComponent component -->\n<ion-content>\n  <ion-list>\n  	<!-- unused <button menuClose class="main" ion-item >My Account</button> -->\n  	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>\n  	<button menuClose class="main dbl" ion-item *ngIf="loggedIn()" (tap)="myAccount()">My Account</button>\n  	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>\n    <a target="_blank" *ngFor="let p of links" [href]="p?.link">\n    	<button menuClose ion-item>\n    		{{p?.title}}\n    	</button>\n    </a>\n  </ion-list>\n\n  <section class="footer">\n  	<ion-row class="container">\n  		<ion-col class="neutrogena">\n  			<img src="../assets/images/logo_neutrogena.png"/>\n  		</ion-col>\n  		<ion-col class="aura">\n  			<img src="../assets/images/logo_aura_blue.png"/>\n  		</ion-col>\n  	</ion-row>\n  </section>\n</ion-content>'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/side-menu/side-menu.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__["c" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__["c" /* DomSanitizer */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__["c" /* DomSanitizer */]])
 ], SideMenuComponent);
 
-var _a, _b, _c;
 //# sourceMappingURL=side-menu.js.map
 
 /***/ }),
@@ -3142,7 +3139,7 @@ __decorate([
 ], SubCourseComponent.prototype, "progress", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('prog'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
 ], SubCourseComponent.prototype, "prog", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["S" /* Output */])('begin'),
@@ -3156,10 +3153,9 @@ SubCourseComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'sub-course',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container">\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">(Duration) {{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProg()==0?"Begin":"Continue"}}</button>\n</div>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/sub-course/sub-course.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]])
 ], SubCourseComponent);
 
-var _a, _b, _c, _d, _e;
 //# sourceMappingURL=sub-course.js.map
 
 /***/ }),
@@ -3269,10 +3265,9 @@ AuraHeadComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'aura-head',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/aura-head/aura-head.html"*/'<!-- Generated template for the AuraHeadComponent component -->\n<div class="body">\n	\n	<ion-row>\n\n		<ion-col col-7>\n			<span><img src="../assets/images/neutrogena_white.png"/></span>\n			<span><img src="../assets/images/auraLogo_white.png"/></span>\n		</ion-col>\n\n		<ion-col col-5>\n			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>\n			<a *ngIf = "logged" (tap)="myAccount()">Hi, {{name}}</a>\n			<span><img src="../assets/images/person.png"/></span>\n		</ion-col>\n\n	</ion-row>\n  \n</div>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/aura-head/aura-head.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]])
 ], AuraHeadComponent);
 
-var _a, _b;
 //# sourceMappingURL=aura-head.js.map
 
 /***/ }),
@@ -3361,10 +3356,9 @@ AuraFootComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'aura-foot',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder">\n  			<a [href]="ext_url" target="_blank">\n  				<img src="../assets/images/reorder.png"/>\n  			</a>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]])
 ], AuraFootComponent);
 
-var _a, _b;
 //# sourceMappingURL=aura-foot.js.map
 
 /***/ }),
@@ -3808,20 +3802,19 @@ var AuraMainPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _a || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
 ], AuraMainPage.prototype, "slider", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _b || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-aura-main',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n\n<ion-content >\n\n	<section class="track-preview">\n		<a class="progress-days">\n			Day {{day < app?.activeDur ? (day+1):day}} of {{app?.activeDur+1}}\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\':true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="day < app?.activeDur">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\':dy?.status}" (tap)="intoTheContent(true,day+1)">\n						<ion-icon name="play"></ion-icon>\n						Day {{day + 1}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			Start this course\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<p class="content" [ngClass]="{\'show\':expanded}">\n				{{app?.activeCourse[day]?.desc.trim().substring(0,300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.courses[crs]"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _h || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */], __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
 ], AuraMainPage);
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
 //# sourceMappingURL=aura-main.js.map
 
 /***/ }),
