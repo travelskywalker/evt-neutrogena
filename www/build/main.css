@@ -26062,6 +26062,10 @@ page-age-gate ion-header button[ion-button].xbtn {
   box-shadow: none;
 }
 
+page-age-gate ion-content {
+  margin-top: 44px;
+}
+
 page-age-gate ion-content div.scroll-content {
   background-color: #f0f0f0;
 }
