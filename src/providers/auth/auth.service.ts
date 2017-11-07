@@ -13,6 +13,7 @@ export class AuthService {
   clientDefId:string = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
   clientDefSecret:string = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
   projectId : string;
+  /* main auth0 variable. */
   webAuth = new auth0.WebAuth({
     clientID: Config.auth0.clientID,
     domain: Config.auth0.domain,
@@ -29,6 +30,7 @@ export class AuthService {
     this.projectId = Config.projectId;
   }
 
+  /* Check if a user is logged in. */
   loggedIn() : boolean{
     if(localStorage.getItem('access_token') && localStorage.getItem('access_token') != ""){
       return true;
@@ -38,6 +40,10 @@ export class AuthService {
     }
   }
 
+  /* Sign up for email-based account. First name *
+   * and last name is included in the            *
+   * user_metadata so that we can track it       *   
+   * Not needed for FB based signup              */   
   public signup(usr:{email:string,pass:string},fName='',lName='') {
     return new Promise((resolve,reject)=>{
       this.webAuth.signup({
@@ -58,6 +64,7 @@ export class AuthService {
     });
   }
 
+  /* Login/Signup for fb-based account */
   public fbAuth(): void{
     this.webAuth.authorize({
       connection: 'facebook',
@@ -65,6 +72,7 @@ export class AuthService {
     });
   }
 
+  /* login for email-based account */
   public login(usr:{email:string,pass:string}) {
     return new Promise((resolve, reject) => {
         this.webAuth.redirect.loginWithCredentials({
@@ -127,6 +135,7 @@ export class AuthService {
     );
   }
 
+  /* store EVT info in the localstorage */
   setEVTInfo(){
     if( (localStorage.access_token && localStorage.id_token) && (!localStorage.evrythngInfo || localStorage.evrythngInfo === "undefined") ){
       let user = this.getUserDetailsFromStorage();
@@ -135,6 +144,7 @@ export class AuthService {
     }
   }
 
+  /* get the user details from the auth0 platform using access_token */
   getUserDetails(){
     this.lock.getUserInfo(localStorage.getItem('access_token'), function(error, profile) {
       if (!error) {
@@ -143,10 +153,12 @@ export class AuthService {
     });
   }
 
+  /* Get the user details from local storage */
   public getUserDetailsFromStorage() {
     return JSON.parse(localStorage.getItem('userInfo'));
   }
 
+  /* Get the user details from local storage */
   public setUserMetadata(meta) {
     let usr = this.getUserDetailsFromStorage();
     usr.user_metadata = meta;
@@ -154,10 +166,12 @@ export class AuthService {
     localStorage.setItem('userInfo',JSON.stringify(usr));
   }
 
+  /* Get the user metadata from local storage */
   public getUserMetadataFromStorage() {
     return JSON.parse(localStorage.getItem('userInfo'))['user_metadata'];
   }
 
+  /* trigger logout. User should redirect to the returnTo field specified below */
   public logout():void {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('access_token');
@@ -169,6 +183,7 @@ export class AuthService {
     });
   }
 
+  /* Update user metadata via auth0 manage */
   public updateUser(usrMetaData) {
     let umd = this.getUserMetadataFromStorage();
     umd["firstName"] = usrMetaData.firstName;
@@ -196,10 +211,15 @@ export class AuthService {
 
   }
 
+  /* check if FB based account or email-based  *
+   * FB accounts have the 'sub' variable. This * 
+   * is what we check                          */
   isFB():boolean{
     return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
   }
 
+
+  /* Delete the user account via user management client */
   deleteUser(){
     let self = this;
     let id = (self.isFB() ? this.getUserDetailsFromStorage()['sub'] : self.getUserDetailsFromStorage()['user_id']);
@@ -224,6 +244,7 @@ export class AuthService {
     );
   }
 
+  /* Delete the user password via user management client */
   updatePassword(newPass : string){
     let self = this;
     let id = this.getUserDetailsFromStorage()['user_id'];
@@ -250,6 +271,8 @@ export class AuthService {
 
   }
 
+  /* request oauth token via auth0 management client * 
+   * this will be used for management api requests   */
   requestMgmtToken(){
     let hdr = new Headers();
     hdr.append("Content-Type","application/json");
@@ -274,6 +297,7 @@ export class AuthService {
            });
   }
 
+  /* Search user by email via auth0 management client */
   searchUser(mail){
     let self = this;
     let hdr = new Headers();
@@ -298,6 +322,7 @@ export class AuthService {
     });
   }
 
+  /* Update password */
   changePassword(mail:string){
     return new Promise((resolve,reject)=>{
 

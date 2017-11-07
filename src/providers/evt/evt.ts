@@ -41,9 +41,9 @@ export class EvtProvider {
 
   	this.evtapp = new EVT.App(Config.evt_app);
 
-  	//console.log(this.getUserContext());
   }
 
+  /* return evt user context as a promise */
   getUserContext():Promise<any> {
   	//let usr = this.auth0.getUserDetailsFromStorage();
   	let userContext = JSON.parse(localStorage.evrythngInfo);
@@ -59,10 +59,12 @@ export class EvtProvider {
   	);
   }
 
+  /* EVT Scan */
   scan(){
   	return this.evtapp.scan();
   }
 
+  /* Get EVT user's custom fields */
   getUserCustomFields():Promise<any>{
   	return new Promise((resolve,reject)=>{
 	  	this.getUserContext().then(usr=>{

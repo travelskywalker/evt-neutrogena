@@ -8,7 +8,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 /* Pages */
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { SignUpPage } from '../pages/sign-up/sign-up';
 import { AuthPage } from '../pages/auth/auth';
 import { LoginPage } from '../pages/login/login';
@@ -33,7 +32,6 @@ import { ComponentsModule } from '../components/components.module';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     SignUpPage,
     AuthPage,
     LoginPage,
@@ -52,7 +50,6 @@ import { ComponentsModule } from '../components/components.module';
     IonicModule.forRoot(MyApp,{}, {
       links: [
         { component: HomePage, name: 'Home', segment: 'home' },
-        { component: ListPage, name: 'listPage', segment: 'list' },
         { component: SignUpPage, name: 'SignUpPage', segment: 'sign-up' },
         { component: AuthPage, name: 'Auth0Page', segment: ':data' },
         { component: LoginPage, name: 'LoginPage', segment: 'login' },
@@ -70,7 +67,6 @@ import { ComponentsModule } from '../components/components.module';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     SignUpPage,
     AuthPage,
     LoginPage,
