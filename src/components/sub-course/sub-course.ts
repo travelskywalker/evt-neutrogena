@@ -40,6 +40,8 @@ export class SubCourseComponent {
 
   ngOnInit(){
   	this.duration = Object.keys(this.crs).length;
+  	this.bgImg = "../assets/aura/images/hero/"+this.title+".jpg";
+  	console.log(this);
 
   	/* THIS SHOULDNT BE RANDOM 				*
   	 * Once the progress tracking system 	*

@@ -25957,7 +25957,7 @@ sub-course div.container span.image-container > p {
   font-family: 'HelveticaNeue-Light';
   padding-left: 23px;
   text-align: left;
-  text-shadow: 0 0 0 #000;
+  text-shadow: 0 0 2px #000;
   font-weight: 500;
 }
 
@@ -25971,6 +25971,7 @@ sub-course div.container span.image-container > p.sign-in {
   color: #f07721;
   line-height: 17px;
   font-family: 'HelveticaNeue-Bold';
+  text-shadow: none;
 }
 
 sub-course div.container span.image-container span.progress {
@@ -26301,7 +26302,7 @@ page-aura-content ion-content #aura-widget-div span.title {
 page-aura-content ion-content #aura-widget-div span.title p {
   line-height: 17px;
   color: #fff;
-  text-shadow: 0 0 0px #333;
+  text-shadow: 0 0 2px #333;
   margin-left: 24px;
   margin-bottom: 0;
 }
@@ -26425,6 +26426,42 @@ page-aura-main ion-content section.track-preview {
   padding: 10vw 0 0 0;
 }
 
+page-aura-main ion-content section.track-preview.Mindfulness {
+  background-image: url("../assets/aura/images/hero/Mindfulness.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Refreshing {
+  background-image: url("../assets/aura/images/hero/Refreshing.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Focus {
+  background-image: url("../assets/aura/images/hero/Focus.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Happiness {
+  background-image: url("../assets/aura/images/hero/Happiness.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Selflove {
+  background-image: url("../assets/aura/images/hero/Selflove.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Healing {
+  background-image: url("../assets/aura/images/hero/Healing.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Relaxation {
+  background-image: url("../assets/aura/images/hero/Relaxation.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Stress {
+  background-image: url("../assets/aura/images/hero/Stress.jpg");
+}
+
+page-aura-main ion-content section.track-preview.Anxiety {
+  background-image: url("../assets/aura/images/hero/Anxiety.jpg");
+}
+
 page-aura-main ion-content section.track-preview a.progress-days {
   color: #f07721;
   line-height: 17px;
@@ -26455,7 +26492,7 @@ page-aura-main ion-content section.track-preview div.expandable {
   margin-top: 2vw;
   font-size: 2.8vw;
   color: #fff;
-  text-shadow: 0 0 0px #333;
+  text-shadow: 0 0 2px #333;
   line-height: 17px;
 }
 

@@ -23,7 +23,7 @@ sub-course {
 				font-family: 'HelveticaNeue-Light';
 				padding-left:23px;
 				text-align: left;
-				text-shadow: 0 0 0 #000;
+				text-shadow: 0 0 2px #000;
 				font-weight: 500;
 				&.title{
 					padding-top: 16.365vw;
@@ -36,7 +36,8 @@ sub-course {
 					font-size: 11px;
 					color:rgb(240,119,33);
 					line-height: 17px;
-					font-family: 'HelveticaNeue-Bold'
+					font-family: 'HelveticaNeue-Bold';
+					text-shadow: none;
 				}
 			}
 

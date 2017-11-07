@@ -72,6 +72,35 @@ page-aura-main {
 			display: inline-block;
 			margin:0;
 			padding:10vw 0 0 0;
+
+			&.Mindfulness{
+				background-image:url('../assets/aura/images/hero/Mindfulness.jpg');
+			}
+			&.Refreshing{
+				background-image:url('../assets/aura/images/hero/Refreshing.jpg');
+			}
+			&.Focus{
+				background-image:url('../assets/aura/images/hero/Focus.jpg');
+			}
+			&.Happiness{
+				background-image:url('../assets/aura/images/hero/Happiness.jpg');
+			}
+			&.Selflove{
+				background-image:url('../assets/aura/images/hero/Selflove.jpg');
+			}
+			&.Healing{
+				background-image:url('../assets/aura/images/hero/Healing.jpg');
+			}
+			&.Relaxation{
+				background-image:url('../assets/aura/images/hero/Relaxation.jpg');
+			}
+			&.Stress{
+				background-image:url('../assets/aura/images/hero/Stress.jpg');
+			}
+			&.Anxiety{
+				background-image:url('../assets/aura/images/hero/Anxiety.jpg');
+			}
+
 			a.progress-days{
 				color:rgb(240,119,33);
 				line-height: 17px;
@@ -102,7 +131,7 @@ page-aura-main {
 					margin-top: 2vw;
 					font-size: 2.8vw;
 					color:#fff;
-					text-shadow: 0 0 0px #333;
+					text-shadow: 0 0 2px #333;
 					line-height: 17px;
 					a.desc-trigger{
 						font-size: 2.8vw;

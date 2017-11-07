@@ -5,10 +5,12 @@ import 'rxjs/add/operator/map';
 import { aura } from "../../assets/aura/config/aura.config";
 
 /*
-  Generated class for the AppProvider provider.
-
-  This is the main service for handling user progress
-*/
+ *	Generated class for the AppProvider provider.
+ *
+ *	This is the main service for handling user progress
+ *	This contains all the progress variables. 
+ *	The variables in the content page are here.
+*/ 
 @Injectable()
 export class AppProvider {
 	progressArr ?: Array<any> = [];
@@ -21,6 +23,7 @@ export class AppProvider {
     this.initCourses();
   }
 
+  /* GET the aura variable containing the content details, path..etc. */
   toGroup():Promise<any>{
   	let mast = [];
 	let promises = aura.map(ar=>{
@@ -39,10 +42,10 @@ export class AppProvider {
 
   }
 
+  /* set the active course for the top component in the main page */
   setActiveCourse(val){
   	this.activeCourse = val;
   	this.activeDur = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]}).length;
-  	console.log(this.activeCourse,this.activeDur);
   }
 
   setDur(val:number){
