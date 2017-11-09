@@ -84,7 +84,7 @@ export class HomePage {
             self.scanFailed = false;
 
             thng.action("scans").create().catch(err=>console.error(err));
-            thng.action("_Activated").create().then(console.log).catch(console.error);
+            //thng.action("_Activated").create().then(console.log).catch(console.error);
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
             self.navCtrl.setRoot(AuraMainPage);

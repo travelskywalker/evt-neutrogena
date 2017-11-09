@@ -2098,7 +2098,7 @@ var HomePage = (function () {
                 usr_1.thng(item.id).read().then(function (thng) {
                     self.scanFailed = false;
                     thng.action("scans").create().catch(function (err) { return console.error(err); });
-                    thng.action("_Activated").create().then(console.log).catch(console.error);
+                    //thng.action("_Activated").create().then(console.log).catch(console.error);
                     usr_1.update({ customFields: { myThng: thng.id } }).then(console.log);
                     //TODO: Redirect to content page. Still in progress
                     self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
@@ -3792,10 +3792,11 @@ var EvtProvider = (function () {
 }());
 EvtProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]
+        // private auth0: AuthService
+    ])
 ], EvtProvider);
 
-var _a;
 //# sourceMappingURL=evt.js.map
 
 /***/ }),
