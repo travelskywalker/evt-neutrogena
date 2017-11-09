@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
 
 import { aura } from "../../assets/aura/config/aura.config";
@@ -8,9 +9,9 @@ import { aura } from "../../assets/aura/config/aura.config";
  *	Generated class for the AppProvider provider.
  *
  *	This is the main service for handling user progress
- *	This contains all the progress variables. 
+ *	This contains all the progress variables.
  *	The variables in the content page are here.
-*/ 
+*/
 @Injectable()
 export class AppProvider {
 	progressArr ?: Array<any> = [];
@@ -18,6 +19,7 @@ export class AppProvider {
 	courses ?: Array<any> = [];
 	activeCourse : any;
 	activeDur : number = 1;
+  hasValidUserAge : boolean = false;
   constructor(public http: Http) {
     console.log(aura);
     this.initCourses();
@@ -36,7 +38,7 @@ export class AppProvider {
 				mast[crs][ar.Day] = {id:ar.ID,title:ar.Title,path:ar.path,desc:ar.Description};
 			}
 	  	})
-	  
+
   	return Promise.all(promises).then(()=>{ this.progressKeys = Object.keys(mast); return mast});
 
 
@@ -46,7 +48,7 @@ export class AppProvider {
   setActiveCourse(val){
   	this.activeCourse = val;
   	let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
-  	
+
   	this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
 
   }
@@ -73,10 +75,38 @@ export class AppProvider {
   	});
   }
 
+  static isAgeGated() {
+    return Cookie.get("age_gate");
+  }
+
+  isValidAge() {
+    /**
+     * Check if there's a previous age gating info
+     * Check if greater than age allowed
+     */
+    let isAgeGated = Cookie.get("age_gate");
+    let agd = Cookie.get("agd");
+    this.hasValidUserAge = (isAgeGated && parseInt(agd) >= 18);
+    return this.hasValidUserAge;
+  }
+
+  saveAgeGateData(ageGated: any, cookiesOn: any, selectedDate: JSON) {
+    /**
+     * Save age gating info for user into Cookie
+     */
+    if(cookiesOn){ // remember the user, for 24 hours or more, used 7 days
+      Cookie.set('agd', ageGated, 7);
+      Cookie.set('age_gate',"true", 7);
+      Cookie.set('birthdate',JSON.stringify(selectedDate), 7);
+    }
+  }
+
   updateUserProgress(){
   	//TODO: get user data first from EVT. probably from custom fields
 
   	//TODO: assign user data to existing mapping.
   }
+
+
 
 }

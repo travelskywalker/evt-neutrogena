@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angul
 // import { AuthService } from "../../providers/auth/auth.service";
 
 import { Cookie } from "ng2-cookies";
+import { AppProvider } from "../../providers/app/app";
 import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
 import { AuraMainPage } from '../aura-main/aura-main';
@@ -20,10 +21,12 @@ export class AgeGatePage {
   cookiesOn: boolean = false;
   noticeViewed : boolean;
 
+
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
   				private render: Renderer2,
-          public alertCtrl: AlertController
+          public alertCtrl: AlertController,
+          public app: AppProvider
   				) {
 
     this.selectedDate = {
@@ -31,7 +34,10 @@ export class AgeGatePage {
       'month':'',
       'year':''
     };
-      this.inputDate ='';
+    this.inputDate ='';
+    if (AppProvider.isAgeGated()) {
+      this.invalidAge = !this.app.isValidAge()
+    }
   }
 
   ionViewDidLoad() {
@@ -47,7 +53,6 @@ export class AgeGatePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
-
   }
 
   changedDate(){
@@ -74,22 +79,20 @@ export class AgeGatePage {
     else{
       let currentDate = new Date().getFullYear();
       console.log((currentDate - this.selectedDate.year) > 18);
+      let ageGated = currentDate - this.selectedDate.year;
+      console.log("Selected:" + this.selectedDate);
+      if( ageGated > 18){
 
-      if((currentDate - this.selectedDate.year) > 18){
+        this.invalidAge = false;
+        /* We're all good. Proceed to meditation home, save age gate info first */
 
-          this.invalidAge = false;
-        /* We're all good. Proceed to sign up */
-
-        if(this.cookiesOn){ // remember the user
-          Cookie.set('age_gate',"true");
-          Cookie.set('birthdate',JSON.stringify(this.selectedDate));
-        }
+        this.app.saveAgeGateData(ageGated, this.cookiesOn, this.selectedDate);
         // this.navCtrl.setRoot(SignUpPage,{age_gate:true});
         this.navCtrl.setRoot(AuraMainPage,{age_gate:true});
       }
       else{
-          this.invalidAge = true;
-
+        this.app.saveAgeGateData(ageGated, this.cookiesOn, this.selectedDate);
+        this.invalidAge = true;
       }
     }
   }
