@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angul
 import { Cookie } from "ng2-cookies";
 import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
+import { AuraMainPage } from '../aura-main/aura-main';
 
 @IonicPage()
 @Component({
@@ -17,6 +18,7 @@ export class AgeGatePage {
   selectedDate: any;
   inputDate: any;
   cookiesOn: boolean = false;
+  noticeViewed : boolean;
 
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
@@ -34,6 +36,18 @@ export class AgeGatePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AgeGatePage');
+  }
+
+  ngOnInit(){
+    // if noticeViewed is true, the cookie policy notification will no longer be displayed
+    if(Cookie.get('cookie_notice') && Cookie.get('cookie_notice') == '1'){
+      this.noticeViewed = true;
+    }
+    else{
+      Cookie.set('cookie_notice','1');
+      this.noticeViewed = false;
+    }
+
   }
 
   changedDate(){
@@ -70,7 +84,8 @@ export class AgeGatePage {
           Cookie.set('age_gate',"true");
           Cookie.set('birthdate',JSON.stringify(this.selectedDate));
         }
-        this.navCtrl.setRoot(SignUpPage,{age_gate:true});
+        // this.navCtrl.setRoot(SignUpPage,{age_gate:true});
+        this.navCtrl.setRoot(AuraMainPage,{age_gate:true});
       }
       else{
           this.invalidAge = true;
