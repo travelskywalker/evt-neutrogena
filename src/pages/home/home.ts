@@ -8,6 +8,7 @@ import { Cookie } from 'ng2-cookies';
 
 import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';
+import { AgeGatePage } from '../age-gate/age-gate';
 
 /*
  *  This is the scan page. Where scanning happens.
@@ -82,7 +83,8 @@ export class HomePage {
             thng.action("_Activated").create().then(console.log).catch(console.error);
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
-            self.navCtrl.setRoot(AuraMainPage);
+            // self.navCtrl.setRoot(AuraMainPage);
+            self.gotoNexPage();
           })
           .catch(err=>{
             self.scanFailed = true;
@@ -107,7 +109,8 @@ export class HomePage {
                 /* Already has a thng */
                 console.log('You already have a thng!');
                 /* REDIRECT TO MAIN PAGE */
-                self.navCtrl.setRoot(AuraMainPage);
+                // self.navCtrl.setRoot(AuraMainPage);
+                self.gotoNexPage();
                 let thngId = cf.myThng;
 
               }else{
@@ -126,7 +129,8 @@ export class HomePage {
                   th.action("_Activated").create().then(console.log).catch(console.error);
 
                   /* REDIRECT TO MAIN PAGE */
-                  self.navCtrl.setRoot(AuraMainPage);
+                  // self.navCtrl.setRoot(AuraMainPage);
+                  self.gotoNexPage();
                 })
                 .catch(err=>{
                   console.log("Failed to create a thng");
@@ -150,6 +154,12 @@ export class HomePage {
       self.scanFailed = true;
       console.log('scan failed',err)
     });
+  }
+
+  gotoNexPage(){
+    /*check if age gate*/
+    if(Cookie.get('age_gate')) this.navCtrl.setRoot(AuraMainPage);
+    else this.navCtrl.setRoot(AgeGatePage);
   }
 
 }

@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angul
 import { Cookie } from "ng2-cookies";
 import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
+import { AuraMainPage } from '../aura-main/aura-main';
 
 @IonicPage()
 @Component({
@@ -70,7 +71,8 @@ export class AgeGatePage {
           Cookie.set('age_gate',"true");
           Cookie.set('birthdate',JSON.stringify(this.selectedDate));
         }
-        this.navCtrl.setRoot(SignUpPage,{age_gate:true});
+        // this.navCtrl.setRoot(SignUpPage,{age_gate:true});
+        this.navCtrl.setRoot(AuraMainPage,{age_gate:true});
       }
       else{
           this.invalidAge = true;
