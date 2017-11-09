@@ -18,6 +18,7 @@ export class AgeGatePage {
   selectedDate: any;
   inputDate: any;
   cookiesOn: boolean = false;
+  noticeViewed : boolean;
 
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
@@ -35,6 +36,18 @@ export class AgeGatePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AgeGatePage');
+  }
+
+  ngOnInit(){
+    // if noticeViewed is true, the cookie policy notification will no longer be displayed
+    if(Cookie.get('cookie_notice') && Cookie.get('cookie_notice') == '1'){
+      this.noticeViewed = true;
+    }
+    else{
+      Cookie.set('cookie_notice','1');
+      this.noticeViewed = false;
+    }
+
   }
 
   changedDate(){
