@@ -74,8 +74,8 @@ export class EvtProvider {
   }
 
   /* EVT Scan */
-  scan(){
-  	return this.evtapp.scan();
+  scan(opt:any){
+  	return this.evtapp.scan(opt);
   }
 
   /* Get EVT user's custom fields */
@@ -92,7 +92,7 @@ export class EvtProvider {
 	  		})
 	  	}).catch(err=>{
 	  		reject(err);
-	  	})	
+	  	})
   	})
   }
 
