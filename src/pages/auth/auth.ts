@@ -7,7 +7,7 @@ import { AuthService } from "../../providers/auth/auth.service";
 /**
  * This is the catch-all page. All paths are checked here first.
  * The access_token and id_token variables are stored in localstorage
- * for processing. 
+ * for processing.
  *
  */
 
@@ -23,12 +23,9 @@ export class AuthPage {
 
   ionViewDidLoad() {
     let data = this.navParams.get('data');
-    if(data == ""){
-    	if(localStorage.getItem('access_token') && localStorage.getItem('id_token')){
-    		this.navCtrl.setRoot(HomePage);
-    	}else{
-    		this.navCtrl.setRoot(LoginPage);
-    	}
+    if(data === ""){
+    	//experience starts with SCAN page (HomePage)
+      this.navCtrl.setRoot(HomePage);
 
     } else {
     	let authData = this.URLToArray(data);
