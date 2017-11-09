@@ -88,7 +88,8 @@ export class HomePage {
             thng.action("_Activated").create().then(console.log).catch(console.error);
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
-            self.navCtrl.setRoot(AuraMainPage);
+            // self.navCtrl.setRoot(AuraMainPage);
+            self.gotoNexPage();
           })
           .catch(err=>{
               self.scanFailed = true;
