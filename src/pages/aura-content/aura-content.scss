@@ -4,7 +4,12 @@ page-aura-content {
 		margin-bottom: 50px;
 		height: calc(100% - 100px);
 
+    iframe {
+      &#aura-widget-div{
+        border: 0 ;
+      }
 
+    }
 		#aura-widget-div{
 			max-height: 320px;
 			height: 320px;
@@ -50,7 +55,7 @@ page-aura-content {
 
 				div.text-div{
 					opacity: 0;
-				} //end of .text-div 
+				} //end of .text-div
 
 				div.audio-main{
 					position:absolute;
