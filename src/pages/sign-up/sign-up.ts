@@ -28,9 +28,9 @@ export class SignUpPage {
 	emailTaken : boolean = false;
 	private formGroup : FormGroup;
   constructor(	public navCtrl: NavController,
-  				public navParams: NavParams, 
-  				private render: Renderer2, 
-  				private auth0: AuthService, 
+  				public navParams: NavParams,
+  				private render: Renderer2,
+  				private auth0: AuthService,
   				private formBuilder: FormBuilder,
   				private loader : LoadingController,
           private evt: EvtProvider) {
@@ -98,12 +98,13 @@ export class SignUpPage {
   		}else{
 
 
-        
+
 		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(response=>{
           /* add _Activated action for anonymous user */
-          console.log(response.data);
+        //  console.log(response.data);
+          let res:any= response;
           if(localStorage.getItem("isAnon")){
-            let regUserId = response.data.Id;
+            let regUserId:any = res.data.Id;
             self.evt.getUserContext().then(usr=>{
               let item = JSON.parse(localStorage.getItem("myThng"));
 
