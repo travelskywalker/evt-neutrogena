@@ -103,10 +103,10 @@ export class SignUpPage {
           /* add _Activated action for anonymous user */
           if(localStorage.getItem("isAnon")){
             let regUserId = res.res.Id;
-            self.evt.getUserContext().then(usr=>{
+            self.evt.getUserContext().then(user=>{
               let item = JSON.parse(localStorage.getItem("myThng"));
 
-              usr.thng(item.id).read().then(thng=>{
+              user.thng(item.id).read().then(thng=>{
                 thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
               })
               .catch(err=>{
