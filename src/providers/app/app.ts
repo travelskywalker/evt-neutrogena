@@ -1,4 +1,4 @@
-import { Injectable,ViewChild } from '@angular/core';
+import { Injectable,ViewChild, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
@@ -76,7 +76,9 @@ export class AppProvider {
   	this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
 
   }
-
+  ngOnInit(){
+    alert('XXX');
+  }
   setDur(val:number){
   	this.activeDur = val;
   }
