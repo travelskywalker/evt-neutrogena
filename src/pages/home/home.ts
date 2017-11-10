@@ -39,6 +39,7 @@ export class HomePage {
   }
 
   ngOnInit(){
+    console.log("from home");
     // if noticeViewed is true, the cookie policy notification will no longer be displayed
     if(Cookie.get('cookie_notice') && Cookie.get('cookie_notice') == '1'){
       this.noticeViewed = true;
@@ -68,6 +69,16 @@ export class HomePage {
         createAnonymousUser: this.isNotLoggedIn
     }).then(res=>{
 
+      /* set user context for anonymous user */
+      if(this.isNotLoggedIn){
+        localStorage.isAnon = 'true';
+        localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
+        // console.log("set userContext");
+      }else{
+        localStorage.isAnon = 'true';
+      }
+
+
        load.data.enableBackdropDismiss = false;
       if(res.length === 0) {
         /* Scan failed. we should create a 'not recognized' action */
@@ -85,6 +96,7 @@ export class HomePage {
 
 
       }else if(typeof res[0].results[0].thng !== "undefined" && this.isNotLoggedIn){
+        console.log("anonymous user");
           /* Scanned QR code. It is a thng and anonymous user */
           let item = res[0].results[0].thng;
           let usr =  res[0].user;
@@ -104,7 +116,7 @@ export class HomePage {
           })
       } else if (typeof res[0].results[0].thng !== "undefined" && !this.isNotLoggedIn) {
         /* Scanned QR code. It is a thng */
-
+        console.log("thing activated by logged in user");
         let item = res[0].results[0].thng;
         self.evt.getUserContext().then(usr=>{
 
@@ -127,6 +139,7 @@ export class HomePage {
           console.log(err)
         })
       } else if (typeof res[0].results[0].product !== "undefined") {
+        console.log("image recognition");
         /* Scanned via image recognition. it is a product */
 
         let item = res[0].results[0].product;
@@ -157,8 +170,9 @@ export class HomePage {
                   /* Assign the newly created thng to the user */
                   usr.update({customFields:{myThng:th.id}}).then(console.log);
 
+                  /*create activated action if user is registered or signed in */
                   /* Create activated action */
-                  th.action("_Activated").create().then(console.log).catch(console.error);
+                  // th.action("_Activated").create().then(console.log).catch(console.error);
 
                   /* REDIRECT TO MAIN PAGE */
                   // self.navCtrl.setRoot(AuraMainPage);
@@ -196,6 +210,7 @@ export class HomePage {
     /*check if age gate*/
     if(this.app.isValidAge()) this.navCtrl.setRoot(AuraMainPage);
     else this.navCtrl.setRoot(AgeGatePage);
+
   }
 
 }
