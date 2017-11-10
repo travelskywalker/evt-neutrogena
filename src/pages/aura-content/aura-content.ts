@@ -119,7 +119,11 @@ export class AuraContentPage{
          let playBtn = fp.contentWindow.document.querySelector('div.audio.play');
          console.log(playBtn);
          playBtn.addEventListener('click',function(e){
-           self.controlButtons()
+           let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play')
+           if(ifStartPlay){
+             self.controlButtons();
+           }
+
          });
          auraWidget.removeEventListener('DOMSubtreeModified',handler,true);
        }
