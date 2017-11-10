@@ -9,7 +9,7 @@ import { Cookie } from 'ng2-cookies';
 import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';
 import { AgeGatePage } from '../age-gate/age-gate';
-
+import { AppProvider } from "../../providers/app/app";
 /*
  *  This is the scan page. Where scanning happens.
  *
@@ -26,7 +26,14 @@ export class HomePage {
   logos : any;
   noticeViewed : boolean;
   isNotLoggedIn: boolean = true;
-  constructor(public platform: Platform,public navCtrl: NavController, public evt: EvtProvider, private auth0: AuthService, private loader: LoadingController) {
+  constructor(
+    public platform: Platform,
+    public navCtrl: NavController,
+    public evt: EvtProvider,
+    public app: AppProvider,
+    private auth0: AuthService,
+    private loader: LoadingController
+  ) {
     this.auth0.setEVTInfo();
 
   }
@@ -181,6 +188,10 @@ export class HomePage {
         })
 
       } // END OF SCAN PROCESS
+
+      //save the thng to localStorage for later use
+      this.app.saveThngContext(res);
+
     }).catch(err=>{
       self.scanFailed = true;
       console.log('scan failed',err)
@@ -189,7 +200,7 @@ export class HomePage {
 
   gotoNexPage(data: data){
     /*check if age gate*/
-    if(Cookie.get('age_gate')) this.navCtrl.setRoot(AuraMainPage);
+    if(this.app.isValidAge()) this.navCtrl.setRoot(AuraMainPage);
     else this.navCtrl.setRoot(AgeGatePage);
 
     if(data.anonymous){
