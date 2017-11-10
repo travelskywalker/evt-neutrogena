@@ -144,6 +144,8 @@ export class AppProvider {
        */
       if (typeof result[0].results[0].thng !== "undefined"){
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
+      }else{
+        localStorage.setItem('myThng', JSON.stringify(result[0].results[0].product));
       }
     }
 

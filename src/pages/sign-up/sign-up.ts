@@ -108,7 +108,7 @@ export class SignUpPage {
             self.evt.getUserContext().then(usr=>{
               let item = JSON.parse(localStorage.getItem("myThng"));
 
-              usr.thng(item.id).read().then(thng=>{
+              user.thng(item.id).read().then(thng=>{
                 thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
               })
               .catch(err=>{

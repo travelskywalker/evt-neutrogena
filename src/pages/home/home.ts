@@ -185,7 +185,7 @@ export class HomePage {
                 // self.navCtrl.setRoot(AuraMainPage);
                 self.gotoNexPage();
                 let thngId = cf.myThng;
-
+                usr.update({customFields:{myThng:thngId}}).then(console.log);
               }else{
                 /* Create a thng */
                 let thng = {
@@ -200,7 +200,7 @@ export class HomePage {
 
                   /*create activated action if user is registered or signed in */
                   /* Create activated action */
-                  // th.action("_Activated").create().then(console.log).catch(console.error);
+                  if(!self.isNotLoggedIn) th.action("_Activated").create().then(console.log).catch(console.error);
 
                   /* REDIRECT TO MAIN PAGE */
                   // self.navCtrl.setRoot(AuraMainPage);
