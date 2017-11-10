@@ -58,7 +58,7 @@ export class AuthService {
         if(err){
           reject(err);
         }else{
-          resolve({msg:"Signup successfull",res:response});
+          resolve({msg:"Signup successfull",data: response});
         }
       })
     });

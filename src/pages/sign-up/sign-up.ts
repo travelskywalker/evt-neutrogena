@@ -101,19 +101,19 @@ export class SignUpPage {
         
 		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(response=>{
           /* add _Activated action for anonymous user */
-          // console.log(res);
+          console.log(response.data);
           if(localStorage.getItem("isAnon")){
-            let regUserId = response.res.Id;
-            // self.evt.getUserContext().then(usr=>{
-            //   let item = JSON.parse(localStorage.getItem("myThng"));
+            let regUserId = response.data.Id;
+            self.evt.getUserContext().then(usr=>{
+              let item = JSON.parse(localStorage.getItem("myThng"));
 
-            //   usr.thng(item.id).read().then(thng=>{
-            //     thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
-            //   })
-            //   .catch(err=>{
-            //     console.log(err,'thng error')
-            //   })
-            // })
+              usr.thng(item.id).read().then(thng=>{
+                thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
+              })
+              .catch(err=>{
+                console.log(err,'thng error')
+              })
+            })
           }
 
 		  		this.navCtrl.setRoot(LoginPage);
