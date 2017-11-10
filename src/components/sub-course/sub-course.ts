@@ -47,7 +47,12 @@ export class SubCourseComponent {
   	 * has been implemented, fetch user 	*
   	 * progress and then assign here 		*/
   	if(this.auth0.loggedIn){
-  		this.progress = Math.round(Math.random()*this.duration);
+      if (typeof this.appService.getCurrentLesson() !== 'undefined') {
+        this.progress = this.appService.getCurrentLesson();
+      } else {
+        this.progress = Math.round(Math.random()*this.duration);
+      }
+
   	}else{
   		this.progress = 0;
   	}
