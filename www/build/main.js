@@ -2356,6 +2356,7 @@ var AuraMainPage = (function () {
         this.arrDay = [];
         this.activeCourse = [{ desc: "", id: "", path: "", title: "", course: "" }];
         this.courseTitle = "Mindfulness";
+        this.courseTitle = this.app.getCurrentCourse();
     }
     AuraMainPage.prototype.ionViewDidLoad = function () {
     };
@@ -2397,6 +2398,7 @@ var AuraMainPage = (function () {
     * transfers the data from the sub-course to 	  *
     * the top area (slider of buttons).     	 	  */
     AuraMainPage.prototype.tryMe = function ($event) {
+        console.log("Event: " + JSON.stringify($event));
         this.day = $event.progress;
         this.courseTitle = $event.title;
         delete $event['progress'];
@@ -2417,19 +2419,20 @@ var AuraMainPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _a || Object)
 ], AuraMainPage.prototype, "slider", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _b || Object)
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-aura-main',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{day < app?.activeDur ? (day+1):day}} of {{app?.activeDur}}\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\':true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="day < app?.activeDur">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\':dy?.status}" (tap)="intoTheContent(true,day+1)">\n						<ion-icon name="play"></ion-icon>\n						Day {{day + 1}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			Start this course\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<p class="content" [ngClass]="{\'show\':expanded}">\n				{{app?.activeCourse[day+1]?.desc.trim().substring(0,300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.courses[crs]"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */], __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_app_script_service__["a" /* ScriptService */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _h || Object])
 ], AuraMainPage);
 
+var _a, _b, _c, _d, _e, _f, _g, _h;
 //# sourceMappingURL=aura-main.js.map
 
 /***/ }),
@@ -2479,8 +2482,10 @@ var AppProvider = (function () {
         this.progressArr = [];
         this.progressKeys = [];
         this.courses = [];
+        //total lessons / days in a course
         this.activeDur = 1;
         this.hasValidUserAge = false;
+        this.currentLesson = 1;
         this.playToggleMap = [];
         this.initCourses();
     }
@@ -2592,7 +2597,7 @@ var AppProvider = (function () {
             this.evt.createThngAction('_CourseStarted', {
                 "customFields": {
                     "currentCourse": courseData.course,
-                    "currentLesson": courseData.title,
+                    "currentLesson": courseData.day,
                     "currentLessonContentId": courseData.id
                 }
             });
@@ -2608,7 +2613,7 @@ var AppProvider = (function () {
                 _this.evt.createThngAction('_CourseCompleted', {
                     "customFields": {
                         "currentCourse": courseData.course,
-                        "currentLesson": courseData.title,
+                        "currentLesson": courseData.day,
                         "currentLessonContentId": courseData.id
                     }
                 });
@@ -2650,10 +2655,12 @@ var AppProvider = (function () {
         this.evt.createThngAction('_LessonStarted', {
             "customFields": {
                 "currentCourse": lessonData.course,
-                "currentLesson": lessonData.title,
+                "currentLesson": lessonData.day,
                 "currentLessonContentId": lessonData.id
             }
         });
+        this.setCurrentLesson(lessonData.day);
+        this.setCurrentCourse(lessonData.course);
     };
     AppProvider.prototype.startLessonTimer = function (lessonData) {
         var _this = this;
@@ -2682,32 +2689,50 @@ var AppProvider = (function () {
         this.evt.createThngAction('_LessonCompleted', {
             "customFields": {
                 "currentCourse": lessonData.course,
-                "currentLesson": lessonData.title,
+                "currentLesson": lessonData.day,
                 "currentLessonContentId": lessonData.id
             }
         });
         this.completeCourse(lessonData);
     };
     AppProvider.prototype.isLastLesson = function (course, lessonDay) {
-        var _this = this;
         /**
          * For a given course and day, is it the last one?
          */
+        var self = this;
         return this.toGroup().then(function (res) {
-            _this.courses = res;
-            console.log(res);
-            var courseLen = Object.keys(_this.courses[course]).length;
+            self.courses = res;
+            console.log(typeof res);
+            console.log(self.courses[course]);
+            var courseLen = Object.keys(self.courses[course]).length;
             return (courseLen <= lessonDay);
         });
+    };
+    AppProvider.prototype.setCurrentCourse = function (course) {
+        this.currentCourse = course;
+    };
+    AppProvider.prototype.getCurrentCourse = function () {
+        if (typeof this.currentCourse !== 'undefined') {
+            return this.currentCourse;
+        }
+        else {
+            return 'Mindfulness';
+        }
+    };
+    AppProvider.prototype.setCurrentLesson = function (day) {
+        this.currentLesson = day;
+    };
+    AppProvider.prototype.getCurrentLesson = function () {
+        return this.currentLesson;
     };
     return AppProvider;
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _b || Object])
 ], AppProvider);
 
+var _a, _b;
 //# sourceMappingURL=app.js.map
 
 /***/ }),
@@ -3707,7 +3732,12 @@ var SubCourseComponent = (function () {
          * has been implemented, fetch user 	*
          * progress and then assign here 		*/
         if (this.auth0.loggedIn) {
-            this.progress = Math.round(Math.random() * this.duration);
+            if (typeof this.appService.getCurrentLesson() !== 'undefined') {
+                this.progress = this.appService.getCurrentLesson();
+            }
+            else {
+                this.progress = Math.round(Math.random() * this.duration);
+            }
         }
         else {
             this.progress = 0;
@@ -3752,7 +3782,7 @@ __decorate([
 ], SubCourseComponent.prototype, "progress", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('prog'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
 ], SubCourseComponent.prototype, "prog", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["S" /* Output */])('begin'),
@@ -3766,9 +3796,10 @@ SubCourseComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'sub-course',template:/*ion-inline-start:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container">\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">(Duration) {{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProg()==0?"Begin":"Continue"}}</button>\n</div>\n'/*ion-inline-end:"/Users/lei/Documents/projects/dummyapp/evt-neutrogena/src/components/sub-course/sub-course.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _e || Object])
 ], SubCourseComponent);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=sub-course.js.map
 
 /***/ }),

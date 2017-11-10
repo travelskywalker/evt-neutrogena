@@ -19,10 +19,14 @@ export class AppProvider {
 	progressArr ?: Array<any> = [];
 	progressKeys ?: Array<any> = [];
 	courses ?: Array<any> = [];
+  //array of lessons in a course
 	activeCourse : any;
+  //total lessons / days in a course
 	activeDur : number = 1;
   hasValidUserAge : boolean = false;
   lessonTimer?: any;
+  currentCourse?: string;
+  currentLesson?: number = 1;
 
   playToggleMap?: Array<any> = [];
   constructor(
@@ -68,7 +72,6 @@ export class AppProvider {
   setActiveCourse(val){
   	this.activeCourse = val;
   	let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
-
   	this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
 
   }
@@ -159,7 +162,7 @@ export class AppProvider {
         {
           "customFields": {
             "currentCourse": courseData.course,
-            "currentLesson": courseData.title,
+            "currentLesson": courseData.day,
             "currentLessonContentId": courseData.id
           }
         }
@@ -178,7 +181,7 @@ export class AppProvider {
           {
             "customFields": {
               "currentCourse": courseData.course,
-              "currentLesson": courseData.title,
+              "currentLesson": courseData.day,
               "currentLessonContentId": courseData.id
             }
           }
@@ -223,12 +226,13 @@ export class AppProvider {
       {
         "customFields": {
           "currentCourse": lessonData.course,
-          "currentLesson": lessonData.title,
+          "currentLesson": lessonData.day,
           "currentLessonContentId": lessonData.id
         }
       }
     )
-
+    this.setCurrentLesson(lessonData.day);
+    this.setCurrentCourse(lessonData.course);
   }
 
   startLessonTimer(lessonData: any) {
@@ -262,7 +266,7 @@ export class AppProvider {
       {
         "customFields": {
           "currentCourse": lessonData.course,
-          "currentLesson": lessonData.title,
+          "currentLesson": lessonData.day,
           "currentLessonContentId": lessonData.id
         }
       }
@@ -274,14 +278,36 @@ export class AppProvider {
     /**
      * For a given course and day, is it the last one?
      */
+
+    let self = this;
     return this.toGroup().then(
       res=> {
-        this.courses = res;
-        console.log(res);
-        let courseLen = Object.keys(this.courses[course]).length;
+        self.courses = res;
+        console.log(typeof res);
+        console.log(self.courses[course]);
+        let courseLen = Object.keys(self.courses[course]).length;
         return (courseLen <= lessonDay);
       }
     );
   }
 
+  setCurrentCourse(course: string) {
+    this.currentCourse = course;
+  }
+
+  getCurrentCourse(): string {
+    if (typeof this.currentCourse !== 'undefined') {
+      return this.currentCourse;
+    } else {
+      return 'Mindfulness';
+    }
+  }
+
+  setCurrentLesson(day: number) {
+    this.currentLesson = day;
+  }
+
+  getCurrentLesson(): number {
+    return this.currentLesson;
+  }
 }

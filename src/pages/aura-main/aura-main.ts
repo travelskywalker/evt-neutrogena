@@ -30,6 +30,7 @@ export class AuraMainPage {
 	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
 	courseTitle?: string = "Mindfulness";
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private app:AppProvider) {
+    this.courseTitle = this.app.getCurrentCourse()
   }
 
   ionViewDidLoad() {
@@ -75,6 +76,7 @@ export class AuraMainPage {
  * transfers the data from the sub-course to 	  *
  * the top area (slider of buttons).     	 	  */
   tryMe($event){
+    console.log("Event: " + JSON.stringify($event));
   	this.day = $event.progress;
   	this.courseTitle = $event.title;
   	delete $event['progress'];
