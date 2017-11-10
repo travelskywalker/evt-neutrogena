@@ -1,5 +1,6 @@
 import { Component, Input, Renderer2, ElementRef, AfterViewInit } from '@angular/core';
-
+import { App } from 'ionic-angular';
+import { LoginPage } from '../../pages/login/login';
 
 /**
  * Generated class for the NoticeComponent component.
@@ -16,9 +17,11 @@ export class NoticeComponent {
 	@Input("title") title?: string = "";
 	@Input("class") class ?: any;
   @Input('show') show ?: boolean = false;
+  @Input('noLink') noLink ?: boolean = true;
+
   style: any;
 	//@ViewChild(this) content ?: NoticeComponent;
-  constructor(private render: Renderer2, public elem:ElementRef) {
+  constructor(public app: App,private render: Renderer2, public elem:ElementRef) {
   }
 
   ngOnInit(){
@@ -32,6 +35,11 @@ export class NoticeComponent {
 
   ngAfterViewInit(){
 
+  }
+  goToPage(){
+    let nav = this.app.getRootNav();
+    this.toggleView(false);
+    nav.setRoot(LoginPage);
   }
   toggleView(stat: boolean = !this.show){
     this.show = stat;

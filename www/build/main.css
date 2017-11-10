@@ -25717,7 +25717,7 @@ notice {
 }
 
 notice > section.body {
-  padding: 21px 15vw 24px;
+  padding: 11px 15vw 14px;
 }
 
 notice > section.body span.title {
@@ -25725,6 +25725,7 @@ notice > section.body span.title {
   display: block;
   clear: both;
   margin-bottom: 0;
+  padding: 10px 0;
 }
 
 notice > section.body a {
@@ -25741,7 +25742,8 @@ notice > section.body button[ion-button] {
   margin: 0;
   height: auto;
   position: absolute;
-  top: 13px;
+  top: 0;
+  bottom: 0;
   right: 11px;
   color: #fff;
 }

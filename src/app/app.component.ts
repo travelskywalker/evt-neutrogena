@@ -18,6 +18,8 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
   text?: string = "";
   show?: boolean = false;
+  noLink?: boolean = true;
+
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
@@ -45,6 +47,7 @@ export class MyApp {
       if(localStorage.getItem("isAnon")){
         this.show = true;
         this.text = 'Sign in to track your progress.';
+        this.noLink = true;
       }
     }
 
