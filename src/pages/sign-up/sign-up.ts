@@ -1,6 +1,7 @@
 import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
+import { EvtProvider} from '../../providers/evt/evt';
 
 import { LoginPage } from "../login/login";
 import { HomePage } from "../home/home";
@@ -31,7 +32,8 @@ export class SignUpPage {
   				private render: Renderer2, 
   				private auth0: AuthService, 
   				private formBuilder: FormBuilder,
-  				private loader : LoadingController) {
+  				private loader : LoadingController,
+          private evt: EvtProvider) {
   	this.formGroup = this.formBuilder.group({
   		firstName: ['', Validators.required],
   		lastName: ['', Validators.required],
@@ -94,9 +96,27 @@ export class SignUpPage {
   			console.log(usr,found);
   			self.emailTaken = true;
   		}else{
-		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(res=>{
+
+
+        
+		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(response=>{
+          /* add _Activated action for anonymous user */
+          // console.log(res);
+          if(localStorage.getItem("isAnon")){
+            let regUserId = response.res.Id;
+            // self.evt.getUserContext().then(usr=>{
+            //   let item = JSON.parse(localStorage.getItem("myThng"));
+
+            //   usr.thng(item.id).read().then(thng=>{
+            //     thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
+            //   })
+            //   .catch(err=>{
+            //     console.log(err,'thng error')
+            //   })
+            // })
+          }
+
 		  		this.navCtrl.setRoot(LoginPage);
-		  		console.log(res)
 		  	})
 		  	.catch(err=>{
 		  		console.log(err);

@@ -52,6 +52,32 @@ export class HomePage {
     this.mobileVersion = this.platform.is('mobile');
   }
 
+  anonymousDataModel(data){
+    let obj = {
+      "sub": "anonymous",
+      "given_name": "Demo",
+      "family_name": "Engmntprty",
+      "nickname": "demo",
+      "name": "Demo Engmntprty",
+      "picture": "https://scontent.xx.fbcdn.net/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?oh=24b240ba2dc60ad31b4319fbab9bb9e2&oe=5A9CD62F",
+      "gender": "male",
+      "locale": "en-US",
+      "updated_at": "2017-11-10T08:52:57.635Z",
+      "email": "demo@engmntprty.com",
+      "email_verified": false,
+      "user_metadata": {
+        "evrythngUserData": {
+          "evrythngUser": data.id,
+          "status": "anonymous",
+          "email": data.email,
+          "evrythngApiKey": data.apiKey,
+          "socialNetwork": "evrythng"
+        }
+      }
+    }
+    return obj;
+  }
+
   scan(){
     let self = this;
     let load = this.loader.create({
@@ -68,14 +94,16 @@ export class HomePage {
     this.evt.scan({
         createAnonymousUser: this.isNotLoggedIn
     }).then(res=>{
-
+      console.log(res);
       /* set user context for anonymous user */
       if(this.isNotLoggedIn){
+
+        // set anonymous info in localstorage
         localStorage.isAnon = 'true';
+        localStorage.userInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
         localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
-        // console.log("set userContext");
       }else{
-        localStorage.isAnon = 'true';
+        localStorage.isAnon = 'false';
       }
 
 
