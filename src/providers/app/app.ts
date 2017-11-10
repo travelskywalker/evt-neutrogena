@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { aura } from "../../assets/aura/config/aura.config";
 import { EvtProvider } from "../../providers/evt/evt";
+import { Observable } from 'rxjs';
 
 /*
  *	Generated class for the AppProvider provider.
@@ -21,14 +22,15 @@ export class AppProvider {
 	activeCourse : any;
 	activeDur : number = 1;
   hasValidUserAge : boolean = false;
+  lessonTimer?: any;
 
   playToggleMap?: Array<any> = [];
   constructor(
     public http: Http,
     public evt: EvtProvider
   ) {
-    console.log(aura);
     this.initCourses();
+
   }
 
   /* GET the aura variable containing the content details, path..etc. */
@@ -170,17 +172,19 @@ export class AppProvider {
     /**
      * App helper function to complete a course
      */
-    if (courseData.day === 10) {
-      this.evt.createThngAction('_CourseCompleted',
-        {
-          "customFields": {
-            "currentCourse": courseData.course,
-            "currentLesson": courseData.title,
-            "currentLessonContentId": courseData.id
+    this.isLastLesson(courseData.course, courseData.day).then(isLastLesson => {
+      if (isLastLesson) {
+        this.evt.createThngAction('_CourseCompleted',
+          {
+            "customFields": {
+              "currentCourse": courseData.course,
+              "currentLesson": courseData.title,
+              "currentLessonContentId": courseData.id
+            }
           }
-        }
-      )
-    }
+        )
+      }
+    })
   }
 
   playLesson(lessonData: any) {
@@ -205,6 +209,9 @@ export class AppProvider {
     if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       this.evt.createThngAction('_Play');
       this.startLesson(lessonData);
+      this.startLessonTimer(lessonData);
+    } else {
+      this.stopLessonTimer(lessonData);
     }
   }
 
@@ -224,11 +231,34 @@ export class AppProvider {
 
   }
 
+  startLessonTimer(lessonData: any) {
+    let timer = Observable.timer(1000, 1000);
+    let alive: boolean = true;
+    this.lessonTimer =
+      timer
+      .takeWhile(() => alive)
+      .subscribe((val) => {
+
+        //if (val >= (val * 60 * 10)) { //Todo: put this in config
+        if (val % 10 === 0) { //Todo: put this in config
+          //if 10 mins, trigger a _LessonCompleted action
+          this.completeLesson(lessonData);
+        }
+      })
+
+  }
+
+  stopLessonTimer(lessonData: any) {
+    if (typeof this.lessonTimer !== 'undefined') {
+      this.lessonTimer.unsubscribe();
+    }
+  }
+
   completeLesson(lessonData: any) {
     /**
      * App helper to put Lesson completed data to EVT
      */
-    this.evt.createThngAction('_LessonStarted',
+    this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
           "currentCourse": lessonData.course,
@@ -237,7 +267,21 @@ export class AppProvider {
         }
       }
     )
+    this.completeCourse(lessonData);
+  }
 
+  isLastLesson(course, lessonDay): Promise<any> {
+    /**
+     * For a given course and day, is it the last one?
+     */
+    return this.toGroup().then(
+      res=> {
+        this.courses = res;
+        console.log(res);
+        let courseLen = Object.keys(this.courses[course]).length;
+        return (courseLen <= lessonDay);
+      }
+    );
   }
 
 }
