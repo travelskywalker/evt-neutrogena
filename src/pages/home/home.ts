@@ -182,6 +182,10 @@ export class HomePage {
         })
 
       } // END OF SCAN PROCESS
+
+      //save the thng to localStorage for later use
+      this.app.saveThngContext(res);
+
     }).catch(err=>{
       self.scanFailed = true;
       console.log('scan failed',err)

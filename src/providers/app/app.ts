@@ -108,5 +108,25 @@ export class AppProvider {
   }
 
 
+  saveThngContext(result: JSON) {
+    /**
+     * Save the THNG scanned or created via IR scan to localStorage for later use
+     */
+    if (this.getThngContext() === null) {
+      /**
+       * Ignore other THNGs if there's already one in localStorage
+       */
+      if (typeof result[0].results[0].thng !== "undefined"){
+        localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
+      }
+    }
 
+  }
+
+  getThngContext() {
+    /**
+     * get the THNG from the localStorage
+     */
+    return localStorage.getItem('myThng');
+  }
 }

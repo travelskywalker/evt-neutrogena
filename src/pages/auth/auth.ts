@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from "../home/home";
+import { AuraMainPage } from "../aura-main/aura-main";
 import { LoginPage } from "../login/login";
 
 import { AuthService } from "../../providers/auth/auth.service";
+import { AppProvider } from "../../providers/app/app";
 /**
  * This is the catch-all page. All paths are checked here first.
  * The access_token and id_token variables are stored in localstorage
@@ -18,7 +20,11 @@ import { AuthService } from "../../providers/auth/auth.service";
 })
 export class AuthPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth0 : AuthService) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public app: AppProvider,
+    private auth0 : AuthService) {
   }
 
   ionViewDidLoad() {
@@ -30,13 +36,24 @@ export class AuthPage {
     } else {
     	let authData = this.URLToArray(data);
     	//console.log(authData);
-		this.auth0.result(authData).then(res=>{
-			console.log(res);
-			this.navCtrl.setRoot(HomePage);
-		}).catch(err=>{
-			console.log(err);
-			//GO TO ERROR PAGE
-		})
+      this.auth0.result(authData).then(res=>{
+        console.log(res);
+        if (this.app.getThngContext()) {
+          /**
+           * has THNG in localStorage
+           */
+          this.navCtrl.setRoot(AuraMainPage);
+        } else {
+          /**
+           * Lead User to re-scan
+           */
+          this.navCtrl.setRoot(HomePage);
+        }
+
+      }).catch(err=>{
+        console.log(err);
+        //GO TO ERROR PAGE
+      })
     }
   }
 
