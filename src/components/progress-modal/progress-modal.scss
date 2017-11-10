@@ -73,6 +73,7 @@ progress-modal {
 			height: 50px;
 			background-image:url('../assets/images/signup_btn.png');
 			background-size:contain;
+      background-repeat: no-repeat;
 			color:#fff;
 			text-transform: uppercase;
 			font-family: 'HelveticaNeue-Light';
@@ -90,5 +91,5 @@ page-aura-content{
 	ion-content{
 		div.scroll-content{
 		}
-	}	
+	}
 }

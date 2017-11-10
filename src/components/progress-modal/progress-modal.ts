@@ -36,7 +36,7 @@ export class ProgressModalComponent {
   	if(!this.show){
   		this.render.setStyle(this.elem.nativeElement,"display","none");
   	}else{
-  		this.render.setStyle(this.elem.nativeElement,"display","none");
+  		this.render.setStyle(this.elem.nativeElement,"display","block");
   	}
   }
 

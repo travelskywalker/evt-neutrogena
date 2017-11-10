@@ -1410,6 +1410,8 @@ var aura = [
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs__ = __webpack_require__(379);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1419,6 +1421,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1510,11 +1513,10 @@ var AuraContentPage = (function () {
             var elementDetected = 0;
             var handler = function (e) {
                 var playBtn = fp.contentWindow.document.querySelector('div.audio.play');
-                console.log(playBtn);
                 playBtn.addEventListener('click', function (e) {
                     var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
                     if (ifStartPlay) {
-                        self.controlButtons();
+                        self.controlButtons(playBtn);
                     }
                 });
                 auraWidget.removeEventListener('DOMSubtreeModified', handler, true);
@@ -1522,8 +1524,26 @@ var AuraContentPage = (function () {
             auraWidget.addEventListener('DOMSubtreeModified', handler, true);
         };
     };
-    AuraContentPage.prototype.controlButtons = function () {
+    AuraContentPage.prototype.controlButtons = function (element) {
         this.app.playLesson(this.module);
+        this.startLessonTimer(element);
+    };
+    AuraContentPage.prototype.startLessonTimer = function (element) {
+        var _this = this;
+        var timer = __WEBPACK_IMPORTED_MODULE_8_rxjs__["Observable"].timer(1000, 1000);
+        var alive = true;
+        this.lessonTimer =
+            timer
+                .takeWhile(function () { return alive; })
+                .subscribe(function (val) {
+                //if (val >= (val * 60 * 10)) { //Todo: put this in config
+                if (val == (_this.app.lessonTimeLimit)) {
+                    //if 10 mins, trigger a _LessonCompleted action
+                    _this.pmc.toggleView(true);
+                    element.click();
+                    _this.lessonTimer.unsubscribe();
+                }
+            });
     };
     /* If page leave is triggered before audio finishes playing, *
      * make sure to pause/stop all aura audio					 */
@@ -1553,30 +1573,24 @@ var AuraContentPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('aura'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
 ], AuraContentPage.prototype, "auraComponent", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]) === "function" && _b || Object)
 ], AuraContentPage.prototype, "content", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */])
+    __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]) === "function" && _c || Object)
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-aura-content',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
-        __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
+    __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]) === "function" && _l || Object])
 ], AuraContentPage);
 
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 //# sourceMappingURL=aura-content.js.map
 
 /***/ }),
@@ -1630,7 +1644,7 @@ var ProgressModalComponent = (function () {
             this.render.setStyle(this.elem.nativeElement, "display", "none");
         }
         else {
-            this.render.setStyle(this.elem.nativeElement, "display", "none");
+            this.render.setStyle(this.elem.nativeElement, "display", "block");
         }
     };
     return ProgressModalComponent;
@@ -1651,9 +1665,10 @@ ProgressModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'progress-modal',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome()">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _c || Object])
 ], ProgressModalComponent);
 
+var _a, _b, _c;
 //# sourceMappingURL=progress-modal.js.map
 
 /***/ }),
@@ -2453,6 +2468,7 @@ var AppProvider = (function () {
         this.courses = [];
         this.activeDur = 1;
         this.hasValidUserAge = false;
+        this.lessonTimeLimit = 10; //seconds
         this.playToggleMap = [];
         this.initCourses();
     }
@@ -2635,10 +2651,11 @@ var AppProvider = (function () {
             timer
                 .takeWhile(function () { return alive; })
                 .subscribe(function (val) {
-                //if (val >= (val * 60 * 10)) { //Todo: put this in config
-                if (val % 10 === 0) {
+                if (val == (_this.lessonTimeLimit)) {
+                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
                     //if 10 mins, trigger a _LessonCompleted action
                     _this.completeLesson(lessonData);
+                    _this.lessonTimer.unsubscribe();
                 }
             });
     };
@@ -2676,10 +2693,10 @@ var AppProvider = (function () {
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _b || Object])
 ], AppProvider);
 
+var _a, _b;
 //# sourceMappingURL=app.js.map
 
 /***/ }),

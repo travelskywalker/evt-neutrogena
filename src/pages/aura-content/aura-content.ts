@@ -10,7 +10,7 @@ import { AppProvider } from "../../providers/app/app"
 
 import { AuraMainPage } from "../aura-main/aura-main";
 import { ProgressModalComponent } from "../../components/progress-modal/progress-modal";
-
+import { Observable } from 'rxjs';
 /**
  * Generated class for the AuraContentPage page.
  *
@@ -28,6 +28,7 @@ export class AuraContentPage{
 	@ViewChild('aura') auraComponent : ElementRef;
 	@ViewChild(Content) content: Content;
 	auraLoc = aura;
+  lessonTimer?: any;
 	module :{title?:string,description?:string,link?:any,id?:any,course?:any, day?:any} = {
 			title:"Morning Meditations",
 			description:`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips`,
@@ -37,7 +38,7 @@ export class AuraContentPage{
 	auraRef : any;
 	auraSelect: any;
 	@ViewChild(ProgressModalComponent) pmc : ProgressModalComponent;
-
+  message:any;
   constructor(private elRef:ElementRef,
               public navCtrl: NavController,
               public navParams: NavParams,
@@ -90,13 +91,13 @@ export class AuraContentPage{
     //   document.getElementsByTagName('page-aura-content')[0].appendChild(node);
     // }
     document.getElementsByTagName('page-aura-content')[0].appendChild(node);
+
  }
 
   ngAfterViewInit(){
+    let self = this;
+    self.pmc.toggleView(false);
 
-
-  	let self = this;
-  	self.pmc.toggleView(false);
     // this.loadScript('../assets/scripts/widget.js',this.module.id);
   	/* check if iframe has loaded */
   	document.getElementById("aura-widget-div").onload = function(e){
@@ -117,11 +118,11 @@ export class AuraContentPage{
        let handler = function(e){
 
          let playBtn = fp.contentWindow.document.querySelector('div.audio.play');
-         console.log(playBtn);
+
          playBtn.addEventListener('click',function(e){
            let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play')
            if(ifStartPlay){
-             self.controlButtons();
+             self.controlButtons(playBtn);
            }
 
          });
@@ -134,8 +135,27 @@ export class AuraContentPage{
 
   }
 
-  controlButtons(){
+  controlButtons(element){
     this.app.playLesson(this.module);
+    this.startLessonTimer(element);
+  }
+  startLessonTimer(element) {
+    let timer = Observable.timer(1000, 1000);
+    let alive: boolean = true;
+    this.lessonTimer =
+      timer
+      .takeWhile(() => alive)
+      .subscribe((val) => {
+
+        //if (val >= (val * 60 * 10)) { //Todo: put this in config
+        if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
+          //if 10 mins, trigger a _LessonCompleted action
+        	this.pmc.toggleView(true);
+          element.click();
+            this.lessonTimer.unsubscribe();
+        }
+      })
+
   }
 
   /* If page leave is triggered before audio finishes playing, *

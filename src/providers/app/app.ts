@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
@@ -23,7 +23,7 @@ export class AppProvider {
 	activeDur : number = 1;
   hasValidUserAge : boolean = false;
   lessonTimer?: any;
-
+  lessonTimeLimit?:any = 10;//seconds
   playToggleMap?: Array<any> = [];
   constructor(
     public http: Http,
@@ -191,6 +191,7 @@ export class AppProvider {
     /**
      * single-point entry for handling play button actions for AURA content
      */
+
     if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
       this.playToggleMap[lessonData.course] = {}
     }
@@ -239,10 +240,12 @@ export class AppProvider {
       .takeWhile(() => alive)
       .subscribe((val) => {
 
-        //if (val >= (val * 60 * 10)) { //Todo: put this in config
-        if (val % 10 === 0) { //Todo: put this in config
+        if (val == (this.lessonTimeLimit)) { //Todo: put this in config
+        // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
           this.completeLesson(lessonData);
+          this.lessonTimer.unsubscribe();
+
         }
       })
 
