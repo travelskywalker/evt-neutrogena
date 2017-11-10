@@ -15,15 +15,13 @@ export class NoticeComponent {
 
 	@Input("title") title?: string = "";
 	@Input("class") class ?: any;
+  @Input('show') show ?: boolean = false;
   style: any;
 	//@ViewChild(this) content ?: NoticeComponent;
-  constructor(private render: Renderer2, public element:ElementRef) {
+  constructor(private render: Renderer2, public elem:ElementRef) {
   }
 
   ngOnInit(){
-  }
-
-  ngAfterViewInit(){
     if(this.class == "pink"){
       this.style = {'color':'#fff','font-size':'15px','line-height':'20px','background-color':'rgb(240,115,172)','text-align':'center'};
     }
@@ -32,9 +30,22 @@ export class NoticeComponent {
     }
   }
 
+  ngAfterViewInit(){
+
+  }
+  toggleView(stat: boolean = !this.show){
+    this.show = stat;
+
+    if(!this.show){
+      this.render.setStyle(this.elem.nativeElement,"display","none");
+    }else{
+      this.render.setStyle(this.elem.nativeElement,"display","block");
+    }
+  }
+
   destroy(){
-  	console.log(this.element.nativeElement);
-  	this.render.setStyle(this.element.nativeElement,"display","none");
+  	console.log(this.elem.nativeElement);
+  	this.render.setStyle(this.elem.nativeElement,"display","none");
   	//this.content.setElementStyle("display","none");
   }
 

@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 
+import { NoticeComponent } from "../components/notice/notice";
 
 @Component({
   templateUrl: 'app.html'
@@ -15,7 +16,7 @@ export class MyApp {
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;
-  text?: string = "Don't forget to track your progress with a photo.";
+  text?: string = "";
   show?: boolean = false;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
@@ -28,7 +29,27 @@ export class MyApp {
 
     //this.evt.init();
   }
+  ngAfterViewInit(){
 
+    this.nav.viewDidEnter.subscribe((data) => {
+
+
+        if((data.component.name == 'AuraMainPage')||(data.component.name == 'AuraContentPage')){
+          this.noticePopUp();
+        }
+     });
+  }
+
+  noticePopUp(){
+    if(typeof localStorage.getItem("isAnon") !== 'undefined'){
+      if(localStorage.getItem("isAnon")){
+        this.show = true;
+        this.text = 'Sign in to track your progress.';
+      }
+    }
+
+
+  }
   initializeApp() {
     let self = this;
     this.platform.ready().then(() => {

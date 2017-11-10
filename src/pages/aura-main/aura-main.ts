@@ -5,7 +5,6 @@ import { ScriptService } from "../../providers/app/script.service";
 import { AppProvider } from "../../providers/app/app";
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
-
 /**
  * Generated class for the AuraMainPage page.
  *
@@ -26,6 +25,9 @@ export class AuraMainPage {
 	day ?: number = 0;
 	dur ?: number = 10;
 	arrDay ?: any = [];
+  noticeTitle?:string;
+  noticeClass?:string = 'pink';
+  loggedIn: boolean;
 	courses ?: any;
 	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
 	courseTitle?: string = "Mindfulness";
@@ -34,6 +36,7 @@ export class AuraMainPage {
   }
 
   ionViewDidLoad() {
+
   }
 
   /* Add buttons depending on number of days *
@@ -63,6 +66,7 @@ export class AuraMainPage {
 
   ngAfterViewInit(){
     this.popDays();
+
   }
 
   ngOnInit(){
