@@ -69,7 +69,15 @@ export class HomePage {
         createAnonymousUser: this.isNotLoggedIn
     }).then(res=>{
 
-      console.log(res);
+      /* set user context for anonymous user */
+      if(this.isNotLoggedIn){
+        localStorage.isAnon = 'true';
+        localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
+        // console.log("set userContext");
+      }else{
+        localStorage.isAnon = 'true';
+      }
+
 
        load.data.enableBackdropDismiss = false;
       if(res.length === 0) {
@@ -100,7 +108,7 @@ export class HomePage {
             usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
             // self.navCtrl.setRoot(AuraMainPage);
-            self.gotoNexPage({anonymous: true, id: usr.id});
+            self.gotoNexPage();
           })
           .catch(err=>{
               self.scanFailed = true;
@@ -198,18 +206,11 @@ export class HomePage {
     });
   }
 
-  gotoNexPage(data: data){
+  gotoNexPage(){
     /*check if age gate*/
     if(this.app.isValidAge()) this.navCtrl.setRoot(AuraMainPage);
     else this.navCtrl.setRoot(AgeGatePage);
 
-    if(data.anonymous){
-      localStorage.isAnon = true;
-      localStorage.anonUserId = data.id;
-    }else{
-      localStorage.delete("isAnon");
-      localStorage.delete("anonUserId");
-    }
   }
 
 }
