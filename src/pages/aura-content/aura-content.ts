@@ -6,6 +6,7 @@ import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 import { aura } from "../../assets/aura/config/aura.config";
 
 import { ScriptService } from "../../providers/app/script.service";
+import { EvtProvider } from "../../providers/evt/evt"
 
 import { AuraMainPage } from "../aura-main/aura-main";
 import { ProgressModalComponent } from "../../components/progress-modal/progress-modal";
@@ -27,7 +28,7 @@ export class AuraContentPage{
 	@ViewChild('aura') auraComponent : ElementRef;
 	@ViewChild(Content) content: Content;
 	auraLoc = aura;
-	module :{title?:string,description?:string,link?:any,id?:any} = {
+	module :{title?:string,description?:string,link?:any,id?:any,course?:any, courseInd?:any} = {
 			title:"Morning Meditations",
 			description:`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips`,
       id:'h1',
@@ -37,7 +38,14 @@ export class AuraContentPage{
 	auraSelect: any;
 	@ViewChild(ProgressModalComponent) pmc : ProgressModalComponent;
 
-  constructor(private elRef:ElementRef,public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private sanitizer: DomSanitizer) {
+  constructor(private elRef:ElementRef,
+              public navCtrl: NavController,
+              public navParams: NavParams,
+              public evt: EvtProvider,
+              private render: Renderer2,
+              private viewCtrl : ViewController,
+              private scr : ScriptService,
+              private sanitizer: DomSanitizer) {
 
   	let data = this.navParams.get('data');
 
@@ -47,9 +55,12 @@ export class AuraContentPage{
   		this.navCtrl.setRoot(AuraMainPage);
   	}else{
   		/* set the content details */
+      console.log(data);
 	  	this.module.title = data.title;
 	  	this.module.description = data.desc;
       this.module.id = data.id;
+      this.module.course = data.course;
+      this.module.courseInd = data.courseInd;
 	  	this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));
   	}
 
@@ -57,15 +68,15 @@ export class AuraContentPage{
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AuraContentPage');
-    // document.getElementById("my-element").remove();
-    // let X = document.getElementById('aura-widget');
-    //
-    // this.RemoveJsCss("//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js", "js");
-    // this.RemoveJsCss("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "js");
-    // this.RemoveJsCss("https://www.gstatic.com/firebasejs/4.4.0/firebase.js", "js");
-    // this.RemoveJsCss("https://fonts.googleapis.com/css?family=Lato:300,400,700", "css");
-    // this.RemoveJsCss("http://app.aurahealth.io/static/style.css", "css");
-    // this.RemoveJsCss("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "css");
+    this.evt.createThngAction('_courseStarted',
+      {
+        "customFields": {
+          "currentCourse": this.module.course,
+          "currentLesson": this.module.title,
+          "currentLessonContentId": this.module.id
+        }
+      }
+    )
   }
 
   loadScript(url,contentId) {
@@ -116,50 +127,11 @@ export class AuraContentPage{
          let playBtn = fp.contentWindow.document.querySelector('div.audio.play');
          console.log(playBtn);
          playBtn.addEventListener('click',function(e){
-           console.log("PUTA");
+           self.controlButtons()
          });
          auraWidget.removeEventListener('DOMSubtreeModified',handler,true);
        }
        auraWidget.addEventListener('DOMSubtreeModified',handler,true);
-
-
-
-      //  auraWidget.addEventListener('DOMSubtreeModified', function(e){
-   	// 		// add event listener here
-      //
-      //   let playBtn = fp.contentWindow.document.querySelector('div.audio.play');
-      //   console.log(playBtn);
-      //   // playBtn.addEventListener('click',function(e){
-      //   //   console.log('play');
-      //   //   fp.contentWindow.document.getElementById('aura-widget-div').removeEventListener("DOMNodeInserted",function(e){
-      //   //
-      //   //
-      //   //
-      //   //   })
-      //   // });
-      //
-      //
-   	// 	});
-
-       //ray code
-  		// fp.contentWindow.addEventListener('DOMContentLoaded', function(e){
-  		// 	// add event listener here
-      //
-  		// })
-
-
-  		/* Append scripts from adobe to the iframe. Uncomment once okay *
-  		let scr1 = document.createElement("script");
-  		let scr2 = document.createElement("script");
-  		scr1.setAttribute("src","//assets.adobedtm.com/bf12630c02a44df137a783f39cdb4dbd09e2b5d7/satelliteLib-a77040281e8ad94d1a2e4c30d4df757c9e6fed98.js");
-  		scr1.setAttribute("type","text/javascript");
-  		scr2.setAttribute("type","text/javascript");
-
-  		scr2.innerText = "_satellite.pageBottom();";
-
-  		hed.appendChild(scr1);
-  		frm.appendChild(scr2);
-  		*/
 
   	}
 

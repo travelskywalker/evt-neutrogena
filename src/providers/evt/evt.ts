@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Config } from '../../config/environment.dev';
 
-// import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 declare var EVT : any;
 
 /*
@@ -17,8 +17,8 @@ export class EvtProvider {
 
  evtapp : any;
 
-  constructor(public http: Http
-    // private auth0: AuthService
+  constructor(public http: Http,
+              private auth: AuthService
   ) {
     console.log('Hello EvtProvider Provider',Config.evt_app);
     this.init();
@@ -36,6 +36,12 @@ export class EvtProvider {
   	this.getUserContext().then(usr=>{
   		usr.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
   	})
+  }
+
+  createThngAction(actionType:string='',action:any = {}){
+    this.getThngContext().then(thng=>{
+      thng.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
+    })
   }
 
   init(){
@@ -71,6 +77,33 @@ export class EvtProvider {
         	)
   		})
   	);
+  }
+
+  getUser() {
+    /**
+     * Return EVT user instance object (Not a promise)
+     * @type {any}
+     */
+
+    let userContext = this.auth.getUserDetailsFromStorage();
+    if (typeof userContext != 'undefined') {
+      return new EVT.User({
+        id: userContext.user_metadata.evrythngUserData.evrythngUser,
+        apiKey: userContext.user_metadata.evrythngUserData.evrythngApiKey
+      }, this.evtapp)
+    }
+  }
+
+  getThngContext():Promise<any> {
+    /**
+     * Return Thng context as promise
+     *
+     * @type {any}
+     */
+    let myThng = JSON.parse(localStorage.myThng);
+    if (typeof myThng !== 'undefined') {
+      return this.getUser().thng(myThng.id).read()
+    }
   }
 
   /* EVT Scan */

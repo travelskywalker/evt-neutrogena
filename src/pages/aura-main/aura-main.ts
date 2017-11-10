@@ -27,7 +27,7 @@ export class AuraMainPage {
 	dur ?: number = 10;
 	arrDay ?: any = [];
 	courses ?: any;
-	activeCourse ?: [{desc:string,id:string,path:string,title:string}] = [{desc:"",id:"",path:"",title:""}];
+	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
 	courseTitle?: string = "Mindfulness";
   constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private app:AppProvider) {
   }
@@ -87,7 +87,9 @@ export class AuraMainPage {
   /* Go to the aura content */
   intoTheContent(stat,ind:number = 1){
   	//console.log(this.activeCourse[ind]);
-  	this.navCtrl.setRoot(AuraContentPage,{data:this.app.activeCourse[ind]});
+    let courseData = this.app.activeCourse[ind];
+    courseData["courseInd"] = ind;
+  	this.navCtrl.setRoot(AuraContentPage,{data:courseData});
   }
 
 }

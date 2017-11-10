@@ -28,14 +28,26 @@ export class AppProvider {
   /* GET the aura variable containing the content details, path..etc. */
   toGroup():Promise<any>{
   	let mast = [];
-	let promises = aura.map(ar=>{
+	  let promises = aura.map(ar=>{
 			let crs = ar.Course.trim();
 			if(mast.hasOwnProperty(crs)){
-				mast[crs][ar.Day]= {id:ar.ID,title:ar.Title,path:ar.path,desc:ar.Description};
+				mast[crs][ar.Day]= {
+          id:ar.ID,
+          title:ar.Title,
+          path:ar.path,
+          desc:ar.Description,
+          course: ar.Course
+        };
 			}
 			else{
 				mast[crs] = {};
-				mast[crs][ar.Day] = {id:ar.ID,title:ar.Title,path:ar.path,desc:ar.Description};
+				mast[crs][ar.Day] = {
+          id:ar.ID,
+          title:ar.Title,
+          path:ar.path,
+          desc:ar.Description,
+          course: ar.Course
+        };
 			}
 	  	})
 
