@@ -99,13 +99,9 @@ export class HomePage {
       if(this.isNotLoggedIn){
 
         // set anonymous info in localstorage
+        localStorage.isAnon = 'true';
         localStorage.userInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
-
-        let user = this.auth0.getUserDetailsFromStorage();
-        console.log(user);
-        // localStorage.isAnon = 'true';
-        // localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
-        // console.log("set userContext");
+        localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
       }else{
         localStorage.isAnon = 'false';
       }

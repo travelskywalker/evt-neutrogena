@@ -54,11 +54,11 @@ export class AuthService {
           firstName: fName,
           lastName: lName
         }
-      }, function(err){
+      }, function(err,response){
         if(err){
           reject(err);
         }else{
-          resolve({msg:"Signup successfull"});
+          resolve({msg:"Signup successfull",res:response});
         }
       })
     });
@@ -114,6 +114,7 @@ export class AuthService {
 
           /* Successful auth */
           if (user) {
+            console.log("auth result is ", authResult);
             console.log(user);
             localStorage.setItem('userInfo',JSON.stringify(user));
             self.userInfo = user;
