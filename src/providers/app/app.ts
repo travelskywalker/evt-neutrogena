@@ -4,6 +4,7 @@ import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
 
 import { aura } from "../../assets/aura/config/aura.config";
+import { EvtProvider } from "../../providers/evt/evt";
 
 /*
  *	Generated class for the AppProvider provider.
@@ -20,7 +21,12 @@ export class AppProvider {
 	activeCourse : any;
 	activeDur : number = 1;
   hasValidUserAge : boolean = false;
-  constructor(public http: Http) {
+
+  playToggleMap?: Array<any> = [];
+  constructor(
+    public http: Http,
+    public evt: EvtProvider
+  ) {
     console.log(aura);
     this.initCourses();
   }
@@ -141,4 +147,97 @@ export class AppProvider {
      */
     return localStorage.getItem('myThng');
   }
+
+  startCourse(courseData: any) {
+    /**
+     * App helper function to start a course
+     */
+    if (courseData.day === 1) {
+      this.evt.createThngAction('_CourseStarted',
+        {
+          "customFields": {
+            "currentCourse": courseData.course,
+            "currentLesson": courseData.title,
+            "currentLessonContentId": courseData.id
+          }
+        }
+      )
+    }
+
+  }
+
+  completeCourse(courseData: any) {
+    /**
+     * App helper function to complete a course
+     */
+    if (courseData.day === 10) {
+      this.evt.createThngAction('_CourseCompleted',
+        {
+          "customFields": {
+            "currentCourse": courseData.course,
+            "currentLesson": courseData.title,
+            "currentLessonContentId": courseData.id
+          }
+        }
+      )
+    }
+  }
+
+  playLesson(lessonData: any) {
+    /**
+     * single-point entry for handling play button actions for AURA content
+     */
+    if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
+      this.playToggleMap[lessonData.course] = {}
+    }
+
+    if ( typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined' ) {
+      //playing
+      this.playToggleMap[lessonData.course][lessonData.id] = 1
+    } else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+      //stopped
+      this.playToggleMap[lessonData.course][lessonData.id] = 0
+    } else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
+      //playing
+      this.playToggleMap[lessonData.course][lessonData.id] = 1
+    }
+
+    if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+      this.evt.createThngAction('_Play');
+      this.startLesson(lessonData);
+    }
+  }
+
+  startLesson(lessonData: any) {
+    /**
+     * App helper to put Lesson started data to EVT
+     */
+    this.evt.createThngAction('_LessonStarted',
+      {
+        "customFields": {
+          "currentCourse": lessonData.course,
+          "currentLesson": lessonData.title,
+          "currentLessonContentId": lessonData.id
+        }
+      }
+    )
+
+  }
+
+  completeLesson(lessonData: any) {
+    /**
+     * App helper to put Lesson completed data to EVT
+     */
+    this.evt.createThngAction('_LessonStarted',
+      {
+        "customFields": {
+          "currentCourse": lessonData.course,
+          "currentLesson": lessonData.title,
+          "currentLessonContentId": lessonData.id
+        }
+      }
+    )
+
+  }
+
 }

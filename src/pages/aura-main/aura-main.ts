@@ -88,7 +88,7 @@ export class AuraMainPage {
   intoTheContent(stat,ind:number = 1){
   	//console.log(this.activeCourse[ind]);
     let courseData = this.app.activeCourse[ind];
-    courseData["courseInd"] = ind;
+    courseData["day"] = ind;
   	this.navCtrl.setRoot(AuraContentPage,{data:courseData});
   }
 

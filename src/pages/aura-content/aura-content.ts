@@ -6,7 +6,7 @@ import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 import { aura } from "../../assets/aura/config/aura.config";
 
 import { ScriptService } from "../../providers/app/script.service";
-import { EvtProvider } from "../../providers/evt/evt"
+import { AppProvider } from "../../providers/app/app"
 
 import { AuraMainPage } from "../aura-main/aura-main";
 import { ProgressModalComponent } from "../../components/progress-modal/progress-modal";
@@ -28,7 +28,7 @@ export class AuraContentPage{
 	@ViewChild('aura') auraComponent : ElementRef;
 	@ViewChild(Content) content: Content;
 	auraLoc = aura;
-	module :{title?:string,description?:string,link?:any,id?:any,course?:any, courseInd?:any} = {
+	module :{title?:string,description?:string,link?:any,id?:any,course?:any, day?:any} = {
 			title:"Morning Meditations",
 			description:`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips`,
       id:'h1',
@@ -41,7 +41,7 @@ export class AuraContentPage{
   constructor(private elRef:ElementRef,
               public navCtrl: NavController,
               public navParams: NavParams,
-              public evt: EvtProvider,
+              public app: AppProvider,
               private render: Renderer2,
               private viewCtrl : ViewController,
               private scr : ScriptService,
@@ -60,7 +60,7 @@ export class AuraContentPage{
 	  	this.module.description = data.desc;
       this.module.id = data.id;
       this.module.course = data.course;
-      this.module.courseInd = data.courseInd;
+      this.module.day = data.day;
 	  	this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));
   	}
 
@@ -68,15 +68,7 @@ export class AuraContentPage{
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AuraContentPage');
-    this.evt.createThngAction('_courseStarted',
-      {
-        "customFields": {
-          "currentCourse": this.module.course,
-          "currentLesson": this.module.title,
-          "currentLessonContentId": this.module.id
-        }
-      }
-    )
+    this.app.startCourse(this.module);
   }
 
   loadScript(url,contentId) {
@@ -139,7 +131,7 @@ export class AuraContentPage{
   }
 
   controlButtons(){
-    alert('PUTA');
+    this.app.playLesson(this.module);
   }
 
   /* If page leave is triggered before audio finishes playing, *
