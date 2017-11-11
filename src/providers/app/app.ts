@@ -7,6 +7,8 @@ import { aura } from "../../assets/aura/config/aura.config";
 import { EvtProvider } from "../../providers/evt/evt";
 import { Observable } from 'rxjs';
 
+import { Config } from '../../config/environment.dev';
+
 /*
  *	Generated class for the AppProvider provider.
  *
@@ -28,12 +30,14 @@ export class AppProvider {
   lessonTimeLimit?:any = 10;//seconds
   currentCourse?: string;
   currentLesson?: number = 1;
+  today = new Date();
 
   playToggleMap?: Array<any> = [];
   constructor(
     public http: Http,
     public evt: EvtProvider
   ) {
+    this.lessonTimeLimit = Config.lessonCompletionTimeLimit || this.lessonTimeLimit;
     this.initCourses();
 
   }
@@ -49,7 +53,7 @@ export class AppProvider {
           title:ar.Title,
           path:ar.path,
           desc:ar.Description,
-          course: ar.Course
+          course: crs
         };
 			}
 			else{
@@ -59,14 +63,12 @@ export class AppProvider {
           title:ar.Title,
           path:ar.path,
           desc:ar.Description,
-          course: ar.Course
+          course: crs
         };
 			}
 	  	})
 
   	return Promise.all(promises).then(()=>{ this.progressKeys = Object.keys(mast); return mast});
-
-
   }
 
   /* set the active course for the top component in the main page */
@@ -270,6 +272,7 @@ export class AppProvider {
     /**
      * App helper to put Lesson completed data to EVT
      */
+    let self = this;
     this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
@@ -278,8 +281,10 @@ export class AppProvider {
           "currentLessonContentId": lessonData.id
         }
       }
-    )
-    this.completeCourse(lessonData);
+    ).then((res)=> {
+        self.updateCompletedLessonsCnt(lessonData.course);
+        self.completeCourse(lessonData);
+    });
   }
 
   isLastLesson(course, lessonDay): Promise<any> {
@@ -290,9 +295,9 @@ export class AppProvider {
     let self = this;
     return this.toGroup().then(
       res=> {
-        self.courses = res;
-        console.log(typeof res);
-        console.log(self.courses[course]);
+        if (typeof self.courses == 'undefined' || self.courses.length < 0) {
+          self.courses = res;
+        }
         let courseLen = Object.keys(self.courses[course]).length;
         return (courseLen <= lessonDay);
       }
@@ -317,5 +322,47 @@ export class AppProvider {
 
   getCurrentLesson(): number {
     return this.currentLesson;
+  }
+
+  updateCompletedLessonsCnt(course: any) {
+    /**
+     * Update the tally of completed lessons for the day
+     */
+    let crsCnt =  this.getLessonsCompletedToday(course) + 1;
+    let totCnt =  this.getLessonsCompletedToday() + 1;
+    if (typeof course !== 'undefined') {
+      localStorage.setItem("lcCnt" + course + this.today.toDateString(), crsCnt.toString());
+      localStorage.setItem("lcCnt" + this.today.toDateString(), totCnt.toString());
+    }
+  }
+
+  getLessonsCompletedToday(course?: any): number {
+    /**
+     * Get the tally of completed Lessons for the day
+     */
+    if (typeof course == 'undefined') {
+      return (parseInt(localStorage.getItem("lcCnt") + this.today.toDateString()) || 0);
+    } else {
+      if (typeof this.courses[course] == 'undefined') {
+        return 0;
+      }
+      return (parseInt(localStorage.getItem("lcCnt" + course + this.today.toDateString())) || 0);
+    }
+  }
+
+  getLessonsRemainingToday(course?: any) {
+    /**
+     * Check total remaining new lessons for the day
+     * w/o params shows total for all courses
+     *
+     */
+    if (typeof course == 'undefined') {
+      return (Config.totalDailyLessonLimit - this.getLessonsCompletedToday());
+    } else {
+      if (this.courses[course] != 'undefined') {
+        let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+        return (remCnt >= 0 ? remCnt : 0);
+      }
+    }
   }
 }

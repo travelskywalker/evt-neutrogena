@@ -39,9 +39,9 @@ export class EvtProvider {
   }
 
   createThngAction(actionType:string='',action:any = {}){
-    this.getThngContext().then(thng=>{
+    return this.getThngContext().then(thng=>{
       thng.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
-    })
+    });
   }
 
   init(){
