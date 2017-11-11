@@ -1,11 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 
 import { NoticeComponent } from "../components/notice/notice";
+
+import { EvtProvider } from "../providers/evt/evt";
+import { AppProvider } from "../providers/app/app";
 
 @Component({
   templateUrl: 'app.html'
@@ -21,16 +24,35 @@ export class MyApp {
   noLink?: boolean = true;
 
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
+    , public app: AppProvider
+    , public evt: EvtProvider,
+      private loading: LoadingController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage }
     ];
-
-    //this.evt.init();
   }
+
+  ngOnInit() {
+    if (!this.evt.hasUserContext()) {
+      return;
+    }
+    let self = this;
+    let loading = self.loading.create({
+      spinner: 'crescent',
+      content: `Checking your progress...`,
+      enableBackdropDismiss: true
+    })
+    loading.present();
+    this.app.initCourses().then(()=> {
+      loading.dismiss();
+      this.nav.push("AuraMainPage");
+    })
+  }
+
   ngAfterViewInit(){
 
     this.nav.viewDidEnter.subscribe((data) => {
@@ -55,7 +77,7 @@ export class MyApp {
   }
   initializeApp() {
     let self = this;
-    this.platform.ready().then(() => {
+    self.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
@@ -63,6 +85,7 @@ export class MyApp {
       //self.evt.init();
       console.log("EVT");
     });
+
 
     // if(this.platform.is('mobile')){
     //   this.rootPage = HomePage;
