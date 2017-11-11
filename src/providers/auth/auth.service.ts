@@ -9,6 +9,7 @@ import 'rxjs/add/operator/toPromise';
 declare var Auth0Lock;
 
 @Injectable()
+@Injectable()
 export class AuthService {
   clientDefId:string = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
   clientDefSecret:string = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
@@ -42,8 +43,8 @@ export class AuthService {
 
   /* Sign up for email-based account. First name *
    * and last name is included in the            *
-   * user_metadata so that we can track it       *   
-   * Not needed for FB based signup              */   
+   * user_metadata so that we can track it       *
+   * Not needed for FB based signup              */
   public signup(usr:{email:string,pass:string},fName='',lName='') {
     return new Promise((resolve,reject)=>{
       this.webAuth.signup({
@@ -178,6 +179,8 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('evrythngInfo');
+    localStorage.removeItem('myThng');
+    localStorage.removeItem('isAnon');
     this.webAuth.logout({
       returnTo: Config.auth0.redirectUri,
       clientID: Config.auth0.clientID
@@ -213,7 +216,7 @@ export class AuthService {
   }
 
   /* check if FB based account or email-based  *
-   * FB accounts have the 'sub' variable. This * 
+   * FB accounts have the 'sub' variable. This *
    * is what we check                          */
   isFB():boolean{
     return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
@@ -272,7 +275,7 @@ export class AuthService {
 
   }
 
-  /* request oauth token via auth0 management client * 
+  /* request oauth token via auth0 management client *
    * this will be used for management api requests   */
   requestMgmtToken(){
     let hdr = new Headers();
@@ -281,7 +284,7 @@ export class AuthService {
       grant_type: Config.auth0Mgmt.grant_type,
       client_id: Config.auth0Mgmt.client_id,
       client_secret: Config.auth0Mgmt.client_secret,
-      audience: Config.auth0Mgmt.audience 
+      audience: Config.auth0Mgmt.audience
     };
 
     let opts = new RequestOptions({headers:hdr});

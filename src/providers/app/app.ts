@@ -27,9 +27,10 @@ export class AppProvider {
 	activeDur : number = 1;
   hasValidUserAge : boolean = false;
   lessonTimer?: any;
-  lessonTimeLimit?:any = 10;//seconds
+  lessonTimeLimit?:any = Config.lessonCompletionTimeLimit;//seconds
   currentCourse?: string;
   currentLesson?: number = 1;
+  courseHistory?: Array<any> = [];
   today = new Date();
 
   playToggleMap?: Array<any> = [];
@@ -37,8 +38,8 @@ export class AppProvider {
     public http: Http,
     public evt: EvtProvider
   ) {
-    this.lessonTimeLimit = Config.lessonCompletionTimeLimit || this.lessonTimeLimit;
     this.initCourses();
+
 
   }
 
@@ -88,7 +89,10 @@ export class AppProvider {
   initCourses(){
   	let self = this;
   	self.toGroup().then(res=>{
-  		self.initProgArr();
+      if (this.evt.hasUserContext()) {
+        self.initProgArr();
+      }
+
   		self.courses = res;
   		self.activeCourse = res['Mindfulness'];
   		self.activeDur = Object.keys(self.activeCourse).length;
@@ -97,10 +101,17 @@ export class AppProvider {
 
   initProgArr(){
   	let self = this;
-  	this.progressKeys.forEach((val,ind)=>{
-  		let init = {val:[]};
-  		self.progressArr.push(init);
-  	});
+    this.getCourseHistory().then(hist=>{
+      self.courseHistory.forEach((val)=>{
+        if (typeof self.progressArr[val.courseNumber] === 'undefined') {
+          self.progressArr[val.courseNumber] = [val.lessonNumber]
+        }
+        if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
+          self.progressArr[val.courseNumber].push(val.lessonNumber);
+        }
+      });
+    })
+
   }
 
   static isAgeGated() {
@@ -164,7 +175,7 @@ export class AppProvider {
     /**
      * App helper function to start a course
      */
-    if (courseData.day === 1) {
+    if (courseData.day === 1 && !this.hasStartedCourse(courseData.course)) {
       this.evt.createThngAction('_CourseStarted',
         {
           "customFields": {
@@ -364,5 +375,21 @@ export class AppProvider {
         return (remCnt >= 0 ? remCnt : 0);
       }
     }
+  }
+
+  getCourseHistory(): Promise<any> {
+    return this.evt.getUserCustomFields().then((customFields)=> {
+      if (customFields.hasOwnProperty('courseHistory')) {
+        this.courseHistory = customFields.courseHistory;
+        return customFields.courseHistory;
+      }
+    })
+
+  }
+
+  hasStartedCourse(course: any): boolean {
+    console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
+    console.log(this.progressArr);
+    return (typeof this.progressArr[course] != 'undefined');
   }
 }

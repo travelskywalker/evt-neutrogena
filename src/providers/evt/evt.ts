@@ -63,16 +63,44 @@ export class EvtProvider {
 
   }
 
+  hasUserContext(): boolean {
+    return (this.getUserContextKeys() ? true : false);
+  }
+
+  getUserContextKeys(): any {
+    let lsApiKey = "";
+    let lsId = "";
+    if (this.auth.loggedIn()) {
+      let userContext = this.auth.getUserDetailsFromStorage();
+      lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
+      lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
+    } else {
+      //Anon user
+      if (typeof localStorage.evrythngInfo != 'undefined') {
+        let userContext = JSON.parse(localStorage.evrythngInfo);
+        lsId = userContext.evrythngUser;
+        lsApiKey = userContext.evrythngApiKey;
+      }
+    }
+
+    if (lsApiKey !== "" && lsId !== "") {
+      return [lsApiKey, lsId];
+    }
+  }
+
   /* return evt user context as a promise */
   getUserContext():Promise<any> {
-  	//let usr = this.auth0.getUserDetailsFromStorage();
-  	let userContext = JSON.parse(localStorage.evrythngInfo);
+
+    let ls = this.getUserContextKeys();
+    let lsId = ls[1];
+    let lsApiKey = ls[0];
+
   	return(
   		new Promise((resolve,reject)=>{
   			resolve(
 		        new EVT.User({
-		            id: userContext.evrythngUser,
-		            apiKey: userContext.evrythngApiKey
+              id: lsId,
+              apiKey: lsApiKey
 		        }, this.evtapp)
         	)
   		})
@@ -84,12 +112,15 @@ export class EvtProvider {
      * Return EVT user instance object (Not a promise)
      * @type {any}
      */
+    let ls = this.getUserContextKeys();
+    let lsId = ls[1];
+    let lsApiKey = ls[0];
 
     let userContext = this.auth.getUserDetailsFromStorage();
     if (typeof userContext != 'undefined') {
       return new EVT.User({
-        id: userContext.user_metadata.evrythngUserData.evrythngUser,
-        apiKey: userContext.user_metadata.evrythngUserData.evrythngApiKey
+        id: lsId,
+        apiKey: lsApiKey
       }, this.evtapp)
     }
   }

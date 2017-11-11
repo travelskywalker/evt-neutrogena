@@ -35,6 +35,7 @@ export class HomePage {
     private loader: LoadingController
   ) {
     this.auth0.setEVTInfo();
+    this.isNotLoggedIn = !this.auth0.loggedIn();
 
   }
 
@@ -107,7 +108,7 @@ export class HomePage {
       }
 
 
-       load.data.enableBackdropDismiss = false;
+      load.data.enableBackdropDismiss = false;
       if(res.length === 0) {
         /* Scan failed. we should create a 'not recognized' action */
 
@@ -123,7 +124,7 @@ export class HomePage {
         })
 
 
-      }else if(typeof res[0].results[0].thng !== "undefined" && this.isNotLoggedIn){
+      } else if(typeof res[0].results[0].thng !== "undefined" && this.isNotLoggedIn){
         console.log("anonymous user");
           /* Scanned QR code. It is a thng and anonymous user */
           let item = res[0].results[0].thng;
@@ -224,7 +225,6 @@ export class HomePage {
         })
 
       } // END OF SCAN PROCESS
-
       //save the thng to localStorage for later use
       this.app.saveThngContext(res);
 
