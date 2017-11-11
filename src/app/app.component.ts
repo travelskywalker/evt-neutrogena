@@ -44,7 +44,7 @@ export class MyApp {
 
   noticePopUp(){
     if(typeof localStorage.getItem("isAnon") !== 'undefined'){
-      if(localStorage.getItem("isAnon")){
+      if(JSON.parse(localStorage.getItem("isAnon"))){
         this.show = true;
         this.text = 'Sign in to track your progress.';
         this.noLink = true;
