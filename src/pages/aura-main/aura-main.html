@@ -15,13 +15,13 @@
 		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">
 			<ion-slide *ngFor="let dy of arrDay">
 				<div class="play">
-					<ion-col [ngClass]="{'rng':true}" (tap)="intoTheContent(!dy?.status,dy?.day)">
+					<ion-col [ngClass]="{'rng': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">
 						Day {{dy?.day}}
 						<img src="../assets/images/tick.png"/>
 					</ion-col>
 				</div>
 			</ion-slide>
-			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle)">
+			<ion-slide *ngIf="app?.nextLesson(courseTitle) < app?.courseDuration(courseTitle)">
 				<div class="play">
 					<ion-col [ngClass]="{'rng': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">
 						<ion-icon name="play"></ion-icon>

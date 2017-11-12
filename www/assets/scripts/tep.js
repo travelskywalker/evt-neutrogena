@@ -37,3 +37,16 @@ String.prototype.hashCode = function() {
   }
   return hash;
 }
+
+/**
+ * Extend Array to sort the numbers easily
+ * @ref: https://stackoverflow.com/questions/1063007/how-to-sort-an-array-of-integers-correctly
+ *
+ * @param a
+ * @param b
+ * @returns {number}
+ */
+Array.prototype.sortNum = function() {
+  this.sort((a, b)=>(a - b));
+  return this;
+}

@@ -379,7 +379,7 @@ export class AppProvider {
      *
      */
     if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
-      let lesson = this.progressArr[course].sort()[this.progressArr[course].length-1];
+      let lesson = this.progressArr[course].sortNum()[this.progressArr[course].length-1];
       console.log("course: " + course + ", lesson: " + lesson);
       return lesson;
     }
@@ -521,7 +521,13 @@ export class AppProvider {
       crsProgress = this.getCourseProgress(course);
       crsDuration = this.getCourseDuration(course);
       crsLastLesson = this.getCurrentLesson(course);
-      crsNextLesson = crsLastLesson + this.getAdditionalLesson();
+
+      if (crsDuration > crsLastLesson) {
+        crsNextLesson = crsLastLesson + this.getAdditionalLesson();
+      } else {
+        crsNextLesson = crsLastLesson;
+      }
+
     } else {
       crsProgress = 0;
       crsDuration = this.getCourseDuration(course);
