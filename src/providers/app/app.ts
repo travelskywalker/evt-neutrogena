@@ -75,7 +75,9 @@ export class AppProvider {
 
   /* set the active course for the top component in the main page */
   setActiveCourse(courseTitle?: any){
+    console.log("Activecourse is set");
   	this.activeCourse = this.getCourseData(courseTitle);
+    console.log(this.activeCourse);
     this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
     this.activeDur = this.getCourseDuration(courseTitle);
     this.currentCourse = courseTitle;
@@ -361,6 +363,8 @@ export class AppProvider {
      */
     if (typeof this.currentCourse !== 'undefined') {
       return this.currentCourse;
+    } else {
+      return 'Mindfulness';
     }
 
   }
@@ -625,25 +629,31 @@ export class AppProvider {
   getArrDay(course?: any): Array<any> {
     //add a lesson if there are lesson credit remaining and if there's history
     let arrDay = [];
-    let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
+    let availableLessons = this.getLastCompletedLesson() > 0 ?
+      this.lastLesson(course) + this.getAdditionalLesson(course) : 0;
+    //let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
 
     for(let i=0;i < availableLessons;i++){
       let iDay = i + 1;
     	let st = !(iDay==this.nextLesson(course));
     	arrDay.push({day:iDay,status:st});
     }
+    console.log(this.lastLesson(course));
+    console.log(arrDay);
     console.log("hasNextLesson:" + this.hasNextLesson(course));
     return arrDay;
   }
 
-  getLastCompletedLesson() {
+  getLastCompletedLesson(): number {
     if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
       return this.courseHistory[this.courseHistory.length-1]
+    } else {
+      return 0;
     }
   }
 
   getLastCompletedCourse() {
-    if (typeof this.getLastCompletedLesson() != 'undefined') {
+    if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson() > 0) {
       return this.getLastCompletedLesson()['courseNumber'];
     } else {
       return 'Mindfulness';
@@ -651,6 +661,9 @@ export class AppProvider {
   }
 
   hasActiveCourse(): boolean {
+    /**
+     * Check if Active course has been initialize or set
+     */
     return (typeof this.activeCourse != 'undefined');
   }
 
@@ -669,4 +682,10 @@ export class AppProvider {
     return this.auth.loggedIn();
   }
 
+  getLessonData(course?:any, lessonId: any): any{
+    //console.log(this.courses[course][lessonId]);
+    if (typeof this.courses[course] != 'undefined') {
+      return this.courses[course][lessonId];
+    }
+  }
 }

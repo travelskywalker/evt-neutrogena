@@ -43,9 +43,9 @@
 
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
-			<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse()">
-				<!--{{app?.activeCourse[day+1]?.desc.trim().substring(0,300)}}-->
-				{{app?.activeCourse[app?.nextLesson()]?.desc?.trunc(300)}}
+			<!--<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse()">-->
+			<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">
+				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}
 				<a class="link">About AURA</a>
 			</p>
 		</div>

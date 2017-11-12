@@ -1,7 +1,7 @@
 //import { Component, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { Component, ViewChild} from '@angular/core';
 //import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, LoadingController } from 'ionic-angular';
 
 //import { ScriptService } from "../../providers/app/script.service";
 import { AppProvider } from "../../providers/app/app";
@@ -38,6 +38,7 @@ export class AuraMainPage {
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
+              public loading: LoadingController
               //private render: Renderer2,
               //private viewCtrl : ViewController,
               //private scr : ScriptService
@@ -45,7 +46,24 @@ export class AuraMainPage {
   }
 
   ionViewWillEnter() {
-
+    console.log("ionViewWillEnter Aura Home");
+    if (!this.app.hasActiveCourse()) {
+      let self = this;
+      let loading = self.loading.create({
+        spinner: 'crescent',
+        content: `Please wait...`,
+        enableBackdropDismiss: true
+      })
+      loading.present();
+      this.app.initCourses().then(()=> {
+        this.app.initProgArr().then(()=> {
+          console.log("Last completed:" + this.app.getLastCompletedCourse());
+          this.app.setActiveCourse(this.app.getLastCompletedCourse());
+          loading.dismiss();
+          this.navCtrl.setRoot("AuraMainPage");
+        })
+      })
+    }
   }
 
   ionViewDidLoad() {
