@@ -2,6 +2,7 @@ import { Component, Input, Renderer2, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { AuraMainPage } from "../../pages/aura-main/aura-main";
+import { AppProvider } from "../../providers/app/app";
 
 /**
  * Generated class for the ProgressModalComponent component.
@@ -18,7 +19,8 @@ export class ProgressModalComponent {
   @Input('day') day ?: number = 1;
   @Input('length') length ?: number = 10;
   @Input('show') show ?: boolean = false;
-  constructor(private nav: NavController, private render: Renderer2, private elem:ElementRef) {
+  constructor(private nav: NavController, private render: Renderer2,
+              private elem:ElementRef, private app: AppProvider) {
   }
 
   ngOnInit(){
@@ -30,7 +32,9 @@ export class ProgressModalComponent {
   }
 
 /* toggle visibility of this component */
-  toggleView(stat: boolean = !this.show){
+  toggleView(stat: boolean = !this.show, course?: any){
+    this.day = this.app.getCourseProgress(course);
+    this.length = this.app.getCourseDuration(course);
   	this.show = stat;
 
   	if(!this.show){

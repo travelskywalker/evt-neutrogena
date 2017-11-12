@@ -150,7 +150,7 @@ export class AuraContentPage{
         //if (val >= (val * 60 * 10)) { //Todo: put this in config
         if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
-        	this.pmc.toggleView(true);
+        	this.pmc.toggleView(true, this.module.course);
           element.click();
             this.lessonTimer.unsubscribe();
         }

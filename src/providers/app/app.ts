@@ -447,6 +447,9 @@ export class AppProvider {
     /**
      * Get one additional lesson if there are still lesson credits for the day
      */
+    if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+      return 0;
+    }
     return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
   }
 
@@ -456,8 +459,8 @@ export class AppProvider {
       console.log(customFields);
       if (typeof customFields != 'undefined') {
         this.userCustomFields = customFields;
-        let cl = "";
-        let cc = ""
+        let cl = null;
+        let cc = "";
         if (customFields.hasOwnProperty('courseHistory')) {
           this.courseHistory = customFields.courseHistory;
           let lastLessonCompleted = this.getLastCompletedLesson();
@@ -469,11 +472,11 @@ export class AppProvider {
 
         if (customFields.hasOwnProperty('currentLesson')) {
           this.currentLesson = parseInt(customFields.currentLesson);
-        }  else if (cl !== "") {
+        }  else if (cl !== null) {
           this.currentLesson = cl;
         }
         if (customFields.hasOwnProperty('currentCourse')) {
-          this.currentCourse = parseInt(customFields.currentCourse);
+          this.currentCourse = customFields.currentCourse;
         } else if (cc !== "") {
           this.currentCourse = cc;
         }
@@ -532,6 +535,9 @@ export class AppProvider {
 
 
   nextLesson(course?: any) {
+    /**
+     * current course state helper
+     */
     if (typeof course == 'undefined') {
       course = this.currentCourse;
     }
@@ -543,6 +549,7 @@ export class AppProvider {
 
   lastLesson(course?: any) {
     /**
+     * current course state helper
      * Last used/active lesson
      *
      */
@@ -556,6 +563,9 @@ export class AppProvider {
   }
 
   courseDuration(course?: any) {
+    /**
+     * current course state helper
+     */
     if (typeof course == 'undefined') {
       course = this.currentCourse;
     }
@@ -566,6 +576,9 @@ export class AppProvider {
   }
 
   progressCount(course?: any) {
+    /**
+     * current course state helper
+     */
     if (typeof course == 'undefined') {
       course = this.currentCourse;
     }
@@ -576,6 +589,10 @@ export class AppProvider {
   }
 
   hasNextLesson(course?: any): boolean {
+    if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+      //has reached end
+      return false;
+    }
     return (this.nextLesson(course) !== this.getCourseProgress(course));
   }
 
@@ -602,12 +619,11 @@ export class AppProvider {
     let arrDay = [];
     let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
 
-    for(let i=1;i < availableLessons;i++){
-    	let st = !(i==this.nextLesson(course));
-    	arrDay.push({day:i,status:st});
+    for(let i=0;i < availableLessons;i++){
+      let iDay = i + 1;
+    	let st = !(iDay==this.nextLesson(course));
+    	arrDay.push({day:iDay,status:st});
     }
-    console.log(course);
-    console.log(arrDay);
     console.log("hasNextLesson:" + this.hasNextLesson(course));
     return arrDay;
   }
@@ -634,7 +650,7 @@ export class AppProvider {
     /**
      * Get all lessons of a course
      */
-    if (typeof this.courses == 'undefined' && this.courses[course] == 'undefined') {
+    if (typeof this.courses == 'undefined' || typeof this.courses[course] == 'undefined') {
       return;
     }
     let s = this.courses[course];
