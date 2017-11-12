@@ -24,7 +24,7 @@
 			<ion-slide *ngIf="app?.nextLesson(courseTitle) < app?.courseDuration(courseTitle)">
 				<div class="play">
 					<ion-col [ngClass]="{'rng': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">
-						<ion-icon name="play"></ion-icon>
+						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>
 						Day {{app?.nextLesson(courseTitle)}}
 					</ion-col>
 				</div>

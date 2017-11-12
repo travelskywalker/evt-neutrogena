@@ -177,7 +177,7 @@ export class AppProvider {
   }
 
 
-  saveThngContext(result: JSON) {
+  saveThngContext(result: any) {
     /**
      * Save the THNG scanned or created via IR scan to localStorage for later use
      */
@@ -185,10 +185,12 @@ export class AppProvider {
       /**
        * Ignore other THNGs if there's already one in localStorage
        */
-      if (typeof result[0].results[0].thng !== "undefined"){
+      if (typeof result.id !== 'undefined') {
+        localStorage.setItem('myThng', JSON.stringify(result));
+      } else if (typeof result[0].results[0].thng !== "undefined"){
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
-      }else{
-        localStorage.setItem('myThng', JSON.stringify(result[0].results[0].product));
+      }else if (typeof result[0].results[0].product !== "undefined"){
+        localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
       }
     }
 
@@ -626,19 +628,27 @@ export class AppProvider {
     return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
   }
 
+  getTotalAvailableLessons(course?: any): number {
+
+    let availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
+    if (!this.hasLoggedIn() && availableLessons > 0 && availableLessons > Config.anonUserLessonLimit) {
+      availableLessons = Config.anonUserLessonLimit; //only 1 lesson available for anon user
+    }
+    return availableLessons;
+  }
+
   getArrDay(course?: any): Array<any> {
     //add a lesson if there are lesson credit remaining and if there's history
     let arrDay = [];
-    let availableLessons = this.getLastCompletedLesson() > 0 ?
-      this.lastLesson(course) + this.getAdditionalLesson(course) : 0;
-    //let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
+    let availableLessons = this.getTotalAvailableLessons(course);
 
     for(let i=0;i < availableLessons;i++){
       let iDay = i + 1;
     	let st = !(iDay==this.nextLesson(course));
     	arrDay.push({day:iDay,status:st});
     }
-    console.log(this.lastLesson(course));
+
+    console.log("lastLesson" + this.lastLesson(course));
     console.log(arrDay);
     console.log("hasNextLesson:" + this.hasNextLesson(course));
     return arrDay;
@@ -690,4 +700,19 @@ export class AppProvider {
       return this.courses[course][lessonId];
     }
   }
+
+  isNextLessonLocked(course?: any): boolean {
+    if (!this.hasLoggedIn()) {
+      //logged in, no lock, don't bother
+      let nextLesson = this.nextLesson(course);
+      if (typeof nextLesson != 'undefined') {
+        if (nextLesson > Config.anonUserLessonLimit) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
 }
