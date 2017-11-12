@@ -467,7 +467,7 @@ export class AppProvider {
         this.userCustomFields = customFields;
         let cl = null;
         let cc = "";
-        if (customFields.hasOwnProperty('courseHistory')) {
+        if (customFields.hasOwnProperty('courseHistory') && customFields.courseHistory.length > 0) {
           this.courseHistory = customFields.courseHistory;
           let lastLessonCompleted = this.getLastCompletedLesson();
           if (typeof lastLessonCompleted !== 'undefined') {
@@ -644,16 +644,19 @@ export class AppProvider {
     return arrDay;
   }
 
-  getLastCompletedLesson(): number {
+  getLastCompletedLesson(): any {
     if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
       return this.courseHistory[this.courseHistory.length-1]
     } else {
-      return 0;
+      return {
+        courseNumber: "",
+        lessonNumber: 0
+      };
     }
   }
 
   getLastCompletedCourse() {
-    if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson() > 0) {
+    if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
       return this.getLastCompletedLesson()['courseNumber'];
     } else {
       return 'Mindfulness';
@@ -682,8 +685,7 @@ export class AppProvider {
     return this.auth.loggedIn();
   }
 
-  getLessonData(course?:any, lessonId: any): any{
-    //console.log(this.courses[course][lessonId]);
+  getLessonData(course:any, lessonId: any): any{
     if (typeof this.courses[course] != 'undefined') {
       return this.courses[course][lessonId];
     }
