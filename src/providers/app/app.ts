@@ -9,6 +9,7 @@ import { EvtProvider } from "../../providers/evt/evt";
 import { Observable } from 'rxjs';
 
 import { Config } from '../../config/environment.dev';
+import { AuthService } from '../../providers/auth/auth.service';
 
 /*
  *	Generated class for the AppProvider provider.
@@ -39,7 +40,8 @@ export class AppProvider {
   playToggleMap?: Array<any> = [];
   constructor(
     public http: Http,
-    public evt: EvtProvider
+    public evt: EvtProvider,
+    public auth: AuthService
   ) {
   }
 
@@ -657,5 +659,8 @@ export class AppProvider {
     return s;
   }
 
+  hasLoggedIn(): boolean {
+    return this.auth.loggedIn();
+  }
 
 }

@@ -32,6 +32,7 @@ export class AuraMainPage {
 	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
 	courseTitle?: string = "Mindfulness";
   addLesson: number = 0;
+  labelIntro = "Start this course";
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
@@ -50,6 +51,8 @@ export class AuraMainPage {
     //clear timer from content page
     this.app.stopLessonTimer();
     this.initActiveCourse();
+    this.initLabelIntro();
+
   }
 
   initActiveCourse() {
@@ -65,12 +68,7 @@ export class AuraMainPage {
    * Animate for effect to the current day 	 */
   popDays(){
   	this.arrDay = this.app.getArrDay(this.courseTitle);
-    //add a lesson if there are lesson credit remainig and if there's history
 
-    //for(let i=1;i < this.app.availableLessons()+1;i++){
-    //	let st = !(i==this.day);
-    //	this.arrDay.push({day:i,status:st});
-    //}
     setTimeout(()=>{
     	try{
     		this.btnSlide.slideTo(this.app.nextLesson());
@@ -109,7 +107,7 @@ export class AuraMainPage {
     delete $event['progress'];
     this.app.setActiveCourse(courseTitle);
   	this.courseTitle = courseTitle;
-
+    this.initLabelIntro();
   	//this.dur = this.app.progressKeys.length;
   	this.popDays();
   }
@@ -122,4 +120,23 @@ export class AuraMainPage {
   	this.navCtrl.setRoot(AuraContentPage,{data:courseData});
   }
 
+  initLabelIntro() {
+    if (this.app.hasLoggedIn()) {
+      if (this.app.hasStartedCourse(this.courseTitle)) {
+        this.labelIntro = "Continue";
+      } else {
+        this.labelIntro = "Start this course";
+      }
+    } else {
+      let lessonData = {
+        day: this.app.getCurrentLesson(this.courseTitle),
+        course: this.courseTitle
+      };
+      if (this.app.hasStartedCourse(this.courseTitle)) {
+        this.labelIntro = "Sign in to access content";
+      } else {
+        this.labelIntro = "Start this course";
+      }
+    }
+  }
 }
