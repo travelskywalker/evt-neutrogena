@@ -240,7 +240,7 @@ export class AppProvider {
     })
   }
 
-  playLesson(lessonData: any) {
+  playLesson(lessonData: any, pmc?: any) {
     /**
      * single-point entry for handling play button actions for AURA content
      */
@@ -263,7 +263,7 @@ export class AppProvider {
     if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       this.evt.createThngAction('_Play');
       this.startLesson(lessonData);
-      this.startLessonTimer(lessonData);
+      this.startLessonTimer(lessonData, pmc);
     } else {
       this.stopLessonTimer(lessonData);
     }
@@ -289,18 +289,18 @@ export class AppProvider {
     this.setCurrentCourse(lessonData.course);
   }
 
-  startLessonTimer(lessonData: any) {
+  startLessonTimer(lessonData: any, pmc?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
     this.lessonTimer =
       timer
       .takeWhile(() => alive)
       .subscribe((val) => {
-
         if (val == (this.lessonTimeLimit)) { //Todo: put this in config
         // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
           this.completeLesson(lessonData);
+          pmc.toggleView(true, lessonData.course);
           this.lessonTimer.unsubscribe();
 
         }
@@ -323,7 +323,7 @@ export class AppProvider {
     }
 
     let self = this;
-    this.evt.createThngAction('_LessonCompleted',
+    return this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
           "currentCourse": lessonData.course,

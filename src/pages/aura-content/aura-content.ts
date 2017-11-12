@@ -132,31 +132,30 @@ export class AuraContentPage{
 
   	}
 
-
   }
 
   controlButtons(element){
-    this.app.playLesson(this.module);
-    this.startLessonTimer(element);
+    this.app.playLesson(this.module, this.pmc);
+    //this.startLessonTimer(element);
   }
-  startLessonTimer(element) {
-    let timer = Observable.timer(1000, 1000);
-    let alive: boolean = true;
-    this.lessonTimer =
-      timer
-      .takeWhile(() => alive)
-      .subscribe((val) => {
-
-        //if (val >= (val * 60 * 10)) { //Todo: put this in config
-        if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
-          //if 10 mins, trigger a _LessonCompleted action
-        	this.pmc.toggleView(true, this.module.course);
-          element.click();
-            this.lessonTimer.unsubscribe();
-        }
-      })
-
-  }
+  //startLessonTimer(element) {
+  //  let timer = Observable.timer(1000, 1000);
+  //  let alive: boolean = true;
+  //  this.lessonTimer =
+  //    timer
+  //    .takeWhile(() => alive)
+  //    .subscribe((val) => {
+  //
+  //      //if (val >= (val * 60 * 10)) { //Todo: put this in config
+  //      if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
+  //        //if 10 mins, trigger a _LessonCompleted action
+  //      	this.pmc.toggleView(true, this.module.course);
+  //        element.click();
+  //          this.lessonTimer.unsubscribe();
+  //      }
+  //    })
+  //
+  //}
 
   /* If page leave is triggered before audio finishes playing, *
    * make sure to pause/stop all aura audio					 */
