@@ -43,13 +43,17 @@ export class MyApp {
     let self = this;
     let loading = self.loading.create({
       spinner: 'crescent',
-      content: `Checking your progress...`,
+      content: `Please wait...`,
       enableBackdropDismiss: true
     })
     loading.present();
     this.app.initCourses().then(()=> {
-      loading.dismiss();
-      this.nav.push("AuraMainPage");
+      this.app.initProgArr().then(()=> {
+        console.log("Last completed:" + this.app.getLastCompletedCourse());
+        this.app.setActiveCourse(this.app.getLastCompletedCourse());
+        loading.dismiss();
+        this.nav.setRoot("AuraMainPage");
+      })
     })
   }
 
@@ -85,14 +89,5 @@ export class MyApp {
       //self.evt.init();
       console.log("EVT");
     });
-
-
-    // if(this.platform.is('mobile')){
-    //   this.rootPage = HomePage;
-    // }
-    // else{
-    //   this.rootPage = '';
-    // }
-
   }
 }

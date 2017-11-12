@@ -74,11 +74,11 @@ export class AuthPage {
 
             anonymousUser.thng(queryObject["thng"]).read().then((thng) => {
               if (this.isNotLoggedIn) {
-                localStorage.isAnon = 'true';
+                localStorage.isAnon = true;
                 localStorage.evrythngInfo = '{"anonymousUser":"' + this.isNotLoggedIn + '","evrythngUser":"' + localStorage.userId + '","evrythngApiKey":"' + localStorage.apiKey + '"}';
                 // console.log("set userContext");
               } else {
-                localStorage.isAnon = 'true';
+                localStorage.isAnon = true;
               }
 
               load.data.enableBackdropDismiss = false;

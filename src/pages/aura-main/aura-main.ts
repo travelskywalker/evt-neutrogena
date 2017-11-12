@@ -1,5 +1,5 @@
 import { Component, Renderer2, ViewChild, ElementRef, AfterViewInit, } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Content, Slides, LoadingController } from 'ionic-angular';
 
 import { ScriptService } from "../../providers/app/script.service";
 import { AppProvider } from "../../providers/app/app";
@@ -22,7 +22,7 @@ export class AuraMainPage {
 	@ViewChild('btns') btnSlide : Slides;
 	expanded: boolean = false;
 	def : string = "down";
-	day ?: number = 0;
+	day ?: number = 1;
 	dur ?: number = 10;
 	arrDay ?: any = [];
   noticeTitle?:string;
@@ -31,26 +31,49 @@ export class AuraMainPage {
 	courses ?: any;
 	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
 	courseTitle?: string = "Mindfulness";
-  constructor(public navCtrl: NavController, public navParams: NavParams, private render: Renderer2, private viewCtrl : ViewController, private scr : ScriptService, private app:AppProvider) {
-    this.courseTitle = this.app.getCurrentCourse()
+  addLesson: number = 0;
+  constructor(private app:AppProvider,
+              public navCtrl: NavController,
+              public navParams: NavParams,
+              private render: Renderer2,
+              private viewCtrl : ViewController,
+              private scr : ScriptService,
+              private loading: LoadingController
+  ) {
+  }
+
+  ionViewWillEnter() {
+
   }
 
   ionViewDidLoad() {
+    //clear timer from content page
+    this.app.stopLessonTimer();
+    this.initActiveCourse();
+  }
+
+  initActiveCourse() {
+
+    this.courseTitle = this.app.getCurrentCourse();
+    //this.day = this.app.getCurrentLesson();
+    this.popDays();
+    //this.app.setActiveCourse(this.courseTitle);
 
   }
 
   /* Add buttons depending on number of days *
    * Animate for effect to the current day 	 */
   popDays(){
-  	this.arrDay = [];
-    for(let i=1;i<=this.day;i++){
-    	let st = !(i==this.day);
-    	this.arrDay.push({day:i,status:st});
-    }
+  	this.arrDay = this.app.getArrDay(this.courseTitle);
+    //add a lesson if there are lesson credit remainig and if there's history
 
+    //for(let i=1;i < this.app.availableLessons()+1;i++){
+    //	let st = !(i==this.day);
+    //	this.arrDay.push({day:i,status:st});
+    //}
     setTimeout(()=>{
     	try{
-    		this.btnSlide.slideTo(this.day);
+    		this.btnSlide.slideTo(this.app.nextLesson());
     	}catch(e){
     		//console.log(e);
     	}
@@ -65,7 +88,7 @@ export class AuraMainPage {
   }
 
   ngAfterViewInit(){
-    this.popDays();
+    //this.popDays();
 
   }
 
@@ -80,12 +103,13 @@ export class AuraMainPage {
  * transfers the data from the sub-course to 	  *
  * the top area (slider of buttons).     	 	  */
   tryMe($event){
-    console.log("Event: " + JSON.stringify($event));
-  	this.day = $event.progress;
-  	this.courseTitle = $event.title;
-  	delete $event['progress'];
-  	delete $event['title'];
-  	this.app.setActiveCourse($event);
+    console.log(JSON.stringify($event));
+    let courseTitle = $event.title;
+    delete $event['title'];
+    delete $event['progress'];
+    this.app.setActiveCourse(courseTitle);
+  	this.courseTitle = courseTitle;
+
   	//this.dur = this.app.progressKeys.length;
   	this.popDays();
   }

@@ -100,11 +100,11 @@ export class HomePage {
       if(this.isNotLoggedIn){
 
         // set anonymous info in localstorage
-        localStorage.isAnon = 'true';
+        localStorage.isAnon = true;
         localStorage.userInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
         localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
       }else{
-        localStorage.isAnon = 'false';
+        localStorage.isAnon = false;
       }
 
 
@@ -141,7 +141,8 @@ export class HomePage {
           })
           .catch(err=>{
               self.scanFailed = true;
-              console.log(err,'thng error')
+              console.log(err,'thng error');
+              load.dismiss();
           })
       } else if (typeof res[0].results[0].thng !== "undefined" && !this.isNotLoggedIn) {
         /* Scanned QR code. It is a thng */
@@ -162,10 +163,12 @@ export class HomePage {
           .catch(err=>{
             self.scanFailed = true;
             console.log(err,'thng error')
+            load.dismiss();
           })
         })
         .catch(err=>{
-          console.log(err)
+          console.log(err);
+          load.dismiss();
         })
       } else if (typeof res[0].results[0].product !== "undefined") {
         console.log("image recognition");
@@ -217,11 +220,13 @@ export class HomePage {
           })
           .catch(err=>{
             self.scanFailed = true;
-            console.log(err,'prod error')
+            console.log(err,'prod error');
+            load.dismiss();
           })
         })
         .catch(err=>{
-          console.log(err)
+          console.log(err);
+          load.dismiss();
         })
 
       } // END OF SCAN PROCESS
@@ -230,7 +235,8 @@ export class HomePage {
 
     }).catch(err=>{
       self.scanFailed = true;
-      console.log('scan failed',err)
+      console.log('scan failed',err);
+      load.dismiss();
     });
   }
 

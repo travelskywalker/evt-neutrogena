@@ -1,4 +1,5 @@
-import { Injectable,ViewChild, OnInit } from '@angular/core';
+//import { Injectable,ViewChild, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
@@ -20,7 +21,7 @@ import { Config } from '../../config/environment.dev';
 export class AppProvider {
 	progressArr ?: Array<any> = [];
 	progressKeys ?: Array<any> = [];
-	courses ?: Array<any> = [];
+	private courses ?: Array<any> = [];
   //array of lessons in a course
 	activeCourse : any;
   //total lessons / days in a course
@@ -32,15 +33,14 @@ export class AppProvider {
   currentLesson?: number = 1;
   courseHistory?: Array<any> = [];
   today = new Date();
+  userCustomFields?: any;
+  activeCourseState?: Array<any> = [0, 0, 0, 1];
 
   playToggleMap?: Array<any> = [];
   constructor(
     public http: Http,
     public evt: EvtProvider
   ) {
-    this.initCourses();
-
-
   }
 
   /* GET the aura variable containing the content details, path..etc. */
@@ -68,15 +68,18 @@ export class AppProvider {
         };
 			}
 	  	})
-
   	return Promise.all(promises).then(()=>{ this.progressKeys = Object.keys(mast); return mast});
   }
 
   /* set the active course for the top component in the main page */
-  setActiveCourse(val){
-  	this.activeCourse = val;
-  	let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
-  	this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
+  setActiveCourse(courseTitle?: any){
+  	this.activeCourse = this.getCourseData(courseTitle);
+    this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
+    this.activeDur = this.getCourseDuration(courseTitle);
+    this.currentCourse = courseTitle;
+
+  	//let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
+  	//this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
 
   }
   ngOnInit(){
@@ -87,30 +90,53 @@ export class AppProvider {
   }
 
   initCourses(){
+    /**
+     *
+     * @type {AppProvider}
+     *
+     * group lessons into courses
+     * initialize default course title, data and duration (from grouping)
+     * initialize courses
+     */
   	let self = this;
-  	self.toGroup().then(res=>{
-      if (this.evt.hasUserContext()) {
-        self.initProgArr();
-      }
+  	return this.toGroup().then(res=>{
+      console.log("initCourses");
+      console.log(res);
+      self.courses = res;
+      console.log(self.courses);
 
-  		self.courses = res;
-  		self.activeCourse = res['Mindfulness'];
-  		self.activeDur = Object.keys(self.activeCourse).length;
+      self.currentCourse = 'Mindfulness';
+      self.activeCourse = res['Mindfulness'];
+      self.activeDur = Object.keys(self.activeCourse).length;
+
+      if (this.evt.hasUserContext()) {
+        return this.initProgArr();
+      }
   	})
   }
 
-  initProgArr(){
+  initProgArr(): Promise<any> {
+    /**
+     *
+     * @type {AppProvider}
+     *
+     * Get data from EVT and store it a progress array in-memory
+     */
   	let self = this;
-    this.getCourseHistory().then(hist=>{
+    return this.getProgressStateFromEvt().then(customFields =>{
+      console.log("COURSE HISTORY");
+      console.log(self.courseHistory);
       self.courseHistory.forEach((val)=>{
         if (typeof self.progressArr[val.courseNumber] === 'undefined') {
-          self.progressArr[val.courseNumber] = [val.lessonNumber]
+          self.progressArr[val.courseNumber] = [];
         }
         if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
           self.progressArr[val.courseNumber].push(val.lessonNumber);
         }
+
       });
-    })
+
+    });
 
   }
 
@@ -241,6 +267,9 @@ export class AppProvider {
     /**
      * App helper to put Lesson started data to EVT
      */
+    if (this.hasLessonCompleted(lessonData)) {
+      return;
+    }
     this.evt.createThngAction('_LessonStarted',
       {
         "customFields": {
@@ -273,7 +302,7 @@ export class AppProvider {
 
   }
 
-  stopLessonTimer(lessonData: any) {
+  stopLessonTimer(lessonData?: any) {
     if (typeof this.lessonTimer !== 'undefined') {
       this.lessonTimer.unsubscribe();
     }
@@ -283,6 +312,10 @@ export class AppProvider {
     /**
      * App helper to put Lesson completed data to EVT
      */
+    if (this.hasLessonCompleted(lessonData)) {
+      return;
+    }
+
     let self = this;
     this.evt.createThngAction('_LessonCompleted',
       {
@@ -320,18 +353,34 @@ export class AppProvider {
   }
 
   getCurrentCourse(): string {
+    /**
+     * Get the CURRENT course of the user. CURRENT is not ACTIVE but the state
+     * from last update. ACTIVE is the one in use by tapping or clicking.
+     */
     if (typeof this.currentCourse !== 'undefined') {
       return this.currentCourse;
-    } else {
-      return 'Mindfulness';
     }
+
   }
 
   setCurrentLesson(day: number) {
     this.currentLesson = day;
   }
 
-  getCurrentLesson(): number {
+  getCurrentLesson(course?: any): number {
+    /**
+     *
+     * Get the CURRENT lesson of the user.
+     * CURRENT is not ACTIVE but the state
+     * from last update. ACTIVE is the one
+     * in use by tapping or clicking.
+     *
+     */
+    if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
+      let lesson = this.progressArr[course].sort()[this.progressArr[course].length-1];
+      console.log("course: " + course + ", lesson: " + lesson);
+      return lesson;
+    }
     return this.currentLesson;
   }
 
@@ -342,8 +391,10 @@ export class AppProvider {
     let crsCnt =  this.getLessonsCompletedToday(course) + 1;
     let totCnt =  this.getLessonsCompletedToday() + 1;
     if (typeof course !== 'undefined') {
-      localStorage.setItem("lcCnt" + course + this.today.toDateString(), crsCnt.toString());
-      localStorage.setItem("lcCnt" + this.today.toDateString(), totCnt.toString());
+      localStorage.setItem(this.getLSKey(course), crsCnt.toString());
+      localStorage.setItem(this.getLSKey(), totCnt.toString());
+      //refresh the progress
+      this.initProgArr();
     }
   }
 
@@ -352,13 +403,28 @@ export class AppProvider {
      * Get the tally of completed Lessons for the day
      */
     if (typeof course == 'undefined') {
-      return (parseInt(localStorage.getItem("lcCnt") + this.today.toDateString()) || 0);
+      return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
     } else {
       if (typeof this.courses[course] == 'undefined') {
         return 0;
       }
-      return (parseInt(localStorage.getItem("lcCnt" + course + this.today.toDateString())) || 0);
+      return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
     }
+  }
+
+  getLSKey(course?: any): string {
+    /**
+     * Get a lesson key counter
+     * @type {string}
+     */
+    let str = "";
+    if (typeof course != 'undefined') {
+      str = "lcCnt" + this.today.toDateString();
+    } else {
+      str = "lcCnt" + course + this.today.toDateString()
+    }
+
+    return str;
   }
 
   getLessonsRemainingToday(course?: any) {
@@ -377,12 +443,46 @@ export class AppProvider {
     }
   }
 
-  getCourseHistory(): Promise<any> {
+  getAdditionalLesson(course?: any): number {
+    /**
+     * Get one additional lesson if there are still lesson credits for the day
+     */
+    return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
+  }
+
+  getProgressStateFromEvt(): Promise<any> {
     return this.evt.getUserCustomFields().then((customFields)=> {
-      if (customFields.hasOwnProperty('courseHistory')) {
-        this.courseHistory = customFields.courseHistory;
-        return customFields.courseHistory;
+      console.log("customFields");
+      console.log(customFields);
+      if (typeof customFields != 'undefined') {
+        this.userCustomFields = customFields;
+        let cl = "";
+        let cc = ""
+        if (customFields.hasOwnProperty('courseHistory')) {
+          this.courseHistory = customFields.courseHistory;
+          let lastLessonCompleted = this.getLastCompletedLesson();
+          if (typeof lastLessonCompleted !== 'undefined') {
+            cl = lastLessonCompleted.lessonNumber;
+            cc = lastLessonCompleted.courseNumber;
+          }
+        }
+
+        if (customFields.hasOwnProperty('currentLesson')) {
+          this.currentLesson = parseInt(customFields.currentLesson);
+        }  else if (cl !== "") {
+          this.currentLesson = cl;
+        }
+        if (customFields.hasOwnProperty('currentCourse')) {
+          this.currentCourse = parseInt(customFields.currentCourse);
+        } else if (cc !== "") {
+          this.currentCourse = cc;
+        }
+
+        return customFields;
       }
+
+
+
     })
 
   }
@@ -392,4 +492,154 @@ export class AppProvider {
     console.log(this.progressArr);
     return (typeof this.progressArr[course] != 'undefined');
   }
+
+  hasLessonCompleted(lessonData) {
+    if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
+      return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
+    }
+  }
+
+  getCourseState(course: string): any {
+    /**
+     * Return
+     * [ course progress,
+     *   course total duration,
+     *   current lesson,
+     *   next lesson]
+     *
+     */
+    let crsProgress = 0;
+    let crsDuration = 0;
+    let crsLastLesson = 0;
+    let crsNextLesson = 1;
+    if (typeof this.progressArr[course] != 'undefined') {
+      crsProgress = this.getCourseProgress(course);
+      crsDuration = this.getCourseDuration(course);
+      crsLastLesson = this.getCurrentLesson(course);
+      crsNextLesson = crsLastLesson + this.getAdditionalLesson();
+    } else {
+      crsProgress = 0;
+      crsDuration = this.getCourseDuration(course);
+      crsLastLesson = 0; //last Lesson Completed
+      crsNextLesson = 1;
+    }
+    let st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
+    console.log('course state: ');
+    console.log(st);
+    this.activeCourseState[course] = st;
+    return st;
+  }
+
+
+  nextLesson(course?: any) {
+    if (typeof course == 'undefined') {
+      course = this.currentCourse;
+    }
+    if (typeof this.activeCourseState[course] == 'undefined') {
+      return 1;
+    }
+    return this.activeCourseState[course][3];
+  }
+
+  lastLesson(course?: any) {
+    /**
+     * Last used/active lesson
+     *
+     */
+    if (typeof course == 'undefined') {
+      course = this.currentCourse;
+    }
+    if (typeof this.activeCourseState[course] == 'undefined') {
+      return 0;
+    }
+    return this.activeCourseState[course][2];
+  }
+
+  courseDuration(course?: any) {
+    if (typeof course == 'undefined') {
+      course = this.currentCourse;
+    }
+    if (typeof this.activeCourseState[course] == 'undefined') {
+      return 10;
+    }
+    return this.activeCourseState[course][1];
+  }
+
+  progressCount(course?: any) {
+    if (typeof course == 'undefined') {
+      course = this.currentCourse;
+    }
+    if (typeof this.activeCourseState[course] == 'undefined') {
+      return;
+    }
+    return this.activeCourseState[course][0];
+  }
+
+  hasNextLesson(course?: any): boolean {
+    return (this.nextLesson(course) !== this.getCourseProgress(course));
+  }
+
+  getCourseDuration(course: any): number {
+    if (typeof this.courses != 'undefined' && typeof this.courses[course] != 'undefined') {
+      //console.log(this.courses[course]);
+      return Object.keys(this.courses[course]).length;
+    } else {
+      return 10;
+    }
+  }
+
+  getCourseProgress(course: any): number {
+    /**
+     * returns 0 or the lesson day
+     */
+    //console.log("PROGRESS ARRAY");
+    //console.log(this.progressArr);
+    return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
+  }
+
+  getArrDay(course?: any): Array<any> {
+    //add a lesson if there are lesson credit remaining and if there's history
+    let arrDay = [];
+    let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
+
+    for(let i=1;i < availableLessons;i++){
+    	let st = !(i==this.nextLesson(course));
+    	arrDay.push({day:i,status:st});
+    }
+    console.log(course);
+    console.log(arrDay);
+    console.log("hasNextLesson:" + this.hasNextLesson(course));
+    return arrDay;
+  }
+
+  getLastCompletedLesson() {
+    if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
+      return this.courseHistory[this.courseHistory.length-1]
+    }
+  }
+
+  getLastCompletedCourse() {
+    if (typeof this.getLastCompletedLesson() != 'undefined') {
+      return this.getLastCompletedLesson()['courseNumber'];
+    } else {
+      return 'Mindfulness';
+    }
+  }
+
+  hasActiveCourse(): boolean {
+    return (typeof this.activeCourse != 'undefined');
+  }
+
+  getCourseData(course: string): any {
+    /**
+     * Get all lessons of a course
+     */
+    if (typeof this.courses == 'undefined' && this.courses[course] == 'undefined') {
+      return;
+    }
+    let s = this.courses[course];
+    return s;
+  }
+
+
 }

@@ -4,7 +4,8 @@
 
 	<section class="track-preview {{courseTitle}}">
 		<a class="progress-days">
-			Day {{day < app?.activeDur ? (day+1):day}} of {{app?.activeDur}}
+			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}
+			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->
 		</a>
 		<p class="section-title">
 			{{courseTitle}}
@@ -20,11 +21,11 @@
 					</ion-col>
 				</div>
 			</ion-slide>
-			<ion-slide *ngIf="day < app?.activeDur">
+			<ion-slide *ngIf="app?.nextLesson(courseTitle) < app?.courseDuration(courseTitle)">
 				<div class="play">
-					<ion-col [ngClass]="{'rng':dy?.status}" (tap)="intoTheContent(true,day+1)">
+					<ion-col [ngClass]="{'rng': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">
 						<ion-icon name="play"></ion-icon>
-						Day {{day + 1}}
+						Day {{app?.nextLesson(courseTitle)}}
 					</ion-col>
 				</div>
 			</ion-slide>
@@ -42,8 +43,9 @@
 
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
-			<p class="content" [ngClass]="{'show':expanded}">
-				{{app?.activeCourse[day+1]?.desc.trim().substring(0,300)}}
+			<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse()">
+				<!--{{app?.activeCourse[day+1]?.desc.trim().substring(0,300)}}-->
+				{{app?.activeCourse[app?.nextLesson()]?.desc?.trunc(300)}}
 				<a class="link">About AURA</a>
 			</p>
 		</div>
@@ -55,7 +57,7 @@
 	<section class="sliders">
 		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">
 			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">
-				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.courses[crs]"></sub-course>
+				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>
 			</ion-slide>
 			<!--ion-slide>
 				<sub-course [title]="'Mindfulness'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>
