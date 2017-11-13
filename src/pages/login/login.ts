@@ -2,12 +2,14 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 import { EvtProvider } from "../../providers/evt/evt";
+import { AppProvider } from "../../providers/app/app";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
+import { AuraMainPage } from '../aura-main/aura-main';
 
 @IonicPage()
 @Component({
@@ -23,6 +25,7 @@ export class LoginPage {
   				private auth0: AuthService,
   				private formBuilder: FormBuilder,
   				private loader : LoadingController,
+  				private app : AppProvider,
   				private evt : EvtProvider) {
   	this.formGroup = this.formBuilder.group({
   		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
@@ -32,6 +35,13 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SignUpPage');
+
+  }
+
+  ionViewWillEnter(){
+    if (this.app.hasLoggedIn()) {
+      this.navCtrl.setRoot(AuraMainPage);
+    }
   }
 
   focused(event){
@@ -70,10 +80,9 @@ export class LoginPage {
       enableBackdropDismiss:true});
   	load.present();
   	//console.log(usr);
-
+    this.app.startLogin();
   	this.auth0.login({email:usr.email,pass:usr.password}).then(res=>{
   		//console.log(res)
-  		self.evt.createUserAction("_Login");
   	})
   	.catch(err=>{
   		console.log(err);
