@@ -1,6 +1,7 @@
 import { Component, Input, Renderer2, ElementRef, AfterViewInit } from '@angular/core';
 import { App } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
+import { EvtProvider } from '../../providers/evt/evt';
 
 /**
  * Generated class for the NoticeComponent component.
@@ -18,10 +19,11 @@ export class NoticeComponent {
 	@Input("class") class ?: any;
   @Input('show') show ?: boolean = false;
   @Input('noLink') noLink ?: boolean = true;
+  @Input('ext_url') ext_url ?: any;
 
   style: any;
 	//@ViewChild(this) content ?: NoticeComponent;
-  constructor(public app: App,private render: Renderer2, public elem:ElementRef) {
+  constructor(public app: App, private evt: EvtProvider,private render: Renderer2, public elem:ElementRef) {
   }
 
   ngOnInit(){
@@ -36,10 +38,17 @@ export class NoticeComponent {
   ngAfterViewInit(){
 
   }
-  goToPage(){
-    let nav = this.app.getRootNav();
-    this.toggleView(false);
-    nav.setRoot(LoginPage);
+
+  goToPage(ext_url?: any){
+    console.log(this.ext_url);
+    if (typeof ext_url == 'undefined') {
+      let nav = this.app.getRootNav();
+      this.toggleView(false);
+      nav.setRoot(LoginPage);
+    } else {
+      this.evt.createUserAction("_Reorder");
+    }
+
   }
   toggleView(stat: boolean = !this.show){
     this.show = stat;

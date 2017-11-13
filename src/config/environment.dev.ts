@@ -24,12 +24,14 @@ export const Config = {
     privacyPolicy:"//www.neutrogena.co.uk/privacypolicy",
     cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
     legalNotice:"//www.neutrogena.co.uk/legal-statement",
-    slaveryAct:"//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf"
+    slaveryAct:"//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
+    reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
   },
-  lessonCompletionTimeLimit: 2, //seconds
+  lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
   anonUserDaysToSignInNotice: 0, //days until an anon user will see a pop-up to sign-in / sign-up
-  dayToReorderNotice: 1 //day N of 30 days before a logged-in user will see a pop-up since sign-up
+  thngDaysLifeSpan: 30, //the number of days that the activator is meant for. expires cookie and a new one is set
+  dayToReorderNotice: 1 //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
 };

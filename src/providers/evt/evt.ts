@@ -125,11 +125,16 @@ export class EvtProvider {
     }
   }
 
+  /**
+   *
+   * Return Thng context as promise
+   * Save to local storage if it's available in EVT
+   *
+   * @returns {any}
+   */
   getThngContext():Promise<any> {
     /**
-     * Return Thng context as promise
-     * Save to local storage if it's available in EVT
-     *
+     * assign `this` local function context
      * @type {any}
      */
     let self = this;
@@ -138,14 +143,10 @@ export class EvtProvider {
       let myThng = JSON.parse(localStorage.myThng);
       return this.getUser().thng(myThng.id).read();
     } else {
-      console.log("getThngContext");
       return this.getUserCustomFields().then(cf => {
-
-        console.log(cf);
         if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
           //has myThng customField
-          return this.getUser().thng(cf.myThng).read(th=>{
-            console.log(th);
+          return self.getUser().thng(cf.myThng).read(th=>{
             localStorage.myThng = JSON.stringify(th);
           });
         }
