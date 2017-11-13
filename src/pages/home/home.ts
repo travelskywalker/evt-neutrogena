@@ -199,6 +199,8 @@ export class HomePage {
                 }
                 usr.thng().create(thng).then(th=>{
 
+                  console.log(th.id);
+                  this.app.saveThngContext(th);
                   /* Assign the newly created thng to the user */
                   usr.update({customFields:{myThng:th.id}}).then(console.log);
 
@@ -211,6 +213,7 @@ export class HomePage {
                   self.gotoNexPage();
                 })
                 .catch(err=>{
+                  console.log(err);
                   console.log("Failed to create a thng");
                 })
               }

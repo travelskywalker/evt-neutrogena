@@ -69,17 +69,15 @@ export class MyApp {
   }
 
   noticePopUp(){
-    if(typeof localStorage.getItem("isAnon") !== 'undefined'){
-      if(JSON.parse(localStorage.getItem("isAnon"))){
+    if(!this.app.hasLoggedIn()){
         this.show = true;
         this.text = 'Sign in to track your progress.';
         this.noLink = true;
-      }
     }
-
-
   }
+
   initializeApp() {
+
     let self = this;
     self.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

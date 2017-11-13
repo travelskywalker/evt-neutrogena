@@ -24,17 +24,21 @@ export class ProgressModalComponent {
   }
 
   ngOnInit(){
+    this.day = this.app.nextLesson(this.app.currentCourse);
+    this.length = this.app.getCourseDuration(this.app.currentCourse);
   	console.log(this);
   }
 
   toHome(){
-  	this.nav.setRoot(AuraMainPage);
+    this.app.initProgArr().then(()=>{
+      this.app.setActiveCourse(this.app.getLastCompletedCourse());
+      this.nav.setRoot(AuraMainPage);
+    });
   }
 
 /* toggle visibility of this component */
   toggleView(stat: boolean = !this.show, course?: any){
-    this.day = this.app.getCourseProgress(course);
-    this.length = this.app.getCourseDuration(course);
+
   	this.show = stat;
 
   	if(!this.show){

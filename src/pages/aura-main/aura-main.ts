@@ -7,6 +7,7 @@ import { IonicPage, NavController, NavParams, Slides, LoadingController } from '
 import { AppProvider } from "../../providers/app/app";
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
+import { LoginPage } from "../../pages/login/login";
 /**
  * Generated class for the AuraMainPage page.
  *
@@ -132,10 +133,20 @@ export class AuraMainPage {
 
   /* Go to the aura content */
   intoTheContent(stat,ind:number = 1){
-  	//console.log(this.activeCourse[ind]);
-    let courseData = this.app.activeCourse[ind];
-    courseData["day"] = ind;
-  	this.navCtrl.setRoot(AuraContentPage,{data:courseData});
+    console.log(ind);
+    console.log(this.app.nextLesson(this.courseTitle));
+    if (ind >= this.app.nextLesson(this.courseTitle)
+      && this.app.isNextLessonLocked(this.courseTitle)) {
+
+      this.navCtrl.push(LoginPage);
+
+    } else {
+      //console.log(this.activeCourse[ind]);
+      let courseData = this.app.activeCourse[ind];
+      courseData["day"] = ind;
+      this.navCtrl.setRoot(AuraContentPage,{data:courseData});
+    }
+
   }
 
   initLabelIntro() {
@@ -151,6 +162,14 @@ export class AuraMainPage {
       } else {
         this.labelIntro = "Start this course";
       }
+    }
+  }
+
+  getDayBtnIcon() {
+    if (this.app.isNextLessonLocked(this.courseTitle)) {
+      return "lock";
+    } else {
+      return "play";
     }
   }
 }

@@ -170,14 +170,7 @@ export class AppProvider {
     }
   }
 
-  updateUserProgress(){
-  	//TODO: get user data first from EVT. probably from custom fields
-
-  	//TODO: assign user data to existing mapping.
-  }
-
-
-  saveThngContext(result: JSON) {
+  saveThngContext(result: any) {
     /**
      * Save the THNG scanned or created via IR scan to localStorage for later use
      */
@@ -185,10 +178,12 @@ export class AppProvider {
       /**
        * Ignore other THNGs if there's already one in localStorage
        */
-      if (typeof result[0].results[0].thng !== "undefined"){
+      if (typeof result.id !== 'undefined') {
+        localStorage.setItem('myThng', JSON.stringify(result));
+      } else if (typeof result[0].results[0].thng !== "undefined"){
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
-      }else{
-        localStorage.setItem('myThng', JSON.stringify(result[0].results[0].product));
+      }else if (typeof result[0].results[0].product !== "undefined"){
+        localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
       }
     }
 
@@ -238,7 +233,7 @@ export class AppProvider {
     })
   }
 
-  playLesson(lessonData: any) {
+  playLesson(lessonData: any, pmc?: any) {
     /**
      * single-point entry for handling play button actions for AURA content
      */
@@ -261,7 +256,7 @@ export class AppProvider {
     if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       this.evt.createThngAction('_Play');
       this.startLesson(lessonData);
-      this.startLessonTimer(lessonData);
+      this.startLessonTimer(lessonData, pmc);
     } else {
       this.stopLessonTimer(lessonData);
     }
@@ -287,18 +282,18 @@ export class AppProvider {
     this.setCurrentCourse(lessonData.course);
   }
 
-  startLessonTimer(lessonData: any) {
+  startLessonTimer(lessonData: any, pmc?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
     this.lessonTimer =
       timer
       .takeWhile(() => alive)
       .subscribe((val) => {
-
         if (val == (this.lessonTimeLimit)) { //Todo: put this in config
         // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
           this.completeLesson(lessonData);
+          pmc.toggleView(true, lessonData.course);
           this.lessonTimer.unsubscribe();
 
         }
@@ -321,7 +316,7 @@ export class AppProvider {
     }
 
     let self = this;
-    this.evt.createThngAction('_LessonCompleted',
+    return this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
           "currentCourse": lessonData.course,
@@ -424,7 +419,7 @@ export class AppProvider {
      * @type {string}
      */
     let str = "";
-    if (typeof course != 'undefined') {
+    if (typeof course == 'undefined') {
       str = "lcCnt" + this.today.toDateString();
     } else {
       str = "lcCnt" + course + this.today.toDateString()
@@ -444,7 +439,15 @@ export class AppProvider {
     } else {
       if (this.courses[course] != 'undefined') {
         let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
-        return (remCnt >= 0 ? remCnt : 0);
+        if (this.hasLoggedIn()) {
+          return (remCnt >= 0 ? remCnt : 0);
+        } else {
+          if (this.nextLesson(course) <= Config.anonUserLessonLimit) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
       }
     }
   }
@@ -527,7 +530,7 @@ export class AppProvider {
       crsLastLesson = this.getCurrentLesson(course);
 
       if (crsDuration > crsLastLesson) {
-        crsNextLesson = crsLastLesson + this.getAdditionalLesson();
+        crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
       } else {
         crsNextLesson = crsLastLesson;
       }
@@ -626,19 +629,39 @@ export class AppProvider {
     return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
   }
 
+  getTotalAvailableLessons(course?: any): number {
+    /**
+     * Get total available lessons. Separate branches between Anon and Logged-in user
+     */
+    if (this.hasLoggedIn()) {
+      let availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
+
+      return availableLessons;
+    } else {
+
+      let progressCnt = this.getCourseProgress(course);
+      console.log("progressCnt" + progressCnt);
+      if (progressCnt >= Config.anonUserLessonLimit) {
+        return Config.anonUserLessonLimit; //only 1 lesson available for anon user
+      } else {
+        return this.lastLesson(course);
+      }
+    }
+
+  }
+
   getArrDay(course?: any): Array<any> {
     //add a lesson if there are lesson credit remaining and if there's history
     let arrDay = [];
-    let availableLessons = this.getLastCompletedLesson() > 0 ?
-      this.lastLesson(course) + this.getAdditionalLesson(course) : 0;
-    //let availableLessons = this.lastLesson(course) + this.getAdditionalLesson(course);
+    let availableLessons = this.getTotalAvailableLessons(course);
 
     for(let i=0;i < availableLessons;i++){
       let iDay = i + 1;
     	let st = !(iDay==this.nextLesson(course));
     	arrDay.push({day:iDay,status:st});
     }
-    console.log(this.lastLesson(course));
+
+    console.log("lastLesson" + this.lastLesson(course));
     console.log(arrDay);
     console.log("hasNextLesson:" + this.hasNextLesson(course));
     return arrDay;
@@ -690,4 +713,19 @@ export class AppProvider {
       return this.courses[course][lessonId];
     }
   }
+
+  isNextLessonLocked(course?: any): boolean {
+    if (!this.hasLoggedIn()) {
+      //logged in, no lock, don't bother
+      let nextLesson = this.nextLesson(course);
+      if (typeof nextLesson != 'undefined') {
+        if (nextLesson > Config.anonUserLessonLimit) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
 }
