@@ -25730,7 +25730,8 @@ notice > section.body span.title {
 
 notice > section.body a {
   color: inherit;
-  text-decoration: underline;
+  text-decoration: none;
+  cursor: auto;
 }
 
 notice > section.body button[ion-button] {

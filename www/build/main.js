@@ -39,7 +39,7 @@ webpackEmptyAsyncContext.id = 203;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(339);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
@@ -1214,10 +1214,10 @@ var aura = [
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(379);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__ = __webpack_require__(22);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1908,9 +1908,10 @@ var AppProvider = (function () {
         /**
          * set beginning of use
          */
-        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined') {
-            var dy = Date.now() - (Date.now() % 86400); //start of the day
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString());
+        console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
+            var dy = Date.now(); //start of the day
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
         }
     };
     AppProvider.prototype.getBeginTS = function () {
@@ -1924,13 +1925,30 @@ var AppProvider = (function () {
          * Check if there's a need to popup a signin notice
          */
         if (!this.hasLoggedIn()) {
-            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / 86400);
+            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
             if (daysSince >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
                 console.log('daysSince:' + daysSince);
                 return true;
             }
         }
         return false;
+    };
+    AppProvider.prototype.getUserCreatedAt = function () {
+        if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
+            //only for logged in
+            var usr = JSON.parse(localStorage.userInfo);
+            var userCreatedAt = new Date(usr.created_at);
+            return userCreatedAt;
+        }
+    };
+    AppProvider.prototype.hasReorderNotice = function () {
+        if (this.hasLoggedIn()) {
+            var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
+            console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
+            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
+                return true;
+            }
+        }
     };
     return AppProvider;
 }());
@@ -1956,7 +1974,7 @@ AppProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2231,7 +2249,7 @@ ScriptService = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProgressModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2535,7 +2553,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(332);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(645);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(48);
@@ -2545,8 +2563,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(646);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
@@ -2652,9 +2670,10 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2671,6 +2690,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var MyApp = (function () {
     function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
         this.platform = platform;
@@ -2679,14 +2699,14 @@ var MyApp = (function () {
         this.app = app;
         this.evt = evt;
         this.loading = loading;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */];
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
         this.text = "";
         this.show = false;
         this.noLink = true;
         this.initializeApp();
         // used for an example of ngFor and navigation
         this.pages = [
-            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */] }
+            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] }
         ];
     }
     MyApp.prototype.ngOnInit = function () {
@@ -2725,6 +2745,15 @@ var MyApp = (function () {
             this.text = 'Sign in to track your progress.';
             this.noLink = true;
         }
+        else if (this.app.hasReorderNotice()) {
+            this.show = true;
+            this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
+            this.noLink = false;
+            this.ext_url = {
+                name: 'reorder',
+                link: __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__["a" /* Config */].ext_links.reorder
+            };
+        }
     };
     MyApp.prototype.initializeApp = function () {
         var _this = this;
@@ -2735,9 +2764,9 @@ var MyApp = (function () {
             _this.statusBar.styleDefault();
             _this.splashScreen.hide();
             //self.evt.init();
+            _this.app.setBeginTS();
             console.log("EVT");
         });
-        this.app.setBeginTS();
     };
     return MyApp;
 }());
@@ -2746,11 +2775,11 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink"  *ngIf="show">\n\n</notice>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show">\n\n</notice>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
 ], MyApp);
 
@@ -2759,6 +2788,194 @@ MyApp = __decorate([
 /***/ }),
 
 /***/ 37:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EvtProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(22);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+/*
+  Generated class for the EvtProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var EvtProvider = (function () {
+    function EvtProvider(http, auth) {
+        this.http = http;
+        this.auth = auth;
+        console.log('Hello EvtProvider Provider', __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
+        this.init();
+    }
+    EvtProvider.prototype.createAppAction = function (actionType, action) {
+        if (actionType === void 0) { actionType = ''; }
+        if (action === void 0) { action = {}; }
+        this.evtapp.$init.then(function (res) {
+            res.action(actionType).create(action).then(console.log);
+        }).catch(function (err) {
+            console.log(err);
+        });
+    };
+    EvtProvider.prototype.createUserAction = function (actionType, action) {
+        if (actionType === void 0) { actionType = ''; }
+        if (action === void 0) { action = {}; }
+        return this.getUserContext().then(function (usr) {
+            usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
+        });
+    };
+    EvtProvider.prototype.createThngAction = function (actionType, action) {
+        if (actionType === void 0) { actionType = ''; }
+        if (action === void 0) { action = {}; }
+        return this.getThngContext().then(function (thng) {
+            thng.action(actionType).create(action).then(console.log).catch(function (err) { return console.error(err); });
+        });
+    };
+    EvtProvider.prototype.init = function () {
+        EVT.use(EVT.Scan);
+        EVT.setup({
+            apiUrl: __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_base_url,
+            geolocation: false
+        });
+        EVT.Scan.setup({
+            filter: {
+                method: ["ir", "2d"]
+            }
+        });
+        this.evtapp = new EVT.App(__WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
+    };
+    EvtProvider.prototype.hasUserContext = function () {
+        return (this.getUserContextKeys() ? true : false);
+    };
+    EvtProvider.prototype.getUserContextKeys = function () {
+        var lsApiKey = "";
+        var lsId = "";
+        if (this.auth.loggedIn()) {
+            var userContext = this.auth.getUserDetailsFromStorage();
+            lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
+            lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
+        }
+        else {
+            //Anon user
+            if (typeof localStorage.evrythngInfo != 'undefined') {
+                var userContext = JSON.parse(localStorage.evrythngInfo);
+                lsId = userContext.evrythngUser;
+                lsApiKey = userContext.evrythngApiKey;
+            }
+        }
+        if (lsApiKey !== "" && lsId !== "") {
+            return [lsApiKey, lsId];
+        }
+    };
+    /* return evt user context as a promise */
+    EvtProvider.prototype.getUserContext = function () {
+        var _this = this;
+        var ls = this.getUserContextKeys();
+        var lsId = ls[1];
+        var lsApiKey = ls[0];
+        return (new Promise(function (resolve, reject) {
+            resolve(new EVT.User({
+                id: lsId,
+                apiKey: lsApiKey
+            }, _this.evtapp));
+        }));
+    };
+    EvtProvider.prototype.getUser = function () {
+        /**
+         * Return EVT user instance object (Not a promise)
+         * @type {any}
+         */
+        var ls = this.getUserContextKeys();
+        var lsId = ls[1];
+        var lsApiKey = ls[0];
+        var userContext = this.auth.getUserDetailsFromStorage();
+        if (typeof userContext != 'undefined') {
+            return new EVT.User({
+                id: lsId,
+                apiKey: lsApiKey
+            }, this.evtapp);
+        }
+    };
+    /**
+     *
+     * Return Thng context as promise
+     * Save to local storage if it's available in EVT
+     *
+     * @returns {any}
+     */
+    EvtProvider.prototype.getThngContext = function () {
+        /**
+         * assign `this` local function context
+         * @type {any}
+         */
+        var self = this;
+        if (typeof localStorage.myThng !== 'undefined') {
+            var myThng = JSON.parse(localStorage.myThng);
+            return this.getUser().thng(myThng.id).read();
+        }
+        else {
+            return this.getUserCustomFields().then(function (cf) {
+                if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
+                    //has myThng customField
+                    return self.getUser().thng(cf.myThng).read(function (th) {
+                        localStorage.myThng = JSON.stringify(th);
+                    });
+                }
+            });
+        }
+    };
+    /* EVT Scan */
+    EvtProvider.prototype.scan = function (opt) {
+        return this.evtapp.scan(opt);
+    };
+    /* Get EVT user's custom fields */
+    EvtProvider.prototype.getUserCustomFields = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.getUserContext().then(function (usr) {
+                usr.$init.then(function (user) {
+                    if (typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')) {
+                        resolve(user.customFields);
+                    }
+                    else {
+                        resolve(false);
+                    }
+                });
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+    return EvtProvider;
+}());
+EvtProvider = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
+], EvtProvider);
+
+//# sourceMappingURL=evt.js.map
+
+/***/ }),
+
+/***/ 38:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2958,18 +3175,18 @@ AuraMainPage = __decorate([
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -3223,193 +3440,6 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 44:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EvtProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(22);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-/*
-  Generated class for the EvtProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
-var EvtProvider = (function () {
-    function EvtProvider(http, auth) {
-        this.http = http;
-        this.auth = auth;
-        console.log('Hello EvtProvider Provider', __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
-        this.init();
-    }
-    EvtProvider.prototype.createAppAction = function (actionType, action) {
-        if (actionType === void 0) { actionType = ''; }
-        if (action === void 0) { action = {}; }
-        this.evtapp.$init.then(function (res) {
-            res.action(actionType).create(action).then(console.log);
-        }).catch(function (err) {
-            console.log(err);
-        });
-    };
-    EvtProvider.prototype.createUserAction = function (actionType, action) {
-        if (actionType === void 0) { actionType = ''; }
-        if (action === void 0) { action = {}; }
-        return this.getUserContext().then(function (usr) {
-            usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
-        });
-    };
-    EvtProvider.prototype.createThngAction = function (actionType, action) {
-        if (actionType === void 0) { actionType = ''; }
-        if (action === void 0) { action = {}; }
-        return this.getThngContext().then(function (thng) {
-            thng.action(actionType).create(action).then(console.log).catch(function (err) { return console.error(err); });
-        });
-    };
-    EvtProvider.prototype.init = function () {
-        EVT.use(EVT.Scan);
-        EVT.setup({
-            apiUrl: __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_base_url,
-            geolocation: false
-        });
-        EVT.Scan.setup({
-            filter: {
-                method: ["ir", "2d"]
-            }
-        });
-        this.evtapp = new EVT.App(__WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
-    };
-    EvtProvider.prototype.hasUserContext = function () {
-        return (this.getUserContextKeys() ? true : false);
-    };
-    EvtProvider.prototype.getUserContextKeys = function () {
-        var lsApiKey = "";
-        var lsId = "";
-        if (this.auth.loggedIn()) {
-            var userContext = this.auth.getUserDetailsFromStorage();
-            lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
-            lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
-        }
-        else {
-            //Anon user
-            if (typeof localStorage.evrythngInfo != 'undefined') {
-                var userContext = JSON.parse(localStorage.evrythngInfo);
-                lsId = userContext.evrythngUser;
-                lsApiKey = userContext.evrythngApiKey;
-            }
-        }
-        if (lsApiKey !== "" && lsId !== "") {
-            return [lsApiKey, lsId];
-        }
-    };
-    /* return evt user context as a promise */
-    EvtProvider.prototype.getUserContext = function () {
-        var _this = this;
-        var ls = this.getUserContextKeys();
-        var lsId = ls[1];
-        var lsApiKey = ls[0];
-        return (new Promise(function (resolve, reject) {
-            resolve(new EVT.User({
-                id: lsId,
-                apiKey: lsApiKey
-            }, _this.evtapp));
-        }));
-    };
-    EvtProvider.prototype.getUser = function () {
-        /**
-         * Return EVT user instance object (Not a promise)
-         * @type {any}
-         */
-        var ls = this.getUserContextKeys();
-        var lsId = ls[1];
-        var lsApiKey = ls[0];
-        var userContext = this.auth.getUserDetailsFromStorage();
-        if (typeof userContext != 'undefined') {
-            return new EVT.User({
-                id: lsId,
-                apiKey: lsApiKey
-            }, this.evtapp);
-        }
-    };
-    EvtProvider.prototype.getThngContext = function () {
-        var _this = this;
-        /**
-         * Return Thng context as promise
-         * Save to local storage if it's available in EVT
-         *
-         * @type {any}
-         */
-        var self = this;
-        if (typeof localStorage.myThng !== 'undefined') {
-            var myThng = JSON.parse(localStorage.myThng);
-            return this.getUser().thng(myThng.id).read();
-        }
-        else {
-            console.log("getThngContext");
-            return this.getUserCustomFields().then(function (cf) {
-                console.log(cf);
-                if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
-                    //has myThng customField
-                    return _this.getUser().thng(cf.myThng).read(function (th) {
-                        console.log(th);
-                        localStorage.myThng = JSON.stringify(th);
-                    });
-                }
-            });
-        }
-    };
-    /* EVT Scan */
-    EvtProvider.prototype.scan = function (opt) {
-        return this.evtapp.scan(opt);
-    };
-    /* Get EVT user's custom fields */
-    EvtProvider.prototype.getUserCustomFields = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.getUserContext().then(function (usr) {
-                usr.$init.then(function (user) {
-                    if (typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')) {
-                        resolve(user.customFields);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                });
-            }).catch(function (err) {
-                reject(err);
-            });
-        });
-    };
-    return EvtProvider;
-}());
-EvtProvider = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
-], EvtProvider);
-
-//# sourceMappingURL=evt.js.map
-
-/***/ }),
-
 /***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3418,13 +3448,13 @@ EvtProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(38);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3538,7 +3568,7 @@ LoginPage = __decorate([
 
 /***/ }),
 
-/***/ 62:
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3569,14 +3599,16 @@ var Config = {
         privacyPolicy: "//www.neutrogena.co.uk/privacypolicy",
         cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
         legalNotice: "//www.neutrogena.co.uk/legal-statement",
-        slaveryAct: "//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf"
+        slaveryAct: "//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
+        reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
     },
     lessonCompletionTimeLimit: 2,
     totalDailyLessonLimit: 30,
     courseDailyLessonLimit: 10,
     anonUserLessonLimit: 1,
     anonUserDaysToSignInNotice: 0,
-    dayToReorderNotice: 1 //day N of 30 days before a logged-in user will see a pop-up since sign-up
+    thngDaysLifeSpan: 30,
+    dayToReorderNotice: 1 //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
 };
 //# sourceMappingURL=environment.dev.js.map
 
@@ -3589,12 +3621,12 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3760,7 +3792,7 @@ AuthPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(44);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3992,7 +4024,7 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
@@ -4127,6 +4159,7 @@ NoticeComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4139,6 +4172,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the NoticeComponent component.
  *
@@ -4147,8 +4181,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  */
 var NoticeComponent = (function () {
     //@ViewChild(this) content ?: NoticeComponent;
-    function NoticeComponent(app, render, elem) {
+    function NoticeComponent(app, evt, render, elem) {
         this.app = app;
+        this.evt = evt;
         this.render = render;
         this.elem = elem;
         this.title = "";
@@ -4165,10 +4200,16 @@ var NoticeComponent = (function () {
     };
     NoticeComponent.prototype.ngAfterViewInit = function () {
     };
-    NoticeComponent.prototype.goToPage = function () {
-        var nav = this.app.getRootNav();
-        this.toggleView(false);
-        nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_login_login__["a" /* LoginPage */]);
+    NoticeComponent.prototype.goToPage = function (ext_url) {
+        console.log(this.ext_url);
+        if (typeof ext_url == 'undefined') {
+            var nav = this.app.getRootNav();
+            this.toggleView(false);
+            nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_login_login__["a" /* LoginPage */]);
+        }
+        else {
+            this.evt.createUserAction("_Reorder");
+        }
     };
     NoticeComponent.prototype.toggleView = function (stat) {
         if (stat === void 0) { stat = !this.show; }
@@ -4203,11 +4244,15 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('noLink'),
     __metadata("design:type", Boolean)
 ], NoticeComponent.prototype, "noLink", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('ext_url'),
+    __metadata("design:type", Object)
+], NoticeComponent.prototype, "ext_url", void 0);
 NoticeComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'notice',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/'<!-- Generated template for the NoticeComponent component -->\n<section class="body" [ngStyle]="style">\n	<button ion-button id="btnClose" ><ion-icon (click)="destroy()" name="close"></ion-icon></button>\n	<span class="title" *ngIf="noLink">\n		{{title}}\n	</span>\n  <span class="title" *ngIf="!noLink" (tap)="goToPage()">\n		{{title}}\n	</span>\n	<div class="body">\n		<ng-content>\n\n		</ng-content>\n	</div>\n</section>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/
+        selector: 'notice',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/'<!-- Generated template for the NoticeComponent component -->\n<section class="body" [ngStyle]="style">\n	<button ion-button id="btnClose" ><ion-icon (click)="destroy()" name="close"></ion-icon></button>\n	<span class="title" *ngIf="noLink">\n		{{title}}\n	</span>\n  <span class="title" *ngIf="!noLink" (tap)="goToPage(ext_url)">\n    <a class="title" [href]="ext_url?.link" [target]="ext_url?.target" [title]="ext_url?.name">\n		{{title}}\n    </a>\n	</span>\n	<div class="body">\n		<ng-content>\n\n		</ng-content>\n	</div>\n</section>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
 ], NoticeComponent);
 
 //# sourceMappingURL=notice.js.map
@@ -4260,7 +4305,7 @@ FooterComponentModule = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4646,8 +4691,8 @@ AuraFootComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4824,12 +4869,12 @@ ProgressModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__);
@@ -4998,8 +5043,8 @@ SignUpPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5119,7 +5164,7 @@ AgeGatePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(289);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
