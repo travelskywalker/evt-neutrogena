@@ -30,4 +30,6 @@ export const Config = {
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
+  anonUserDaysToSignInNotice: 0, //days until an anon user will see a pop-up to sign-in / sign-up
+  dayToReorderNotice: 1 //day N of 30 days before a logged-in user will see a pop-up since sign-up
 };
