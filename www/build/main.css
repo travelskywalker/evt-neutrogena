@@ -26418,6 +26418,15 @@ page-aura-main .btns div.play ion-col.rng:after {
   border-bottom: 1px solid #f07721;
 }
 
+page-aura-main .btns div.play.end ion-col img {
+  max-height: 18px;
+  margin-top: 4px;
+}
+
+page-aura-main .btns div.play.end ion-col.rng:after {
+  display: none !important;
+}
+
 page-aura-main ion-content {
   margin-top: 50px;
   margin-bottom: 50px;
