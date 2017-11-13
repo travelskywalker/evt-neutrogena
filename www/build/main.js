@@ -1904,6 +1904,34 @@ var AppProvider = (function () {
             });
         }
     };
+    AppProvider.prototype.setBeginTS = function () {
+        /**
+         * set beginning of use
+         */
+        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined') {
+            var dy = Date.now() - (Date.now() % 86400); //start of the day
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString());
+        }
+    };
+    AppProvider.prototype.getBeginTS = function () {
+        /**
+         * return since beginning of use.
+         */
+        return parseInt(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+    };
+    AppProvider.prototype.hasSignInNotice = function () {
+        /**
+         * Check if there's a need to popup a signin notice
+         */
+        if (!this.hasLoggedIn()) {
+            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / 86400);
+            if (daysSince >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
+                console.log('daysSince:' + daysSince);
+                return true;
+            }
+        }
+        return false;
+    };
     return AppProvider;
 }());
 AppProvider = __decorate([
@@ -2692,7 +2720,7 @@ var MyApp = (function () {
         });
     };
     MyApp.prototype.noticePopUp = function () {
-        if (!this.app.hasLoggedIn()) {
+        if (this.app.hasSignInNotice()) {
             this.show = true;
             this.text = 'Sign in to track your progress.';
             this.noLink = true;
@@ -2709,6 +2737,7 @@ var MyApp = (function () {
             //self.evt.init();
             console.log("EVT");
         });
+        this.app.setBeginTS();
     };
     return MyApp;
 }());
@@ -3546,6 +3575,8 @@ var Config = {
     totalDailyLessonLimit: 30,
     courseDailyLessonLimit: 10,
     anonUserLessonLimit: 1,
+    anonUserDaysToSignInNotice: 0,
+    dayToReorderNotice: 1 //day N of 30 days before a logged-in user will see a pop-up since sign-up
 };
 //# sourceMappingURL=environment.dev.js.map
 
