@@ -752,4 +752,37 @@ export class AppProvider {
     }
   }
 
+  setBeginTS(): void {
+    /**
+     * set beginning of use
+     */
+    if (typeof Cookie.get('ts_begin') == 'undefined') {
+      let dy = Date.now() - (Date.now() % 86400); //start of the day
+      Cookie.set('ts_begin', dy);
+    }
+  }
+
+  getBeginTS(): any {
+    /**
+     * return since beginning of use.
+     */
+    return parseInt(Cookie.get('ts_begin'));
+  }
+
+  hasSignInNotice(): boolean {
+    /**
+     * Check if there's a need to popup a signin notice
+     */
+
+    if (!this.hasLoggedIn()) {
+      let daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / 86400);
+
+      if (daysSince >= Config.anonUserDaysToSignInNotice) {
+        console.log('daysSince:' + daysSince);
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

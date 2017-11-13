@@ -70,7 +70,7 @@ export class MyApp {
   }
 
   noticePopUp(){
-    if(!this.app.hasLoggedIn()){
+    if(this.app.hasSignInNotice()){
         this.show = true;
         this.text = 'Sign in to track your progress.';
         this.noLink = true;
@@ -88,5 +88,6 @@ export class MyApp {
       //self.evt.init();
       console.log("EVT");
     });
+    this.app.setBeginTS();
   }
 }
