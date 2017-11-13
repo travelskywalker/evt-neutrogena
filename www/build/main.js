@@ -1202,813 +1202,7 @@ var aura = [
 
 /***/ }),
 
-/***/ 285:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraContentPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-/**
- * Generated class for the AuraContentPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var AuraContentPage = (function () {
-    function AuraContentPage(elRef, navCtrl, navParams, app, render, viewCtrl, scr, sanitizer) {
-        this.elRef = elRef;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.app = app;
-        this.render = render;
-        this.viewCtrl = viewCtrl;
-        this.scr = scr;
-        this.sanitizer = sanitizer;
-        this.auraLoc = __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__["a" /* aura */];
-        this.module = {
-            title: "Morning Meditations",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips",
-            id: 'h1',
-            link: this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html")
-        };
-        var data = this.navParams.get('data');
-        /* If there are no data in navparams *
-     * redirect to main page			 */
-        if (typeof data == "undefined") {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
-        }
-        else {
-            /* set the content details */
-            console.log(data);
-            this.module.title = data.title;
-            this.module.description = data.desc;
-            this.module.id = data.id;
-            this.module.course = data.course;
-            this.module.day = data.day;
-            this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/" + encodeURIComponent(data.path));
-        }
-    }
-    AuraContentPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad AuraContentPage');
-        this.app.startCourse(this.module);
-    };
-    AuraContentPage.prototype.loadScript = function (url, contentId) {
-        console.log('preparing to load...');
-        var node = document.createElement('script');
-        node.setAttribute('id', 'aura-widget');
-        node.setAttribute('data-content-id', contentId);
-        node.src = url;
-        node.type = 'text/javascript';
-        // let jsScript = document.getElementById('aura-widget');
-        //
-        // if(jsScript){
-        //   console.log(jsScript);
-        //   jsScript.removeAttribute('data-content-id');
-        //   jsScript.setAttribute('data-content-id',contentId);
-        // }
-        // else{
-        //   document.getElementsByTagName('page-aura-content')[0].appendChild(node);
-        // }
-        document.getElementsByTagName('page-aura-content')[0].appendChild(node);
-    };
-    AuraContentPage.prototype.ngAfterViewInit = function () {
-        var self = this;
-        self.pmc.toggleView(false);
-        // this.loadScript('../assets/scripts/widget.js',this.module.id);
-        /* check if iframe has loaded */
-        document.getElementById("aura-widget-div").onload = function (e) {
-            var fp = e.srcElement;
-            var hed = fp.contentWindow.document.getElementsByTagName('head')[0];
-            var frm = fp.contentWindow.document.getElementsByTagName('body')[0];
-            frm.style.maxHeight = "100%"; // assign max height
-            frm.style.margin = "0px"; // and margin css details
-            var auraWidget = fp.contentWindow.document.getElementById('aura-widget-div');
-            auraWidget.style.maxHeight = "100%";
-            auraWidget.style.height = "100%";
-            // fp.contentWindow.document.getElementById('aura-widget-div')
-            /* TO DO: Add listener to aura player to track	*
-             * play, pause, and audio completion			*/
-            var elementDetected = 0;
-            var handler = function (e) {
-                var playBtn = fp.contentWindow.document.querySelector('div.audio.play');
-                playBtn.addEventListener('click', function (e) {
-                    var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
-                    if (ifStartPlay) {
-                        self.controlButtons(playBtn);
-                    }
-                });
-                auraWidget.removeEventListener('DOMSubtreeModified', handler, true);
-            };
-            auraWidget.addEventListener('DOMSubtreeModified', handler, true);
-        };
-    };
-    AuraContentPage.prototype.controlButtons = function (element) {
-        this.app.playLesson(this.module, this.pmc);
-        //this.startLessonTimer(element);
-    };
-    //startLessonTimer(element) {
-    //  let timer = Observable.timer(1000, 1000);
-    //  let alive: boolean = true;
-    //  this.lessonTimer =
-    //    timer
-    //    .takeWhile(() => alive)
-    //    .subscribe((val) => {
-    //
-    //      //if (val >= (val * 60 * 10)) { //Todo: put this in config
-    //      if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
-    //        //if 10 mins, trigger a _LessonCompleted action
-    //      	this.pmc.toggleView(true, this.module.course);
-    //        element.click();
-    //          this.lessonTimer.unsubscribe();
-    //      }
-    //    })
-    //
-    //}
-    /* If page leave is triggered before audio finishes playing, *
-     * make sure to pause/stop all aura audio					 */
-    AuraContentPage.prototype.ionViewDidLeave = function () {
-        //audio.ontimeupdate = null;
-    };
-    AuraContentPage.prototype.ionViewWillLeave = function () {
-        // alert('XX');
-        //
-        // this.RemoveJsCss("//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js", "js");
-        // this.RemoveJsCss("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "js");
-        // this.RemoveJsCss("https://www.gstatic.com/firebasejs/4.4.0/firebase.js", "js");
-        // this.RemoveJsCss("https://fonts.googleapis.com/css?family=Lato:300,400,700", "css");
-        // this.RemoveJsCss("http://app.aurahealth.io/static/style.css", "css");
-        // this.RemoveJsCss("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "css");
-    };
-    AuraContentPage.prototype.RemoveJsCss = function (filename, filetype) {
-        var targetelement = (filetype == "js") ? "script" : (filetype == "css") ? "link" : "none"; //determine element type to create nodelist from
-        var targetattr = (filetype == "js") ? "src" : (filetype == "css") ? "href" : "none"; //determine corresponding attribute to test for
-        var allsuspects = document.getElementsByTagName(targetelement);
-        for (var i = allsuspects.length; i >= 0; i--) {
-            if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) != null && allsuspects[i].getAttribute(targetattr).indexOf(filename) != -1)
-                allsuspects[i].parentNode.removeChild(allsuspects[i]); //remove element by calling parentNode.removeChild()
-        }
-    };
-    return AuraContentPage;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('aura'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
-], AuraContentPage.prototype, "auraComponent", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */])
-], AuraContentPage.prototype, "content", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */])
-], AuraContentPage.prototype, "pmc", void 0);
-AuraContentPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
-        __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
-], AuraContentPage);
-
-//# sourceMappingURL=aura-content.js.map
-
-/***/ }),
-
-/***/ 286:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScriptService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var ScriptService = (function () {
-    /*
-     * AS of now, this not used.
-     * This dynamically updates/creates the aura script js
-     */
-    function ScriptService() {
-        var _this = this;
-        this.scripts = {};
-        [{ name: "aura", src: "http://app.aurahealth.io/static/widget.js" }].forEach(function (script) {
-            _this.scripts[script.name] = {
-                loaded: false,
-                src: script.src
-            };
-        });
-    }
-    /*load(...scripts: string[]) {
-        var promises: any[] = [];
-        scripts.forEach((script) => promises.push(this.loadScript(script)));
-        return Promise.all(promises);
-    }*/
-    ScriptService.prototype.loadScript = function (name, cid) {
-        var _this = this;
-        document.getElementById('ext_scripts').innerHTML = "";
-        return new Promise(function (resolve, reject) {
-            //resolve if already loaded
-            //load script
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = _this.scripts[name].src;
-            script.id = "aura-widget";
-            script.setAttribute("data-content-id", cid);
-            if (script.readyState) {
-                script.onreadystatechange = function () {
-                    if (script.readyState === "loaded" || script.readyState === "complete") {
-                        script.onreadystatechange = null;
-                        _this.scripts[name].loaded = true;
-                        resolve({ script: name, loaded: true, status: 'Loaded' });
-                    }
-                };
-            }
-            else {
-                script.onload = function () {
-                    _this.scripts[name].loaded = true;
-                    resolve({ script: name, loaded: true, status: 'Loaded' });
-                };
-            }
-            script.onerror = function (error) { return resolve({ script: name, loaded: false, status: 'Loaded' }); };
-            document.getElementById('ext_scripts').appendChild(script);
-        });
-    };
-    return ScriptService;
-}());
-ScriptService = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [])
-], ScriptService);
-
-//# sourceMappingURL=script.service.js.map
-
-/***/ }),
-
-/***/ 287:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProgressModalComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(36);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-/**
- * Generated class for the ProgressModalComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-var ProgressModalComponent = (function () {
-    function ProgressModalComponent(nav, render, elem, app) {
-        this.nav = nav;
-        this.render = render;
-        this.elem = elem;
-        this.app = app;
-        this.day = 1;
-        this.length = 10;
-        this.show = false;
-    }
-    ProgressModalComponent.prototype.ngOnInit = function () {
-        this.day = this.app.nextLesson(this.app.currentCourse);
-        this.length = this.app.getCourseDuration(this.app.currentCourse);
-        console.log(this);
-    };
-    ProgressModalComponent.prototype.toHome = function () {
-        var _this = this;
-        this.app.initProgArr().then(function () {
-            _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-            _this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */]);
-        });
-    };
-    /* toggle visibility of this component */
-    ProgressModalComponent.prototype.toggleView = function (stat, course) {
-        if (stat === void 0) { stat = !this.show; }
-        this.show = stat;
-        if (!this.show) {
-            this.render.setStyle(this.elem.nativeElement, "display", "none");
-        }
-        else {
-            this.render.setStyle(this.elem.nativeElement, "display", "block");
-        }
-    };
-    return ProgressModalComponent;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('day'),
-    __metadata("design:type", Number)
-], ProgressModalComponent.prototype, "day", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('length'),
-    __metadata("design:type", Number)
-], ProgressModalComponent.prototype, "length", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('show'),
-    __metadata("design:type", Boolean)
-], ProgressModalComponent.prototype, "show", void 0);
-ProgressModalComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'progress-modal',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome()">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
-], ProgressModalComponent);
-
-//# sourceMappingURL=progress-modal.js.map
-
-/***/ }),
-
-/***/ 288:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ForgotPasswordPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(47);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-/**
- * Generated class for the ForgotPasswordPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var ForgotPasswordPage = (function () {
-    function ForgotPasswordPage(navCtrl, navParams, auth0, formBuilder, render) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.auth0 = auth0;
-        this.formBuilder = formBuilder;
-        this.render = render;
-        this.invalidEmail = false;
-        this.emailSent = false;
-        this.formGroup = this.formBuilder.group({
-            email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-        });
-    }
-    ForgotPasswordPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad ForgotPasswordPage');
-    };
-    ForgotPasswordPage.prototype.focused = function (event) {
-        //console.log(event._elementRef.nativeElement);
-        var node = event._elementRef.nativeElement;
-        this.render.addClass(node, "focused");
-        //this.render.setStyle(node,"box-shadow","2px 2px 3px 1px rgb(240,119,33)");
-    };
-    ForgotPasswordPage.prototype.blurred = function (event) {
-        //console.log(event._elementRef.nativeElement);
-        var node = event._elementRef.nativeElement;
-        this.render.removeClass(node, "focused");
-        //this.render.removeStyle(node,"box-shadow");
-    };
-    ForgotPasswordPage.prototype.toSignup = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__["a" /* SignUpPage */]);
-    };
-    ForgotPasswordPage.prototype.reset_pass = function () {
-        var self = this;
-        this.auth0.searchUser(this.formGroup.value.email)
-            .then(function (res) {
-            if (res) {
-                self.invalidEmail = false;
-                self.auth0.changePassword(self.formGroup.value.email)
-                    .then(function (res) {
-                    self.emailSent = true;
-                })
-                    .catch(function (err) {
-                    console.log(err);
-                });
-            }
-            else {
-                self.invalidEmail = true;
-            }
-        })
-            .catch(function (err) {
-            console.log(err);
-        });
-    };
-    ForgotPasswordPage.prototype.dismissThis = function () {
-        // should pop this page and then go to previous
-        console.log("dismiss");
-        if (this.navCtrl.canGoBack()) {
-            this.navCtrl.pop();
-        }
-        else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
-        }
-    };
-    return ForgotPasswordPage;
-}());
-ForgotPasswordPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail,\'mailed\':emailSent}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()" [disabled]="!formGroup.valid || emailSent">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]])
-], ForgotPasswordPage);
-
-//# sourceMappingURL=forgot-password.js.map
-
-/***/ }),
-
-/***/ 289:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeleteAccountPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_account_my_account__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__ = __webpack_require__(22);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-/**
- * Generated class for the DeleteAccountPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var DeleteAccountPage = (function () {
-    function DeleteAccountPage(navCtrl, navParams, auth0, loader) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.auth0 = auth0;
-        this.loader = loader;
-    }
-    DeleteAccountPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad DeleteAccountPage');
-    };
-    DeleteAccountPage.prototype.cancel = function () {
-        if (this.navCtrl.canGoBack()) {
-            this.navCtrl.pop();
-        }
-        else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__my_account_my_account__["a" /* MyAccountPage */]);
-        }
-    };
-    DeleteAccountPage.prototype.delete = function () {
-        //auth0 here
-        var self = this;
-        var load = this.loader.create({
-            spinner: 'crescent',
-            dismissOnPageChange: true,
-            showBackdrop: true,
-            content: "Please wait...",
-            enableBackdropDismiss: true
-        });
-        load.present();
-        this.auth0.deleteUser().then(function (res) {
-            self.auth0.logout();
-            self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */]);
-        })
-            .catch(function (err) {
-            console.log("An error has occurred", err);
-            load.dismiss();
-        });
-    };
-    return DeleteAccountPage;
-}());
-DeleteAccountPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="delete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
-], DeleteAccountPage);
-
-//# sourceMappingURL=delete-account.js.map
-
-/***/ }),
-
-/***/ 290:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(291);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(295);
-
-
-Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
-//# sourceMappingURL=main.js.map
-
-/***/ }),
-
-/***/ 295:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(332);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(645);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(289);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(646);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_components_module__ = __webpack_require__(647);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-
-
-
-/* Pages */
-
-
-
-
-
-
-
-
-
-
-
-/* Providers */
-
-
-
-
-/* Custom Modules */
-
-var pages = [
-    __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
-    __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */],
-    __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__["a" /* SignUpPage */],
-    __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__["a" /* AuthPage */],
-    __WEBPACK_IMPORTED_MODULE_10__pages_login_login__["a" /* LoginPage */],
-    __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__["a" /* MyAccountPage */],
-    __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__["a" /* DeleteAccountPage */],
-    __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__["a" /* ForgotPasswordPage */],
-    __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__["a" /* AgeGatePage */],
-    __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__["a" /* ResetPasswordPage */],
-    __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__["a" /* AuraContentPage */],
-    __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */]
-];
-var AppModule = (function () {
-    function AppModule() {
-    }
-    return AppModule;
-}());
-AppModule = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["L" /* NgModule */])({
-        declarations: pages,
-        imports: [
-            __WEBPACK_IMPORTED_MODULE_22__components_components_module__["a" /* ComponentsModule */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */], {}, {
-                links: [
-                    { component: __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */], name: 'Home', segment: 'home' },
-                    { component: __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__["a" /* SignUpPage */], name: 'SignUpPage', segment: 'sign-up' },
-                    { component: __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__["a" /* AuthPage */], name: 'Auth0Page', segment: ':data' },
-                    { component: __WEBPACK_IMPORTED_MODULE_10__pages_login_login__["a" /* LoginPage */], name: 'LoginPage', segment: 'login' },
-                    { component: __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__["a" /* MyAccountPage */], name: 'MyAccountPage', segment: 'my-account' },
-                    { component: __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__["a" /* DeleteAccountPage */], name: 'DeleteAccountPage', segment: 'delete-account' },
-                    { component: __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__["a" /* ForgotPasswordPage */], name: 'ForgotPasswordPage', segment: 'forgot-password' },
-                    { component: __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__["a" /* AgeGatePage */], name: 'AgeGatePage', segment: 'age-gate' },
-                    { component: __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__["a" /* ResetPasswordPage */], name: 'ResetPasswordPage', segment: 'reset-password' },
-                    { component: __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__["a" /* AuraContentPage */], name: 'AuraContentPage', segment: 'aura-content' },
-                    { component: __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */], name: 'AuraMainPage', segment: 'aura' },
-                ]
-            }),
-        ],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
-        entryComponents: pages,
-        providers: [
-            __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__["a" /* StatusBar */],
-            __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__["a" /* SplashScreen */],
-            { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicErrorHandler */] },
-            __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__["a" /* EvtProvider */],
-            __WEBPACK_IMPORTED_MODULE_19__providers_app_app__["a" /* AppProvider */],
-            __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__["a" /* ScriptService */]
-        ]
-    })
-], AppModule);
-
-//# sourceMappingURL=app.module.js.map
-
-/***/ }),
-
-/***/ 332:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(36);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
-        this.platform = platform;
-        this.statusBar = statusBar;
-        this.splashScreen = splashScreen;
-        this.app = app;
-        this.evt = evt;
-        this.loading = loading;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */];
-        this.text = "";
-        this.show = false;
-        this.noLink = true;
-        this.initializeApp();
-        // used for an example of ngFor and navigation
-        this.pages = [
-            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */] }
-        ];
-    }
-    MyApp.prototype.ngOnInit = function () {
-        var _this = this;
-        if (!this.evt.hasUserContext()) {
-            return;
-        }
-        var self = this;
-        var loading = self.loading.create({
-            spinner: 'crescent',
-            content: "Please wait...",
-            enableBackdropDismiss: true
-        });
-        loading.present();
-        this.app.initCourses().then(function () {
-            _this.app.initProgArr().then(function () {
-                console.log("Last completed:" + _this.app.getLastCompletedCourse());
-                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-                loading.dismiss();
-                _this.nav.setRoot("AuraMainPage");
-            });
-        });
-    };
-    MyApp.prototype.ngAfterViewInit = function () {
-        var _this = this;
-        this.nav.viewDidEnter.subscribe(function (data) {
-            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
-                _this.noticePopUp();
-            }
-        });
-    };
-    MyApp.prototype.noticePopUp = function () {
-        if (!this.app.hasLoggedIn()) {
-            this.show = true;
-            this.text = 'Sign in to track your progress.';
-            this.noLink = true;
-        }
-    };
-    MyApp.prototype.initializeApp = function () {
-        var _this = this;
-        var self = this;
-        self.platform.ready().then(function () {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
-            _this.statusBar.styleDefault();
-            _this.splashScreen.hide();
-            //self.evt.init();
-            console.log("EVT");
-        });
-    };
-    return MyApp;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
-], MyApp.prototype, "nav", void 0);
-MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink"  *ngIf="show">\n\n</notice>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
-], MyApp);
-
-//# sourceMappingURL=app.component.js.map
-
-/***/ }),
-
-/***/ 36:
+/***/ 28:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2020,7 +1214,7 @@ MyApp = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(379);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(62);
@@ -2688,6 +1882,28 @@ var AppProvider = (function () {
         }
         return false;
     };
+    AppProvider.prototype.startLogin = function () {
+        console.log("Login action called");
+        localStorage.loginStarted = 1;
+    };
+    AppProvider.prototype.completeLogin = function () {
+        if (typeof localStorage.loginStarted != 'undefined') {
+            console.log("finalizeLogin");
+            var self_1 = this;
+            this.evt.createUserAction("_Login").then(function () {
+                self_1.evt.getThngContext().then(function (th) {
+                    console.log("getThngContext");
+                    console.log(th);
+                    if (typeof th != "undefined") {
+                        if (typeof localStorage.myThng == 'undefined') {
+                            self_1.saveThngContext(th);
+                        }
+                    }
+                });
+                localStorage.removeItem('loginStarted');
+            });
+        }
+    };
     return AppProvider;
 }());
 AppProvider = __decorate([
@@ -2701,20 +1917,1032 @@ AppProvider = __decorate([
 
 /***/ }),
 
-/***/ 42:
+/***/ 285:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraContentPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the AuraContentPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var AuraContentPage = (function () {
+    function AuraContentPage(elRef, navCtrl, navParams, app, render, viewCtrl, scr, sanitizer) {
+        this.elRef = elRef;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.app = app;
+        this.render = render;
+        this.viewCtrl = viewCtrl;
+        this.scr = scr;
+        this.sanitizer = sanitizer;
+        this.auraLoc = __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__["a" /* aura */];
+        this.module = {
+            title: "Morning Meditations",
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips",
+            id: 'h1',
+            link: this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html")
+        };
+        var data = this.navParams.get('data');
+        /* If there are no data in navparams *
+     * redirect to main page			 */
+        if (typeof data == "undefined") {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
+        }
+        else {
+            /* set the content details */
+            console.log(data);
+            this.module.title = data.title;
+            this.module.description = data.desc;
+            this.module.id = data.id;
+            this.module.course = data.course;
+            this.module.day = data.day;
+            this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/" + encodeURIComponent(data.path));
+        }
+    }
+    AuraContentPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad AuraContentPage');
+        this.app.startCourse(this.module);
+    };
+    AuraContentPage.prototype.loadScript = function (url, contentId) {
+        console.log('preparing to load...');
+        var node = document.createElement('script');
+        node.setAttribute('id', 'aura-widget');
+        node.setAttribute('data-content-id', contentId);
+        node.src = url;
+        node.type = 'text/javascript';
+        // let jsScript = document.getElementById('aura-widget');
+        //
+        // if(jsScript){
+        //   console.log(jsScript);
+        //   jsScript.removeAttribute('data-content-id');
+        //   jsScript.setAttribute('data-content-id',contentId);
+        // }
+        // else{
+        //   document.getElementsByTagName('page-aura-content')[0].appendChild(node);
+        // }
+        document.getElementsByTagName('page-aura-content')[0].appendChild(node);
+    };
+    AuraContentPage.prototype.ngAfterViewInit = function () {
+        var self = this;
+        self.pmc.toggleView(false);
+        // this.loadScript('../assets/scripts/widget.js',this.module.id);
+        /* check if iframe has loaded */
+        document.getElementById("aura-widget-div").onload = function (e) {
+            var fp = e.srcElement;
+            var hed = fp.contentWindow.document.getElementsByTagName('head')[0];
+            var frm = fp.contentWindow.document.getElementsByTagName('body')[0];
+            frm.style.maxHeight = "100%"; // assign max height
+            frm.style.margin = "0px"; // and margin css details
+            var auraWidget = fp.contentWindow.document.getElementById('aura-widget-div');
+            auraWidget.style.maxHeight = "100%";
+            auraWidget.style.height = "100%";
+            // fp.contentWindow.document.getElementById('aura-widget-div')
+            /* TO DO: Add listener to aura player to track	*
+             * play, pause, and audio completion			*/
+            var elementDetected = 0;
+            var handler = function (e) {
+                var playBtn = fp.contentWindow.document.querySelector('div.audio.play');
+                playBtn.addEventListener('click', function (e) {
+                    var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
+                    if (ifStartPlay) {
+                        self.controlButtons(playBtn);
+                    }
+                });
+                auraWidget.removeEventListener('DOMSubtreeModified', handler, true);
+            };
+            auraWidget.addEventListener('DOMSubtreeModified', handler, true);
+        };
+    };
+    AuraContentPage.prototype.controlButtons = function (element) {
+        this.app.playLesson(this.module, this.pmc);
+        //this.startLessonTimer(element);
+    };
+    //startLessonTimer(element) {
+    //  let timer = Observable.timer(1000, 1000);
+    //  let alive: boolean = true;
+    //  this.lessonTimer =
+    //    timer
+    //    .takeWhile(() => alive)
+    //    .subscribe((val) => {
+    //
+    //      //if (val >= (val * 60 * 10)) { //Todo: put this in config
+    //      if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
+    //        //if 10 mins, trigger a _LessonCompleted action
+    //      	this.pmc.toggleView(true, this.module.course);
+    //        element.click();
+    //          this.lessonTimer.unsubscribe();
+    //      }
+    //    })
+    //
+    //}
+    /* If page leave is triggered before audio finishes playing, *
+     * make sure to pause/stop all aura audio					 */
+    AuraContentPage.prototype.ionViewDidLeave = function () {
+        //audio.ontimeupdate = null;
+    };
+    AuraContentPage.prototype.ionViewWillLeave = function () {
+        // alert('XX');
+        //
+        // this.RemoveJsCss("//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js", "js");
+        // this.RemoveJsCss("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "js");
+        // this.RemoveJsCss("https://www.gstatic.com/firebasejs/4.4.0/firebase.js", "js");
+        // this.RemoveJsCss("https://fonts.googleapis.com/css?family=Lato:300,400,700", "css");
+        // this.RemoveJsCss("http://app.aurahealth.io/static/style.css", "css");
+        // this.RemoveJsCss("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "css");
+    };
+    AuraContentPage.prototype.RemoveJsCss = function (filename, filetype) {
+        var targetelement = (filetype == "js") ? "script" : (filetype == "css") ? "link" : "none"; //determine element type to create nodelist from
+        var targetattr = (filetype == "js") ? "src" : (filetype == "css") ? "href" : "none"; //determine corresponding attribute to test for
+        var allsuspects = document.getElementsByTagName(targetelement);
+        for (var i = allsuspects.length; i >= 0; i--) {
+            if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) != null && allsuspects[i].getAttribute(targetattr).indexOf(filename) != -1)
+                allsuspects[i].parentNode.removeChild(allsuspects[i]); //remove element by calling parentNode.removeChild()
+        }
+    };
+    return AuraContentPage;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('aura'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+], AuraContentPage.prototype, "auraComponent", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */])
+], AuraContentPage.prototype, "content", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */])
+], AuraContentPage.prototype, "pmc", void 0);
+AuraContentPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
+        __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */],
+        __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
+], AuraContentPage);
+
+//# sourceMappingURL=aura-content.js.map
+
+/***/ }),
+
+/***/ 286:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScriptService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ScriptService = (function () {
+    /*
+     * AS of now, this not used.
+     * This dynamically updates/creates the aura script js
+     */
+    function ScriptService() {
+        var _this = this;
+        this.scripts = {};
+        [{ name: "aura", src: "http://app.aurahealth.io/static/widget.js" }].forEach(function (script) {
+            _this.scripts[script.name] = {
+                loaded: false,
+                src: script.src
+            };
+        });
+    }
+    /*load(...scripts: string[]) {
+        var promises: any[] = [];
+        scripts.forEach((script) => promises.push(this.loadScript(script)));
+        return Promise.all(promises);
+    }*/
+    ScriptService.prototype.loadScript = function (name, cid) {
+        var _this = this;
+        document.getElementById('ext_scripts').innerHTML = "";
+        return new Promise(function (resolve, reject) {
+            //resolve if already loaded
+            //load script
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = _this.scripts[name].src;
+            script.id = "aura-widget";
+            script.setAttribute("data-content-id", cid);
+            if (script.readyState) {
+                script.onreadystatechange = function () {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                        script.onreadystatechange = null;
+                        _this.scripts[name].loaded = true;
+                        resolve({ script: name, loaded: true, status: 'Loaded' });
+                    }
+                };
+            }
+            else {
+                script.onload = function () {
+                    _this.scripts[name].loaded = true;
+                    resolve({ script: name, loaded: true, status: 'Loaded' });
+                };
+            }
+            script.onerror = function (error) { return resolve({ script: name, loaded: false, status: 'Loaded' }); };
+            document.getElementById('ext_scripts').appendChild(script);
+        });
+    };
+    return ScriptService;
+}());
+ScriptService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [])
+], ScriptService);
+
+//# sourceMappingURL=script.service.js.map
+
+/***/ }),
+
+/***/ 287:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProgressModalComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/**
+ * Generated class for the ProgressModalComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var ProgressModalComponent = (function () {
+    function ProgressModalComponent(nav, render, elem, app) {
+        this.nav = nav;
+        this.render = render;
+        this.elem = elem;
+        this.app = app;
+        this.day = 1;
+        this.length = 10;
+        this.show = false;
+    }
+    ProgressModalComponent.prototype.ngOnInit = function () {
+        if (this.app.hasLoggedIn()) {
+            this.day = this.app.nextLesson(this.app.currentCourse);
+        }
+        else {
+            this.day = this.app.lastLesson(this.app.currentCourse);
+        }
+        this.length = this.app.getCourseDuration(this.app.currentCourse);
+        console.log(this);
+    };
+    ProgressModalComponent.prototype.toHome = function () {
+        var _this = this;
+        this.app.initProgArr().then(function () {
+            _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+            _this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */]);
+        });
+    };
+    /* toggle visibility of this component */
+    ProgressModalComponent.prototype.toggleView = function (stat, course) {
+        if (stat === void 0) { stat = !this.show; }
+        this.show = stat;
+        if (!this.show) {
+            this.render.setStyle(this.elem.nativeElement, "display", "none");
+        }
+        else {
+            this.render.setStyle(this.elem.nativeElement, "display", "block");
+        }
+    };
+    return ProgressModalComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('day'),
+    __metadata("design:type", Number)
+], ProgressModalComponent.prototype, "day", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('length'),
+    __metadata("design:type", Number)
+], ProgressModalComponent.prototype, "length", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('show'),
+    __metadata("design:type", Boolean)
+], ProgressModalComponent.prototype, "show", void 0);
+ProgressModalComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'progress-modal',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome()">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
+        __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
+], ProgressModalComponent);
+
+//# sourceMappingURL=progress-modal.js.map
+
+/***/ }),
+
+/***/ 288:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ForgotPasswordPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(48);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+/**
+ * Generated class for the ForgotPasswordPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var ForgotPasswordPage = (function () {
+    function ForgotPasswordPage(navCtrl, navParams, auth0, formBuilder, render) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.auth0 = auth0;
+        this.formBuilder = formBuilder;
+        this.render = render;
+        this.invalidEmail = false;
+        this.emailSent = false;
+        this.formGroup = this.formBuilder.group({
+            email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+        });
+    }
+    ForgotPasswordPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad ForgotPasswordPage');
+    };
+    ForgotPasswordPage.prototype.focused = function (event) {
+        //console.log(event._elementRef.nativeElement);
+        var node = event._elementRef.nativeElement;
+        this.render.addClass(node, "focused");
+        //this.render.setStyle(node,"box-shadow","2px 2px 3px 1px rgb(240,119,33)");
+    };
+    ForgotPasswordPage.prototype.blurred = function (event) {
+        //console.log(event._elementRef.nativeElement);
+        var node = event._elementRef.nativeElement;
+        this.render.removeClass(node, "focused");
+        //this.render.removeStyle(node,"box-shadow");
+    };
+    ForgotPasswordPage.prototype.toSignup = function () {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__["a" /* SignUpPage */]);
+    };
+    ForgotPasswordPage.prototype.reset_pass = function () {
+        var self = this;
+        this.auth0.searchUser(this.formGroup.value.email)
+            .then(function (res) {
+            if (res) {
+                self.invalidEmail = false;
+                self.auth0.changePassword(self.formGroup.value.email)
+                    .then(function (res) {
+                    self.emailSent = true;
+                })
+                    .catch(function (err) {
+                    console.log(err);
+                });
+            }
+            else {
+                self.invalidEmail = true;
+            }
+        })
+            .catch(function (err) {
+            console.log(err);
+        });
+    };
+    ForgotPasswordPage.prototype.dismissThis = function () {
+        // should pop this page and then go to previous
+        console.log("dismiss");
+        if (this.navCtrl.canGoBack()) {
+            this.navCtrl.pop();
+        }
+        else {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
+        }
+    };
+    return ForgotPasswordPage;
+}());
+ForgotPasswordPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail,\'mailed\':emailSent}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()" [disabled]="!formGroup.valid || emailSent">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */],
+        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]])
+], ForgotPasswordPage);
+
+//# sourceMappingURL=forgot-password.js.map
+
+/***/ }),
+
+/***/ 289:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeleteAccountPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__ = __webpack_require__(22);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+/**
+ * Generated class for the DeleteAccountPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var DeleteAccountPage = (function () {
+    function DeleteAccountPage(navCtrl, navParams, auth0, loader) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.auth0 = auth0;
+        this.loader = loader;
+    }
+    DeleteAccountPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad DeleteAccountPage');
+    };
+    DeleteAccountPage.prototype.cancel = function () {
+        if (this.navCtrl.canGoBack()) {
+            this.navCtrl.pop();
+        }
+        else {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__my_account_my_account__["a" /* MyAccountPage */]);
+        }
+    };
+    DeleteAccountPage.prototype.delete = function () {
+        //auth0 here
+        var self = this;
+        var load = this.loader.create({
+            spinner: 'crescent',
+            dismissOnPageChange: true,
+            showBackdrop: true,
+            content: "Please wait...",
+            enableBackdropDismiss: true
+        });
+        load.present();
+        this.auth0.deleteUser().then(function (res) {
+            self.auth0.logout();
+            self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */]);
+        })
+            .catch(function (err) {
+            console.log("An error has occurred", err);
+            load.dismiss();
+        });
+    };
+    return DeleteAccountPage;
+}());
+DeleteAccountPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="delete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], DeleteAccountPage);
+
+//# sourceMappingURL=delete-account.js.map
+
+/***/ }),
+
+/***/ 290:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(295);
+
+
+Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ 295:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(332);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(645);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(646);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_components_module__ = __webpack_require__(647);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+
+/* Pages */
+
+
+
+
+
+
+
+
+
+
+
+/* Providers */
+
+
+
+
+/* Custom Modules */
+
+var pages = [
+    __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
+    __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */],
+    __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__["a" /* SignUpPage */],
+    __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__["a" /* AuthPage */],
+    __WEBPACK_IMPORTED_MODULE_10__pages_login_login__["a" /* LoginPage */],
+    __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__["a" /* MyAccountPage */],
+    __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__["a" /* DeleteAccountPage */],
+    __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__["a" /* ForgotPasswordPage */],
+    __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__["a" /* AgeGatePage */],
+    __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__["a" /* ResetPasswordPage */],
+    __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__["a" /* AuraContentPage */],
+    __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */]
+];
+var AppModule = (function () {
+    function AppModule() {
+    }
+    return AppModule;
+}());
+AppModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["L" /* NgModule */])({
+        declarations: pages,
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_22__components_components_module__["a" /* ComponentsModule */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */], {}, {
+                links: [
+                    { component: __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */], name: 'Home', segment: 'home' },
+                    { component: __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__["a" /* SignUpPage */], name: 'SignUpPage', segment: 'sign-up' },
+                    { component: __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__["a" /* AuthPage */], name: 'Auth0Page', segment: ':data' },
+                    { component: __WEBPACK_IMPORTED_MODULE_10__pages_login_login__["a" /* LoginPage */], name: 'LoginPage', segment: 'login' },
+                    { component: __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__["a" /* MyAccountPage */], name: 'MyAccountPage', segment: 'my-account' },
+                    { component: __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__["a" /* DeleteAccountPage */], name: 'DeleteAccountPage', segment: 'delete-account' },
+                    { component: __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__["a" /* ForgotPasswordPage */], name: 'ForgotPasswordPage', segment: 'forgot-password' },
+                    { component: __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__["a" /* AgeGatePage */], name: 'AgeGatePage', segment: 'age-gate' },
+                    { component: __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__["a" /* ResetPasswordPage */], name: 'ResetPasswordPage', segment: 'reset-password' },
+                    { component: __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__["a" /* AuraContentPage */], name: 'AuraContentPage', segment: 'aura-content' },
+                    { component: __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */], name: 'AuraMainPage', segment: 'aura' },
+                ]
+            }),
+        ],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
+        entryComponents: pages,
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__["a" /* StatusBar */],
+            __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__["a" /* SplashScreen */],
+            { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicErrorHandler */] },
+            __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__["a" /* EvtProvider */],
+            __WEBPACK_IMPORTED_MODULE_19__providers_app_app__["a" /* AppProvider */],
+            __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__["a" /* ScriptService */]
+        ]
+    })
+], AppModule);
+
+//# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ 332:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(28);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+var MyApp = (function () {
+    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
+        this.platform = platform;
+        this.statusBar = statusBar;
+        this.splashScreen = splashScreen;
+        this.app = app;
+        this.evt = evt;
+        this.loading = loading;
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */];
+        this.text = "";
+        this.show = false;
+        this.noLink = true;
+        this.initializeApp();
+        // used for an example of ngFor and navigation
+        this.pages = [
+            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */] }
+        ];
+    }
+    MyApp.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.evt.hasUserContext()) {
+            return;
+        }
+        var self = this;
+        var loading = self.loading.create({
+            spinner: 'crescent',
+            content: "Please wait...",
+            enableBackdropDismiss: true
+        });
+        loading.present();
+        this.app.initCourses().then(function () {
+            _this.app.initProgArr().then(function () {
+                console.log("Last completed:" + _this.app.getLastCompletedCourse());
+                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+                _this.app.completeLogin(); //if login() is called
+                loading.dismiss();
+                _this.nav.setRoot("AuraMainPage");
+            });
+        });
+    };
+    MyApp.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.nav.viewDidEnter.subscribe(function (data) {
+            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
+                _this.noticePopUp();
+            }
+        });
+    };
+    MyApp.prototype.noticePopUp = function () {
+        if (!this.app.hasLoggedIn()) {
+            this.show = true;
+            this.text = 'Sign in to track your progress.';
+            this.noLink = true;
+        }
+    };
+    MyApp.prototype.initializeApp = function () {
+        var _this = this;
+        var self = this;
+        self.platform.ready().then(function () {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            _this.statusBar.styleDefault();
+            _this.splashScreen.hide();
+            //self.evt.init();
+            console.log("EVT");
+        });
+    };
+    return MyApp;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
+], MyApp.prototype, "nav", void 0);
+MyApp = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink"  *ngIf="show">\n\n</notice>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], MyApp);
+
+//# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 37:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraMainPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+//import { Component, Renderer2, ViewChild, ElementRef } from '@angular/core';
+
+//import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
+
+//import { ScriptService } from "../../providers/app/script.service";
+
+
+
+/**
+ * Generated class for the AuraMainPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var AuraMainPage = (function () {
+    function AuraMainPage(app, navCtrl, navParams, loading
+        //private render: Renderer2,
+        //private viewCtrl : ViewController,
+        //private scr : ScriptService
+    ) {
+        this.app = app;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.loading = loading;
+        this.expanded = false;
+        this.def = "down";
+        this.day = 1;
+        this.dur = 10;
+        this.arrDay = [];
+        this.noticeClass = 'pink';
+        this.activeCourse = [{ desc: "", id: "", path: "", title: "", course: "" }];
+        this.courseTitle = "Mindfulness";
+        this.addLesson = 0;
+        this.labelIntro = "Start this course";
+    }
+    AuraMainPage.prototype.ionViewWillEnter = function () {
+        var _this = this;
+        console.log("ionViewWillEnter Aura Home");
+        if (!this.app.hasActiveCourse()) {
+            var self_1 = this;
+            var loading_1 = self_1.loading.create({
+                spinner: 'crescent',
+                content: "Please wait...",
+                enableBackdropDismiss: true
+            });
+            loading_1.present();
+            this.app.initCourses().then(function () {
+                _this.app.initProgArr().then(function () {
+                    console.log("Last completed:" + _this.app.getLastCompletedCourse());
+                    _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+                    loading_1.dismiss();
+                    _this.navCtrl.setRoot("AuraMainPage");
+                });
+            });
+        }
+    };
+    AuraMainPage.prototype.ionViewDidLoad = function () {
+        //clear timer from content page
+        this.app.stopLessonTimer();
+        this.initActiveCourse();
+        this.initLabelIntro();
+    };
+    AuraMainPage.prototype.initActiveCourse = function () {
+        this.courseTitle = this.app.getCurrentCourse();
+        //this.day = this.app.getCurrentLesson();
+        this.popDays();
+        //this.app.setActiveCourse(this.courseTitle);
+    };
+    /* Add buttons depending on number of days *
+     * Animate for effect to the current day 	 */
+    AuraMainPage.prototype.popDays = function () {
+        var _this = this;
+        this.arrDay = this.app.getArrDay(this.courseTitle);
+        setTimeout(function () {
+            try {
+                _this.btnSlide.slideTo(_this.app.nextLesson());
+            }
+            catch (e) {
+                //console.log(e);
+            }
+        }, 100);
+    };
+    /* Expand description */
+    AuraMainPage.prototype.expand = function () {
+        this.expanded = !this.expanded;
+        if (this.expanded)
+            this.def = "up";
+        else
+            this.def = "down";
+    };
+    AuraMainPage.prototype.ngAfterViewInit = function () {
+        //this.popDays();
+    };
+    AuraMainPage.prototype.ngOnInit = function () {
+        this.app.initProgArr();
+    };
+    /* This is triggered by the sub-course component *
+    * when it is tapped (begin / continue) and 	  *
+    * transfers the data from the sub-course to 	  *
+    * the top area (slider of buttons).     	 	  */
+    AuraMainPage.prototype.tryMe = function ($event) {
+        console.log(JSON.stringify($event));
+        var courseTitle = $event.title;
+        delete $event['title'];
+        delete $event['progress'];
+        this.app.setActiveCourse(courseTitle);
+        this.courseTitle = courseTitle;
+        this.initLabelIntro();
+        //this.dur = this.app.progressKeys.length;
+        this.popDays();
+    };
+    /* Go to the aura content */
+    AuraMainPage.prototype.intoTheContent = function (stat, ind) {
+        if (ind === void 0) { ind = 1; }
+        console.log(ind);
+        console.log(this.app.nextLesson(this.courseTitle));
+        if (ind >= this.app.nextLesson(this.courseTitle)
+            && this.app.isNextLessonLocked(this.courseTitle)) {
+            this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__pages_login_login__["a" /* LoginPage */]);
+        }
+        else {
+            //console.log(this.activeCourse[ind]);
+            var courseData = this.app.activeCourse[ind];
+            courseData["day"] = ind;
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__["a" /* AuraContentPage */], { data: courseData });
+        }
+    };
+    AuraMainPage.prototype.initLabelIntro = function () {
+        if (this.app.hasLoggedIn()) {
+            if (this.app.hasStartedCourse(this.courseTitle)) {
+                this.labelIntro = "Continue";
+            }
+            else {
+                this.labelIntro = "Start this course";
+            }
+        }
+        else {
+            if (this.app.hasStartedCourse(this.courseTitle)) {
+                this.labelIntro = "Sign in to access content";
+            }
+            else {
+                this.labelIntro = "Start this course";
+            }
+        }
+    };
+    AuraMainPage.prototype.getDayBtnIcon = function () {
+        if (this.app.isNextLessonLocked(this.courseTitle)) {
+            return "lock";
+        }
+        else {
+            return "play";
+        }
+    };
+    return AuraMainPage;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+], AuraMainPage.prototype, "slider", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+], AuraMainPage.prototype, "btnSlide", void 0);
+AuraMainPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]
+        //private render: Renderer2,
+        //private viewCtrl : ViewController,
+        //private scr : ScriptService
+    ])
+], AuraMainPage);
+
+//# sourceMappingURL=aura-main.js.map
+
+/***/ }),
+
+/***/ 43:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2761,6 +2989,7 @@ var HomePage = (function () {
             this.noticeViewed = false;
         }
         this.mobileVersion = this.platform.is('mobile');
+        this.app.completeLogin(); //if login() is called
     };
     HomePage.prototype.anonymousDataModel = function (data) {
         var obj = {
@@ -2965,7 +3194,7 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3015,8 +3244,8 @@ var EvtProvider = (function () {
     EvtProvider.prototype.createUserAction = function (actionType, action) {
         if (actionType === void 0) { actionType = ''; }
         if (action === void 0) { action = {}; }
-        this.getUserContext().then(function (usr) {
-            usr.action(actionType).create(action).then(console.log).catch(function (err) { return console.error(err); });
+        return this.getUserContext().then(function (usr) {
+            usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
         });
     };
     EvtProvider.prototype.createThngAction = function (actionType, action) {
@@ -3092,14 +3321,30 @@ var EvtProvider = (function () {
         }
     };
     EvtProvider.prototype.getThngContext = function () {
+        var _this = this;
         /**
          * Return Thng context as promise
+         * Save to local storage if it's available in EVT
          *
          * @type {any}
          */
-        var myThng = JSON.parse(localStorage.myThng);
-        if (typeof myThng !== 'undefined') {
+        var self = this;
+        if (typeof localStorage.myThng !== 'undefined') {
+            var myThng = JSON.parse(localStorage.myThng);
             return this.getUser().thng(myThng.id).read();
+        }
+        else {
+            console.log("getThngContext");
+            return this.getUserCustomFields().then(function (cf) {
+                console.log(cf);
+                if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
+                    //has myThng customField
+                    return _this.getUser().thng(cf.myThng).read(function (th) {
+                        console.log(th);
+                        localStorage.myThng = JSON.stringify(th);
+                    });
+                }
+            });
         }
     };
     /* EVT Scan */
@@ -3136,7 +3381,7 @@ EvtProvider = __decorate([
 
 /***/ }),
 
-/***/ 47:
+/***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3144,11 +3389,13 @@ EvtProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__forgot_password_forgot_password__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3166,23 +3413,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var LoginPage = (function () {
-    function LoginPage(navCtrl, navParams, render, auth0, formBuilder, loader, evt) {
+    function LoginPage(navCtrl, navParams, render, auth0, formBuilder, loader, app, evt) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.render = render;
         this.auth0 = auth0;
         this.formBuilder = formBuilder;
         this.loader = loader;
+        this.app = app;
         this.evt = evt;
         this.invalidLogin = false;
         this.formGroup = this.formBuilder.group({
-            email: ['', __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-            password: ['', __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].required],
+            email: ['', __WEBPACK_IMPORTED_MODULE_5__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_5__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_5__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+            password: ['', __WEBPACK_IMPORTED_MODULE_5__angular_forms__["g" /* Validators */].required],
         });
     }
     LoginPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad SignUpPage');
+    };
+    LoginPage.prototype.ionViewWillEnter = function () {
+        if (this.app.hasLoggedIn()) {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__["a" /* AuraMainPage */]);
+        }
     };
     LoginPage.prototype.focused = function (event) {
         var node = event._elementRef.nativeElement;
@@ -3199,11 +3454,11 @@ var LoginPage = (function () {
             this.navCtrl.pop();
         }
         else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__home_home__["a" /* HomePage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__home_home__["a" /* HomePage */]);
         }
     };
     LoginPage.prototype.toSignup = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__sign_up_sign_up__["a" /* SignUpPage */]);
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__["a" /* SignUpPage */]);
     };
     LoginPage.prototype.login = function () {
         var _this = this;
@@ -3218,9 +3473,9 @@ var LoginPage = (function () {
         });
         load.present();
         //console.log(usr);
+        this.app.startLogin();
         this.auth0.login({ email: usr.email, pass: usr.password }).then(function (res) {
             //console.log(res)
-            self.evt.createUserAction("_Login");
         })
             .catch(function (err) {
             console.log(err);
@@ -3232,7 +3487,7 @@ var LoginPage = (function () {
         this.auth0.fbAuth();
     };
     LoginPage.prototype.passwordReset = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__forgot_password_forgot_password__["a" /* ForgotPasswordPage */]);
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__["a" /* ForgotPasswordPage */]);
     };
     return LoginPage;
 }());
@@ -3244,212 +3499,13 @@ LoginPage = __decorate([
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
         __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */],
+        __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
+        __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */],
         __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */]])
 ], LoginPage);
 
 //# sourceMappingURL=login.js.map
-
-/***/ }),
-
-/***/ 52:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraMainPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(47);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-//import { Component, Renderer2, ViewChild, ElementRef } from '@angular/core';
-
-//import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
-
-//import { ScriptService } from "../../providers/app/script.service";
-
-
-
-/**
- * Generated class for the AuraMainPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var AuraMainPage = (function () {
-    function AuraMainPage(app, navCtrl, navParams, loading
-        //private render: Renderer2,
-        //private viewCtrl : ViewController,
-        //private scr : ScriptService
-    ) {
-        this.app = app;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.loading = loading;
-        this.expanded = false;
-        this.def = "down";
-        this.day = 1;
-        this.dur = 10;
-        this.arrDay = [];
-        this.noticeClass = 'pink';
-        this.activeCourse = [{ desc: "", id: "", path: "", title: "", course: "" }];
-        this.courseTitle = "Mindfulness";
-        this.addLesson = 0;
-        this.labelIntro = "Start this course";
-    }
-    AuraMainPage.prototype.ionViewWillEnter = function () {
-        var _this = this;
-        console.log("ionViewWillEnter Aura Home");
-        if (!this.app.hasActiveCourse()) {
-            var self_1 = this;
-            var loading_1 = self_1.loading.create({
-                spinner: 'crescent',
-                content: "Please wait...",
-                enableBackdropDismiss: true
-            });
-            loading_1.present();
-            this.app.initCourses().then(function () {
-                _this.app.initProgArr().then(function () {
-                    console.log("Last completed:" + _this.app.getLastCompletedCourse());
-                    _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-                    loading_1.dismiss();
-                    _this.navCtrl.setRoot("AuraMainPage");
-                });
-            });
-        }
-    };
-    AuraMainPage.prototype.ionViewDidLoad = function () {
-        //clear timer from content page
-        this.app.stopLessonTimer();
-        this.initActiveCourse();
-        this.initLabelIntro();
-    };
-    AuraMainPage.prototype.initActiveCourse = function () {
-        this.courseTitle = this.app.getCurrentCourse();
-        //this.day = this.app.getCurrentLesson();
-        this.popDays();
-        //this.app.setActiveCourse(this.courseTitle);
-    };
-    /* Add buttons depending on number of days *
-     * Animate for effect to the current day 	 */
-    AuraMainPage.prototype.popDays = function () {
-        var _this = this;
-        this.arrDay = this.app.getArrDay(this.courseTitle);
-        setTimeout(function () {
-            try {
-                _this.btnSlide.slideTo(_this.app.nextLesson());
-            }
-            catch (e) {
-                //console.log(e);
-            }
-        }, 100);
-    };
-    /* Expand description */
-    AuraMainPage.prototype.expand = function () {
-        this.expanded = !this.expanded;
-        if (this.expanded)
-            this.def = "up";
-        else
-            this.def = "down";
-    };
-    AuraMainPage.prototype.ngAfterViewInit = function () {
-        //this.popDays();
-    };
-    AuraMainPage.prototype.ngOnInit = function () {
-        this.app.initProgArr();
-    };
-    /* This is triggered by the sub-course component *
-    * when it is tapped (begin / continue) and 	  *
-    * transfers the data from the sub-course to 	  *
-    * the top area (slider of buttons).     	 	  */
-    AuraMainPage.prototype.tryMe = function ($event) {
-        console.log(JSON.stringify($event));
-        var courseTitle = $event.title;
-        delete $event['title'];
-        delete $event['progress'];
-        this.app.setActiveCourse(courseTitle);
-        this.courseTitle = courseTitle;
-        this.initLabelIntro();
-        //this.dur = this.app.progressKeys.length;
-        this.popDays();
-    };
-    /* Go to the aura content */
-    AuraMainPage.prototype.intoTheContent = function (stat, ind) {
-        if (ind === void 0) { ind = 1; }
-        console.log(ind);
-        console.log(this.app.nextLesson(this.courseTitle));
-        if (ind >= this.app.nextLesson(this.courseTitle)
-            && this.app.isNextLessonLocked(this.courseTitle)) {
-            this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__pages_login_login__["a" /* LoginPage */]);
-        }
-        else {
-            //console.log(this.activeCourse[ind]);
-            var courseData = this.app.activeCourse[ind];
-            courseData["day"] = ind;
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__["a" /* AuraContentPage */], { data: courseData });
-        }
-    };
-    AuraMainPage.prototype.initLabelIntro = function () {
-        if (this.app.hasLoggedIn()) {
-            if (this.app.hasStartedCourse(this.courseTitle)) {
-                this.labelIntro = "Continue";
-            }
-            else {
-                this.labelIntro = "Start this course";
-            }
-        }
-        else {
-            if (this.app.hasStartedCourse(this.courseTitle)) {
-                this.labelIntro = "Sign in to access content";
-            }
-            else {
-                this.labelIntro = "Start this course";
-            }
-        }
-    };
-    AuraMainPage.prototype.getDayBtnIcon = function () {
-        if (this.app.isNextLessonLocked(this.courseTitle)) {
-            return "lock";
-        }
-        else {
-            return "play";
-        }
-    };
-    return AuraMainPage;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
-], AuraMainPage.prototype, "slider", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
-], AuraMainPage.prototype, "btnSlide", void 0);
-AuraMainPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]
-        //private render: Renderer2,
-        //private viewCtrl : ViewController,
-        //private scr : ScriptService
-    ])
-], AuraMainPage);
-
-//# sourceMappingURL=aura-main.js.map
 
 /***/ }),
 
@@ -3488,7 +3544,7 @@ var Config = {
     },
     lessonCompletionTimeLimit: 2,
     totalDailyLessonLimit: 30,
-    courseDailyLessonLimit: 1,
+    courseDailyLessonLimit: 10,
     anonUserLessonLimit: 1,
 };
 //# sourceMappingURL=environment.dev.js.map
@@ -3502,12 +3558,12 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(44);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3672,8 +3728,8 @@ AuthPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(43);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3906,9 +3962,9 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4039,7 +4095,7 @@ NoticeComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NoticeComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(48);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4174,7 +4230,7 @@ FooterComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4280,7 +4336,7 @@ SubCourseComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__ = __webpack_require__(67);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4559,8 +4615,8 @@ AuraFootComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4737,13 +4793,15 @@ ProgressModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_cookies__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_ng2_cookies__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4762,6 +4820,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the SignUpPage page.
  *
@@ -4769,7 +4829,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var SignUpPage = (function () {
-    function SignUpPage(navCtrl, navParams, render, auth0, formBuilder, loader, evt) {
+    function SignUpPage(navCtrl, navParams, render, auth0, formBuilder, loader, evt, app) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.render = render;
@@ -4777,24 +4837,30 @@ var SignUpPage = (function () {
         this.formBuilder = formBuilder;
         this.loader = loader;
         this.evt = evt;
+        this.app = app;
         this.invalidReg = false;
         this.emailTaken = false;
         this.formGroup = this.formBuilder.group({
-            firstName: ['', __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].required],
-            lastName: ['', __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].required],
-            email: ['', __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
-            password: ['', __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].minLength(8), __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_7__angular_forms__["g" /* Validators */].pattern(/.*([A-Z+]|[0-9+]).*$/)])]
+            firstName: ['', __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].required],
+            lastName: ['', __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].required],
+            email: ['', __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+            password: ['', __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].minLength(8), __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_9__angular_forms__["g" /* Validators */].pattern(/.*([A-Z+]|[0-9+]).*$/)])]
         });
         console.log(navParams.data);
     }
     SignUpPage.prototype.ionViewDidLoad = function () {
     };
     SignUpPage.prototype.ionViewWillEnter = function () {
-        if (__WEBPACK_IMPORTED_MODULE_8_ng2_cookies__["Cookie"].get('age_gate') === "true" || this.navParams.get('age_gate') == true) {
-            console.log('Passed age gate!');
+        if (this.app.hasLoggedIn()) {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__["a" /* AuraMainPage */]);
         }
         else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__["a" /* AgeGatePage */]);
+            if (__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__["Cookie"].get('age_gate') === "true" || this.navParams.get('age_gate') == true) {
+                console.log('Passed age gate!');
+            }
+            else {
+                this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__["a" /* AgeGatePage */]);
+            }
         }
     };
     SignUpPage.prototype.focused = function (event) {
@@ -4816,7 +4882,7 @@ var SignUpPage = (function () {
             this.navCtrl.pop();
         }
         else {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__home_home__["a" /* HomePage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__home_home__["a" /* HomePage */]);
         }
     };
     SignUpPage.prototype.signup = function () {
@@ -4853,7 +4919,7 @@ var SignUpPage = (function () {
                             });
                         });
                     }
-                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__login_login__["a" /* LoginPage */]);
+                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
                 })
                     .catch(function (err) {
                     console.log(err);
@@ -4869,7 +4935,7 @@ var SignUpPage = (function () {
         this.auth0.fbAuth();
     };
     SignUpPage.prototype.toLogin = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__login_login__["a" /* LoginPage */]);
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
     };
     return SignUpPage;
 }());
@@ -4881,9 +4947,10 @@ SignUpPage = __decorate([
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
         __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_7__angular_forms__["a" /* FormBuilder */],
+        __WEBPACK_IMPORTED_MODULE_9__angular_forms__["a" /* FormBuilder */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */]])
+        __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */]])
 ], SignUpPage);
 
 //# sourceMappingURL=sign-up.js.map
@@ -4899,9 +4966,9 @@ SignUpPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5021,7 +5088,7 @@ AgeGatePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(289);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
