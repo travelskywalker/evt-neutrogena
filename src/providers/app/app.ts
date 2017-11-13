@@ -728,4 +728,28 @@ export class AppProvider {
     return false;
   }
 
+  startLogin() {
+    console.log("Login action called");
+    localStorage.loginStarted = 1;
+  }
+
+  completeLogin() {
+    if (typeof localStorage.loginStarted != 'undefined') {
+      console.log("finalizeLogin");
+      let self = this;
+      this.evt.createUserAction("_Login").then(()=>{
+        self.evt.getThngContext().then(th=>{
+          console.log("getThngContext");
+          console.log(th);
+          if (typeof th != "undefined") {
+            if (typeof localStorage.myThng == 'undefined') {
+              self.saveThngContext(th);
+            }
+          }
+        });
+        localStorage.removeItem('loginStarted');
+      })
+    }
+  }
+
 }

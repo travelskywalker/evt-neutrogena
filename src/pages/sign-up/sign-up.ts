@@ -2,14 +2,17 @@ import { Component, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 import { EvtProvider} from '../../providers/evt/evt';
+import { AppProvider } from "../../providers/app/app";
 
 import { LoginPage } from "../login/login";
 import { HomePage } from "../home/home";
 import { AgeGatePage } from "../age-gate/age-gate";
+import { AuraMainPage } from "../aura-main/aura-main";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 
 import { Cookie } from "ng2-cookies";
+
 
 /**
  * Generated class for the SignUpPage page.
@@ -33,7 +36,9 @@ export class SignUpPage {
   				private auth0: AuthService,
   				private formBuilder: FormBuilder,
   				private loader : LoadingController,
-          private evt: EvtProvider) {
+          private evt: EvtProvider,
+          private app: AppProvider
+  ) {
   	this.formGroup = this.formBuilder.group({
   		firstName: ['', Validators.required],
   		lastName: ['', Validators.required],
@@ -47,11 +52,16 @@ export class SignUpPage {
   }
 
   ionViewWillEnter(){
-    if(Cookie.get('age_gate') === "true" || this.navParams.get('age_gate') == true){
-    	console.log('Passed age gate!');
-    }
-    else{
-    	this.navCtrl.setRoot(AgeGatePage);
+    if (this.app.hasLoggedIn()) {
+      this.navCtrl.setRoot(AuraMainPage);
+
+    } else {
+      if(Cookie.get('age_gate') === "true" || this.navParams.get('age_gate') == true){
+        console.log('Passed age gate!');
+      }
+      else{
+        this.navCtrl.setRoot(AgeGatePage);
+      }
     }
   }
 

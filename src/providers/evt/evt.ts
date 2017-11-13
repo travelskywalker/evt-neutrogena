@@ -32,13 +32,13 @@ export class EvtProvider {
   	});
   }
 
-  createUserAction(actionType:string='',action:any = {}){
-  	this.getUserContext().then(usr=>{
-  		usr.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
+  createUserAction(actionType:string='',action:any = {}): Promise<any> {
+  	return this.getUserContext().then(usr=>{
+  		usr.action(actionType).create(action).then(console.log(actionType)).catch(err=>console.error(err));
   	})
   }
 
-  createThngAction(actionType:string='',action:any = {}){
+  createThngAction(actionType:string='',action:any = {}): Promise<any> {
     return this.getThngContext().then(thng=>{
       thng.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
     });
@@ -128,12 +128,28 @@ export class EvtProvider {
   getThngContext():Promise<any> {
     /**
      * Return Thng context as promise
+     * Save to local storage if it's available in EVT
      *
      * @type {any}
      */
-    let myThng = JSON.parse(localStorage.myThng);
-    if (typeof myThng !== 'undefined') {
-      return this.getUser().thng(myThng.id).read()
+    let self = this;
+
+    if (typeof localStorage.myThng !== 'undefined') {
+      let myThng = JSON.parse(localStorage.myThng);
+      return this.getUser().thng(myThng.id).read();
+    } else {
+      console.log("getThngContext");
+      return this.getUserCustomFields().then(cf => {
+
+        console.log(cf);
+        if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
+          //has myThng customField
+          return this.getUser().thng(cf.myThng).read(th=>{
+            console.log(th);
+            localStorage.myThng = JSON.stringify(th);
+          });
+        }
+      })
     }
   }
 

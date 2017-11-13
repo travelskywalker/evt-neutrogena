@@ -51,6 +51,7 @@ export class MyApp {
       this.app.initProgArr().then(()=> {
         console.log("Last completed:" + this.app.getLastCompletedCourse());
         this.app.setActiveCourse(this.app.getLastCompletedCourse());
+        this.app.completeLogin(); //if login() is called
         loading.dismiss();
         this.nav.setRoot("AuraMainPage");
       })

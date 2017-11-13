@@ -28,6 +28,6 @@ export const Config = {
   },
   lessonCompletionTimeLimit: 2, //seconds
   totalDailyLessonLimit: 30, //lesson completion count
-  courseDailyLessonLimit: 1, //lesson completion count
+  courseDailyLessonLimit: 10, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
 };

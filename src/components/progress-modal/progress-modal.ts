@@ -24,7 +24,12 @@ export class ProgressModalComponent {
   }
 
   ngOnInit(){
-    this.day = this.app.nextLesson(this.app.currentCourse);
+    if (this.app.hasLoggedIn()) {
+      this.day = this.app.nextLesson(this.app.currentCourse);
+    } else {
+      this.day = this.app.lastLesson(this.app.currentCourse);
+    }
+
     this.length = this.app.getCourseDuration(this.app.currentCourse);
   	console.log(this);
   }

@@ -51,6 +51,7 @@ export class HomePage {
     }
 
     this.mobileVersion = this.platform.is('mobile');
+    this.app.completeLogin(); //if login() is called
   }
 
   anonymousDataModel(data){
