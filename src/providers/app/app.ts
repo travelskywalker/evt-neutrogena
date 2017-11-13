@@ -170,13 +170,6 @@ export class AppProvider {
     }
   }
 
-  updateUserProgress(){
-  	//TODO: get user data first from EVT. probably from custom fields
-
-  	//TODO: assign user data to existing mapping.
-  }
-
-
   saveThngContext(result: any) {
     /**
      * Save the THNG scanned or created via IR scan to localStorage for later use
@@ -426,7 +419,7 @@ export class AppProvider {
      * @type {string}
      */
     let str = "";
-    if (typeof course != 'undefined') {
+    if (typeof course == 'undefined') {
       str = "lcCnt" + this.today.toDateString();
     } else {
       str = "lcCnt" + course + this.today.toDateString()
@@ -446,7 +439,15 @@ export class AppProvider {
     } else {
       if (this.courses[course] != 'undefined') {
         let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
-        return (remCnt >= 0 ? remCnt : 0);
+        if (this.hasLoggedIn()) {
+          return (remCnt >= 0 ? remCnt : 0);
+        } else {
+          if (this.nextLesson(course) <= Config.anonUserLessonLimit) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
       }
     }
   }
@@ -529,7 +530,7 @@ export class AppProvider {
       crsLastLesson = this.getCurrentLesson(course);
 
       if (crsDuration > crsLastLesson) {
-        crsNextLesson = crsLastLesson + this.getAdditionalLesson();
+        crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
       } else {
         crsNextLesson = crsLastLesson;
       }
@@ -629,12 +630,24 @@ export class AppProvider {
   }
 
   getTotalAvailableLessons(course?: any): number {
+    /**
+     * Get total available lessons. Separate branches between Anon and Logged-in user
+     */
+    if (this.hasLoggedIn()) {
+      let availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
 
-    let availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
-    if (!this.hasLoggedIn() && availableLessons > 0 && availableLessons > Config.anonUserLessonLimit) {
-      availableLessons = Config.anonUserLessonLimit; //only 1 lesson available for anon user
+      return availableLessons;
+    } else {
+
+      let progressCnt = this.getCourseProgress(course);
+      console.log("progressCnt" + progressCnt);
+      if (progressCnt >= Config.anonUserLessonLimit) {
+        return Config.anonUserLessonLimit; //only 1 lesson available for anon user
+      } else {
+        return this.lastLesson(course);
+      }
     }
-    return availableLessons;
+
   }
 
   getArrDay(course?: any): Array<any> {

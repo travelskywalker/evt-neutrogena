@@ -53,6 +53,19 @@ page-aura-main {
 				}
 			}
 		}//end of div play
+    div.play.end {
+      ion-col{
+        img{
+          max-height: 18px;
+          margin-top:4px;
+        }
+        &.rng {
+          &:after {
+            display: none !important;
+          }
+        }
+      }
+    }
 	}// end of btns
 
 	ion-content{

@@ -14,7 +14,7 @@
 		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
 		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">
 			<ion-slide *ngFor="let dy of arrDay">
-				<div class="play">
+				<div [ngClass]="{'play': true, 'end': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">
 					<ion-col [ngClass]="{'rng': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">
 						Day {{dy?.day}}
 						<img src="../assets/images/tick.png"/>

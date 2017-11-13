@@ -27,7 +27,7 @@ export const Config = {
     slaveryAct:"//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf"
   },
   lessonCompletionTimeLimit: 2, //seconds
-  totalDailyLessonLimit: 90, //lesson completion count
-  courseDailyLessonLimit: 10, //lesson completion count
-  anonUserLessonLimit: 1, //lesson count for anonymous user
+  totalDailyLessonLimit: 30, //lesson completion count
+  courseDailyLessonLimit: 1, //lesson completion count
+  anonUserLessonLimit: 1, //lesson count allowed for anonymous user
 };
