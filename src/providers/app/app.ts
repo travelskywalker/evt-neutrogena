@@ -758,7 +758,7 @@ export class AppProvider {
      */
     if (typeof Cookie.get('ts_begin') == 'undefined') {
       let dy = Date.now() - (Date.now() % 86400); //start of the day
-      Cookie.set('ts_begin', dy);
+      Cookie.set('ts_begin', dy.toString());
     }
   }
 
