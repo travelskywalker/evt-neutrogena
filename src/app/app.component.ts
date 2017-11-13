@@ -3,6 +3,7 @@ import { Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { Config } from '../config/environment.dev';
 import { HomePage } from '../pages/home/home';
 
 import { NoticeComponent } from "../components/notice/notice";
@@ -22,7 +23,7 @@ export class MyApp {
   text?: string = "";
   show?: boolean = false;
   noLink?: boolean = true;
-
+  ext_url?: any;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
@@ -71,10 +72,19 @@ export class MyApp {
 
   noticePopUp(){
     if(this.app.hasSignInNotice()){
-        this.show = true;
-        this.text = 'Sign in to track your progress.';
-        this.noLink = true;
+      this.show = true;
+      this.text = 'Sign in to track your progress.';
+      this.noLink = true;
+    } else if (this.app.hasReorderNotice()) {
+      this.show = true;
+      this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
+      this.noLink = false;
+      this.ext_url = {
+        name:'reorder',
+        link: Config.ext_links.reorder
+      };
     }
+
   }
 
   initializeApp() {
@@ -86,8 +96,9 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       //self.evt.init();
+      this.app.setBeginTS();
       console.log("EVT");
     });
-    this.app.setBeginTS();
+
   }
 }

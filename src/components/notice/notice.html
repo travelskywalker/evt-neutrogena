@@ -4,8 +4,10 @@
 	<span class="title" *ngIf="noLink">
 		{{title}}
 	</span>
-  <span class="title" *ngIf="!noLink" (tap)="goToPage()">
+  <span class="title" *ngIf="!noLink" (tap)="goToPage(ext_url)">
+    <a class="title" [href]="ext_url?.link" [target]="ext_url?.target" [title]="ext_url?.name">
 		{{title}}
+    </a>
 	</span>
 	<div class="body">
 		<ng-content>

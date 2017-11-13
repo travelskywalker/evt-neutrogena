@@ -756,9 +756,10 @@ export class AppProvider {
     /**
      * set beginning of use
      */
-    if (typeof Cookie.get('ts_begin') == 'undefined') {
-      let dy = Date.now() - (Date.now() % 86400); //start of the day
-      Cookie.set('ts_begin', dy.toString());
+    console.log(typeof Cookie.get('ts_begin'));
+    if (typeof Cookie.get('ts_begin') == 'undefined' || !Cookie.get('ts_begin')) {
+      let dy = Date.now(); //start of the day
+      Cookie.set('ts_begin', dy.toString(), Config.thngDaysLifeSpan);
     }
   }
 
@@ -775,8 +776,7 @@ export class AppProvider {
      */
 
     if (!this.hasLoggedIn()) {
-      let daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / 86400);
-
+      let daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
       if (daysSince >= Config.anonUserDaysToSignInNotice) {
         console.log('daysSince:' + daysSince);
         return true;
@@ -785,4 +785,23 @@ export class AppProvider {
     return false;
   }
 
+  getUserCreatedAt(): any {
+    if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
+      //only for logged in
+      let usr = JSON.parse(localStorage.userInfo);
+      let userCreatedAt = new Date(usr.created_at);
+      return userCreatedAt;
+    }
+  }
+
+  hasReorderNotice(): boolean {
+    if (this.hasLoggedIn()) {
+      let daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
+      console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
+      if (daysSinceCreatedAt >= Config.dayToReorderNotice) {
+        return true;
+      }
+
+    }
+  }
 }
