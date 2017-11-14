@@ -156,7 +156,7 @@ var AuthService = (function () {
                 localStorage.removeItem('evrythngInfo');
                 reject(authResult.error);
             }
-            else {
+            else if (typeof authResult.access_token != 'undefined') {
                 localStorage.setItem('access_token', authResult.access_token);
                 localStorage.setItem('id_token', authResult.id_token);
                 _this.webAuth.client.userInfo(authResult.access_token, function (err, user) {
@@ -187,7 +187,12 @@ var AuthService = (function () {
         if ((localStorage.access_token && localStorage.id_token) && (!localStorage.evrythngInfo || localStorage.evrythngInfo === "undefined")) {
             var user = this.getUserDetailsFromStorage();
             var res = Object.keys(user).filter(function (a) { return (a.indexOf("user_metadata") > -1); });
-            localStorage.setItem('evrythngInfo', JSON.stringify(user[res[0]].evrythngUserData));
+            console.log('setEVTInfo');
+            console.log(res);
+            if (typeof res != 'undefined' && typeof user[res[0]].evrythngUserData != 'undefined') {
+                var evrythngUserData = user[res[0]].evrythngUserData;
+                localStorage.setItem('evrythngInfo', JSON.stringify(evrythngUserData));
+            }
         }
     };
     /* get the user details from the auth0 platform using access_token */
@@ -393,7 +398,7 @@ AuthService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(380);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(53);
@@ -1065,10 +1070,16 @@ var AppProvider = (function () {
         console.log("Login action called");
         localStorage.loginStarted = 1;
     };
+    AppProvider.prototype.resetThngContext = function () {
+        localStorage.removeItem("myThng");
+        localStorage.removeItem("myProduct");
+    };
     AppProvider.prototype.completeLogin = function () {
         if (typeof localStorage.loginStarted != 'undefined') {
             console.log("finalizeLogin");
             var self_1 = this;
+            this.auth.setEVTInfo();
+            this.resetThngContext();
             this.evt.createUserAction("_Login").then(function () {
                 self_1.evt.getThngContext().then(function (th) {
                     console.log("getThngContext");
@@ -1126,6 +1137,54 @@ var AppProvider = (function () {
             console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
             if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
                 return true;
+            }
+        }
+    };
+    /**
+     * Registration have been started, completed in Auth0
+     * but not user local actions in not yet connected
+     * in EVT
+     *
+     * @param regAuth0UserId
+     */
+    AppProvider.prototype.startReg = function (regAuth0UserId) {
+        console.log("startReg:" + regAuth0UserId);
+        //create the action anyway, but add registerIdType
+        this.evt.createThngAction("_Activated", {
+            customFields: {
+                registeredUserIdType: 'auth0',
+                registeredUserId: regAuth0UserId
+            }
+        }, true); //called against on anon user
+        localStorage.regStarted = regAuth0UserId;
+    };
+    /**
+     * Complete the registration process
+     * - checks user_metadata from auth0
+     * - checks that regid and local device are equivalent
+     * - calls the _Activated action with evt user id w/ anon user
+     *
+     * @param userData
+     *
+     */
+    AppProvider.prototype.completeReg = function (userData) {
+        var regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+        var regAuth0UserId = userData.user_id.replace('auth0|', '');
+        if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
+            console.log("reg start detected");
+            if (localStorage.regStarted === regAuth0UserId) {
+                //valid registration to complete
+                console.log("valid registration to complete");
+                this.evt.createThngAction("_Activated", {
+                    customFields: {
+                        registeredUserIdType: 'evt',
+                        registeredUserId: regEvtUserId
+                    }
+                }, true).then(//called with anon user
+                function (//called with anon user
+                    es) {
+                    localStorage.removeItem("regStarted");
+                });
             }
         }
     };
@@ -1974,7 +2033,7 @@ var aura = [
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2149,7 +2208,7 @@ __decorate([
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
+        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -2249,7 +2308,7 @@ ScriptService = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProgressModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2533,7 +2592,7 @@ DeleteAccountPage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(53);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2637,7 +2696,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(333);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(646);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(48);
@@ -2647,8 +2706,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(647);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
@@ -2755,8 +2814,8 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2773,6 +2832,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+//import { NoticeComponent } from "../components/notice/notice";
+//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
 
 
 var MyApp = (function () {
@@ -2875,6 +2936,222 @@ MyApp = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+/*
+ *  This is the scan page. Where scanning happens.
+ *
+ */
+var HomePage = (function () {
+    function HomePage(platform, navCtrl, evt, app, auth0, loader) {
+        this.platform = platform;
+        this.navCtrl = navCtrl;
+        this.evt = evt;
+        this.app = app;
+        this.auth0 = auth0;
+        this.loader = loader;
+        this.links = [];
+        this.scanFailed = false;
+        this.isNotLoggedIn = true;
+        this.isNotLoggedIn = !this.auth0.loggedIn();
+    }
+    HomePage.prototype.ngOnInit = function () {
+        console.log("from home");
+        // if noticeViewed is true, the cookie policy notification will no longer be displayed
+        if (__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].get('cookie_notice') && __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].get('cookie_notice') == '1') {
+            this.noticeViewed = true;
+        }
+        else {
+            __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].set('cookie_notice', '1');
+            this.noticeViewed = false;
+        }
+        this.mobileVersion = this.platform.is('mobile');
+    };
+    HomePage.prototype.scan = function () {
+        var _this = this;
+        var self = this;
+        var load = this.loader.create({
+            spinner: 'crescent',
+            dismissOnPageChange: true,
+            showBackdrop: true,
+            content: "Please wait...",
+            enableBackdropDismiss: true
+        });
+        load.present();
+        if (localStorage.getItem('access_token') && localStorage.getItem('id_token')) {
+            this.isNotLoggedIn = false;
+        }
+        this.evt.scan({
+            createAnonymousUser: this.isNotLoggedIn
+        }).then(function (res) {
+            console.log(res);
+            /* set user context for anonymous user */
+            _this.evt.setAnonUserContext(res, _this.isNotLoggedIn);
+            load.data.enableBackdropDismiss = false;
+            if (res.length === 0) {
+                /* Scan failed. we should create a 'not recognized' action */
+                console.log("not Found");
+                self.scanFailed = true;
+                self.evt.getUserContext().then(function (usr) {
+                    usr.action("_NotRecognised").create().catch(function (err) { return console.error(err); });
+                    load.dismiss();
+                })
+                    .catch(function (err) {
+                    console.log(err);
+                    load.dismiss();
+                });
+            }
+            else if (typeof res[0].results[0].thng !== "undefined" && _this.isNotLoggedIn) {
+                console.log("anonymous user");
+                /* Scanned QR code. It is a thng and anonymous user */
+                var item = res[0].results[0].thng;
+                var usr = res[0].user;
+                usr.thng(item.id).read().then(function (thng) {
+                    self.scanFailed = false;
+                    //thng.action("scans").create().catch(err=>console.error(err));
+                    //thng.action("_Activated").create().then(console.log).catch(console.error);
+                    //usr.update({customFields:{myThng:thng.id}}).then(console.log);
+                    //TODO: Redirect to content page. Still in progress
+                    // self.navCtrl.setRoot(AuraMainPage);
+                    self.gotoNexPage();
+                })
+                    .catch(function (err) {
+                    self.scanFailed = true;
+                    console.log(err, 'thng error');
+                    load.dismiss();
+                });
+            }
+            else if (typeof res[0].results[0].thng !== "undefined" && !_this.isNotLoggedIn) {
+                /* Scanned QR code. It is a thng */
+                console.log("thing activated by logged in user");
+                var item_1 = res[0].results[0].thng;
+                self.evt.getUserContext().then(function (usr) {
+                    usr.thng(item_1.id).read().then(function (thng) {
+                        self.scanFailed = false;
+                        thng.action("scans").create().catch(function (err) { return console.error(err); });
+                        thng.action("_Activated").create().then(console.log).catch(console.error);
+                        usr.update({ customFields: { myThng: thng.id } }).then(console.log);
+                        //TODO: Redirect to content page. Still in progress
+                        // self.navCtrl.setRoot(AuraMainPage);
+                        self.gotoNexPage();
+                    })
+                        .catch(function (err) {
+                        self.scanFailed = true;
+                        console.log(err, 'thng error');
+                        load.dismiss();
+                    });
+                })
+                    .catch(function (err) {
+                    console.log(err);
+                    load.dismiss();
+                });
+            }
+            else if (typeof res[0].results[0].product !== "undefined") {
+                console.log("image recognition");
+                /* Scanned via image recognition. it is a product */
+                var item_2 = res[0].results[0].product;
+                self.evt.getUserContext().then(function (usr) {
+                    usr.product(item_2.id).read().then(function (prod) {
+                        self.scanFailed = false;
+                        prod.action("scans").create().catch(function (err) { return console.error(err); });
+                        self.evt.getUserCustomFields().then(function (cf) {
+                            if (cf) {
+                                /* Already has a thng */
+                                console.log('You already have a thng!');
+                                self.gotoNexPage();
+                            }
+                            else {
+                                /* Create a thng */
+                                var thng = {
+                                    name: "User Thng - " + usr.id,
+                                    tags: ["Image Recognition"],
+                                    product: item_2.id
+                                };
+                                _this.evt.createThng(thng).then(function () {
+                                    self.gotoNexPage();
+                                }).catch(function (err) {
+                                    console.log(err);
+                                    console.log("Failed to create a thng");
+                                });
+                            }
+                        }).catch(function (err) {
+                            console.log(err);
+                            console.error("Failed to save");
+                        });
+                    })
+                        .catch(function (err) {
+                        self.scanFailed = true;
+                        console.log(err, 'prod error');
+                        load.dismiss();
+                    });
+                })
+                    .catch(function (err) {
+                    console.log(err);
+                    load.dismiss();
+                });
+            } // END OF SCAN PROCESS
+            //save the thng to localStorage for later use
+            _this.app.saveThngContext(res);
+        }).catch(function (err) {
+            self.scanFailed = true;
+            console.log('scan failed', err);
+            load.dismiss();
+        });
+    };
+    HomePage.prototype.gotoNexPage = function () {
+        /*check if age gate*/
+        if (this.app.isValidAge())
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
+        else
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__["a" /* AgeGatePage */]);
+    };
+    return HomePage;
+}());
+HomePage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>\n      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your\nVisibly Clear&copy; Light Therapy Acne Mask Activator</p>\n\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], HomePage);
+
+//# sourceMappingURL=home.js.map
+
+/***/ }),
+
+/***/ 38:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EvtProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
@@ -2925,11 +3202,23 @@ var EvtProvider = (function () {
             usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
         });
     };
-    EvtProvider.prototype.createThngAction = function (actionType, action) {
+    /**
+     *
+     * Create a THNG action for a given user mode - anon or registered
+     *
+     * @param actionType
+     * @param action
+     * @param anonUser
+     * @returns {any}
+     */
+    EvtProvider.prototype.createThngAction = function (actionType, action, anonUser) {
         if (actionType === void 0) { actionType = ''; }
         if (action === void 0) { action = {}; }
-        return this.getThngContext().then(function (thng) {
-            thng.action(actionType).create(action).then(console.log).catch(function (err) { return console.error(err); });
+        if (anonUser === void 0) { anonUser = false; }
+        return this.getThngContext(anonUser).then(function (thng) {
+            if (typeof thng != 'undefined') {
+                thng.action(actionType).create(action).then(console.log).catch(function (err) { return console.error(err); });
+            }
         });
     };
     EvtProvider.prototype.init = function () {
@@ -2948,30 +3237,102 @@ var EvtProvider = (function () {
     EvtProvider.prototype.hasUserContext = function () {
         return (this.getUserContextKeys() ? true : false);
     };
-    EvtProvider.prototype.getUserContextKeys = function () {
+    EvtProvider.prototype.getUserContextKeys = function (forceAnon) {
+        if (forceAnon === void 0) { forceAnon = false; }
         var lsApiKey = "";
         var lsId = "";
-        if (this.auth.loggedIn()) {
-            var userContext = this.auth.getUserDetailsFromStorage();
-            lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
-            lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
-        }
-        else {
-            //Anon user
-            if (typeof localStorage.evrythngInfo != 'undefined') {
-                var userContext = JSON.parse(localStorage.evrythngInfo);
+        if (forceAnon == true) {
+            //force grab the anon user info
+            console.log('user context is anon');
+            if (typeof localStorage.anonEvrythngInfo != 'undefined') {
+                var userContext = JSON.parse(localStorage.anonEvrythngInfo);
                 lsId = userContext.evrythngUser;
                 lsApiKey = userContext.evrythngApiKey;
+            }
+            console.log(lsId, lsApiKey);
+        }
+        else {
+            if (this.auth.loggedIn()) {
+                console.log('user context is registered');
+                var userContext = this.auth.getUserDetailsFromStorage();
+                lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
+                lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
+            }
+            else {
+                console.log('user context is ambigous');
+                //possibly an anon user or just userContext was not set / reset
+                if (typeof localStorage.evrythngInfo != 'undefined') {
+                    var userContext = JSON.parse(localStorage.evrythngInfo);
+                    lsId = userContext.evrythngUser;
+                    lsApiKey = userContext.evrythngApiKey;
+                }
+                if (!lsId || !lsApiKey) {
+                    return this.getUserContextKeys(true);
+                }
             }
         }
         if (lsApiKey !== "" && lsId !== "") {
             return [lsApiKey, lsId];
         }
     };
+    /**
+     * helper to resolve context keys automatically
+     *
+     * @returns {any}
+     * @private
+     */
+    EvtProvider.prototype._getUserContextKeys = function () {
+        var ls;
+        if (this.auth.loggedIn()) {
+            ls = this.getUserContextKeys(false);
+            if (typeof ls == 'undefined') {
+                console.log('Did not find registered keys. Fall back to anon');
+                ls = this.getUserContextKeys(true);
+            }
+        }
+        else {
+            //anon
+            ls = this.getUserContextKeys(true);
+        }
+        return ls;
+    };
     /* return evt user context as a promise */
     EvtProvider.prototype.getUserContext = function () {
         var _this = this;
-        var ls = this.getUserContextKeys();
+        var ls = this._getUserContextKeys();
+        var lsId = typeof ls != 'undefined' ? ls[1] : '';
+        var lsApiKey = typeof ls != 'undefined' ? ls[0] : '';
+        if (lsApiKey == '' || lsId == '') {
+            return new Promise(function () { return false; });
+        }
+        else {
+            return (new Promise(function (resolve, reject) {
+                resolve(new EVT.User({
+                    id: lsId,
+                    apiKey: lsApiKey
+                }, _this.evtapp));
+            }));
+        }
+    };
+    EvtProvider.prototype.getUser = function () {
+        /**
+         * Return EVT user instance object (Not a promise)
+         * @type {any}
+         */
+        var ls = this._getUserContextKeys();
+        var lsId = ls[1];
+        var lsApiKey = ls[0];
+        if (typeof ls != 'undefined') {
+            return new EVT.User({
+                id: lsId,
+                apiKey: lsApiKey
+            }, this.evtapp);
+        }
+    };
+    /* return evt user context as a promise */
+    EvtProvider.prototype.getAnonUserContext = function () {
+        var _this = this;
+        var ls = this.getUserContextKeys(true);
         var lsId = ls[1];
         var lsApiKey = ls[0];
         return (new Promise(function (resolve, reject) {
@@ -2981,16 +3342,15 @@ var EvtProvider = (function () {
             }, _this.evtapp));
         }));
     };
-    EvtProvider.prototype.getUser = function () {
+    EvtProvider.prototype.getAnonUser = function () {
         /**
          * Return EVT user instance object (Not a promise)
          * @type {any}
          */
-        var ls = this.getUserContextKeys();
+        var ls = this.getUserContextKeys(true);
         var lsId = ls[1];
         var lsApiKey = ls[0];
-        var userContext = this.auth.getUserDetailsFromStorage();
-        if (typeof userContext != 'undefined') {
+        if (typeof ls != 'undefined') {
             return new EVT.User({
                 id: lsId,
                 apiKey: lsApiKey
@@ -3004,23 +3364,38 @@ var EvtProvider = (function () {
      *
      * @returns {any}
      */
-    EvtProvider.prototype.getThngContext = function () {
+    EvtProvider.prototype.getThngContext = function (anonUser) {
+        if (anonUser === void 0) { anonUser = false; }
         /**
          * assign `this` local function context
          * @type {any}
          */
         var self = this;
+        var userC = this.getUser();
+        var userCF = this.getUserCustomFields();
+        if (anonUser) {
+            userC = this.getAnonUser();
+            userCF = self.getAnonUserCustomFields();
+        }
         if (typeof localStorage.myThng !== 'undefined') {
             var myThng = JSON.parse(localStorage.myThng);
-            return this.getUser().thng(myThng.id).read();
+            return userC.thng(myThng.id).read();
         }
         else {
-            return this.getUserCustomFields().then(function (cf) {
+            return userCF.then(function (cf) {
                 if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
                     //has myThng customField
-                    return self.getUser().thng(cf.myThng).read(function (th) {
+                    return userC.thng(cf.myThng).read(function (th) {
                         localStorage.myThng = JSON.stringify(th);
                     });
+                }
+                else if (typeof localStorage.myProduct != 'undefined') {
+                    var thngData = {
+                        name: 'User Thng - ' + userC.id,
+                        tags: ["Image Recognition"],
+                        product: localStorage.myProduct.id
+                    };
+                    self.createThng(thngData, anonUser);
                 }
             });
         }
@@ -3047,6 +3422,97 @@ var EvtProvider = (function () {
             });
         });
     };
+    /* Get EVT anon user's custom fields */
+    EvtProvider.prototype.getAnonUserCustomFields = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.getAnonUserContext().then(function (usr) {
+                usr.$init.then(function (user) {
+                    if (typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')) {
+                        resolve(user.customFields);
+                    }
+                    else {
+                        resolve(false);
+                    }
+                });
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+    /**
+     * Common helper to create a thing from data given
+     * {
+     *    name: `User Thng - ${usr.id}`,
+     *    tags: ["Image Recognition"],
+     *    product: item.id
+     *  }
+     *
+     * @param thngData
+     * @param anonUser {boolean}
+     * @returns {any}
+     */
+    EvtProvider.prototype.createThng = function (thngData, anonUser) {
+        if (anonUser === void 0) { anonUser = false; }
+        var usr = this.getUser();
+        if (anonUser) {
+            usr = this.getAnonUser();
+        }
+        return usr.thng().create(thngData).then(function (th) {
+            // Assign the newly created thng to the user immediately, then return the promise
+            return usr.update({
+                customFields: {
+                    myThng: th.id
+                }
+            }).then(function () {
+                localStorage.myThng = JSON.stringify(th);
+            });
+        })
+            .catch(function (err) {
+            console.log(err);
+            console.log("Failed to create a thng");
+        });
+    };
+    EvtProvider.prototype.anonymousDataModel = function (data) {
+        var obj = {
+            "sub": "anonymous",
+            "given_name": "Demo",
+            "family_name": "Engmntprty",
+            "nickname": "demo",
+            "name": "Demo Engmntprty",
+            "picture": "https://scontent.xx.fbcdn.net/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?oh=24b240ba2dc60ad31b4319fbab9bb9e2&oe=5A9CD62F",
+            "gender": "male",
+            "locale": "en-US",
+            "updated_at": "2017-11-10T08:52:57.635Z",
+            "email": "demo@engmntprty.com",
+            "email_verified": false,
+            "user_metadata": {
+                "evrythngUserData": {
+                    "evrythngUser": data.id,
+                    "status": "anonymous",
+                    "email": data.email,
+                    "evrythngApiKey": data.apiKey,
+                    "socialNetwork": "evrythng"
+                }
+            }
+        };
+        return obj;
+    };
+    EvtProvider.prototype.setAnonUserContext = function (res, anonUser) {
+        if (typeof anonUser == 'undefined' || anonUser) {
+            localStorage.isAnon = true;
+            localStorage.anonUserInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
+            var evtInfo = {
+                anonymousUser: true,
+                evrythngUser: res[0].user.id,
+                evrythngApiKey: res[0].user.apiKey
+            };
+            localStorage.anonEvrythngInfo = JSON.stringify(evtInfo);
+        }
+        else {
+            localStorage.isAnon = false;
+        }
+    };
     return EvtProvider;
 }());
 EvtProvider = __decorate([
@@ -3059,7 +3525,7 @@ EvtProvider = __decorate([
 
 /***/ }),
 
-/***/ 38:
+/***/ 39:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3069,6 +3535,7 @@ EvtProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3083,6 +3550,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 //import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
 
 //import { ScriptService } from "../../providers/app/script.service";
+
 
 
 
@@ -3115,23 +3583,28 @@ var AuraMainPage = (function () {
     }
     AuraMainPage.prototype.ionViewWillEnter = function () {
         var _this = this;
-        console.log("ionViewWillEnter Aura Home");
-        if (!this.app.hasActiveCourse()) {
-            var self_1 = this;
-            var loading_1 = self_1.loading.create({
-                spinner: 'crescent',
-                content: "Please wait...",
-                enableBackdropDismiss: true
-            });
-            loading_1.present();
-            this.app.initCourses().then(function () {
-                _this.app.initProgArr().then(function () {
-                    console.log("Last completed:" + _this.app.getLastCompletedCourse());
-                    _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-                    loading_1.dismiss();
-                    _this.navCtrl.setRoot("AuraMainPage");
+        if (this.app.evt.hasUserContext()) {
+            console.log("ionViewWillEnter Aura Home");
+            if (!this.app.hasActiveCourse()) {
+                var self_1 = this;
+                var loading_1 = self_1.loading.create({
+                    spinner: 'crescent',
+                    content: "Please wait...",
+                    enableBackdropDismiss: true
                 });
-            });
+                loading_1.present();
+                this.app.initCourses().then(function () {
+                    _this.app.initProgArr().then(function () {
+                        console.log("Last completed:" + _this.app.getLastCompletedCourse());
+                        _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+                        loading_1.dismiss();
+                        _this.navCtrl.setRoot("AuraMainPage");
+                    });
+                });
+            }
+        }
+        else {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */]);
         }
     };
     AuraMainPage.prototype.ionViewDidLoad = function () {
@@ -3259,271 +3732,6 @@ AuraMainPage = __decorate([
 
 /***/ }),
 
-/***/ 44:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-/*
- *  This is the scan page. Where scanning happens.
- *
- */
-var HomePage = (function () {
-    function HomePage(platform, navCtrl, evt, app, auth0, loader) {
-        this.platform = platform;
-        this.navCtrl = navCtrl;
-        this.evt = evt;
-        this.app = app;
-        this.auth0 = auth0;
-        this.loader = loader;
-        this.links = [];
-        this.scanFailed = false;
-        this.isNotLoggedIn = true;
-        this.auth0.setEVTInfo();
-        this.isNotLoggedIn = !this.auth0.loggedIn();
-    }
-    HomePage.prototype.ngOnInit = function () {
-        console.log("from home");
-        // if noticeViewed is true, the cookie policy notification will no longer be displayed
-        if (__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].get('cookie_notice') && __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].get('cookie_notice') == '1') {
-            this.noticeViewed = true;
-        }
-        else {
-            __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].set('cookie_notice', '1');
-            this.noticeViewed = false;
-        }
-        this.mobileVersion = this.platform.is('mobile');
-        this.app.completeLogin(); //if login() is called
-    };
-    HomePage.prototype.anonymousDataModel = function (data) {
-        var obj = {
-            "sub": "anonymous",
-            "given_name": "Demo",
-            "family_name": "Engmntprty",
-            "nickname": "demo",
-            "name": "Demo Engmntprty",
-            "picture": "https://scontent.xx.fbcdn.net/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?oh=24b240ba2dc60ad31b4319fbab9bb9e2&oe=5A9CD62F",
-            "gender": "male",
-            "locale": "en-US",
-            "updated_at": "2017-11-10T08:52:57.635Z",
-            "email": "demo@engmntprty.com",
-            "email_verified": false,
-            "user_metadata": {
-                "evrythngUserData": {
-                    "evrythngUser": data.id,
-                    "status": "anonymous",
-                    "email": data.email,
-                    "evrythngApiKey": data.apiKey,
-                    "socialNetwork": "evrythng"
-                }
-            }
-        };
-        return obj;
-    };
-    HomePage.prototype.scan = function () {
-        var _this = this;
-        var self = this;
-        var load = this.loader.create({
-            spinner: 'crescent',
-            dismissOnPageChange: true,
-            showBackdrop: true,
-            content: "Please wait...",
-            enableBackdropDismiss: true
-        });
-        load.present();
-        if (localStorage.getItem('access_token') && localStorage.getItem('id_token')) {
-            this.isNotLoggedIn = false;
-        }
-        this.evt.scan({
-            createAnonymousUser: this.isNotLoggedIn
-        }).then(function (res) {
-            console.log(res);
-            /* set user context for anonymous user */
-            if (_this.isNotLoggedIn) {
-                // set anonymous info in localstorage
-                localStorage.isAnon = true;
-                localStorage.userInfo = JSON.stringify(_this.anonymousDataModel(res[0].user));
-                localStorage.evrythngInfo = '{"anonymousUser":"' + _this.isNotLoggedIn + '","evrythngUser":"' + res[0].user.id + '","evrythngApiKey":"' + res[0].user.apiKey + '"}';
-            }
-            else {
-                localStorage.isAnon = false;
-            }
-            load.data.enableBackdropDismiss = false;
-            if (res.length === 0) {
-                /* Scan failed. we should create a 'not recognized' action */
-                console.log("not Found");
-                self.scanFailed = true;
-                self.evt.getUserContext().then(function (usr) {
-                    usr.action("_NotRecognised").create().catch(function (err) { return console.error(err); });
-                    load.dismiss();
-                })
-                    .catch(function (err) {
-                    console.log(err);
-                    load.dismiss();
-                });
-            }
-            else if (typeof res[0].results[0].thng !== "undefined" && _this.isNotLoggedIn) {
-                console.log("anonymous user");
-                /* Scanned QR code. It is a thng and anonymous user */
-                var item = res[0].results[0].thng;
-                var usr_1 = res[0].user;
-                usr_1.thng(item.id).read().then(function (thng) {
-                    self.scanFailed = false;
-                    thng.action("scans").create().catch(function (err) { return console.error(err); });
-                    //thng.action("_Activated").create().then(console.log).catch(console.error);
-                    usr_1.update({ customFields: { myThng: thng.id } }).then(console.log);
-                    //TODO: Redirect to content page. Still in progress
-                    // self.navCtrl.setRoot(AuraMainPage);
-                    self.gotoNexPage();
-                })
-                    .catch(function (err) {
-                    self.scanFailed = true;
-                    console.log(err, 'thng error');
-                    load.dismiss();
-                });
-            }
-            else if (typeof res[0].results[0].thng !== "undefined" && !_this.isNotLoggedIn) {
-                /* Scanned QR code. It is a thng */
-                console.log("thing activated by logged in user");
-                var item_1 = res[0].results[0].thng;
-                self.evt.getUserContext().then(function (usr) {
-                    usr.thng(item_1.id).read().then(function (thng) {
-                        self.scanFailed = false;
-                        thng.action("scans").create().catch(function (err) { return console.error(err); });
-                        thng.action("_Activated").create().then(console.log).catch(console.error);
-                        usr.update({ customFields: { myThng: thng.id } }).then(console.log);
-                        //TODO: Redirect to content page. Still in progress
-                        // self.navCtrl.setRoot(AuraMainPage);
-                        self.gotoNexPage();
-                    })
-                        .catch(function (err) {
-                        self.scanFailed = true;
-                        console.log(err, 'thng error');
-                        load.dismiss();
-                    });
-                })
-                    .catch(function (err) {
-                    console.log(err);
-                    load.dismiss();
-                });
-            }
-            else if (typeof res[0].results[0].product !== "undefined") {
-                console.log("image recognition");
-                /* Scanned via image recognition. it is a product */
-                var item_2 = res[0].results[0].product;
-                self.evt.getUserContext().then(function (usr) {
-                    usr.product(item_2.id).read().then(function (prod) {
-                        self.scanFailed = false;
-                        prod.action("scans").create().catch(function (err) { return console.error(err); });
-                        self.evt.getUserCustomFields().then(function (cf) {
-                            if (cf) {
-                                /* Already has a thng */
-                                console.log('You already have a thng!');
-                                /* REDIRECT TO MAIN PAGE */
-                                // self.navCtrl.setRoot(AuraMainPage);
-                                self.gotoNexPage();
-                                var thngId = cf.myThng;
-                                usr.update({ customFields: { myThng: thngId } }).then(console.log);
-                            }
-                            else {
-                                /* Create a thng */
-                                var thng = {
-                                    name: "User Thng - " + usr.id,
-                                    tags: ["Image Recognition"],
-                                    product: item_2.id
-                                };
-                                usr.thng().create(thng).then(function (th) {
-                                    console.log(th.id);
-                                    _this.app.saveThngContext(th);
-                                    /* Assign the newly created thng to the user */
-                                    usr.update({ customFields: { myThng: th.id } }).then(console.log);
-                                    /*create activated action if user is registered or signed in */
-                                    /* Create activated action */
-                                    if (!self.isNotLoggedIn)
-                                        th.action("_Activated").create().then(console.log).catch(console.error);
-                                    /* REDIRECT TO MAIN PAGE */
-                                    // self.navCtrl.setRoot(AuraMainPage);
-                                    self.gotoNexPage();
-                                })
-                                    .catch(function (err) {
-                                    console.log(err);
-                                    console.log("Failed to create a thng");
-                                });
-                            }
-                        }).catch(function (err) {
-                            console.error("Failed to save");
-                        });
-                    })
-                        .catch(function (err) {
-                        self.scanFailed = true;
-                        console.log(err, 'prod error');
-                        load.dismiss();
-                    });
-                })
-                    .catch(function (err) {
-                    console.log(err);
-                    load.dismiss();
-                });
-            } // END OF SCAN PROCESS
-            //save the thng to localStorage for later use
-            _this.app.saveThngContext(res);
-        }).catch(function (err) {
-            self.scanFailed = true;
-            console.log('scan failed', err);
-            load.dismiss();
-        });
-    };
-    HomePage.prototype.gotoNexPage = function () {
-        /*check if age gate*/
-        if (this.app.isValidAge())
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
-        else
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__["a" /* AgeGatePage */]);
-    };
-    return HomePage;
-}());
-HomePage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>\n      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your\nVisibly Clear&copy; Light Therapy Acne Mask Activator</p>\n\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
-], HomePage);
-
-//# sourceMappingURL=home.js.map
-
-/***/ }),
-
 /***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3532,13 +3740,13 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3618,7 +3826,7 @@ var LoginPage = (function () {
         //console.log(usr);
         this.app.startLogin();
         this.auth0.login({ email: usr.email, pass: usr.password }).then(function (res) {
-            //console.log(res)
+            //won't be reachable due to redirect to auth0. Next landing is home or auth0 callback
         })
             .catch(function (err) {
             console.log(err);
@@ -3728,12 +3936,12 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(38);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3835,6 +4043,8 @@ var AuthPage = (function () {
             //console.log(authData);
             this.auth0.result(authData).then(function (res) {
                 console.log(res);
+                _this.app.completeReg(res);
+                _this.app.completeLogin(); //if login() is called
                 if (_this.app.getThngContext()) {
                     /**
                      * has THNG in localStorage
@@ -3899,7 +4109,7 @@ AuthPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4270,7 +4480,7 @@ NoticeComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4809,7 +5019,7 @@ AuraFootComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__ = __webpack_require__(290);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -5001,12 +5211,12 @@ ReorderModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__);
@@ -5108,23 +5318,22 @@ var SignUpPage = (function () {
         this.auth0.searchUser(usr.email).then(function (found) {
             if (found) {
                 console.log(usr, found);
+                load.dismiss();
                 self.emailTaken = true;
             }
             else {
                 self.auth0.signup({ email: usr.email, pass: usr.password }, usr.firstName, usr.lastName).then(function (response) {
                     /* add _Activated action for anonymous user */
-                    //  console.log(response.data);
+                    console.log("isAnon:" + localStorage.getItem("isAnon"));
+                    console.log("Signup:" + JSON.stringify(response));
                     var res = response;
                     if (localStorage.getItem("isAnon")) {
                         var regUserId_1 = res.data.Id;
-                        self.evt.getUserContext().then(function (usr) {
-                            var item = JSON.parse(localStorage.getItem("myThng"));
-                            usr.thng(item.id).read().then(function (thng) {
-                                thng.action("_Activated").create({ customFields: { registeredUserId: regUserId_1 } }).then(console.log).catch(console.error);
-                            })
-                                .catch(function (err) {
-                                console.log(err, 'thng error');
-                            });
+                        self.evt.getAnonUserContext().then(function (usr) {
+                            //At this point the evrythngUser  won't be available. Only auth0 registered Id.
+                            self.app.startReg(regUserId_1);
+                        }).catch(function (err) {
+                            console.log(err, 'thng error');
                         });
                     }
                     _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
@@ -5136,7 +5345,7 @@ var SignUpPage = (function () {
                 });
             }
         }).catch(function (err) {
-            console.log("Something went wrong.");
+            console.log("Something went wrong.", err);
         });
     };
     SignUpPage.prototype.FBauth = function () {
@@ -5175,8 +5384,8 @@ SignUpPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5296,7 +5505,7 @@ AgeGatePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(289);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
