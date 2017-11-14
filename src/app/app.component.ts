@@ -6,8 +6,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Config } from '../config/environment.dev';
 import { HomePage } from '../pages/home/home';
 
-import { NoticeComponent } from "../components/notice/notice";
-import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
+//import { NoticeComponent } from "../components/notice/notice";
+//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
 
 import { EvtProvider } from "../providers/evt/evt";
 import { AppProvider } from "../providers/app/app";

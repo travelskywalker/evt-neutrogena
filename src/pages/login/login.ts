@@ -82,7 +82,7 @@ export class LoginPage {
   	//console.log(usr);
     this.app.startLogin();
   	this.auth0.login({email:usr.email,pass:usr.password}).then(res=>{
-  		//console.log(res)
+  		//won't be reachable due to redirect to auth0. Next landing is home or auth0 callback
   	})
   	.catch(err=>{
   		console.log(err);

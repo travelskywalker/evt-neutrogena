@@ -8,6 +8,7 @@ import { AppProvider } from "../../providers/app/app";
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
 import { LoginPage } from "../../pages/login/login";
+import { HomePage } from "../../pages/home/home";
 /**
  * Generated class for the AuraMainPage page.
  *
@@ -47,23 +48,32 @@ export class AuraMainPage {
   }
 
   ionViewWillEnter() {
-    console.log("ionViewWillEnter Aura Home");
-    if (!this.app.hasActiveCourse()) {
-      let self = this;
-      let loading = self.loading.create({
-        spinner: 'crescent',
-        content: `Please wait...`,
-        enableBackdropDismiss: true
-      })
-      loading.present();
-      this.app.initCourses().then(()=> {
-        this.app.initProgArr().then(()=> {
-          console.log("Last completed:" + this.app.getLastCompletedCourse());
-          this.app.setActiveCourse(this.app.getLastCompletedCourse());
-          loading.dismiss();
-          this.navCtrl.setRoot("AuraMainPage");
+
+    if (this.app.evt.hasUserContext()) {
+
+      console.log("ionViewWillEnter Aura Home");if (!this.app.hasActiveCourse()) {
+
+        let self = this;
+        let loading = self.loading.create({
+          spinner: 'crescent',
+          content: `Please wait...`,
+          enableBackdropDismiss: true
         })
-      })
+        loading.present();
+        this.app.initCourses().then(()=> {
+          this.app.initProgArr().then(()=> {
+            console.log("Last completed:" + this.app.getLastCompletedCourse());
+            this.app.setActiveCourse(this.app.getLastCompletedCourse());
+            loading.dismiss();
+            this.navCtrl.setRoot("AuraMainPage");
+          })
+        })
+      }
+
+    } else {
+
+      this.navCtrl.setRoot(HomePage);
+
     }
   }
 

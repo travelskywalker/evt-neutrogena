@@ -110,6 +110,10 @@ export class AuthPage {
       //console.log(authData);
       this.auth0.result(authData).then(res => {
         console.log(res);
+
+        this.app.completeReg(res);
+        this.app.completeLogin(); //if login() is called
+
         if (this.app.getThngContext()) {
           /**
            * has THNG in localStorage

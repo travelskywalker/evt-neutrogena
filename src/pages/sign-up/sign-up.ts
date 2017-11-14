@@ -104,29 +104,27 @@ export class SignUpPage {
   	this.auth0.searchUser(usr.email).then(found=>{
   		if(found){
   			console.log(usr,found);
+        load.dismiss();
   			self.emailTaken = true;
   		}else{
 
-
-
 		  	self.auth0.signup({email:usr.email,pass:usr.password},usr.firstName,usr.lastName).then(response=>{
           /* add _Activated action for anonymous user */
-        //  console.log(response.data);
+          console.log("isAnon:" + localStorage.getItem("isAnon"));
+          console.log("Signup:" + JSON.stringify(response));
           let res:any= response;
           if(localStorage.getItem("isAnon")){
-            let regUserId:any = res.data.Id;
-            self.evt.getUserContext().then(usr=>{
-              let item = JSON.parse(localStorage.getItem("myThng"));
 
-              usr.thng(item.id).read().then(thng=>{
-                thng.action("_Activated").create({customFields:{registeredUserId:regUserId}}).then(console.log).catch(console.error);
-              })
-              .catch(err=>{
+            let regUserId:any = res.data.Id;
+            self.evt.getAnonUserContext().then(usr=> {
+
+              //At this point the evrythngUser  won't be available. Only auth0 registered Id.
+              self.app.startReg(regUserId);
+
+            }).catch(err=>{
                 console.log(err,'thng error')
-              })
             })
           }
-
 		  		this.navCtrl.setRoot(LoginPage);
 		  	})
 		  	.catch(err=>{
@@ -136,7 +134,7 @@ export class SignUpPage {
 		  	});
   		}
   	}).catch(err=>{
-  		console.log("Something went wrong.")
+  		console.log("Something went wrong.", err)
   	})
   }
 

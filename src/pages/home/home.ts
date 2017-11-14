@@ -34,7 +34,6 @@ export class HomePage {
     private auth0: AuthService,
     private loader: LoadingController
   ) {
-    this.auth0.setEVTInfo();
     this.isNotLoggedIn = !this.auth0.loggedIn();
 
   }
@@ -51,34 +50,9 @@ export class HomePage {
     }
 
     this.mobileVersion = this.platform.is('mobile');
-    this.app.completeLogin(); //if login() is called
   }
 
-  anonymousDataModel(data){
-    let obj = {
-      "sub": "anonymous",
-      "given_name": "Demo",
-      "family_name": "Engmntprty",
-      "nickname": "demo",
-      "name": "Demo Engmntprty",
-      "picture": "https://scontent.xx.fbcdn.net/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?oh=24b240ba2dc60ad31b4319fbab9bb9e2&oe=5A9CD62F",
-      "gender": "male",
-      "locale": "en-US",
-      "updated_at": "2017-11-10T08:52:57.635Z",
-      "email": "demo@engmntprty.com",
-      "email_verified": false,
-      "user_metadata": {
-        "evrythngUserData": {
-          "evrythngUser": data.id,
-          "status": "anonymous",
-          "email": data.email,
-          "evrythngApiKey": data.apiKey,
-          "socialNetwork": "evrythng"
-        }
-      }
-    }
-    return obj;
-  }
+
 
   scan(){
     let self = this;
@@ -93,28 +67,24 @@ export class HomePage {
     if(localStorage.getItem('access_token') && localStorage.getItem('id_token')){
         this.isNotLoggedIn = false;
     }
+
     this.evt.scan({
+
         createAnonymousUser: this.isNotLoggedIn
+
     }).then(res=>{
+
       console.log(res);
       /* set user context for anonymous user */
-      if(this.isNotLoggedIn){
 
-        // set anonymous info in localstorage
-        localStorage.isAnon = true;
-        localStorage.userInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
-        localStorage.evrythngInfo = '{"anonymousUser":"'+this.isNotLoggedIn+'","evrythngUser":"'+res[0].user.id+'","evrythngApiKey":"'+res[0].user.apiKey+'"}';
-      }else{
-        localStorage.isAnon = false;
-      }
-
-
+      this.evt.setAnonUserContext(res, this.isNotLoggedIn);
       load.data.enableBackdropDismiss = false;
       if(res.length === 0) {
-        /* Scan failed. we should create a 'not recognized' action */
 
+        /* Scan failed. we should create a 'not recognized' action */
         console.log("not Found");
         self.scanFailed = true;
+
         self.evt.getUserContext().then(usr=>{
           usr.action("_NotRecognised").create().catch(err=>console.error(err));
           load.dismiss();
@@ -126,18 +96,21 @@ export class HomePage {
 
 
       } else if(typeof res[0].results[0].thng !== "undefined" && this.isNotLoggedIn){
+
         console.log("anonymous user");
           /* Scanned QR code. It is a thng and anonymous user */
           let item = res[0].results[0].thng;
           let usr =  res[0].user;
           usr.thng(item.id).read().then(thng=>{
+
             self.scanFailed = false;
 
-            thng.action("scans").create().catch(err=>console.error(err));
+            //thng.action("scans").create().catch(err=>console.error(err));
             //thng.action("_Activated").create().then(console.log).catch(console.error);
-            usr.update({customFields:{myThng:thng.id}}).then(console.log);
+            //usr.update({customFields:{myThng:thng.id}}).then(console.log);
             //TODO: Redirect to content page. Still in progress
             // self.navCtrl.setRoot(AuraMainPage);
+
             self.gotoNexPage();
           })
           .catch(err=>{
@@ -184,41 +157,28 @@ export class HomePage {
 
             self.evt.getUserCustomFields().then(cf=>{
               if(cf){
+
                 /* Already has a thng */
                 console.log('You already have a thng!');
-                /* REDIRECT TO MAIN PAGE */
-                // self.navCtrl.setRoot(AuraMainPage);
                 self.gotoNexPage();
-                let thngId = cf.myThng;
-                usr.update({customFields:{myThng:thngId}}).then(console.log);
-              }else{
+
+              } else{
                 /* Create a thng */
                 let thng = {
                   name: `User Thng - ${usr.id}`,
                   tags: ["Image Recognition"],
                   product: item.id
                 }
-                usr.thng().create(thng).then(th=>{
 
-                  console.log(th.id);
-                  this.app.saveThngContext(th);
-                  /* Assign the newly created thng to the user */
-                  usr.update({customFields:{myThng:th.id}}).then(console.log);
-
-                  /*create activated action if user is registered or signed in */
-                  /* Create activated action */
-                  if(!self.isNotLoggedIn) th.action("_Activated").create().then(console.log).catch(console.error);
-
-                  /* REDIRECT TO MAIN PAGE */
-                  // self.navCtrl.setRoot(AuraMainPage);
+                this.evt.createThng(thng).then(()=>{
                   self.gotoNexPage();
-                })
-                .catch(err=>{
+                }).catch(err=>{
                   console.log(err);
                   console.log("Failed to create a thng");
                 })
               }
             }).catch(err=>{
+              console.log(err);
               console.error("Failed to save");
             })
           })

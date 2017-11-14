@@ -740,10 +740,17 @@ export class AppProvider {
     localStorage.loginStarted = 1;
   }
 
+  resetThngContext() {
+    localStorage.removeItem("myThng");
+    localStorage.removeItem("myProduct");
+  }
+
   completeLogin() {
     if (typeof localStorage.loginStarted != 'undefined') {
       console.log("finalizeLogin");
       let self = this;
+      this.auth.setEVTInfo();
+      this.resetThngContext();
       this.evt.createUserAction("_Login").then(()=>{
         self.evt.getThngContext().then(th=>{
           console.log("getThngContext");
@@ -811,4 +818,62 @@ export class AppProvider {
 
     }
   }
+
+  /**
+   * Registration have been started, completed in Auth0
+   * but not user local actions in not yet connected
+   * in EVT
+   *
+   * @param regAuth0UserId
+   */
+  startReg(regAuth0UserId: any): void {
+    console.log("startReg:" + regAuth0UserId);
+    //create the action anyway, but add registerIdType
+    this.evt.createThngAction(
+      "_Activated", {
+        customFields: {
+          registeredUserIdType: 'auth0',
+          registeredUserId: regAuth0UserId
+        }
+      }, true); //called against on anon user
+    localStorage.regStarted = regAuth0UserId;
+  }
+
+  /**
+   * Complete the registration process
+   * - checks user_metadata from auth0
+   * - checks that regid and local device are equivalent
+   * - calls the _Activated action with evt user id w/ anon user
+   *
+   * @param userData
+   *
+   */
+  completeReg(userData: any): void {
+    let regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+    let regAuth0UserId = userData.user_id.replace('auth0|', '');
+
+    if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
+      console.log("reg start detected");
+
+      if (localStorage.regStarted === regAuth0UserId) {
+
+        //valid registration to complete
+        console.log("valid registration to complete");
+        this.evt.createThngAction(
+          "_Activated", {
+            customFields: {
+              registeredUserIdType: 'evt',
+              registeredUserId: regEvtUserId
+            }
+          }, true).then( //called with anon user
+            es=>{
+              localStorage.removeItem("regStarted");
+            }
+          );
+      }
+    }
+  }
+
+
+
 }

@@ -108,7 +108,8 @@ export class AuthService {
         reject(authResult.error);
       }
       /* Proceed with authentication */
-      else{
+      else if (typeof authResult.access_token != 'undefined'){
+
         localStorage.setItem('access_token', authResult.access_token);
         localStorage.setItem('id_token', authResult.id_token);
         this.webAuth.client.userInfo(authResult.access_token,function(err, user){
@@ -128,7 +129,7 @@ export class AuthService {
             localStorage.removeItem('access_token');
             localStorage.removeItem('id_token');
             localStorage.removeItem('userInfo');
-        localStorage.removeItem('evrythngInfo');
+            localStorage.removeItem('evrythngInfo');
             reject(err);
           }
         })
@@ -142,7 +143,14 @@ export class AuthService {
     if( (localStorage.access_token && localStorage.id_token) && (!localStorage.evrythngInfo || localStorage.evrythngInfo === "undefined") ){
       let user = this.getUserDetailsFromStorage();
       let res = Object.keys(user).filter((a)=>{ return (a.indexOf("user_metadata") > -1) });
-      localStorage.setItem('evrythngInfo',JSON.stringify(user[res[0]].evrythngUserData));
+      console.log('setEVTInfo');
+      console.log(res);
+      if (typeof res != 'undefined' && typeof user[res[0]].evrythngUserData != 'undefined') {
+        let evrythngUserData = user[res[0]].evrythngUserData;
+        localStorage.setItem('evrythngInfo', JSON.stringify(evrythngUserData));
+      }
+
+
     }
   }
 
