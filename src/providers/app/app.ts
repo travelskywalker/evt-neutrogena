@@ -36,8 +36,15 @@ export class AppProvider {
   today = new Date();
   userCustomFields?: any;
   activeCourseState?: Array<any> = [0, 0, 0, 1];
-
   playToggleMap?: Array<any> = [];
+  /**
+   * Holds the instance of notice component when it gets created.
+   */
+  public noticeViewManager?: any;
+  /**
+   * Holds the instance of reorder popup when it gets created.
+   */
+  public reorderViewManager?: any;
   constructor(
     public http: Http,
     public evt: EvtProvider,

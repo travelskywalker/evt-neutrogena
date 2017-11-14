@@ -1,5 +1,5 @@
 <aura-head></aura-head>
-
+<reorder-modal #reorder></reorder-modal>
 <ion-content >
 
 	<section class="track-preview {{courseTitle}}">
@@ -72,4 +72,4 @@
     <footer></footer>
 </ion-content>
 
-<aura-foot></aura-foot>
+<aura-foot [reorder]="reorder"></aura-foot>

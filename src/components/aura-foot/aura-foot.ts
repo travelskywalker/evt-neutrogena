@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { NavController, ViewController,LoadingController,App } from "ionic-angular";
+import { Component, Input } from '@angular/core';
+import { NavController, ViewController,LoadingController } from "ionic-angular";
 
 import { AuraMainPage } from "../../pages/aura-main/aura-main";
-import { HomePage } from "../../pages/home/home";
 
-import { EvtProvider } from "../../providers/evt/evt";
+import { AppProvider } from "../../providers/app/app";
+import { ReorderModalComponent } from "../../components/reorder-modal/reorder-modal";
 /**
  * Generated class for the AuraFootComponent component.
  *
@@ -17,17 +17,23 @@ import { EvtProvider } from "../../providers/evt/evt";
 })
 export class AuraFootComponent {
 
-  text: string;
-
+  @Input('reorder') reorder?: ReorderModalComponent;
   /* This is the reorder link */
   ext_url ?: string = "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator";
 
-  constructor(private app: App,private loader: LoadingController,private nav: NavController, private view: ViewController, private evt: EvtProvider) {
+  constructor(private loader: LoadingController,
+              private nav: NavController, private view: ViewController,
+              private appState: AppProvider) {
     console.log('Hello AuraFootComponent Component');
-    this.text = 'Hello World';
   }
 
-  toHome(){
+  /***
+   * home btn tap handler
+   */
+  toHome(): void {
+    if (typeof this.appState.noticeViewManager != 'undefined') {
+      this.appState.noticeViewManager.toggleView(false);
+    }
     let currentView = this.view.component.name;
     if(currentView == 'AuraContentPage'){
       let load = this.loader.create({
@@ -37,65 +43,21 @@ export class AuraFootComponent {
           content: `Please wait...`,
           enableBackdropDismiss:true});
         load.present();
-      this.ClearPlayerResources().then((result) => {
-        load.dismiss();
-        // let EX = document.getElementsByTagName('head')[0];
-        // var r = EX.getElementsByTagName('script');
-        // console.log(r);
-        //
-        // r[0].remove();
-        // r[11].remove();
-        // r[12].remove();
-        // for (var i = 0; i < r.length; i++) {
-        //
-        //     if(r[i].getAttribute('type') != 'text/javascript'){
-        //
-        //         // r[i].parentNode.removeChild(r[i]);
-        //           r[i].remove();
-        //     }
-        //       // r[i].remove();
-        // }
+        this.ClearPlayerResources().then((result) => {
+          load.dismiss();
 
+          if(result){
+            this.nav.setRoot(AuraMainPage);
+          }
+          else{
+            this.nav.setRoot(AuraMainPage);
+          }
 
-        if(result){
-          this.nav.setRoot(AuraMainPage);
-        }
-        else{
-          this.nav.setRoot(AuraMainPage);
-        }
-
-     });
+       });
     }
     else{
         this.nav.setRoot(AuraMainPage);
     }
-    // let playBtn = document.getElementById('play-btn');
-    //
-    // if(playBtn){
-    //   let load = this.loader.create({
-    //     spinner: 'crescent',
-    //     dismissOnPageChange: true,
-    //     showBackdrop: true,
-    //     content: `Please wait...`,
-    //     enableBackdropDismiss:true});
-    //   load.present();
-    //   playBtn.click();
-    //   let timer2 = setTimeout(() => {
-    //
-    //     this.nav.setRoot(AuraMainPage);
-    //     load.dismiss();
-    //       clearTimeout(timer2);
-    //   }, 2000);
-    //
-    // }
-    // else{
-    //
-    //   this.nav.setRoot(AuraMainPage);
-    // }
-
-
-
-
   }
 
   ClearPlayerResources(){
@@ -114,10 +76,11 @@ export class AuraFootComponent {
    });
   }
 
-  logAction(){
-  	// TODO: this is a user action. Possible that we want to log
-  	// the reorder action even if there are no users logged in
-  	this.evt.createUserAction("_Reorder");
+  /***
+   * reorder btn tap handler
+   */
+  reorderAction(): void{
+    this.reorder.toggleView();
   }
 
 }

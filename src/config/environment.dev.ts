@@ -27,6 +27,29 @@ export const Config = {
     slaveryAct:"//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
     reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
   },
+  reorder_links: [
+    {
+      link: "https://www.amazon.co.uk/Neutrogena-Visibly-Clear-Therapy-Activator/dp/B01MU9ML3G/ref=sr_1_2_s_it?s=beauty&ie=UTF8&qid=1509712796&sr=1-2&keywords=neutrogena+light+therapy+acne+mask",
+      name: "Amazon",
+      target: "_blank"
+    },{
+      link: "http://www.boots.com/neutrogena-light-acne-therapy-mask-applicator-10229139",
+      name: "Boots",
+      target: "_blank"
+    },{
+      link: "https://www.superdrug.com/Skin/Face/Face-Masks/Neutrogena-Visibly-Clear-Acne-Mask-Activator/p/737374",
+      name: "Superdrug",
+      target: "_blank"
+    },{
+      link: "https://www.lookfantastic.com/neutrogena-visibly-clear-light-therapy-mask-activator/11433855.html",
+      name: "Lookfantastic",
+      target: "_blank"
+    },{
+      link: "https://www.ocado.com/webshop/product/Neutrogena-Light-Therapy-Acne-Mask-Activator/357890011?from=search&tags=%7C20000&param=neutrogena+activator&parentContainer=SEARCHneutrogena+acti",
+      name: "Ocado",
+      target: "_blank"
+    },
+  ],
   lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
