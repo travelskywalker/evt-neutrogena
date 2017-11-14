@@ -46,8 +46,11 @@
 			<!--<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse()">-->
 			<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">
 				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}
-				<a class="link">About AURA</a>
 			</p>
+      <br>
+      <div>
+        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>
+      </div>
 		</div>
 
 

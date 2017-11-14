@@ -50,6 +50,11 @@ export const Config = {
       target: "_blank"
     },
   ],
+  aura_url: {
+    link: "https://www.aurahealth.io/",
+    name: "AURA health",
+    target: "_blank"
+  },
   lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count

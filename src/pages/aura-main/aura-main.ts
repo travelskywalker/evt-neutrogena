@@ -3,7 +3,7 @@ import { Component, ViewChild} from '@angular/core';
 //import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, Slides, LoadingController } from 'ionic-angular';
 
-//import { ScriptService } from "../../providers/app/script.service";
+import { Config } from "../../config/environment.dev";
 import { AppProvider } from "../../providers/app/app";
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
@@ -37,6 +37,7 @@ export class AuraMainPage {
 	courseTitle?: string = "Mindfulness";
   addLesson: number = 0;
   labelIntro = "Start this course";
+  aura_url = Config.aura_url;
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
