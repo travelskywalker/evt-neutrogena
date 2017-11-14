@@ -1,5 +1,5 @@
 <aura-head></aura-head>
-
+<reorder-modal #reorder></reorder-modal>
 <ion-content >
 <progress-modal></progress-modal>
     <!-- <div id="aura-widget-div" #aura></div> -->
@@ -16,5 +16,4 @@
 
     <footer></footer>
 </ion-content>
-
-<aura-foot></aura-foot>
+<aura-foot [reorder]="reorder"></aura-foot>
