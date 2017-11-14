@@ -39,9 +39,9 @@ webpackEmptyAsyncContext.id = 203;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(339);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(340);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__(261);
@@ -378,6 +378,767 @@ AuthService = __decorate([
 ], AuthService);
 
 //# sourceMappingURL=auth.service.js.map
+
+/***/ }),
+
+/***/ 23:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(380);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__ = __webpack_require__(22);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+//import { Injectable,ViewChild, OnInit } from '@angular/core';
+
+
+
+
+
+
+
+
+
+/*
+ *	Generated class for the AppProvider provider.
+ *
+ *	This is the main service for handling user progress
+ *	This contains all the progress variables.
+ *	The variables in the content page are here.
+*/
+var AppProvider = (function () {
+    function AppProvider(http, evt, auth) {
+        this.http = http;
+        this.evt = evt;
+        this.auth = auth;
+        this.progressArr = [];
+        this.progressKeys = [];
+        this.courses = [];
+        //total lessons / days in a course
+        this.activeDur = 1;
+        this.hasValidUserAge = false;
+        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].lessonCompletionTimeLimit; //seconds
+        this.currentLesson = 1;
+        this.courseHistory = [];
+        this.today = new Date();
+        this.activeCourseState = [0, 0, 0, 1];
+        this.playToggleMap = [];
+    }
+    /* GET the aura variable containing the content details, path..etc. */
+    AppProvider.prototype.toGroup = function () {
+        var _this = this;
+        var mast = [];
+        var promises = __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__["a" /* aura */].map(function (ar) {
+            var crs = ar.Course.trim();
+            if (mast.hasOwnProperty(crs)) {
+                mast[crs][ar.Day] = {
+                    id: ar.ID,
+                    title: ar.Title,
+                    path: ar.path,
+                    desc: ar.Description,
+                    course: crs
+                };
+            }
+            else {
+                mast[crs] = {};
+                mast[crs][ar.Day] = {
+                    id: ar.ID,
+                    title: ar.Title,
+                    path: ar.path,
+                    desc: ar.Description,
+                    course: crs
+                };
+            }
+        });
+        return Promise.all(promises).then(function () { _this.progressKeys = Object.keys(mast); return mast; });
+    };
+    /* set the active course for the top component in the main page */
+    AppProvider.prototype.setActiveCourse = function (courseTitle) {
+        console.log("Activecourse is set");
+        this.activeCourse = this.getCourseData(courseTitle);
+        console.log(this.activeCourse);
+        this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
+        this.activeDur = this.getCourseDuration(courseTitle);
+        this.currentCourse = courseTitle;
+        //let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
+        //this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
+    };
+    AppProvider.prototype.ngOnInit = function () {
+        alert('XXX');
+    };
+    AppProvider.prototype.setDur = function (val) {
+        this.activeDur = val;
+    };
+    AppProvider.prototype.initCourses = function () {
+        var _this = this;
+        /**
+         *
+         * @type {AppProvider}
+         *
+         * group lessons into courses
+         * initialize default course title, data and duration (from grouping)
+         * initialize courses
+         */
+        var self = this;
+        return this.toGroup().then(function (res) {
+            console.log("initCourses");
+            console.log(res);
+            self.courses = res;
+            console.log(self.courses);
+            self.currentCourse = 'Mindfulness';
+            self.activeCourse = res['Mindfulness'];
+            self.activeDur = Object.keys(self.activeCourse).length;
+            if (_this.evt.hasUserContext()) {
+                return _this.initProgArr();
+            }
+        });
+    };
+    AppProvider.prototype.initProgArr = function () {
+        /**
+         *
+         * @type {AppProvider}
+         *
+         * Get data from EVT and store it a progress array in-memory
+         */
+        var self = this;
+        return this.getProgressStateFromEvt().then(function (customFields) {
+            console.log("COURSE HISTORY");
+            console.log(self.courseHistory);
+            self.courseHistory.forEach(function (val) {
+                if (typeof self.progressArr[val.courseNumber] === 'undefined') {
+                    self.progressArr[val.courseNumber] = [];
+                }
+                if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
+                    self.progressArr[val.courseNumber].push(val.lessonNumber);
+                }
+            });
+        });
+    };
+    AppProvider.isAgeGated = function () {
+        return __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
+    };
+    AppProvider.prototype.isValidAge = function () {
+        /**
+         * Check if there's a previous age gating info
+         * Check if greater than age allowed
+         */
+        var isAgeGated = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
+        var agd = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("agd");
+        this.hasValidUserAge = (isAgeGated && parseInt(agd) >= 18);
+        return this.hasValidUserAge;
+    };
+    AppProvider.prototype.saveAgeGateData = function (ageGated, cookiesOn, selectedDate) {
+        /**
+         * Save age gating info for user into Cookie
+         */
+        if (cookiesOn) {
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, 7);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", 7);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), 7);
+        }
+    };
+    AppProvider.prototype.saveThngContext = function (result) {
+        /**
+         * Save the THNG scanned or created via IR scan to localStorage for later use
+         */
+        if (this.getThngContext() === null) {
+            /**
+             * Ignore other THNGs if there's already one in localStorage
+             */
+            if (typeof result.id !== 'undefined') {
+                localStorage.setItem('myThng', JSON.stringify(result));
+            }
+            else if (typeof result[0].results[0].thng !== "undefined") {
+                localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
+            }
+            else if (typeof result[0].results[0].product !== "undefined") {
+                localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+            }
+        }
+    };
+    AppProvider.prototype.getThngContext = function () {
+        /**
+         * get the THNG from the localStorage
+         */
+        return localStorage.getItem('myThng');
+    };
+    AppProvider.prototype.startCourse = function (courseData) {
+        /**
+         * App helper function to start a course
+         */
+        if (courseData.day === 1 && !this.hasStartedCourse(courseData.course)) {
+            this.evt.createThngAction('_CourseStarted', {
+                "customFields": {
+                    "currentCourse": courseData.course,
+                    "currentLesson": courseData.day,
+                    "currentLessonContentId": courseData.id
+                }
+            });
+        }
+    };
+    AppProvider.prototype.completeCourse = function (courseData) {
+        var _this = this;
+        /**
+         * App helper function to complete a course
+         */
+        this.isLastLesson(courseData.course, courseData.day).then(function (isLastLesson) {
+            if (isLastLesson) {
+                _this.evt.createThngAction('_CourseCompleted', {
+                    "customFields": {
+                        "currentCourse": courseData.course,
+                        "currentLesson": courseData.day,
+                        "currentLessonContentId": courseData.id
+                    }
+                });
+            }
+        });
+    };
+    AppProvider.prototype.playLesson = function (lessonData, pmc) {
+        /**
+         * single-point entry for handling play button actions for AURA content
+         */
+        if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
+            this.playToggleMap[lessonData.course] = {};
+        }
+        if (typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined') {
+            //playing
+            this.playToggleMap[lessonData.course][lessonData.id] = 1;
+        }
+        else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+            //stopped
+            this.playToggleMap[lessonData.course][lessonData.id] = 0;
+        }
+        else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
+            //playing
+            this.playToggleMap[lessonData.course][lessonData.id] = 1;
+        }
+        if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+            this.evt.createThngAction('_Play');
+            this.startLesson(lessonData);
+            this.startLessonTimer(lessonData, pmc);
+        }
+        else {
+            this.stopLessonTimer(lessonData);
+        }
+    };
+    AppProvider.prototype.startLesson = function (lessonData) {
+        /**
+         * App helper to put Lesson started data to EVT
+         */
+        if (this.hasLessonCompleted(lessonData)) {
+            return;
+        }
+        this.evt.createThngAction('_LessonStarted', {
+            "customFields": {
+                "currentCourse": lessonData.course,
+                "currentLesson": lessonData.day,
+                "currentLessonContentId": lessonData.id
+            }
+        });
+        this.setCurrentLesson(lessonData.day);
+        this.setCurrentCourse(lessonData.course);
+    };
+    AppProvider.prototype.startLessonTimer = function (lessonData, pmc) {
+        var _this = this;
+        var timer = __WEBPACK_IMPORTED_MODULE_6_rxjs__["Observable"].timer(1000, 1000);
+        var alive = true;
+        this.lessonTimer =
+            timer
+                .takeWhile(function () { return alive; })
+                .subscribe(function (val) {
+                if (val == (_this.lessonTimeLimit)) {
+                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
+                    //if 10 mins, trigger a _LessonCompleted action
+                    _this.completeLesson(lessonData);
+                    pmc.toggleView(true, lessonData.course);
+                    _this.lessonTimer.unsubscribe();
+                }
+            });
+    };
+    AppProvider.prototype.stopLessonTimer = function (lessonData) {
+        if (typeof this.lessonTimer !== 'undefined') {
+            this.lessonTimer.unsubscribe();
+        }
+    };
+    AppProvider.prototype.completeLesson = function (lessonData) {
+        /**
+         * App helper to put Lesson completed data to EVT
+         */
+        if (this.hasLessonCompleted(lessonData)) {
+            return;
+        }
+        var self = this;
+        return this.evt.createThngAction('_LessonCompleted', {
+            "customFields": {
+                "currentCourse": lessonData.course,
+                "currentLesson": lessonData.day,
+                "currentLessonContentId": lessonData.id
+            }
+        }).then(function (res) {
+            self.updateCompletedLessonsCnt(lessonData.course);
+            self.completeCourse(lessonData);
+        });
+    };
+    AppProvider.prototype.isLastLesson = function (course, lessonDay) {
+        /**
+         * For a given course and day, is it the last one?
+         */
+        var self = this;
+        return this.toGroup().then(function (res) {
+            if (typeof self.courses == 'undefined' || self.courses.length < 0) {
+                self.courses = res;
+            }
+            var courseLen = Object.keys(self.courses[course]).length;
+            return (courseLen <= lessonDay);
+        });
+    };
+    AppProvider.prototype.setCurrentCourse = function (course) {
+        this.currentCourse = course;
+    };
+    AppProvider.prototype.getCurrentCourse = function () {
+        /**
+         * Get the CURRENT course of the user. CURRENT is not ACTIVE but the state
+         * from last update. ACTIVE is the one in use by tapping or clicking.
+         */
+        if (typeof this.currentCourse !== 'undefined') {
+            return this.currentCourse;
+        }
+        else {
+            return 'Mindfulness';
+        }
+    };
+    AppProvider.prototype.setCurrentLesson = function (day) {
+        this.currentLesson = day;
+    };
+    AppProvider.prototype.getCurrentLesson = function (course) {
+        /**
+         *
+         * Get the CURRENT lesson of the user.
+         * CURRENT is not ACTIVE but the state
+         * from last update. ACTIVE is the one
+         * in use by tapping or clicking.
+         *
+         */
+        if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
+            var lesson = this.progressArr[course].sortNum()[this.progressArr[course].length - 1];
+            console.log("course: " + course + ", lesson: " + lesson);
+            return lesson;
+        }
+        return this.currentLesson;
+    };
+    AppProvider.prototype.updateCompletedLessonsCnt = function (course) {
+        /**
+         * Update the tally of completed lessons for the day
+         */
+        var crsCnt = this.getLessonsCompletedToday(course) + 1;
+        var totCnt = this.getLessonsCompletedToday() + 1;
+        if (typeof course !== 'undefined') {
+            localStorage.setItem(this.getLSKey(course), crsCnt.toString());
+            localStorage.setItem(this.getLSKey(), totCnt.toString());
+            //refresh the progress
+            this.initProgArr();
+        }
+    };
+    AppProvider.prototype.getLessonsCompletedToday = function (course) {
+        /**
+         * Get the tally of completed Lessons for the day
+         */
+        if (typeof course == 'undefined') {
+            return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
+        }
+        else {
+            if (typeof this.courses[course] == 'undefined') {
+                return 0;
+            }
+            return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
+        }
+    };
+    AppProvider.prototype.getLSKey = function (course) {
+        /**
+         * Get a lesson key counter
+         * @type {string}
+         */
+        var str = "";
+        if (typeof course == 'undefined') {
+            str = "lcCnt" + this.today.toDateString();
+        }
+        else {
+            str = "lcCnt" + course + this.today.toDateString();
+        }
+        return str;
+    };
+    AppProvider.prototype.getLessonsRemainingToday = function (course) {
+        /**
+         * Check total remaining new lessons for the day
+         * w/o params shows total for all courses
+         *
+         */
+        if (typeof course == 'undefined') {
+            return (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
+        }
+        else {
+            if (this.courses[course] != 'undefined') {
+                var remCnt = (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+                if (this.hasLoggedIn()) {
+                    return (remCnt >= 0 ? remCnt : 0);
+                }
+                else {
+                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                        return 1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+            }
+        }
+    };
+    AppProvider.prototype.getAdditionalLesson = function (course) {
+        /**
+         * Get one additional lesson if there are still lesson credits for the day
+         */
+        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+            return 0;
+        }
+        return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
+    };
+    AppProvider.prototype.getProgressStateFromEvt = function () {
+        var _this = this;
+        return this.evt.getUserCustomFields().then(function (customFields) {
+            console.log("customFields");
+            console.log(customFields);
+            if (typeof customFields != 'undefined') {
+                _this.userCustomFields = customFields;
+                var cl = null;
+                var cc = "";
+                if (customFields.hasOwnProperty('courseHistory') && customFields.courseHistory.length > 0) {
+                    _this.courseHistory = customFields.courseHistory;
+                    var lastLessonCompleted = _this.getLastCompletedLesson();
+                    if (typeof lastLessonCompleted !== 'undefined') {
+                        cl = lastLessonCompleted.lessonNumber;
+                        cc = lastLessonCompleted.courseNumber;
+                    }
+                }
+                if (customFields.hasOwnProperty('currentLesson')) {
+                    _this.currentLesson = parseInt(customFields.currentLesson);
+                }
+                else if (cl !== null) {
+                    _this.currentLesson = cl;
+                }
+                if (customFields.hasOwnProperty('currentCourse')) {
+                    _this.currentCourse = customFields.currentCourse;
+                }
+                else if (cc !== "") {
+                    _this.currentCourse = cc;
+                }
+                return customFields;
+            }
+        });
+    };
+    AppProvider.prototype.hasStartedCourse = function (course) {
+        console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
+        console.log(this.progressArr);
+        return (typeof this.progressArr[course] != 'undefined');
+    };
+    AppProvider.prototype.hasLessonCompleted = function (lessonData) {
+        if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
+            return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
+        }
+    };
+    AppProvider.prototype.getCourseState = function (course) {
+        /**
+         * Return
+         * [ course progress,
+         *   course total duration,
+         *   current lesson,
+         *   next lesson]
+         *
+         */
+        var crsProgress = 0;
+        var crsDuration = 0;
+        var crsLastLesson = 0;
+        var crsNextLesson = 1;
+        if (typeof this.progressArr[course] != 'undefined') {
+            crsProgress = this.getCourseProgress(course);
+            crsDuration = this.getCourseDuration(course);
+            crsLastLesson = this.getCurrentLesson(course);
+            if (crsDuration > crsLastLesson) {
+                crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
+            }
+            else {
+                crsNextLesson = crsLastLesson;
+            }
+        }
+        else {
+            crsProgress = 0;
+            crsDuration = this.getCourseDuration(course);
+            crsLastLesson = 0; //last Lesson Completed
+            crsNextLesson = 1;
+        }
+        var st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
+        console.log('course state: ');
+        console.log(st);
+        this.activeCourseState[course] = st;
+        return st;
+    };
+    AppProvider.prototype.nextLesson = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 1;
+        }
+        return this.activeCourseState[course][3];
+    };
+    AppProvider.prototype.lastLesson = function (course) {
+        /**
+         * current course state helper
+         * Last used/active lesson
+         *
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 0;
+        }
+        return this.activeCourseState[course][2];
+    };
+    AppProvider.prototype.courseDuration = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 10;
+        }
+        return this.activeCourseState[course][1];
+    };
+    AppProvider.prototype.progressCount = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return;
+        }
+        return this.activeCourseState[course][0];
+    };
+    AppProvider.prototype.hasNextLesson = function (course) {
+        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+            //has reached end
+            return false;
+        }
+        return (this.nextLesson(course) !== this.getCourseProgress(course));
+    };
+    AppProvider.prototype.getCourseDuration = function (course) {
+        if (typeof this.courses != 'undefined' && typeof this.courses[course] != 'undefined') {
+            //console.log(this.courses[course]);
+            return Object.keys(this.courses[course]).length;
+        }
+        else {
+            return 10;
+        }
+    };
+    AppProvider.prototype.getCourseProgress = function (course) {
+        /**
+         * returns 0 or the lesson day
+         */
+        //console.log("PROGRESS ARRAY");
+        //console.log(this.progressArr);
+        return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
+    };
+    AppProvider.prototype.getTotalAvailableLessons = function (course) {
+        /**
+         * Get total available lessons. Separate branches between Anon and Logged-in user
+         */
+        if (this.hasLoggedIn()) {
+            var availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
+            return availableLessons;
+        }
+        else {
+            var progressCnt = this.getCourseProgress(course);
+            console.log("progressCnt" + progressCnt);
+            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                return __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
+            }
+            else {
+                return this.lastLesson(course);
+            }
+        }
+    };
+    AppProvider.prototype.getArrDay = function (course) {
+        //add a lesson if there are lesson credit remaining and if there's history
+        var arrDay = [];
+        var availableLessons = this.getTotalAvailableLessons(course);
+        for (var i = 0; i < availableLessons; i++) {
+            var iDay = i + 1;
+            var st = !(iDay == this.nextLesson(course));
+            arrDay.push({ day: iDay, status: st });
+        }
+        console.log("lastLesson" + this.lastLesson(course));
+        console.log(arrDay);
+        console.log("hasNextLesson:" + this.hasNextLesson(course));
+        return arrDay;
+    };
+    AppProvider.prototype.getLastCompletedLesson = function () {
+        if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
+            return this.courseHistory[this.courseHistory.length - 1];
+        }
+        else {
+            return {
+                courseNumber: "",
+                lessonNumber: 0
+            };
+        }
+    };
+    AppProvider.prototype.getLastCompletedCourse = function () {
+        if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
+            return this.getLastCompletedLesson()['courseNumber'];
+        }
+        else {
+            return 'Mindfulness';
+        }
+    };
+    AppProvider.prototype.hasActiveCourse = function () {
+        /**
+         * Check if Active course has been initialize or set
+         */
+        return (typeof this.activeCourse != 'undefined');
+    };
+    AppProvider.prototype.getCourseData = function (course) {
+        /**
+         * Get all lessons of a course
+         */
+        if (typeof this.courses == 'undefined' || typeof this.courses[course] == 'undefined') {
+            return;
+        }
+        var s = this.courses[course];
+        return s;
+    };
+    AppProvider.prototype.hasLoggedIn = function () {
+        return this.auth.loggedIn();
+    };
+    AppProvider.prototype.getLessonData = function (course, lessonId) {
+        if (typeof this.courses[course] != 'undefined') {
+            return this.courses[course][lessonId];
+        }
+    };
+    AppProvider.prototype.isNextLessonLocked = function (course) {
+        if (!this.hasLoggedIn()) {
+            //logged in, no lock, don't bother
+            var nextLesson = this.nextLesson(course);
+            if (typeof nextLesson != 'undefined') {
+                if (nextLesson > __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+    AppProvider.prototype.startLogin = function () {
+        console.log("Login action called");
+        localStorage.loginStarted = 1;
+    };
+    AppProvider.prototype.completeLogin = function () {
+        if (typeof localStorage.loginStarted != 'undefined') {
+            console.log("finalizeLogin");
+            var self_1 = this;
+            this.evt.createUserAction("_Login").then(function () {
+                self_1.evt.getThngContext().then(function (th) {
+                    console.log("getThngContext");
+                    console.log(th);
+                    if (typeof th != "undefined") {
+                        if (typeof localStorage.myThng == 'undefined') {
+                            self_1.saveThngContext(th);
+                        }
+                    }
+                });
+                localStorage.removeItem('loginStarted');
+            });
+        }
+    };
+    AppProvider.prototype.setBeginTS = function () {
+        /**
+         * set beginning of use
+         */
+        console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
+            var dy = Date.now(); //start of the day
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
+        }
+    };
+    AppProvider.prototype.getBeginTS = function () {
+        /**
+         * return since beginning of use.
+         */
+        return parseInt(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+    };
+    AppProvider.prototype.hasSignInNotice = function () {
+        /**
+         * Check if there's a need to popup a signin notice
+         */
+        if (!this.hasLoggedIn()) {
+            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
+            if (daysSince >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
+                console.log('daysSince:' + daysSince);
+                return true;
+            }
+        }
+        return false;
+    };
+    AppProvider.prototype.getUserCreatedAt = function () {
+        if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
+            //only for logged in
+            var usr = JSON.parse(localStorage.userInfo);
+            var userCreatedAt = new Date(usr.created_at);
+            return userCreatedAt;
+        }
+    };
+    AppProvider.prototype.hasReorderNotice = function () {
+        if (this.hasLoggedIn()) {
+            var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
+            console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
+            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
+                return true;
+            }
+        }
+    };
+    return AppProvider;
+}());
+AppProvider = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__["a" /* AuthService */]])
+], AppProvider);
+
+//# sourceMappingURL=app.js.map
 
 /***/ }),
 
@@ -1202,767 +1963,6 @@ var aura = [
 
 /***/ }),
 
-/***/ 28:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(379);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__ = __webpack_require__(22);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-//import { Injectable,ViewChild, OnInit } from '@angular/core';
-
-
-
-
-
-
-
-
-
-/*
- *	Generated class for the AppProvider provider.
- *
- *	This is the main service for handling user progress
- *	This contains all the progress variables.
- *	The variables in the content page are here.
-*/
-var AppProvider = (function () {
-    function AppProvider(http, evt, auth) {
-        this.http = http;
-        this.evt = evt;
-        this.auth = auth;
-        this.progressArr = [];
-        this.progressKeys = [];
-        this.courses = [];
-        //total lessons / days in a course
-        this.activeDur = 1;
-        this.hasValidUserAge = false;
-        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].lessonCompletionTimeLimit; //seconds
-        this.currentLesson = 1;
-        this.courseHistory = [];
-        this.today = new Date();
-        this.activeCourseState = [0, 0, 0, 1];
-        this.playToggleMap = [];
-    }
-    /* GET the aura variable containing the content details, path..etc. */
-    AppProvider.prototype.toGroup = function () {
-        var _this = this;
-        var mast = [];
-        var promises = __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__["a" /* aura */].map(function (ar) {
-            var crs = ar.Course.trim();
-            if (mast.hasOwnProperty(crs)) {
-                mast[crs][ar.Day] = {
-                    id: ar.ID,
-                    title: ar.Title,
-                    path: ar.path,
-                    desc: ar.Description,
-                    course: crs
-                };
-            }
-            else {
-                mast[crs] = {};
-                mast[crs][ar.Day] = {
-                    id: ar.ID,
-                    title: ar.Title,
-                    path: ar.path,
-                    desc: ar.Description,
-                    course: crs
-                };
-            }
-        });
-        return Promise.all(promises).then(function () { _this.progressKeys = Object.keys(mast); return mast; });
-    };
-    /* set the active course for the top component in the main page */
-    AppProvider.prototype.setActiveCourse = function (courseTitle) {
-        console.log("Activecourse is set");
-        this.activeCourse = this.getCourseData(courseTitle);
-        console.log(this.activeCourse);
-        this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
-        this.activeDur = this.getCourseDuration(courseTitle);
-        this.currentCourse = courseTitle;
-        //let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
-        //this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
-    };
-    AppProvider.prototype.ngOnInit = function () {
-        alert('XXX');
-    };
-    AppProvider.prototype.setDur = function (val) {
-        this.activeDur = val;
-    };
-    AppProvider.prototype.initCourses = function () {
-        var _this = this;
-        /**
-         *
-         * @type {AppProvider}
-         *
-         * group lessons into courses
-         * initialize default course title, data and duration (from grouping)
-         * initialize courses
-         */
-        var self = this;
-        return this.toGroup().then(function (res) {
-            console.log("initCourses");
-            console.log(res);
-            self.courses = res;
-            console.log(self.courses);
-            self.currentCourse = 'Mindfulness';
-            self.activeCourse = res['Mindfulness'];
-            self.activeDur = Object.keys(self.activeCourse).length;
-            if (_this.evt.hasUserContext()) {
-                return _this.initProgArr();
-            }
-        });
-    };
-    AppProvider.prototype.initProgArr = function () {
-        /**
-         *
-         * @type {AppProvider}
-         *
-         * Get data from EVT and store it a progress array in-memory
-         */
-        var self = this;
-        return this.getProgressStateFromEvt().then(function (customFields) {
-            console.log("COURSE HISTORY");
-            console.log(self.courseHistory);
-            self.courseHistory.forEach(function (val) {
-                if (typeof self.progressArr[val.courseNumber] === 'undefined') {
-                    self.progressArr[val.courseNumber] = [];
-                }
-                if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
-                    self.progressArr[val.courseNumber].push(val.lessonNumber);
-                }
-            });
-        });
-    };
-    AppProvider.isAgeGated = function () {
-        return __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
-    };
-    AppProvider.prototype.isValidAge = function () {
-        /**
-         * Check if there's a previous age gating info
-         * Check if greater than age allowed
-         */
-        var isAgeGated = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
-        var agd = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("agd");
-        this.hasValidUserAge = (isAgeGated && parseInt(agd) >= 18);
-        return this.hasValidUserAge;
-    };
-    AppProvider.prototype.saveAgeGateData = function (ageGated, cookiesOn, selectedDate) {
-        /**
-         * Save age gating info for user into Cookie
-         */
-        if (cookiesOn) {
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), 7);
-        }
-    };
-    AppProvider.prototype.saveThngContext = function (result) {
-        /**
-         * Save the THNG scanned or created via IR scan to localStorage for later use
-         */
-        if (this.getThngContext() === null) {
-            /**
-             * Ignore other THNGs if there's already one in localStorage
-             */
-            if (typeof result.id !== 'undefined') {
-                localStorage.setItem('myThng', JSON.stringify(result));
-            }
-            else if (typeof result[0].results[0].thng !== "undefined") {
-                localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
-            }
-            else if (typeof result[0].results[0].product !== "undefined") {
-                localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
-            }
-        }
-    };
-    AppProvider.prototype.getThngContext = function () {
-        /**
-         * get the THNG from the localStorage
-         */
-        return localStorage.getItem('myThng');
-    };
-    AppProvider.prototype.startCourse = function (courseData) {
-        /**
-         * App helper function to start a course
-         */
-        if (courseData.day === 1 && !this.hasStartedCourse(courseData.course)) {
-            this.evt.createThngAction('_CourseStarted', {
-                "customFields": {
-                    "currentCourse": courseData.course,
-                    "currentLesson": courseData.day,
-                    "currentLessonContentId": courseData.id
-                }
-            });
-        }
-    };
-    AppProvider.prototype.completeCourse = function (courseData) {
-        var _this = this;
-        /**
-         * App helper function to complete a course
-         */
-        this.isLastLesson(courseData.course, courseData.day).then(function (isLastLesson) {
-            if (isLastLesson) {
-                _this.evt.createThngAction('_CourseCompleted', {
-                    "customFields": {
-                        "currentCourse": courseData.course,
-                        "currentLesson": courseData.day,
-                        "currentLessonContentId": courseData.id
-                    }
-                });
-            }
-        });
-    };
-    AppProvider.prototype.playLesson = function (lessonData, pmc) {
-        /**
-         * single-point entry for handling play button actions for AURA content
-         */
-        if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
-            this.playToggleMap[lessonData.course] = {};
-        }
-        if (typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined') {
-            //playing
-            this.playToggleMap[lessonData.course][lessonData.id] = 1;
-        }
-        else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
-            //stopped
-            this.playToggleMap[lessonData.course][lessonData.id] = 0;
-        }
-        else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
-            //playing
-            this.playToggleMap[lessonData.course][lessonData.id] = 1;
-        }
-        if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
-            this.evt.createThngAction('_Play');
-            this.startLesson(lessonData);
-            this.startLessonTimer(lessonData, pmc);
-        }
-        else {
-            this.stopLessonTimer(lessonData);
-        }
-    };
-    AppProvider.prototype.startLesson = function (lessonData) {
-        /**
-         * App helper to put Lesson started data to EVT
-         */
-        if (this.hasLessonCompleted(lessonData)) {
-            return;
-        }
-        this.evt.createThngAction('_LessonStarted', {
-            "customFields": {
-                "currentCourse": lessonData.course,
-                "currentLesson": lessonData.day,
-                "currentLessonContentId": lessonData.id
-            }
-        });
-        this.setCurrentLesson(lessonData.day);
-        this.setCurrentCourse(lessonData.course);
-    };
-    AppProvider.prototype.startLessonTimer = function (lessonData, pmc) {
-        var _this = this;
-        var timer = __WEBPACK_IMPORTED_MODULE_6_rxjs__["Observable"].timer(1000, 1000);
-        var alive = true;
-        this.lessonTimer =
-            timer
-                .takeWhile(function () { return alive; })
-                .subscribe(function (val) {
-                if (val == (_this.lessonTimeLimit)) {
-                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
-                    //if 10 mins, trigger a _LessonCompleted action
-                    _this.completeLesson(lessonData);
-                    pmc.toggleView(true, lessonData.course);
-                    _this.lessonTimer.unsubscribe();
-                }
-            });
-    };
-    AppProvider.prototype.stopLessonTimer = function (lessonData) {
-        if (typeof this.lessonTimer !== 'undefined') {
-            this.lessonTimer.unsubscribe();
-        }
-    };
-    AppProvider.prototype.completeLesson = function (lessonData) {
-        /**
-         * App helper to put Lesson completed data to EVT
-         */
-        if (this.hasLessonCompleted(lessonData)) {
-            return;
-        }
-        var self = this;
-        return this.evt.createThngAction('_LessonCompleted', {
-            "customFields": {
-                "currentCourse": lessonData.course,
-                "currentLesson": lessonData.day,
-                "currentLessonContentId": lessonData.id
-            }
-        }).then(function (res) {
-            self.updateCompletedLessonsCnt(lessonData.course);
-            self.completeCourse(lessonData);
-        });
-    };
-    AppProvider.prototype.isLastLesson = function (course, lessonDay) {
-        /**
-         * For a given course and day, is it the last one?
-         */
-        var self = this;
-        return this.toGroup().then(function (res) {
-            if (typeof self.courses == 'undefined' || self.courses.length < 0) {
-                self.courses = res;
-            }
-            var courseLen = Object.keys(self.courses[course]).length;
-            return (courseLen <= lessonDay);
-        });
-    };
-    AppProvider.prototype.setCurrentCourse = function (course) {
-        this.currentCourse = course;
-    };
-    AppProvider.prototype.getCurrentCourse = function () {
-        /**
-         * Get the CURRENT course of the user. CURRENT is not ACTIVE but the state
-         * from last update. ACTIVE is the one in use by tapping or clicking.
-         */
-        if (typeof this.currentCourse !== 'undefined') {
-            return this.currentCourse;
-        }
-        else {
-            return 'Mindfulness';
-        }
-    };
-    AppProvider.prototype.setCurrentLesson = function (day) {
-        this.currentLesson = day;
-    };
-    AppProvider.prototype.getCurrentLesson = function (course) {
-        /**
-         *
-         * Get the CURRENT lesson of the user.
-         * CURRENT is not ACTIVE but the state
-         * from last update. ACTIVE is the one
-         * in use by tapping or clicking.
-         *
-         */
-        if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
-            var lesson = this.progressArr[course].sortNum()[this.progressArr[course].length - 1];
-            console.log("course: " + course + ", lesson: " + lesson);
-            return lesson;
-        }
-        return this.currentLesson;
-    };
-    AppProvider.prototype.updateCompletedLessonsCnt = function (course) {
-        /**
-         * Update the tally of completed lessons for the day
-         */
-        var crsCnt = this.getLessonsCompletedToday(course) + 1;
-        var totCnt = this.getLessonsCompletedToday() + 1;
-        if (typeof course !== 'undefined') {
-            localStorage.setItem(this.getLSKey(course), crsCnt.toString());
-            localStorage.setItem(this.getLSKey(), totCnt.toString());
-            //refresh the progress
-            this.initProgArr();
-        }
-    };
-    AppProvider.prototype.getLessonsCompletedToday = function (course) {
-        /**
-         * Get the tally of completed Lessons for the day
-         */
-        if (typeof course == 'undefined') {
-            return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
-        }
-        else {
-            if (typeof this.courses[course] == 'undefined') {
-                return 0;
-            }
-            return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
-        }
-    };
-    AppProvider.prototype.getLSKey = function (course) {
-        /**
-         * Get a lesson key counter
-         * @type {string}
-         */
-        var str = "";
-        if (typeof course == 'undefined') {
-            str = "lcCnt" + this.today.toDateString();
-        }
-        else {
-            str = "lcCnt" + course + this.today.toDateString();
-        }
-        return str;
-    };
-    AppProvider.prototype.getLessonsRemainingToday = function (course) {
-        /**
-         * Check total remaining new lessons for the day
-         * w/o params shows total for all courses
-         *
-         */
-        if (typeof course == 'undefined') {
-            return (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
-        }
-        else {
-            if (this.courses[course] != 'undefined') {
-                var remCnt = (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
-                if (this.hasLoggedIn()) {
-                    return (remCnt >= 0 ? remCnt : 0);
-                }
-                else {
-                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                        return 1;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-            }
-        }
-    };
-    AppProvider.prototype.getAdditionalLesson = function (course) {
-        /**
-         * Get one additional lesson if there are still lesson credits for the day
-         */
-        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
-            return 0;
-        }
-        return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
-    };
-    AppProvider.prototype.getProgressStateFromEvt = function () {
-        var _this = this;
-        return this.evt.getUserCustomFields().then(function (customFields) {
-            console.log("customFields");
-            console.log(customFields);
-            if (typeof customFields != 'undefined') {
-                _this.userCustomFields = customFields;
-                var cl = null;
-                var cc = "";
-                if (customFields.hasOwnProperty('courseHistory') && customFields.courseHistory.length > 0) {
-                    _this.courseHistory = customFields.courseHistory;
-                    var lastLessonCompleted = _this.getLastCompletedLesson();
-                    if (typeof lastLessonCompleted !== 'undefined') {
-                        cl = lastLessonCompleted.lessonNumber;
-                        cc = lastLessonCompleted.courseNumber;
-                    }
-                }
-                if (customFields.hasOwnProperty('currentLesson')) {
-                    _this.currentLesson = parseInt(customFields.currentLesson);
-                }
-                else if (cl !== null) {
-                    _this.currentLesson = cl;
-                }
-                if (customFields.hasOwnProperty('currentCourse')) {
-                    _this.currentCourse = customFields.currentCourse;
-                }
-                else if (cc !== "") {
-                    _this.currentCourse = cc;
-                }
-                return customFields;
-            }
-        });
-    };
-    AppProvider.prototype.hasStartedCourse = function (course) {
-        console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
-        console.log(this.progressArr);
-        return (typeof this.progressArr[course] != 'undefined');
-    };
-    AppProvider.prototype.hasLessonCompleted = function (lessonData) {
-        if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
-            return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
-        }
-    };
-    AppProvider.prototype.getCourseState = function (course) {
-        /**
-         * Return
-         * [ course progress,
-         *   course total duration,
-         *   current lesson,
-         *   next lesson]
-         *
-         */
-        var crsProgress = 0;
-        var crsDuration = 0;
-        var crsLastLesson = 0;
-        var crsNextLesson = 1;
-        if (typeof this.progressArr[course] != 'undefined') {
-            crsProgress = this.getCourseProgress(course);
-            crsDuration = this.getCourseDuration(course);
-            crsLastLesson = this.getCurrentLesson(course);
-            if (crsDuration > crsLastLesson) {
-                crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
-            }
-            else {
-                crsNextLesson = crsLastLesson;
-            }
-        }
-        else {
-            crsProgress = 0;
-            crsDuration = this.getCourseDuration(course);
-            crsLastLesson = 0; //last Lesson Completed
-            crsNextLesson = 1;
-        }
-        var st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
-        console.log('course state: ');
-        console.log(st);
-        this.activeCourseState[course] = st;
-        return st;
-    };
-    AppProvider.prototype.nextLesson = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 1;
-        }
-        return this.activeCourseState[course][3];
-    };
-    AppProvider.prototype.lastLesson = function (course) {
-        /**
-         * current course state helper
-         * Last used/active lesson
-         *
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 0;
-        }
-        return this.activeCourseState[course][2];
-    };
-    AppProvider.prototype.courseDuration = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 10;
-        }
-        return this.activeCourseState[course][1];
-    };
-    AppProvider.prototype.progressCount = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return;
-        }
-        return this.activeCourseState[course][0];
-    };
-    AppProvider.prototype.hasNextLesson = function (course) {
-        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
-            //has reached end
-            return false;
-        }
-        return (this.nextLesson(course) !== this.getCourseProgress(course));
-    };
-    AppProvider.prototype.getCourseDuration = function (course) {
-        if (typeof this.courses != 'undefined' && typeof this.courses[course] != 'undefined') {
-            //console.log(this.courses[course]);
-            return Object.keys(this.courses[course]).length;
-        }
-        else {
-            return 10;
-        }
-    };
-    AppProvider.prototype.getCourseProgress = function (course) {
-        /**
-         * returns 0 or the lesson day
-         */
-        //console.log("PROGRESS ARRAY");
-        //console.log(this.progressArr);
-        return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
-    };
-    AppProvider.prototype.getTotalAvailableLessons = function (course) {
-        /**
-         * Get total available lessons. Separate branches between Anon and Logged-in user
-         */
-        if (this.hasLoggedIn()) {
-            var availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
-            return availableLessons;
-        }
-        else {
-            var progressCnt = this.getCourseProgress(course);
-            console.log("progressCnt" + progressCnt);
-            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                return __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
-            }
-            else {
-                return this.lastLesson(course);
-            }
-        }
-    };
-    AppProvider.prototype.getArrDay = function (course) {
-        //add a lesson if there are lesson credit remaining and if there's history
-        var arrDay = [];
-        var availableLessons = this.getTotalAvailableLessons(course);
-        for (var i = 0; i < availableLessons; i++) {
-            var iDay = i + 1;
-            var st = !(iDay == this.nextLesson(course));
-            arrDay.push({ day: iDay, status: st });
-        }
-        console.log("lastLesson" + this.lastLesson(course));
-        console.log(arrDay);
-        console.log("hasNextLesson:" + this.hasNextLesson(course));
-        return arrDay;
-    };
-    AppProvider.prototype.getLastCompletedLesson = function () {
-        if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
-            return this.courseHistory[this.courseHistory.length - 1];
-        }
-        else {
-            return {
-                courseNumber: "",
-                lessonNumber: 0
-            };
-        }
-    };
-    AppProvider.prototype.getLastCompletedCourse = function () {
-        if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
-            return this.getLastCompletedLesson()['courseNumber'];
-        }
-        else {
-            return 'Mindfulness';
-        }
-    };
-    AppProvider.prototype.hasActiveCourse = function () {
-        /**
-         * Check if Active course has been initialize or set
-         */
-        return (typeof this.activeCourse != 'undefined');
-    };
-    AppProvider.prototype.getCourseData = function (course) {
-        /**
-         * Get all lessons of a course
-         */
-        if (typeof this.courses == 'undefined' || typeof this.courses[course] == 'undefined') {
-            return;
-        }
-        var s = this.courses[course];
-        return s;
-    };
-    AppProvider.prototype.hasLoggedIn = function () {
-        return this.auth.loggedIn();
-    };
-    AppProvider.prototype.getLessonData = function (course, lessonId) {
-        if (typeof this.courses[course] != 'undefined') {
-            return this.courses[course][lessonId];
-        }
-    };
-    AppProvider.prototype.isNextLessonLocked = function (course) {
-        if (!this.hasLoggedIn()) {
-            //logged in, no lock, don't bother
-            var nextLesson = this.nextLesson(course);
-            if (typeof nextLesson != 'undefined') {
-                if (nextLesson > __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
-    AppProvider.prototype.startLogin = function () {
-        console.log("Login action called");
-        localStorage.loginStarted = 1;
-    };
-    AppProvider.prototype.completeLogin = function () {
-        if (typeof localStorage.loginStarted != 'undefined') {
-            console.log("finalizeLogin");
-            var self_1 = this;
-            this.evt.createUserAction("_Login").then(function () {
-                self_1.evt.getThngContext().then(function (th) {
-                    console.log("getThngContext");
-                    console.log(th);
-                    if (typeof th != "undefined") {
-                        if (typeof localStorage.myThng == 'undefined') {
-                            self_1.saveThngContext(th);
-                        }
-                    }
-                });
-                localStorage.removeItem('loginStarted');
-            });
-        }
-    };
-    AppProvider.prototype.setBeginTS = function () {
-        /**
-         * set beginning of use
-         */
-        console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
-        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
-            var dy = Date.now(); //start of the day
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
-        }
-    };
-    AppProvider.prototype.getBeginTS = function () {
-        /**
-         * return since beginning of use.
-         */
-        return parseInt(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
-    };
-    AppProvider.prototype.hasSignInNotice = function () {
-        /**
-         * Check if there's a need to popup a signin notice
-         */
-        if (!this.hasLoggedIn()) {
-            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
-            if (daysSince >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
-                console.log('daysSince:' + daysSince);
-                return true;
-            }
-        }
-        return false;
-    };
-    AppProvider.prototype.getUserCreatedAt = function () {
-        if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
-            //only for logged in
-            var usr = JSON.parse(localStorage.userInfo);
-            var userCreatedAt = new Date(usr.created_at);
-            return userCreatedAt;
-        }
-    };
-    AppProvider.prototype.hasReorderNotice = function () {
-        if (this.hasLoggedIn()) {
-            var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
-            console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
-            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
-                return true;
-            }
-        }
-    };
-    return AppProvider;
-}());
-AppProvider = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__["a" /* AuthService */]])
-], AppProvider);
-
-//# sourceMappingURL=app.js.map
-
-/***/ }),
-
 /***/ 285:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1973,7 +1973,7 @@ AppProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2250,7 +2250,7 @@ ScriptService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2531,9 +2531,93 @@ DeleteAccountPage = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(53);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/**
+ * Generated class for the ReorderModalComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var ReorderModalComponent = (function () {
+    function ReorderModalComponent(render, elem, evt, app) {
+        this.render = render;
+        this.elem = elem;
+        this.evt = evt;
+        this.app = app;
+        this.reorder_links = __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].reorder_links;
+        this.show = true;
+    }
+    ReorderModalComponent.prototype.ngAfterViewInit = function () {
+        this.app.reorderViewManager = this;
+    };
+    ReorderModalComponent.prototype.reorder = function (r) {
+        this.toggleView();
+        this.evt.createThngAction('_Reorder', {
+            "customFields": {
+                "retailer": r.name,
+                "link": r.link
+            }
+        });
+        window.open(r.link, '_blank');
+    };
+    ReorderModalComponent.prototype.toggleView = function (stat) {
+        console.log('toggleView:' + this.show);
+        if (typeof stat != 'undefined') {
+            this.show = stat;
+        }
+        if (!this.show || typeof this.show == 'undefined') {
+            this.show = true;
+            this.render.setStyle(this.elem.nativeElement, "display", "none");
+        }
+        else {
+            this.show = false;
+            this.render.setStyle(this.elem.nativeElement, "display", "inline-block");
+        }
+        if (typeof this.app.noticeViewManager != 'undefined') {
+            this.app.noticeViewManager.toggleView(false);
+        }
+    };
+    return ReorderModalComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('show'),
+    __metadata("design:type", Boolean)
+], ReorderModalComponent.prototype, "show", void 0);
+ReorderModalComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'reorder-modal',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/'<!-- Generated template for the ReorderModalComponent component -->\n<div class="container">\n  <h1 class="completion">\n    REORDER OPTIONS\n  </h1>\n\n  <div class="notes"><span>Select the retailer you would like to purchase from</span></div>\n  <span *ngFor="let r of reorder_links; let i=index">\n\n\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" (tap)="reorder(r)">{{r?.name}}</a>-->\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" onclick="alert(1)">-->\n        <button ion-button (tap)="reorder(r)">\n          {{r?.name}}\n        </button>\n      <!--</a>-->\n  </span>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */], __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_2__providers_app_app__["a" /* AppProvider */]])
+], ReorderModalComponent);
+
+//# sourceMappingURL=reorder-modal.js.map
+
+/***/ }),
+
+/***/ 291:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(291);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(295);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(296);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -2541,7 +2625,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 295:
+/***/ 296:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2550,25 +2634,25 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(332);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(333);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(645);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(646);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(289);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(646);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(647);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_components_module__ = __webpack_require__(647);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_components_module__ = __webpack_require__(648);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2661,7 +2745,7 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 332:
+/***/ 333:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2670,10 +2754,10 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2775,7 +2859,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show">\n\n</notice>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
         __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
@@ -2796,7 +2880,7 @@ MyApp = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(22);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2982,7 +3066,7 @@ EvtProvider = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraMainPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -3159,7 +3243,7 @@ __decorate([
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
+        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n				<a class="link">About AURA</a>\n			</p>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_app_app__["a" /* AppProvider */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -3188,7 +3272,7 @@ AuraMainPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3449,7 +3533,7 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(44);
@@ -3568,7 +3652,7 @@ LoginPage = __decorate([
 
 /***/ }),
 
-/***/ 54:
+/***/ 53:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3602,6 +3686,29 @@ var Config = {
         slaveryAct: "//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
         reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
     },
+    reorder_links: [
+        {
+            link: "https://www.amazon.co.uk/Neutrogena-Visibly-Clear-Therapy-Activator/dp/B01MU9ML3G/ref=sr_1_2_s_it?s=beauty&ie=UTF8&qid=1509712796&sr=1-2&keywords=neutrogena+light+therapy+acne+mask",
+            name: "Amazon",
+            target: "_blank"
+        }, {
+            link: "http://www.boots.com/neutrogena-light-acne-therapy-mask-applicator-10229139",
+            name: "Boots",
+            target: "_blank"
+        }, {
+            link: "https://www.superdrug.com/Skin/Face/Face-Masks/Neutrogena-Visibly-Clear-Acne-Mask-Activator/p/737374",
+            name: "Superdrug",
+            target: "_blank"
+        }, {
+            link: "https://www.lookfantastic.com/neutrogena-visibly-clear-light-therapy-mask-activator/11433855.html",
+            name: "Lookfantastic",
+            target: "_blank"
+        }, {
+            link: "https://www.ocado.com/webshop/product/Neutrogena-Light-Therapy-Acne-Mask-Activator/357890011?from=search&tags=%7C20000&param=neutrogena+activator&parentContainer=SEARCHneutrogena+acti",
+            name: "Ocado",
+            target: "_blank"
+        },
+    ],
     lessonCompletionTimeLimit: 2,
     totalDailyLessonLimit: 30,
     courseDailyLessonLimit: 10,
@@ -3614,7 +3721,7 @@ var Config = {
 
 /***/ }),
 
-/***/ 645:
+/***/ 646:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3625,7 +3732,7 @@ var Config = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(37);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3782,7 +3889,7 @@ AuthPage = __decorate([
 
 /***/ }),
 
-/***/ 646:
+/***/ 647:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3883,26 +3990,28 @@ ResetPasswordPage = __decorate([
 
 /***/ }),
 
-/***/ 647:
+/***/ 648:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentsModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scan_scan__ = __webpack_require__(648);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__side_menu_side_menu_module__ = __webpack_require__(649);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__notice_notice_module__ = __webpack_require__(651);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__footer_footer_module__ = __webpack_require__(653);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sub_course_sub_course_module__ = __webpack_require__(655);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_head_aura_head_module__ = __webpack_require__(657);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__aura_foot_aura_foot_module__ = __webpack_require__(659);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__ = __webpack_require__(661);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scan_scan__ = __webpack_require__(649);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__side_menu_side_menu_module__ = __webpack_require__(650);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__notice_notice_module__ = __webpack_require__(652);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__footer_footer_module__ = __webpack_require__(654);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sub_course_sub_course_module__ = __webpack_require__(656);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_head_aura_head_module__ = __webpack_require__(658);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__aura_foot_aura_foot_module__ = __webpack_require__(660);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__ = __webpack_require__(662);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__reorder_modal_reorder_modal_module__ = __webpack_require__(663);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -3928,7 +4037,9 @@ ComponentsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_5__sub_course_sub_course_module__["a" /* SubCourseComponentModule */],
             __WEBPACK_IMPORTED_MODULE_6__aura_head_aura_head_module__["a" /* AuraHeadComponentModule */],
             __WEBPACK_IMPORTED_MODULE_7__aura_foot_aura_foot_module__["a" /* AuraFootComponentModule */],
-            __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__["a" /* ProgressModalComponentModule */],]
+            __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__["a" /* ProgressModalComponentModule */],
+            __WEBPACK_IMPORTED_MODULE_9__reorder_modal_reorder_modal_module__["a" /* ReorderModalComponentModule */],
+        ]
     })
 ], ComponentsModule);
 
@@ -3936,7 +4047,7 @@ ComponentsModule = __decorate([
 
 /***/ }),
 
-/***/ 648:
+/***/ 649:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3976,13 +4087,13 @@ ScanComponent = __decorate([
 
 /***/ }),
 
-/***/ 649:
+/***/ 650:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideMenuComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__side_menu__ = __webpack_require__(650);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__side_menu__ = __webpack_require__(651);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4016,7 +4127,7 @@ SideMenuComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 650:
+/***/ 651:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4024,7 +4135,7 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
@@ -4111,13 +4222,13 @@ SideMenuComponent = __decorate([
 
 /***/ }),
 
-/***/ 651:
+/***/ 652:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NoticeComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notice__ = __webpack_require__(652);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notice__ = __webpack_require__(653);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4151,7 +4262,7 @@ NoticeComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 652:
+/***/ 653:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4160,6 +4271,7 @@ NoticeComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4173,6 +4285,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the NoticeComponent component.
  *
@@ -4181,8 +4294,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  */
 var NoticeComponent = (function () {
     //@ViewChild(this) content ?: NoticeComponent;
-    function NoticeComponent(app, evt, render, elem) {
+    function NoticeComponent(app, appState, evt, render, elem) {
         this.app = app;
+        this.appState = appState;
         this.evt = evt;
         this.render = render;
         this.elem = elem;
@@ -4199,6 +4313,7 @@ var NoticeComponent = (function () {
         }
     };
     NoticeComponent.prototype.ngAfterViewInit = function () {
+        this.appState.noticeViewManager = this;
     };
     NoticeComponent.prototype.goToPage = function (ext_url) {
         console.log(this.ext_url);
@@ -4208,7 +4323,10 @@ var NoticeComponent = (function () {
             nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_login_login__["a" /* LoginPage */]);
         }
         else {
-            this.evt.createUserAction("_Reorder");
+            if (typeof this.appState.reorderViewManager != 'undefined') {
+                this.appState.reorderViewManager.toggleView(true);
+                this.toggleView(false);
+            }
         }
     };
     NoticeComponent.prototype.toggleView = function (stat) {
@@ -4252,20 +4370,20 @@ NoticeComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'notice',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/'<!-- Generated template for the NoticeComponent component -->\n<section class="body" [ngStyle]="style">\n	<button ion-button id="btnClose" ><ion-icon (click)="destroy()" name="close"></ion-icon></button>\n	<span class="title" *ngIf="noLink">\n		{{title}}\n	</span>\n  <span class="title" *ngIf="!noLink" (tap)="goToPage(ext_url)">\n    <a class="title" [href]="ext_url?.link" [target]="ext_url?.target" [title]="ext_url?.name">\n		{{title}}\n    </a>\n	</span>\n	<div class="body">\n		<ng-content>\n\n		</ng-content>\n	</div>\n</section>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/notice/notice.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
 ], NoticeComponent);
 
 //# sourceMappingURL=notice.js.map
 
 /***/ }),
 
-/***/ 653:
+/***/ 654:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__footer__ = __webpack_require__(654);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__footer__ = __webpack_require__(655);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4299,13 +4417,13 @@ FooterComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 654:
+/***/ 655:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4364,13 +4482,13 @@ FooterComponent = __decorate([
 
 /***/ }),
 
-/***/ 655:
+/***/ 656:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SubCourseComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sub_course__ = __webpack_require__(656);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sub_course__ = __webpack_require__(657);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4404,7 +4522,7 @@ SubCourseComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 656:
+/***/ 657:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4412,7 +4530,7 @@ SubCourseComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__ = __webpack_require__(67);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4532,13 +4650,13 @@ SubCourseComponent = __decorate([
 
 /***/ }),
 
-/***/ 657:
+/***/ 658:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraHeadComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_head__ = __webpack_require__(658);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_head__ = __webpack_require__(659);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4572,7 +4690,7 @@ AuraHeadComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 658:
+/***/ 659:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4635,7 +4753,7 @@ var AuraHeadComponent = (function () {
 }());
 AuraHeadComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'aura-head',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-head/aura-head.html"*/'<!-- Generated template for the AuraHeadComponent component -->\n<div class="body">\n	\n	<ion-row>\n\n		<ion-col col-7>\n			<span><img src="../assets/images/neutrogena_white.png"/></span>\n			<span><img src="../assets/images/auraLogo_white.png"/></span>\n		</ion-col>\n\n		<ion-col col-5>\n			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>\n			<a *ngIf = "logged" (tap)="myAccount()">Hi, {{name}}</a>\n			<span><img src="../assets/images/person.png"/></span>\n		</ion-col>\n\n	</ion-row>\n  \n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-head/aura-head.html"*/
+        selector: 'aura-head',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-head/aura-head.html"*/'<!-- Generated template for the AuraHeadComponent component -->\n<div class="body">\n\n	<ion-row>\n\n		<ion-col col-7>\n			<span><img src="../assets/images/neutrogena_white.png"/></span>\n			<span><img src="../assets/images/auraLogo_white.png"/></span>\n		</ion-col>\n\n		<ion-col col-5>\n			<a (tap)="toLogin()" *ngIf = "!logged">Sign In</a>\n			<a *ngIf = "logged" (tap)="myAccount()">Hi, {{name}}</a>\n			<span><img src="../assets/images/person.png"/></span>\n		</ion-col>\n\n	</ion-row>\n\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-head/aura-head.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]])
 ], AuraHeadComponent);
@@ -4644,13 +4762,13 @@ AuraHeadComponent = __decorate([
 
 /***/ }),
 
-/***/ 659:
+/***/ 660:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_foot__ = __webpack_require__(660);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_foot__ = __webpack_require__(661);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4669,10 +4787,10 @@ var AuraFootComponentModule = (function () {
 AuraFootComponentModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["L" /* NgModule */])({
         imports: [
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__["f" /* IonicModule */]
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__["f" /* IonicModule */],
         ],
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_1__aura_foot__["a" /* AuraFootComponent */]
+            __WEBPACK_IMPORTED_MODULE_1__aura_foot__["a" /* AuraFootComponent */],
         ],
         exports: [
             __WEBPACK_IMPORTED_MODULE_1__aura_foot__["a" /* AuraFootComponent */]
@@ -4684,7 +4802,7 @@ AuraFootComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 660:
+/***/ 661:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4692,7 +4810,8 @@ AuraFootComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__ = __webpack_require__(290);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4706,6 +4825,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the AuraFootComponent component.
  *
@@ -4713,19 +4833,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var AuraFootComponent = (function () {
-    function AuraFootComponent(app, loader, nav, view, evt) {
-        this.app = app;
+    function AuraFootComponent(loader, nav, view, appState) {
         this.loader = loader;
         this.nav = nav;
         this.view = view;
-        this.evt = evt;
+        this.appState = appState;
         /* This is the reorder link */
         this.ext_url = "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator";
         console.log('Hello AuraFootComponent Component');
-        this.text = 'Hello World';
     }
+    /***
+     * home btn tap handler
+     */
     AuraFootComponent.prototype.toHome = function () {
         var _this = this;
+        if (typeof this.appState.noticeViewManager != 'undefined') {
+            this.appState.noticeViewManager.toggleView(false);
+        }
         var currentView = this.view.component.name;
         if (currentView == 'AuraContentPage') {
             var load_1 = this.loader.create({
@@ -4738,22 +4862,6 @@ var AuraFootComponent = (function () {
             load_1.present();
             this.ClearPlayerResources().then(function (result) {
                 load_1.dismiss();
-                // let EX = document.getElementsByTagName('head')[0];
-                // var r = EX.getElementsByTagName('script');
-                // console.log(r);
-                //
-                // r[0].remove();
-                // r[11].remove();
-                // r[12].remove();
-                // for (var i = 0; i < r.length; i++) {
-                //
-                //     if(r[i].getAttribute('type') != 'text/javascript'){
-                //
-                //         // r[i].parentNode.removeChild(r[i]);
-                //           r[i].remove();
-                //     }
-                //       // r[i].remove();
-                // }
                 if (result) {
                     _this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */]);
                 }
@@ -4765,29 +4873,6 @@ var AuraFootComponent = (function () {
         else {
             this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */]);
         }
-        // let playBtn = document.getElementById('play-btn');
-        //
-        // if(playBtn){
-        //   let load = this.loader.create({
-        //     spinner: 'crescent',
-        //     dismissOnPageChange: true,
-        //     showBackdrop: true,
-        //     content: `Please wait...`,
-        //     enableBackdropDismiss:true});
-        //   load.present();
-        //   playBtn.click();
-        //   let timer2 = setTimeout(() => {
-        //
-        //     this.nav.setRoot(AuraMainPage);
-        //     load.dismiss();
-        //       clearTimeout(timer2);
-        //   }, 2000);
-        //
-        // }
-        // else{
-        //
-        //   this.nav.setRoot(AuraMainPage);
-        // }
     };
     AuraFootComponent.prototype.ClearPlayerResources = function () {
         return new Promise(function (resolve) {
@@ -4803,25 +4888,32 @@ var AuraFootComponent = (function () {
             }, 2000);
         });
     };
-    AuraFootComponent.prototype.logAction = function () {
-        // TODO: this is a user action. Possible that we want to log
-        // the reorder action even if there are no users logged in
-        this.evt.createUserAction("_Reorder");
+    /***
+     * reorder btn tap handler
+     */
+    AuraFootComponent.prototype.reorderAction = function () {
+        this.reorder.toggleView();
     };
     return AuraFootComponent;
 }());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('reorder'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__["a" /* ReorderModalComponent */])
+], AuraFootComponent.prototype, "reorder", void 0);
 AuraFootComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'aura-foot',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder">\n  			<a (tap)="logAction()" [href]="ext_url" target="_blank">\n  				<img src="../assets/images/reorder.png"/>\n  			</a>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
+        selector: 'aura-foot',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder" (tap)="reorderAction()">\n  			<!--<a (tap)="logAction()" [href]="ext_url" target="_blank">-->\n        <img src="../assets/images/reorder.png"/>\n  			<!--</a>-->\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */], __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
+        __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
 ], AuraFootComponent);
 
 //# sourceMappingURL=aura-foot.js.map
 
 /***/ }),
 
-/***/ 661:
+/***/ 662:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4861,6 +4953,46 @@ ProgressModalComponentModule = __decorate([
 
 /***/ }),
 
+/***/ 663:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponentModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__reorder_modal__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+var ReorderModalComponentModule = (function () {
+    function ReorderModalComponentModule() {
+    }
+    return ReorderModalComponentModule;
+}());
+ReorderModalComponentModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["L" /* NgModule */])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__["f" /* IonicModule */]
+        ],
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_1__reorder_modal__["a" /* ReorderModalComponent */]
+        ],
+        exports: [
+            __WEBPACK_IMPORTED_MODULE_1__reorder_modal__["a" /* ReorderModalComponent */]
+        ]
+    })
+], ReorderModalComponentModule);
+
+//# sourceMappingURL=reorder-modal.module.js.map
+
+/***/ }),
+
 /***/ 67:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4870,7 +5002,7 @@ ProgressModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(95);
@@ -5042,7 +5174,7 @@ SignUpPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(38);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -5259,5 +5391,5 @@ MyAccountPage = __decorate([
 
 /***/ })
 
-},[290]);
+},[291]);
 //# sourceMappingURL=main.js.map

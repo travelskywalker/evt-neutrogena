@@ -25830,9 +25830,103 @@ progress-modal div.container > p > a {
 }
 
 progress-modal div.container > button[ion-button] {
+  width: calc(100% - 70px);
+  max-width: calc(100% - 70px);
+  height: 60px;
+  border-radius: 15px;
+  background-image: url("../assets/images/signup_btn.png");
+  background-repeat: no-repeat;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 15px;
+  line-height: 17px;
+  display: block;
+  margin: 60px auto 0;
+  background-color: transparent;
+}
+
+reorder-modal {
+  z-index: 10;
+  position: fixed;
+  display: none;
+  height: calc(100% - 50px);
+  width: 100%;
+  padding: 16px 20px;
+  top: 50px;
+  left: 0;
+  background-color: rgba(50, 50, 50, 0.4);
+}
+
+reorder-modal .overlay {
+  content: "";
+  z-index: 9;
+  display: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+reorder-modal div.container {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10pt;
+  display: inline-block;
+  min-width: 260px;
+}
+
+reorder-modal div.container > * {
+  display: block;
+  clear: both;
+  width: 100%;
+  text-align: center;
+}
+
+reorder-modal div.container > h1 {
+  padding: 50px 0 0;
+  color: #bd0894;
+  line-height: 16px;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+
+reorder-modal div.container > div.notes {
+  color: #bd0894;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 13px;
+  padding-top: 20px;
+}
+
+reorder-modal div.container > div.notes > span {
+  margin: 25px;
+}
+
+reorder-modal div.container > p {
+  margin: 36px auto 0;
+  font-size: 14px;
+  font-family: 'HelveticaNeue-Light';
+  color: #808184;
+  line-height: 17px;
+}
+
+reorder-modal div.container > p > a {
+  text-decoration: none;
+  color: #f07721;
+  font-size: 18px;
+  font-family: 'HelveticaNeue-Bold';
+}
+
+reorder-modal div.container > button[ion-button] {
   max-width: calc(100% - 70px);
   height: 50px;
-  background-image: url("../assets/images/signup_btn.png");
   background-size: contain;
   background-repeat: no-repeat;
   color: #fff;
@@ -25843,6 +25937,54 @@ progress-modal div.container > button[ion-button] {
   display: block;
   margin: 60px auto 0;
   background-color: transparent;
+}
+
+reorder-modal div.container > span button.button-ios {
+  width: calc(100% - 70px);
+  margin: 0.5rem auto;
+  background-color: transparent;
+  background-image: url("../assets/images/signup_btn.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 50px;
+  border-radius: 10px;
+}
+
+reorder-modal div.container > span button.button-ios > span a {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  line-height: 50px;
+}
+
+reorder-modal div.container > span button.button-ios {
+  width: calc(100% - 70px);
+  margin: 0.5rem auto;
+  background-color: transparent;
+  background-image: url("../assets/images/signup_btn.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 50px;
+  border-radius: 10px;
+}
+
+reorder-modal div.container > span button.button-ios > span a {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'HelveticaNeue-Light';
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  line-height: 50px;
+}
+
+reorder-modal div.container > div.notes {
+  height: 5rem;
 }
 
 side-menu ion-content > .scroll-content {
