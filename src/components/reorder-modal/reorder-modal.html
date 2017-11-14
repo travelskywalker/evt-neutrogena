@@ -1,0 +1,18 @@
+<!-- Generated template for the ReorderModalComponent component -->
+<div class="container">
+  <h1 class="completion">
+    REORDER OPTIONS
+  </h1>
+
+  <div class="notes"><span>Select the retailer you would like to purchase from</span></div>
+  <span *ngFor="let r of reorder_links; let i=index">
+
+
+      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" (tap)="reorder(r)">{{r?.name}}</a>-->
+      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" onclick="alert(1)">-->
+        <button ion-button (tap)="reorder(r)">
+          {{r?.name}}
+        </button>
+      <!--</a>-->
+  </span>
+</div>

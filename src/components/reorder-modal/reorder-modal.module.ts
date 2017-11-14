@@ -1,18 +1,18 @@
 import {NgModule} from '@angular/core';
-import {AuraFootComponent} from "./aura-foot";
+import {ReorderModalComponent} from "./reorder-modal";
 import {IonicModule} from "ionic-angular/index";
 
 @NgModule({
     imports:[
-        IonicModule,
+        IonicModule
     ],
     declarations: [
-        AuraFootComponent,
+      ReorderModalComponent
     ],
     exports: [
-        AuraFootComponent
+      ReorderModalComponent
     ]
 })
-export class AuraFootComponentModule {
+export class ReorderModalComponentModule {
 
 }

@@ -69,10 +69,11 @@ progress-modal {
 		}
 
 		&>button[ion-button]{
-			max-width: calc(100% - 70px);
-			height: 50px;
+      width: calc(100% - 70px);
+      max-width: calc(100% - 70px);
+      height: 60px;
+      border-radius: 15px;
 			background-image:url('../assets/images/signup_btn.png');
-			background-size:contain;
       background-repeat: no-repeat;
 			color:#fff;
 			text-transform: uppercase;
