@@ -18,6 +18,7 @@ import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { AgeGatePage } from '../pages/age-gate/age-gate';
 import { AuraContentPage } from '../pages/aura-content/aura-content';
 import { AuraMainPage } from '../pages/aura-main/aura-main';
+import { ScanPage } from '../pages/scan/scan';
 
 /* Providers */
 import { EvtProvider } from '../providers/evt/evt';
@@ -40,7 +41,8 @@ const pages = [
             AgeGatePage,
             ResetPasswordPage,
             AuraContentPage,
-            AuraMainPage
+            AuraMainPage,
+            ScanPage
           ];
 
 @NgModule({
@@ -54,6 +56,7 @@ const pages = [
         { component: HomePage, name: 'Home', segment: 'home' },
         { component: SignUpPage, name: 'SignUpPage', segment: 'sign-up' },
         { component: AuthPage, name: 'Auth0Page', segment: ':data' },
+        { component: ScanPage, name: 'NativeScanPage', segment: 'scan' },
         { component: LoginPage, name: 'LoginPage', segment: 'login' },
         { component: MyAccountPage, name: 'MyAccountPage', segment: 'my-account' },
         { component: DeleteAccountPage, name: 'DeleteAccountPage', segment: 'delete-account' },
@@ -78,3 +81,5 @@ const pages = [
   ]
 })
 export class AppModule {}
+
+

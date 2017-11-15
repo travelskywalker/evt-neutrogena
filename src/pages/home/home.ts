@@ -77,7 +77,8 @@ export class HomePage {
       console.log(res);
       /* set user context for anonymous user */
 
-      this.evt.setAnonUserContext(res, this.isNotLoggedIn);
+      let user = typeof res[0] != 'undefined' ? res[0].user : null;
+      this.evt.setAnonUserContext(user, this.isNotLoggedIn);
       load.data.enableBackdropDismiss = false;
       if(typeof res === 'undefined' || res.length === 0) {
 

@@ -53,6 +53,10 @@ export class AgeGatePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
+
+    if (this.app.isValidAge()) {
+      this.navCtrl.setRoot(AuraMainPage);
+    }
   }
 
   changedDate(){
