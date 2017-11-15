@@ -26510,6 +26510,12 @@ page-aura-content ion-content section.description p.body {
   font-size: "HelveticaNeue-Light";
 }
 
+page-aura-content ion-content section.description p.author {
+  padding-top: 10px;
+  font-size: 13px;
+  color: #5a5a5a;
+}
+
 page-aura-main .btns ion-slide:nth-of-type(10) ion-col.rng:after {
   display: none !important;
 }
