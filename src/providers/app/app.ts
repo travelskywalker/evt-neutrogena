@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Cookie } from "ng2-cookies";
 import 'rxjs/add/operator/map';
+import '../../app/tep';
 
 import { aura } from "../../assets/aura/config/aura.config";
 import { EvtProvider } from "../../providers/evt/evt";
@@ -428,13 +429,14 @@ export class AppProvider {
      * @type {string}
      */
     let str = "";
-    if (typeof course == 'undefined') {
-      str = "lcCnt" + this.today.toDateString();
-    } else {
-      str = "lcCnt" + course + this.today.toDateString()
-    }
+    let usr = typeof this.evt.getUser() != 'undefined' ? this.evt.getUser().id : '';
 
-    return str;
+    if (typeof course == 'undefined') {
+      str = "lcCnt" + usr + this.today.toDateString();
+    } else {
+      str = "lcCnt" + usr + course + this.today.toDateString()
+    }
+    return str.tephash();
   }
 
   getLessonsRemainingToday(course?: any) {
@@ -875,7 +877,4 @@ export class AppProvider {
       }
     }
   }
-
-
-
 }

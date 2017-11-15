@@ -15,7 +15,7 @@ declare var EVT : any;
 @Injectable()
 export class EvtProvider {
 
- evtapp : any;
+  evtapp : any;
 
   constructor(public http: Http,
               private auth: AuthService
@@ -274,6 +274,48 @@ export class EvtProvider {
     }
   }
 
+  /**
+   * Get a THNG context by giving it an ADI or THNG id
+   *
+   * @param thngId
+   * @param anonUser
+   * @returns {Promise<R>|any|Function}
+   */
+  getThngContextById(thngId: any, anonUser: boolean=false): Promise<any> {
+
+    let userC = this.getUser();
+    if (anonUser) {
+      userC = this.getAnonUser();
+    }
+
+    return userC.thng(thngId).read().catch(err=> {
+
+      userC.action("_NotRecognised").create().catch(err=>console.error(err));
+      console.log('err fetch thng by id', err)
+
+    });
+  }
+
+  /**
+   * Get a product context by giving it a product Id
+   *
+   * @param productId
+   * @param anonUser
+   * @returns {Promise<R>|any|Function}
+   */
+  getProductContextById(productId: string, anonUser: boolean=false): Promise<any> {
+
+    let userC = this.getUser();
+    if (anonUser) {
+      userC = this.getAnonUser();
+    }
+
+    return userC.thng(productId).read().catch(err=> {
+      console.log('err fetch product by id', err)
+    });
+
+  }
+
   /* EVT Scan */
   scan(opt:any){
   	return this.evtapp.scan(opt);
@@ -449,16 +491,16 @@ export class EvtProvider {
     return obj;
   }
 
-  setAnonUserContext(res: any, anonUser: boolean) {
+  setAnonUserContext(user: any, anonUser: boolean) {
 
     if (typeof anonUser == 'undefined' || anonUser) {
 
       localStorage.isAnon = true;
-      localStorage.anonUserInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
+      localStorage.anonUserInfo = JSON.stringify(this.anonymousDataModel(user));
       let evtInfo = {
         anonymousUser: true,
-        evrythngUser: res[0].user.id,
-        evrythngApiKey: res[0].user.apiKey
+        evrythngUser: user.id,
+        evrythngApiKey: user.apiKey
       }
       localStorage.anonEvrythngInfo = JSON.stringify(evtInfo);
 
@@ -468,6 +510,26 @@ export class EvtProvider {
 
     }
 
+
+  }
+
+  /**
+   * Abstraction to get an anon user instance and save state to local store
+   *
+   * @param anonUser
+   * @returns {Thenable<undefined>|Function|any|SyncAsync<R>|Promise<R>}
+   */
+  createAppUser(anonUser?: boolean): Promise<any>{
+
+    return this.evtapp.appUser().create({
+      anonymous: anonUser
+    }).then(usr=>{
+      console.log(typeof usr, usr);
+      this.setAnonUserContext(usr, anonUser);
+      return usr;
+    }).catch(err=> {
+      console.log(err);
+    })
 
   }
 
