@@ -29,11 +29,12 @@ export class AuraContentPage{
 	@ViewChild(Content) content: Content;
 	auraLoc = aura;
   lessonTimer?: any;
-	module :{title?:string,description?:string,link?:any,id?:any,course?:any, day?:any} = {
+	module :{title?:string,description?:string,link?:any,id?:any,course?:any, day?:any, author?: any} = {
 			title:"Morning Meditations",
 			description:`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips`,
       id:'h1',
-			link:this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html")
+			link:this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html"),
+      author: 'AURA'
 		};
 	auraRef : any;
 	auraSelect: any;
@@ -62,6 +63,7 @@ export class AuraContentPage{
       this.module.id = data.id;
       this.module.course = data.course;
       this.module.day = data.day;
+      this.module.author = data.author;
 	  	this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/"+encodeURIComponent(data.path));
   	}
 

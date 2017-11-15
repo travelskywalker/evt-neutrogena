@@ -63,7 +63,8 @@ export class AppProvider {
           title:ar.Title,
           path:ar.path,
           desc:ar.Description,
-          course: crs
+          course: crs,
+          author: ar.Author
         };
 			}
 			else{
@@ -73,7 +74,8 @@ export class AppProvider {
           title:ar.Title,
           path:ar.path,
           desc:ar.Description,
-          course: crs
+          course: crs,
+          author: ar.Author
         };
 			}
 	  	})

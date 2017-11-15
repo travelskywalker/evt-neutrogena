@@ -79,7 +79,7 @@ export class HomePage {
 
       this.evt.setAnonUserContext(res, this.isNotLoggedIn);
       load.data.enableBackdropDismiss = false;
-      if(res.length === 0) {
+      if(typeof res === 'undefined' || res.length === 0) {
 
         /* Scan failed. we should create a 'not recognized' action */
         console.log("not Found");
@@ -105,96 +105,120 @@ export class HomePage {
 
             self.scanFailed = false;
 
-            //thng.action("scans").create().catch(err=>console.error(err));
-            //thng.action("_Activated").create().then(console.log).catch(console.error);
-            //usr.update({customFields:{myThng:thng.id}}).then(console.log);
-            //TODO: Redirect to content page. Still in progress
-            // self.navCtrl.setRoot(AuraMainPage);
-
-            self.gotoNexPage();
+            // scan action, then update, _Activated action after scan have been moved to anon->reg user transition
+            self.evt.createThngAction("scans", {}, true); //anon user context
+            self.evt.updateMyThng(thng, true).then(()=>{ //anon user context
+              self.gotoNexPage();
+            }).catch(err=> {
+              console.log(err);
+              self.gotoNexPage();
+            })
           })
           .catch(err=>{
               self.scanFailed = true;
               console.log(err,'thng error');
               load.dismiss();
           })
+
       } else if (typeof res[0].results[0].thng !== "undefined" && !this.isNotLoggedIn) {
+
         /* Scanned QR code. It is a thng */
         console.log("thing activated by logged in user");
-        let item = res[0].results[0].thng;
-        self.evt.getUserContext().then(usr=>{
+        let thng = res[0].results[0].thng;
 
-          usr.thng(item.id).read().then(thng=>{
-            self.scanFailed = false;
+        self.scanFailed = false;
+        // scan action, then update, _Activated action after scan have been moved to anon->reg user transition
+        self.evt.createThngAction("scans"); //reg user context
+        self.evt.updateMyThng(thng).then(()=>{ //reg user context
 
-            thng.action("scans").create().catch(err=>console.error(err));
-            thng.action("_Activated").create().then(console.log).catch(console.error);
-            usr.update({customFields:{myThng:thng.id}}).then(console.log);
-            //TODO: Redirect to content page. Still in progress
-            // self.navCtrl.setRoot(AuraMainPage);
-            self.gotoNexPage();
-          })
-          .catch(err=>{
-            self.scanFailed = true;
-            console.log(err,'thng error')
-            load.dismiss();
-          })
-        })
-        .catch(err=>{
-          console.log(err);
           load.dismiss();
-        })
+          self.gotoNexPage();
+
+        }).catch(err=> {
+
+          console.log('scanthng error', err);
+          load.dismiss();
+          self.gotoNexPage();
+
+        });
+
+
       } else if (typeof res[0].results[0].product !== "undefined") {
+
         console.log("image recognition");
-        /* Scanned via image recognition. it is a product */
+        //Scanned via image recognition. it is a product
+
+        //IF anon or registered user
+        //register a scan to product
+        //IF NOT THNG for user exist
+        //THEN create a THNG, ELSE ignore
+        //save the context to local storage
+
+        //safe user context resolution
+        let usrC = self.evt.getUserContext();
+        if (this.isNotLoggedIn) {
+          usrC = self.evt.getAnonUserContext();
+        }
 
         let item = res[0].results[0].product;
-        self.evt.getUserContext().then(usr=>{
+        usrC.then(usr=>{
 
           usr.product(item.id).read().then(prod=>{
+
             self.scanFailed = false;
             prod.action("scans").create().catch(err=>console.error(err));
-
             self.evt.getUserCustomFields().then(cf=>{
-              if(cf){
+              if(cf && typeof cf.myThng != 'undefined'){
 
-                /* Already has a thng */
+                // Already has a THNG
                 console.log('You already have a thng!');
                 self.gotoNexPage();
 
               } else{
-                /* Create a thng */
+
+                // Create a THNG
                 let thng = {
                   name: `User Thng - ${usr.id}`,
                   tags: ["Image Recognition"],
                   product: item.id
-                }
+                };
 
                 this.evt.createThng(thng).then(()=>{
+
                   self.gotoNexPage();
+
                 }).catch(err=>{
-                  console.log(err);
-                  console.log("Failed to create a thng");
+
+                  console.log("Failed to create a thng", err);
+
                 })
+
               }
+
             }).catch(err=>{
-              console.log(err);
-              console.error("Failed to save");
+
+              console.log("custom fields context error", err);
+
             })
+
           })
           .catch(err=>{
+
             self.scanFailed = true;
             console.log(err,'prod error');
             load.dismiss();
+
           })
         })
         .catch(err=>{
+
           console.log(err);
           load.dismiss();
+
         })
 
       } // END OF SCAN PROCESS
-      //save the thng to localStorage for later use
+      //save the thng or product to localStorage for later use
       this.app.saveThngContext(res);
 
     }).catch(err=>{

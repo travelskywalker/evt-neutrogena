@@ -47,7 +47,7 @@ export class EvtProvider {
    * @param anonUser
    * @returns {any}
    */
-  createThngAction(actionType:string='',action:any = {}, anonUser: boolean=false): Promise<any> {
+  createThngAction(actionType:string='',action: Object = {}, anonUser: boolean=false): Promise<any> {
     return this.getThngContext(anonUser).then(thng=>{
       if (typeof thng !='undefined') {
         thng.action(actionType).create(action).then(console.log).catch(err=>console.error(err));
@@ -246,7 +246,8 @@ export class EvtProvider {
     if (typeof localStorage.myThng !== 'undefined') {
 
       let myThng = JSON.parse(localStorage.myThng);
-      return userC.thng(myThng.id).read();
+      console.log('has thng', myThng);
+      return userC.thng(myThng.id).read(th=>{});
 
     } else {
       return userCF.then(cf => {
@@ -258,14 +259,16 @@ export class EvtProvider {
           });
 
         } else if (typeof localStorage.myProduct != 'undefined') {
-
+          console.log('no thng - product');
           let thngData = {
               name: 'User Thng - ' + userC.id,
               tags: ["Image Recognition"],
               product: localStorage.myProduct.id
           };
-          self.createThng(thngData, anonUser);
+          return self.createThng(thngData, anonUser);
 
+        } else {
+          console.log('no thng');
         }
       })
     }
@@ -348,6 +351,76 @@ export class EvtProvider {
       console.log("Failed to create a thng");
 
     })
+  }
+
+  /**
+   * Update the myThng custom field of chosen user context.
+   *
+   * @param thngData
+   * @param anonUser
+   * @param allowUpdateIfExists
+   * @returns {any}
+   */
+  updateMyThng(thngData: any, anonUser: boolean=false, allowUpdateIfExists: boolean=false): Promise<any> {
+
+    if (typeof thngData != 'undefined') {
+      return new Promise((resolve)=> {
+        resolve(false);
+      })
+    }
+
+    let usr = this.getUser();
+    let usrCF = this.getUserCustomFields();
+    if (anonUser) {
+      usr = this.getAnonUser();
+      usrCF = this.getAnonUserCustomFields();
+    }
+
+    if (!allowUpdateIfExists) {
+      usrCF.then((cf)=>{
+
+        if (typeof cf != 'undefined' && cf) {
+
+          if (typeof cf.myThng == 'undefined') {
+            return this._updateMyThng(usr, thngData);
+          }
+        }
+
+      })
+    } else {
+
+      return this._updateMyThng(usr, thngData);
+
+    }
+  }
+
+  /***
+   * private method for raw update to user custom fields
+   *
+   * @param usr
+   * @param thngData
+   * @returns {Function|any|Thenable<undefined>|SyncAsync<R>|Promise<R>}
+   * @private
+   */
+  private _updateMyThng(usr: any, thngData: any): Promise<any> {
+
+    return usr.update({
+
+      customFields: {
+        myThng: thngData.id
+      }
+
+    }).then(()=>{
+
+      localStorage.myThng = JSON.stringify(thngData);
+      console.log('myTHng updated')
+
+    }).catch(err=> {
+
+      console.log('update myTHng err', err)
+
+    });
+
   }
 
   anonymousDataModel(data){

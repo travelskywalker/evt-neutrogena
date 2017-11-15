@@ -33,7 +33,9 @@ export class AuraMainPage {
   noticeClass?:string = 'pink';
   loggedIn: boolean;
 	courses ?: any;
-	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string}] = [{desc:"",id:"",path:"",title:"", course: ""}];
+	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string, author: string}] = [
+    {desc:"",id:"",path:"",title:"", course: "", author: ""}
+  ];
 	courseTitle?: string = "Mindfulness";
   addLesson: number = 0;
   labelIntro = "Start this course";
