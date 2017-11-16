@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { ScanPage } from "../scan/scan";
 import { AuraMainPage } from "../aura-main/aura-main";
@@ -30,6 +30,7 @@ export class AuthPage {
     public app: AppProvider,
     private auth0: AuthService,
     public loader: LoadingController,
+    public platform: Platform,
     public evt: EvtProvider) {
   }
   ionViewDidLoad() { }
@@ -38,7 +39,7 @@ export class AuthPage {
     let data = this.navParams.get('data');
     console.log(data);
 
-    if (data === "") {
+    if (data === "" || !this.platform.is('mobile')) {
       //experience starts with SCAN page (HomePage)
       this.navCtrl.setRoot(HomePage);
 

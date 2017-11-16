@@ -26689,7 +26689,7 @@ page-aura-main ion-content section.track-preview div.expandable p.content {
 }
 
 page-aura-main ion-content section.track-preview div.expandable p.content.show {
-  line-height: 13px;
+  line-height: 2.8vw;
   margin-top: 1vw;
   width: calc(100% - 5vw);
   font-size: 2.6vw;
@@ -27166,6 +27166,7 @@ page-home ion-content#homeMobile div.scroll-content section#scan-button-containe
 
 page-home ion-content#homeDesktop h3 {
   color: #bd0894;
+  text-align: center;
 }
 
 page-home ion-content#homeDesktop div.scroll-content {
@@ -27230,7 +27231,6 @@ page-home ion-content#homeDesktop div.scroll-content section.client-logo #aura-l
 }
 
 page-home ion-content#homeDesktop div.scroll-content section#client-content {
-  height: 50vh;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -27251,18 +27251,17 @@ page-home ion-content#homeDesktop div.scroll-content section#client-content {
   overflow: visible;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > ion-img {
   background-color: transparent;
   contain: inherit;
-  width: 40%;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content ion-img img {
-  height: auto;
+page-home ion-content#homeDesktop div.scroll-content section#client-content > ion-img img {
+  height: 35vmin;
+  margin: 0 auto;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content p {
-  width: 50%;
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div p {
   text-align: center;
   color: #f07721;
 }

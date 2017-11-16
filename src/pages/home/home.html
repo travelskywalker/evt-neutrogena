@@ -82,10 +82,15 @@
   <section  id="client-content" class="client-content">
       <h3 padding>This site is best viewed on mobile.</h3>
 
-      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>
-      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your
-Visibly Clear&copy; Light Therapy Acne Mask Activator</p>
-
+      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>
+      <div>
+        <p padding>
+          Scan the QR code or visit
+           <a href="//{{config.desktop_scan_url.link}}" [title]="config.desktop_scan_url.name" [target]="config.desktop_scan_url.target">
+            {{config.desktop_scan_url.name}}
+          </a> on your mobile browser to continue with the experience.
+        </p>
+      </div>
 
   </section>
 
