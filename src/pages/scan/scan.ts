@@ -43,6 +43,7 @@ export class ScanPage {
       this.evt.getThngContextById(thng, !this.app.hasLoggedIn()).then((thng)=>{
 
         this.app.saveThngContext(thng);
+        load.dismiss();
         this.navCtrl.setRoot(AgeGatePage);
 
       }).catch(err=>{

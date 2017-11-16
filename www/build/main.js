@@ -34,16 +34,837 @@ webpackEmptyAsyncContext.id = 203;
 
 /***/ }),
 
-/***/ 22:
+/***/ 21:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_tep__ = __webpack_require__(381);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_tep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__app_tep__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__assets_aura_config_aura_config__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__ = __webpack_require__(23);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+//import { Injectable,ViewChild, OnInit } from '@angular/core';
+
+
+
+
+
+
+
+
+
+
+/*
+ *	Generated class for the AppProvider provider.
+ *
+ *	This is the main service for handling user progress
+ *	This contains all the progress variables.
+ *	The variables in the content page are here.
+*/
+var AppProvider = (function () {
+    function AppProvider(http, evt, auth) {
+        this.http = http;
+        this.evt = evt;
+        this.auth = auth;
+        this.progressArr = [];
+        this.progressKeys = [];
+        this.courses = [];
+        //total lessons / days in a course
+        this.activeDur = 1;
+        this.hasValidUserAge = false;
+        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].lessonCompletionTimeLimit; //seconds
+        this.currentLesson = 1;
+        this.courseHistory = [];
+        this.today = new Date();
+        this.activeCourseState = [0, 0, 0, 1];
+        this.playToggleMap = [];
+    }
+    /* GET the aura variable containing the content details, path..etc. */
+    AppProvider.prototype.toGroup = function () {
+        var _this = this;
+        var mast = [];
+        var promises = __WEBPACK_IMPORTED_MODULE_5__assets_aura_config_aura_config__["a" /* aura */].map(function (ar) {
+            var crs = ar.Course.trim();
+            if (mast.hasOwnProperty(crs)) {
+                mast[crs][ar.Day] = {
+                    id: ar.ID,
+                    title: ar.Title,
+                    path: ar.path,
+                    desc: ar.Description,
+                    course: crs,
+                    author: ar.Author
+                };
+            }
+            else {
+                mast[crs] = {};
+                mast[crs][ar.Day] = {
+                    id: ar.ID,
+                    title: ar.Title,
+                    path: ar.path,
+                    desc: ar.Description,
+                    course: crs,
+                    author: ar.Author
+                };
+            }
+        });
+        return Promise.all(promises).then(function () { _this.progressKeys = Object.keys(mast); return mast; });
+    };
+    /* set the active course for the top component in the main page */
+    AppProvider.prototype.setActiveCourse = function (courseTitle) {
+        console.log("Activecourse is set");
+        this.activeCourse = this.getCourseData(courseTitle);
+        console.log(this.activeCourse);
+        this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
+        this.activeDur = this.getCourseDuration(courseTitle);
+        this.currentCourse = courseTitle;
+        //let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
+        //this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
+    };
+    AppProvider.prototype.ngOnInit = function () {
+        alert('XXX');
+    };
+    AppProvider.prototype.setDur = function (val) {
+        this.activeDur = val;
+    };
+    AppProvider.prototype.initCourses = function () {
+        var _this = this;
+        /**
+         *
+         * @type {AppProvider}
+         *
+         * group lessons into courses
+         * initialize default course title, data and duration (from grouping)
+         * initialize courses
+         */
+        var self = this;
+        return this.toGroup().then(function (res) {
+            console.log("initCourses");
+            console.log(res);
+            self.courses = res;
+            console.log(self.courses);
+            self.currentCourse = 'Mindfulness';
+            self.activeCourse = res['Mindfulness'];
+            self.activeDur = Object.keys(self.activeCourse).length;
+            if (_this.evt.hasUserContext()) {
+                return _this.initProgArr();
+            }
+        });
+    };
+    AppProvider.prototype.initProgArr = function () {
+        /**
+         *
+         * @type {AppProvider}
+         *
+         * Get data from EVT and store it a progress array in-memory
+         */
+        var self = this;
+        return this.getProgressStateFromEvt().then(function (customFields) {
+            console.log("COURSE HISTORY");
+            console.log(self.courseHistory);
+            self.courseHistory.forEach(function (val) {
+                if (typeof self.progressArr[val.courseNumber] === 'undefined') {
+                    self.progressArr[val.courseNumber] = [];
+                }
+                if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
+                    self.progressArr[val.courseNumber].push(val.lessonNumber);
+                }
+            });
+        });
+    };
+    AppProvider.isAgeGated = function () {
+        return __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
+    };
+    AppProvider.prototype.isValidAge = function () {
+        /**
+         * Check if there's a previous age gating info
+         * Check if greater than age allowed
+         */
+        var isAgeGated = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
+        var agd = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("agd");
+        this.hasValidUserAge = (isAgeGated && parseInt(agd) >= 18);
+        return this.hasValidUserAge;
+    };
+    AppProvider.prototype.saveAgeGateData = function (ageGated, cookiesOn, selectedDate) {
+        /**
+         * Save age gating info for user into Cookie
+         */
+        if (cookiesOn) {
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, 7);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", 7);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), 7);
+        }
+    };
+    AppProvider.prototype.saveThngContext = function (result) {
+        /**
+         * Save the THNG scanned or created via IR scan to localStorage for later use
+         */
+        if (this.getThngContext() === null) {
+            /**
+             * Ignore other THNGs if there's already one in localStorage
+             */
+            if (typeof result.id !== 'undefined') {
+                localStorage.setItem('myThng', JSON.stringify(result));
+            }
+            else if (typeof result[0].results[0].thng !== "undefined") {
+                localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
+            }
+            else if (typeof result[0].results[0].product !== "undefined") {
+                localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+            }
+        }
+    };
+    AppProvider.prototype.getThngContext = function () {
+        /**
+         * get the THNG from the localStorage
+         */
+        return localStorage.getItem('myThng');
+    };
+    AppProvider.prototype.startCourse = function (courseData) {
+        /**
+         * App helper function to start a course
+         */
+        if (courseData.day === 1 && !this.hasStartedCourse(courseData.course)) {
+            this.evt.createThngAction('_CourseStarted', {
+                "customFields": {
+                    "currentCourse": courseData.course,
+                    "currentLesson": courseData.day,
+                    "currentLessonContentId": courseData.id
+                }
+            });
+        }
+    };
+    AppProvider.prototype.completeCourse = function (courseData) {
+        var _this = this;
+        /**
+         * App helper function to complete a course
+         */
+        this.isLastLesson(courseData.course, courseData.day).then(function (isLastLesson) {
+            if (isLastLesson) {
+                _this.evt.createThngAction('_CourseCompleted', {
+                    "customFields": {
+                        "currentCourse": courseData.course,
+                        "currentLesson": courseData.day,
+                        "currentLessonContentId": courseData.id
+                    }
+                });
+            }
+        });
+    };
+    AppProvider.prototype.playLesson = function (lessonData, pmc) {
+        /**
+         * single-point entry for handling play button actions for AURA content
+         */
+        if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
+            this.playToggleMap[lessonData.course] = {};
+        }
+        if (typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined') {
+            //playing
+            this.playToggleMap[lessonData.course][lessonData.id] = 1;
+        }
+        else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+            //stopped
+            this.playToggleMap[lessonData.course][lessonData.id] = 0;
+        }
+        else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
+            //playing
+            this.playToggleMap[lessonData.course][lessonData.id] = 1;
+        }
+        if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
+            this.evt.createThngAction('_Play');
+            this.startLesson(lessonData);
+            this.startLessonTimer(lessonData, pmc);
+        }
+        else {
+            this.stopLessonTimer(lessonData);
+        }
+    };
+    AppProvider.prototype.startLesson = function (lessonData) {
+        /**
+         * App helper to put Lesson started data to EVT
+         */
+        if (this.hasLessonCompleted(lessonData)) {
+            return;
+        }
+        this.evt.createThngAction('_LessonStarted', {
+            "customFields": {
+                "currentCourse": lessonData.course,
+                "currentLesson": lessonData.day,
+                "currentLessonContentId": lessonData.id
+            }
+        });
+        this.setCurrentLesson(lessonData.day);
+        this.setCurrentCourse(lessonData.course);
+    };
+    AppProvider.prototype.startLessonTimer = function (lessonData, pmc) {
+        var _this = this;
+        var timer = __WEBPACK_IMPORTED_MODULE_7_rxjs__["Observable"].timer(1000, 1000);
+        var alive = true;
+        this.lessonTimer =
+            timer
+                .takeWhile(function () { return alive; })
+                .subscribe(function (val) {
+                if (val == (_this.lessonTimeLimit)) {
+                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
+                    //if 10 mins, trigger a _LessonCompleted action
+                    _this.completeLesson(lessonData);
+                    pmc.toggleView(true, lessonData.course);
+                    _this.lessonTimer.unsubscribe();
+                }
+            });
+    };
+    AppProvider.prototype.stopLessonTimer = function (lessonData) {
+        if (typeof this.lessonTimer !== 'undefined') {
+            this.lessonTimer.unsubscribe();
+        }
+    };
+    AppProvider.prototype.completeLesson = function (lessonData) {
+        /**
+         * App helper to put Lesson completed data to EVT
+         */
+        if (this.hasLessonCompleted(lessonData)) {
+            return;
+        }
+        var self = this;
+        return this.evt.createThngAction('_LessonCompleted', {
+            "customFields": {
+                "currentCourse": lessonData.course,
+                "currentLesson": lessonData.day,
+                "currentLessonContentId": lessonData.id
+            }
+        }).then(function (res) {
+            self.updateCompletedLessonsCnt(lessonData.course);
+            self.completeCourse(lessonData);
+        });
+    };
+    AppProvider.prototype.isLastLesson = function (course, lessonDay) {
+        /**
+         * For a given course and day, is it the last one?
+         */
+        var self = this;
+        return this.toGroup().then(function (res) {
+            if (typeof self.courses == 'undefined' || self.courses.length < 0) {
+                self.courses = res;
+            }
+            var courseLen = Object.keys(self.courses[course]).length;
+            return (courseLen <= lessonDay);
+        });
+    };
+    AppProvider.prototype.setCurrentCourse = function (course) {
+        this.currentCourse = course;
+    };
+    AppProvider.prototype.getCurrentCourse = function () {
+        /**
+         * Get the CURRENT course of the user. CURRENT is not ACTIVE but the state
+         * from last update. ACTIVE is the one in use by tapping or clicking.
+         */
+        if (typeof this.currentCourse !== 'undefined') {
+            return this.currentCourse;
+        }
+        else {
+            return 'Mindfulness';
+        }
+    };
+    AppProvider.prototype.setCurrentLesson = function (day) {
+        this.currentLesson = day;
+    };
+    AppProvider.prototype.getCurrentLesson = function (course) {
+        /**
+         *
+         * Get the CURRENT lesson of the user.
+         * CURRENT is not ACTIVE but the state
+         * from last update. ACTIVE is the one
+         * in use by tapping or clicking.
+         *
+         */
+        if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
+            var lesson = this.progressArr[course].sortNum()[this.progressArr[course].length - 1];
+            console.log("course: " + course + ", lesson: " + lesson);
+            return lesson;
+        }
+        return this.currentLesson;
+    };
+    AppProvider.prototype.updateCompletedLessonsCnt = function (course) {
+        /**
+         * Update the tally of completed lessons for the day
+         */
+        var crsCnt = this.getLessonsCompletedToday(course) + 1;
+        var totCnt = this.getLessonsCompletedToday() + 1;
+        if (typeof course !== 'undefined') {
+            localStorage.setItem(this.getLSKey(course), crsCnt.toString());
+            localStorage.setItem(this.getLSKey(), totCnt.toString());
+            //refresh the progress
+            this.initProgArr();
+        }
+    };
+    AppProvider.prototype.getLessonsCompletedToday = function (course) {
+        /**
+         * Get the tally of completed Lessons for the day
+         */
+        if (typeof course == 'undefined') {
+            return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
+        }
+        else {
+            if (typeof this.courses[course] == 'undefined') {
+                return 0;
+            }
+            return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
+        }
+    };
+    AppProvider.prototype.getLSKey = function (course) {
+        /**
+         * Get a lesson key counter
+         * @type {string}
+         */
+        var str = "";
+        var usr = typeof this.evt.getUser() != 'undefined' ? this.evt.getUser().id : '';
+        if (typeof course == 'undefined') {
+            str = "lcCnt" + usr + this.today.toDateString();
+        }
+        else {
+            str = "lcCnt" + usr + course + this.today.toDateString();
+        }
+        return str.tephash();
+    };
+    AppProvider.prototype.getLessonsRemainingToday = function (course) {
+        /**
+         * Check total remaining new lessons for the day
+         * w/o params shows total for all courses
+         *
+         */
+        if (typeof course == 'undefined') {
+            return (__WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
+        }
+        else {
+            if (this.courses[course] != 'undefined') {
+                var remCnt = (__WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+                if (this.hasLoggedIn()) {
+                    return (remCnt >= 0 ? remCnt : 0);
+                }
+                else {
+                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                        return 1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+            }
+        }
+    };
+    AppProvider.prototype.getAdditionalLesson = function (course) {
+        /**
+         * Get one additional lesson if there are still lesson credits for the day
+         */
+        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+            return 0;
+        }
+        return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
+    };
+    AppProvider.prototype.getProgressStateFromEvt = function () {
+        var _this = this;
+        return this.evt.getUserCustomFields().then(function (customFields) {
+            console.log("customFields");
+            console.log(customFields);
+            if (typeof customFields != 'undefined') {
+                _this.userCustomFields = customFields;
+                var cl = null;
+                var cc = "";
+                if (customFields.hasOwnProperty('courseHistory') && customFields.courseHistory.length > 0) {
+                    _this.courseHistory = customFields.courseHistory;
+                    var lastLessonCompleted = _this.getLastCompletedLesson();
+                    if (typeof lastLessonCompleted !== 'undefined') {
+                        cl = lastLessonCompleted.lessonNumber;
+                        cc = lastLessonCompleted.courseNumber;
+                    }
+                }
+                if (customFields.hasOwnProperty('currentLesson')) {
+                    _this.currentLesson = parseInt(customFields.currentLesson);
+                }
+                else if (cl !== null) {
+                    _this.currentLesson = cl;
+                }
+                if (customFields.hasOwnProperty('currentCourse')) {
+                    _this.currentCourse = customFields.currentCourse;
+                }
+                else if (cc !== "") {
+                    _this.currentCourse = cc;
+                }
+                return customFields;
+            }
+        });
+    };
+    AppProvider.prototype.hasStartedCourse = function (course) {
+        console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
+        console.log(this.progressArr);
+        return (typeof this.progressArr[course] != 'undefined');
+    };
+    AppProvider.prototype.hasLessonCompleted = function (lessonData) {
+        if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
+            return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
+        }
+    };
+    AppProvider.prototype.getCourseState = function (course) {
+        /**
+         * Return
+         * [ course progress,
+         *   course total duration,
+         *   current lesson,
+         *   next lesson]
+         *
+         */
+        var crsProgress = 0;
+        var crsDuration = 0;
+        var crsLastLesson = 0;
+        var crsNextLesson = 1;
+        if (typeof this.progressArr[course] != 'undefined') {
+            crsProgress = this.getCourseProgress(course);
+            crsDuration = this.getCourseDuration(course);
+            crsLastLesson = this.getCurrentLesson(course);
+            if (crsDuration > crsLastLesson) {
+                crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
+            }
+            else {
+                crsNextLesson = crsLastLesson;
+            }
+        }
+        else {
+            crsProgress = 0;
+            crsDuration = this.getCourseDuration(course);
+            crsLastLesson = 0; //last Lesson Completed
+            crsNextLesson = 1;
+        }
+        var st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
+        console.log('course state: ');
+        console.log(st);
+        this.activeCourseState[course] = st;
+        return st;
+    };
+    AppProvider.prototype.nextLesson = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 1;
+        }
+        return this.activeCourseState[course][3];
+    };
+    AppProvider.prototype.lastLesson = function (course) {
+        /**
+         * current course state helper
+         * Last used/active lesson
+         *
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 0;
+        }
+        return this.activeCourseState[course][2];
+    };
+    AppProvider.prototype.courseDuration = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return 10;
+        }
+        return this.activeCourseState[course][1];
+    };
+    AppProvider.prototype.progressCount = function (course) {
+        /**
+         * current course state helper
+         */
+        if (typeof course == 'undefined') {
+            course = this.currentCourse;
+        }
+        if (typeof this.activeCourseState[course] == 'undefined') {
+            return;
+        }
+        return this.activeCourseState[course][0];
+    };
+    AppProvider.prototype.hasNextLesson = function (course) {
+        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
+            //has reached end
+            return false;
+        }
+        return (this.nextLesson(course) !== this.getCourseProgress(course));
+    };
+    AppProvider.prototype.getCourseDuration = function (course) {
+        if (typeof this.courses != 'undefined' && typeof this.courses[course] != 'undefined') {
+            //console.log(this.courses[course]);
+            return Object.keys(this.courses[course]).length;
+        }
+        else {
+            return 10;
+        }
+    };
+    AppProvider.prototype.getCourseProgress = function (course) {
+        /**
+         * returns 0 or the lesson day
+         */
+        //console.log("PROGRESS ARRAY");
+        //console.log(this.progressArr);
+        return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
+    };
+    AppProvider.prototype.getTotalAvailableLessons = function (course) {
+        /**
+         * Get total available lessons. Separate branches between Anon and Logged-in user
+         */
+        if (this.hasLoggedIn()) {
+            var availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
+            return availableLessons;
+        }
+        else {
+            var progressCnt = this.getCourseProgress(course);
+            console.log("progressCnt" + progressCnt);
+            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                return __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
+            }
+            else {
+                return this.lastLesson(course);
+            }
+        }
+    };
+    AppProvider.prototype.getArrDay = function (course) {
+        //add a lesson if there are lesson credit remaining and if there's history
+        var arrDay = [];
+        var availableLessons = this.getTotalAvailableLessons(course);
+        for (var i = 0; i < availableLessons; i++) {
+            var iDay = i + 1;
+            var st = !(iDay == this.nextLesson(course));
+            arrDay.push({ day: iDay, status: st });
+        }
+        console.log("lastLesson" + this.lastLesson(course));
+        console.log(arrDay);
+        console.log("hasNextLesson:" + this.hasNextLesson(course));
+        return arrDay;
+    };
+    AppProvider.prototype.getLastCompletedLesson = function () {
+        if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
+            return this.courseHistory[this.courseHistory.length - 1];
+        }
+        else {
+            return {
+                courseNumber: "",
+                lessonNumber: 0
+            };
+        }
+    };
+    AppProvider.prototype.getLastCompletedCourse = function () {
+        if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
+            return this.getLastCompletedLesson()['courseNumber'];
+        }
+        else {
+            return 'Mindfulness';
+        }
+    };
+    AppProvider.prototype.hasActiveCourse = function () {
+        /**
+         * Check if Active course has been initialize or set
+         */
+        return (typeof this.activeCourse != 'undefined');
+    };
+    AppProvider.prototype.getCourseData = function (course) {
+        /**
+         * Get all lessons of a course
+         */
+        if (typeof this.courses == 'undefined' || typeof this.courses[course] == 'undefined') {
+            return;
+        }
+        var s = this.courses[course];
+        return s;
+    };
+    AppProvider.prototype.hasLoggedIn = function () {
+        return this.auth.loggedIn();
+    };
+    AppProvider.prototype.getLessonData = function (course, lessonId) {
+        if (typeof this.courses[course] != 'undefined') {
+            return this.courses[course][lessonId];
+        }
+    };
+    AppProvider.prototype.isNextLessonLocked = function (course) {
+        if (!this.hasLoggedIn()) {
+            //logged in, no lock, don't bother
+            var nextLesson = this.nextLesson(course);
+            if (typeof nextLesson != 'undefined') {
+                if (nextLesson > __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+    AppProvider.prototype.startLogin = function () {
+        console.log("Login action called");
+        localStorage.loginStarted = 1;
+    };
+    AppProvider.prototype.resetThngContext = function () {
+        localStorage.removeItem("myThng");
+        localStorage.removeItem("myProduct");
+    };
+    AppProvider.prototype.completeLogin = function () {
+        if (typeof localStorage.loginStarted != 'undefined') {
+            console.log("finalizeLogin");
+            var self_1 = this;
+            this.auth.setEVTInfo();
+            this.resetThngContext();
+            this.evt.createUserAction("_Login").then(function () {
+                self_1.evt.getThngContext().then(function (th) {
+                    console.log("getThngContext");
+                    console.log(th);
+                    if (typeof th != "undefined") {
+                        if (typeof localStorage.myThng == 'undefined') {
+                            self_1.saveThngContext(th);
+                        }
+                    }
+                });
+                localStorage.removeItem('loginStarted');
+            });
+        }
+    };
+    AppProvider.prototype.setBeginTS = function () {
+        /**
+         * set beginning of use
+         */
+        console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
+            var dy = Date.now(); //start of the day
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
+        }
+    };
+    AppProvider.prototype.getBeginTS = function () {
+        /**
+         * return since beginning of use.
+         */
+        return parseInt(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
+    };
+    AppProvider.prototype.hasSignInNotice = function () {
+        /**
+         * Check if there's a need to popup a signin notice
+         */
+        if (!this.hasLoggedIn()) {
+            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
+            if (daysSince >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
+                console.log('daysSince:' + daysSince);
+                return true;
+            }
+        }
+        return false;
+    };
+    AppProvider.prototype.getUserCreatedAt = function () {
+        if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
+            //only for logged in
+            var usr = JSON.parse(localStorage.userInfo);
+            var userCreatedAt = new Date(usr.created_at);
+            return userCreatedAt;
+        }
+    };
+    AppProvider.prototype.hasReorderNotice = function () {
+        if (this.hasLoggedIn()) {
+            var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
+            console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
+            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
+                return true;
+            }
+        }
+    };
+    /**
+     * Registration have been started, completed in Auth0
+     * but not user local actions in not yet connected
+     * in EVT
+     *
+     * @param regAuth0UserId
+     */
+    AppProvider.prototype.startReg = function (regAuth0UserId) {
+        console.log("startReg:" + regAuth0UserId);
+        //create the action anyway, but add registerIdType
+        this.evt.createThngAction("_Activated", {
+            customFields: {
+                registeredUserIdType: 'auth0',
+                registeredUserId: regAuth0UserId
+            }
+        }, true); //called against on anon user
+        localStorage.regStarted = regAuth0UserId;
+    };
+    /**
+     * Complete the registration process
+     * - checks user_metadata from auth0
+     * - checks that regid and local device are equivalent
+     * - calls the _Activated action with evt user id w/ anon user
+     *
+     * @param userData
+     *
+     */
+    AppProvider.prototype.completeReg = function (userData) {
+        var regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+        var regAuth0UserId = userData.user_id.replace('auth0|', '');
+        if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
+            console.log("reg start detected");
+            if (localStorage.regStarted === regAuth0UserId) {
+                //valid registration to complete
+                console.log("valid registration to complete");
+                this.evt.createThngAction("_Activated", {
+                    customFields: {
+                        registeredUserIdType: 'evt',
+                        registeredUserId: regEvtUserId
+                    }
+                }, true).then(//called with anon user
+                function (//called with anon user
+                    es) {
+                    localStorage.removeItem("regStarted");
+                });
+            }
+        }
+    };
+    return AppProvider;
+}());
+AppProvider = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]])
+], AppProvider);
+
+//# sourceMappingURL=app.js.map
+
+/***/ }),
+
+/***/ 23:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(340);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(341);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__(261);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -386,821 +1207,6 @@ AuthService = __decorate([
 
 /***/ }),
 
-/***/ 23:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs__ = __webpack_require__(380);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__ = __webpack_require__(22);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-//import { Injectable,ViewChild, OnInit } from '@angular/core';
-
-
-
-
-
-
-
-
-
-/*
- *	Generated class for the AppProvider provider.
- *
- *	This is the main service for handling user progress
- *	This contains all the progress variables.
- *	The variables in the content page are here.
-*/
-var AppProvider = (function () {
-    function AppProvider(http, evt, auth) {
-        this.http = http;
-        this.evt = evt;
-        this.auth = auth;
-        this.progressArr = [];
-        this.progressKeys = [];
-        this.courses = [];
-        //total lessons / days in a course
-        this.activeDur = 1;
-        this.hasValidUserAge = false;
-        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].lessonCompletionTimeLimit; //seconds
-        this.currentLesson = 1;
-        this.courseHistory = [];
-        this.today = new Date();
-        this.activeCourseState = [0, 0, 0, 1];
-        this.playToggleMap = [];
-    }
-    /* GET the aura variable containing the content details, path..etc. */
-    AppProvider.prototype.toGroup = function () {
-        var _this = this;
-        var mast = [];
-        var promises = __WEBPACK_IMPORTED_MODULE_4__assets_aura_config_aura_config__["a" /* aura */].map(function (ar) {
-            var crs = ar.Course.trim();
-            if (mast.hasOwnProperty(crs)) {
-                mast[crs][ar.Day] = {
-                    id: ar.ID,
-                    title: ar.Title,
-                    path: ar.path,
-                    desc: ar.Description,
-                    course: crs
-                };
-            }
-            else {
-                mast[crs] = {};
-                mast[crs][ar.Day] = {
-                    id: ar.ID,
-                    title: ar.Title,
-                    path: ar.path,
-                    desc: ar.Description,
-                    course: crs
-                };
-            }
-        });
-        return Promise.all(promises).then(function () { _this.progressKeys = Object.keys(mast); return mast; });
-    };
-    /* set the active course for the top component in the main page */
-    AppProvider.prototype.setActiveCourse = function (courseTitle) {
-        console.log("Activecourse is set");
-        this.activeCourse = this.getCourseData(courseTitle);
-        console.log(this.activeCourse);
-        this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
-        this.activeDur = this.getCourseDuration(courseTitle);
-        this.currentCourse = courseTitle;
-        //let ll = Object.keys(this.activeCourse).map(a=>{return this.activeCourse[a]});
-        //this.activeDur = ll.length; //subtract 2 because there are 2 extra fields: current progress and title
-    };
-    AppProvider.prototype.ngOnInit = function () {
-        alert('XXX');
-    };
-    AppProvider.prototype.setDur = function (val) {
-        this.activeDur = val;
-    };
-    AppProvider.prototype.initCourses = function () {
-        var _this = this;
-        /**
-         *
-         * @type {AppProvider}
-         *
-         * group lessons into courses
-         * initialize default course title, data and duration (from grouping)
-         * initialize courses
-         */
-        var self = this;
-        return this.toGroup().then(function (res) {
-            console.log("initCourses");
-            console.log(res);
-            self.courses = res;
-            console.log(self.courses);
-            self.currentCourse = 'Mindfulness';
-            self.activeCourse = res['Mindfulness'];
-            self.activeDur = Object.keys(self.activeCourse).length;
-            if (_this.evt.hasUserContext()) {
-                return _this.initProgArr();
-            }
-        });
-    };
-    AppProvider.prototype.initProgArr = function () {
-        /**
-         *
-         * @type {AppProvider}
-         *
-         * Get data from EVT and store it a progress array in-memory
-         */
-        var self = this;
-        return this.getProgressStateFromEvt().then(function (customFields) {
-            console.log("COURSE HISTORY");
-            console.log(self.courseHistory);
-            self.courseHistory.forEach(function (val) {
-                if (typeof self.progressArr[val.courseNumber] === 'undefined') {
-                    self.progressArr[val.courseNumber] = [];
-                }
-                if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
-                    self.progressArr[val.courseNumber].push(val.lessonNumber);
-                }
-            });
-        });
-    };
-    AppProvider.isAgeGated = function () {
-        return __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
-    };
-    AppProvider.prototype.isValidAge = function () {
-        /**
-         * Check if there's a previous age gating info
-         * Check if greater than age allowed
-         */
-        var isAgeGated = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
-        var agd = __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("agd");
-        this.hasValidUserAge = (isAgeGated && parseInt(agd) >= 18);
-        return this.hasValidUserAge;
-    };
-    AppProvider.prototype.saveAgeGateData = function (ageGated, cookiesOn, selectedDate) {
-        /**
-         * Save age gating info for user into Cookie
-         */
-        if (cookiesOn) {
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), 7);
-        }
-    };
-    AppProvider.prototype.saveThngContext = function (result) {
-        /**
-         * Save the THNG scanned or created via IR scan to localStorage for later use
-         */
-        if (this.getThngContext() === null) {
-            /**
-             * Ignore other THNGs if there's already one in localStorage
-             */
-            if (typeof result.id !== 'undefined') {
-                localStorage.setItem('myThng', JSON.stringify(result));
-            }
-            else if (typeof result[0].results[0].thng !== "undefined") {
-                localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
-            }
-            else if (typeof result[0].results[0].product !== "undefined") {
-                localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
-            }
-        }
-    };
-    AppProvider.prototype.getThngContext = function () {
-        /**
-         * get the THNG from the localStorage
-         */
-        return localStorage.getItem('myThng');
-    };
-    AppProvider.prototype.startCourse = function (courseData) {
-        /**
-         * App helper function to start a course
-         */
-        if (courseData.day === 1 && !this.hasStartedCourse(courseData.course)) {
-            this.evt.createThngAction('_CourseStarted', {
-                "customFields": {
-                    "currentCourse": courseData.course,
-                    "currentLesson": courseData.day,
-                    "currentLessonContentId": courseData.id
-                }
-            });
-        }
-    };
-    AppProvider.prototype.completeCourse = function (courseData) {
-        var _this = this;
-        /**
-         * App helper function to complete a course
-         */
-        this.isLastLesson(courseData.course, courseData.day).then(function (isLastLesson) {
-            if (isLastLesson) {
-                _this.evt.createThngAction('_CourseCompleted', {
-                    "customFields": {
-                        "currentCourse": courseData.course,
-                        "currentLesson": courseData.day,
-                        "currentLessonContentId": courseData.id
-                    }
-                });
-            }
-        });
-    };
-    AppProvider.prototype.playLesson = function (lessonData, pmc) {
-        /**
-         * single-point entry for handling play button actions for AURA content
-         */
-        if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
-            this.playToggleMap[lessonData.course] = {};
-        }
-        if (typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined') {
-            //playing
-            this.playToggleMap[lessonData.course][lessonData.id] = 1;
-        }
-        else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
-            //stopped
-            this.playToggleMap[lessonData.course][lessonData.id] = 0;
-        }
-        else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
-            //playing
-            this.playToggleMap[lessonData.course][lessonData.id] = 1;
-        }
-        if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
-            this.evt.createThngAction('_Play');
-            this.startLesson(lessonData);
-            this.startLessonTimer(lessonData, pmc);
-        }
-        else {
-            this.stopLessonTimer(lessonData);
-        }
-    };
-    AppProvider.prototype.startLesson = function (lessonData) {
-        /**
-         * App helper to put Lesson started data to EVT
-         */
-        if (this.hasLessonCompleted(lessonData)) {
-            return;
-        }
-        this.evt.createThngAction('_LessonStarted', {
-            "customFields": {
-                "currentCourse": lessonData.course,
-                "currentLesson": lessonData.day,
-                "currentLessonContentId": lessonData.id
-            }
-        });
-        this.setCurrentLesson(lessonData.day);
-        this.setCurrentCourse(lessonData.course);
-    };
-    AppProvider.prototype.startLessonTimer = function (lessonData, pmc) {
-        var _this = this;
-        var timer = __WEBPACK_IMPORTED_MODULE_6_rxjs__["Observable"].timer(1000, 1000);
-        var alive = true;
-        this.lessonTimer =
-            timer
-                .takeWhile(function () { return alive; })
-                .subscribe(function (val) {
-                if (val == (_this.lessonTimeLimit)) {
-                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
-                    //if 10 mins, trigger a _LessonCompleted action
-                    _this.completeLesson(lessonData);
-                    pmc.toggleView(true, lessonData.course);
-                    _this.lessonTimer.unsubscribe();
-                }
-            });
-    };
-    AppProvider.prototype.stopLessonTimer = function (lessonData) {
-        if (typeof this.lessonTimer !== 'undefined') {
-            this.lessonTimer.unsubscribe();
-        }
-    };
-    AppProvider.prototype.completeLesson = function (lessonData) {
-        /**
-         * App helper to put Lesson completed data to EVT
-         */
-        if (this.hasLessonCompleted(lessonData)) {
-            return;
-        }
-        var self = this;
-        return this.evt.createThngAction('_LessonCompleted', {
-            "customFields": {
-                "currentCourse": lessonData.course,
-                "currentLesson": lessonData.day,
-                "currentLessonContentId": lessonData.id
-            }
-        }).then(function (res) {
-            self.updateCompletedLessonsCnt(lessonData.course);
-            self.completeCourse(lessonData);
-        });
-    };
-    AppProvider.prototype.isLastLesson = function (course, lessonDay) {
-        /**
-         * For a given course and day, is it the last one?
-         */
-        var self = this;
-        return this.toGroup().then(function (res) {
-            if (typeof self.courses == 'undefined' || self.courses.length < 0) {
-                self.courses = res;
-            }
-            var courseLen = Object.keys(self.courses[course]).length;
-            return (courseLen <= lessonDay);
-        });
-    };
-    AppProvider.prototype.setCurrentCourse = function (course) {
-        this.currentCourse = course;
-    };
-    AppProvider.prototype.getCurrentCourse = function () {
-        /**
-         * Get the CURRENT course of the user. CURRENT is not ACTIVE but the state
-         * from last update. ACTIVE is the one in use by tapping or clicking.
-         */
-        if (typeof this.currentCourse !== 'undefined') {
-            return this.currentCourse;
-        }
-        else {
-            return 'Mindfulness';
-        }
-    };
-    AppProvider.prototype.setCurrentLesson = function (day) {
-        this.currentLesson = day;
-    };
-    AppProvider.prototype.getCurrentLesson = function (course) {
-        /**
-         *
-         * Get the CURRENT lesson of the user.
-         * CURRENT is not ACTIVE but the state
-         * from last update. ACTIVE is the one
-         * in use by tapping or clicking.
-         *
-         */
-        if (typeof course != 'undefined' && typeof this.progressArr[course] != 'undefined') {
-            var lesson = this.progressArr[course].sortNum()[this.progressArr[course].length - 1];
-            console.log("course: " + course + ", lesson: " + lesson);
-            return lesson;
-        }
-        return this.currentLesson;
-    };
-    AppProvider.prototype.updateCompletedLessonsCnt = function (course) {
-        /**
-         * Update the tally of completed lessons for the day
-         */
-        var crsCnt = this.getLessonsCompletedToday(course) + 1;
-        var totCnt = this.getLessonsCompletedToday() + 1;
-        if (typeof course !== 'undefined') {
-            localStorage.setItem(this.getLSKey(course), crsCnt.toString());
-            localStorage.setItem(this.getLSKey(), totCnt.toString());
-            //refresh the progress
-            this.initProgArr();
-        }
-    };
-    AppProvider.prototype.getLessonsCompletedToday = function (course) {
-        /**
-         * Get the tally of completed Lessons for the day
-         */
-        if (typeof course == 'undefined') {
-            return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
-        }
-        else {
-            if (typeof this.courses[course] == 'undefined') {
-                return 0;
-            }
-            return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
-        }
-    };
-    AppProvider.prototype.getLSKey = function (course) {
-        /**
-         * Get a lesson key counter
-         * @type {string}
-         */
-        var str = "";
-        if (typeof course == 'undefined') {
-            str = "lcCnt" + this.today.toDateString();
-        }
-        else {
-            str = "lcCnt" + course + this.today.toDateString();
-        }
-        return str;
-    };
-    AppProvider.prototype.getLessonsRemainingToday = function (course) {
-        /**
-         * Check total remaining new lessons for the day
-         * w/o params shows total for all courses
-         *
-         */
-        if (typeof course == 'undefined') {
-            return (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
-        }
-        else {
-            if (this.courses[course] != 'undefined') {
-                var remCnt = (__WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
-                if (this.hasLoggedIn()) {
-                    return (remCnt >= 0 ? remCnt : 0);
-                }
-                else {
-                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                        return 1;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-            }
-        }
-    };
-    AppProvider.prototype.getAdditionalLesson = function (course) {
-        /**
-         * Get one additional lesson if there are still lesson credits for the day
-         */
-        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
-            return 0;
-        }
-        return (this.getLessonsRemainingToday(course) > 0 ? 1 : 0);
-    };
-    AppProvider.prototype.getProgressStateFromEvt = function () {
-        var _this = this;
-        return this.evt.getUserCustomFields().then(function (customFields) {
-            console.log("customFields");
-            console.log(customFields);
-            if (typeof customFields != 'undefined') {
-                _this.userCustomFields = customFields;
-                var cl = null;
-                var cc = "";
-                if (customFields.hasOwnProperty('courseHistory') && customFields.courseHistory.length > 0) {
-                    _this.courseHistory = customFields.courseHistory;
-                    var lastLessonCompleted = _this.getLastCompletedLesson();
-                    if (typeof lastLessonCompleted !== 'undefined') {
-                        cl = lastLessonCompleted.lessonNumber;
-                        cc = lastLessonCompleted.courseNumber;
-                    }
-                }
-                if (customFields.hasOwnProperty('currentLesson')) {
-                    _this.currentLesson = parseInt(customFields.currentLesson);
-                }
-                else if (cl !== null) {
-                    _this.currentLesson = cl;
-                }
-                if (customFields.hasOwnProperty('currentCourse')) {
-                    _this.currentCourse = customFields.currentCourse;
-                }
-                else if (cc !== "") {
-                    _this.currentCourse = cc;
-                }
-                return customFields;
-            }
-        });
-    };
-    AppProvider.prototype.hasStartedCourse = function (course) {
-        console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
-        console.log(this.progressArr);
-        return (typeof this.progressArr[course] != 'undefined');
-    };
-    AppProvider.prototype.hasLessonCompleted = function (lessonData) {
-        if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
-            return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
-        }
-    };
-    AppProvider.prototype.getCourseState = function (course) {
-        /**
-         * Return
-         * [ course progress,
-         *   course total duration,
-         *   current lesson,
-         *   next lesson]
-         *
-         */
-        var crsProgress = 0;
-        var crsDuration = 0;
-        var crsLastLesson = 0;
-        var crsNextLesson = 1;
-        if (typeof this.progressArr[course] != 'undefined') {
-            crsProgress = this.getCourseProgress(course);
-            crsDuration = this.getCourseDuration(course);
-            crsLastLesson = this.getCurrentLesson(course);
-            if (crsDuration > crsLastLesson) {
-                crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
-            }
-            else {
-                crsNextLesson = crsLastLesson;
-            }
-        }
-        else {
-            crsProgress = 0;
-            crsDuration = this.getCourseDuration(course);
-            crsLastLesson = 0; //last Lesson Completed
-            crsNextLesson = 1;
-        }
-        var st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
-        console.log('course state: ');
-        console.log(st);
-        this.activeCourseState[course] = st;
-        return st;
-    };
-    AppProvider.prototype.nextLesson = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 1;
-        }
-        return this.activeCourseState[course][3];
-    };
-    AppProvider.prototype.lastLesson = function (course) {
-        /**
-         * current course state helper
-         * Last used/active lesson
-         *
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 0;
-        }
-        return this.activeCourseState[course][2];
-    };
-    AppProvider.prototype.courseDuration = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return 10;
-        }
-        return this.activeCourseState[course][1];
-    };
-    AppProvider.prototype.progressCount = function (course) {
-        /**
-         * current course state helper
-         */
-        if (typeof course == 'undefined') {
-            course = this.currentCourse;
-        }
-        if (typeof this.activeCourseState[course] == 'undefined') {
-            return;
-        }
-        return this.activeCourseState[course][0];
-    };
-    AppProvider.prototype.hasNextLesson = function (course) {
-        if (this.getCourseProgress(course) >= this.getCourseDuration(course)) {
-            //has reached end
-            return false;
-        }
-        return (this.nextLesson(course) !== this.getCourseProgress(course));
-    };
-    AppProvider.prototype.getCourseDuration = function (course) {
-        if (typeof this.courses != 'undefined' && typeof this.courses[course] != 'undefined') {
-            //console.log(this.courses[course]);
-            return Object.keys(this.courses[course]).length;
-        }
-        else {
-            return 10;
-        }
-    };
-    AppProvider.prototype.getCourseProgress = function (course) {
-        /**
-         * returns 0 or the lesson day
-         */
-        //console.log("PROGRESS ARRAY");
-        //console.log(this.progressArr);
-        return (typeof this.progressArr[course] != 'undefined') ? this.progressArr[course].length : 0;
-    };
-    AppProvider.prototype.getTotalAvailableLessons = function (course) {
-        /**
-         * Get total available lessons. Separate branches between Anon and Logged-in user
-         */
-        if (this.hasLoggedIn()) {
-            var availableLessons = this.getLastCompletedLesson().lessonNumber > 0 ? this.lastLesson(course) : 0;
-            return availableLessons;
-        }
-        else {
-            var progressCnt = this.getCourseProgress(course);
-            console.log("progressCnt" + progressCnt);
-            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                return __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
-            }
-            else {
-                return this.lastLesson(course);
-            }
-        }
-    };
-    AppProvider.prototype.getArrDay = function (course) {
-        //add a lesson if there are lesson credit remaining and if there's history
-        var arrDay = [];
-        var availableLessons = this.getTotalAvailableLessons(course);
-        for (var i = 0; i < availableLessons; i++) {
-            var iDay = i + 1;
-            var st = !(iDay == this.nextLesson(course));
-            arrDay.push({ day: iDay, status: st });
-        }
-        console.log("lastLesson" + this.lastLesson(course));
-        console.log(arrDay);
-        console.log("hasNextLesson:" + this.hasNextLesson(course));
-        return arrDay;
-    };
-    AppProvider.prototype.getLastCompletedLesson = function () {
-        if (typeof this.courseHistory != 'undefined' && this.courseHistory.length > 0) {
-            return this.courseHistory[this.courseHistory.length - 1];
-        }
-        else {
-            return {
-                courseNumber: "",
-                lessonNumber: 0
-            };
-        }
-    };
-    AppProvider.prototype.getLastCompletedCourse = function () {
-        if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
-            return this.getLastCompletedLesson()['courseNumber'];
-        }
-        else {
-            return 'Mindfulness';
-        }
-    };
-    AppProvider.prototype.hasActiveCourse = function () {
-        /**
-         * Check if Active course has been initialize or set
-         */
-        return (typeof this.activeCourse != 'undefined');
-    };
-    AppProvider.prototype.getCourseData = function (course) {
-        /**
-         * Get all lessons of a course
-         */
-        if (typeof this.courses == 'undefined' || typeof this.courses[course] == 'undefined') {
-            return;
-        }
-        var s = this.courses[course];
-        return s;
-    };
-    AppProvider.prototype.hasLoggedIn = function () {
-        return this.auth.loggedIn();
-    };
-    AppProvider.prototype.getLessonData = function (course, lessonId) {
-        if (typeof this.courses[course] != 'undefined') {
-            return this.courses[course][lessonId];
-        }
-    };
-    AppProvider.prototype.isNextLessonLocked = function (course) {
-        if (!this.hasLoggedIn()) {
-            //logged in, no lock, don't bother
-            var nextLesson = this.nextLesson(course);
-            if (typeof nextLesson != 'undefined') {
-                if (nextLesson > __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
-    AppProvider.prototype.startLogin = function () {
-        console.log("Login action called");
-        localStorage.loginStarted = 1;
-    };
-    AppProvider.prototype.resetThngContext = function () {
-        localStorage.removeItem("myThng");
-        localStorage.removeItem("myProduct");
-    };
-    AppProvider.prototype.completeLogin = function () {
-        if (typeof localStorage.loginStarted != 'undefined') {
-            console.log("finalizeLogin");
-            var self_1 = this;
-            this.auth.setEVTInfo();
-            this.resetThngContext();
-            this.evt.createUserAction("_Login").then(function () {
-                self_1.evt.getThngContext().then(function (th) {
-                    console.log("getThngContext");
-                    console.log(th);
-                    if (typeof th != "undefined") {
-                        if (typeof localStorage.myThng == 'undefined') {
-                            self_1.saveThngContext(th);
-                        }
-                    }
-                });
-                localStorage.removeItem('loginStarted');
-            });
-        }
-    };
-    AppProvider.prototype.setBeginTS = function () {
-        /**
-         * set beginning of use
-         */
-        console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
-        if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
-            var dy = Date.now(); //start of the day
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
-        }
-    };
-    AppProvider.prototype.getBeginTS = function () {
-        /**
-         * return since beginning of use.
-         */
-        return parseInt(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
-    };
-    AppProvider.prototype.hasSignInNotice = function () {
-        /**
-         * Check if there's a need to popup a signin notice
-         */
-        if (!this.hasLoggedIn()) {
-            var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
-            if (daysSince >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
-                console.log('daysSince:' + daysSince);
-                return true;
-            }
-        }
-        return false;
-    };
-    AppProvider.prototype.getUserCreatedAt = function () {
-        if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
-            //only for logged in
-            var usr = JSON.parse(localStorage.userInfo);
-            var userCreatedAt = new Date(usr.created_at);
-            return userCreatedAt;
-        }
-    };
-    AppProvider.prototype.hasReorderNotice = function () {
-        if (this.hasLoggedIn()) {
-            var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
-            console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
-            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_7__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
-                return true;
-            }
-        }
-    };
-    /**
-     * Registration have been started, completed in Auth0
-     * but not user local actions in not yet connected
-     * in EVT
-     *
-     * @param regAuth0UserId
-     */
-    AppProvider.prototype.startReg = function (regAuth0UserId) {
-        console.log("startReg:" + regAuth0UserId);
-        //create the action anyway, but add registerIdType
-        this.evt.createThngAction("_Activated", {
-            customFields: {
-                registeredUserIdType: 'auth0',
-                registeredUserId: regAuth0UserId
-            }
-        }, true); //called against on anon user
-        localStorage.regStarted = regAuth0UserId;
-    };
-    /**
-     * Complete the registration process
-     * - checks user_metadata from auth0
-     * - checks that regid and local device are equivalent
-     * - calls the _Activated action with evt user id w/ anon user
-     *
-     * @param userData
-     *
-     */
-    AppProvider.prototype.completeReg = function (userData) {
-        var regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
-        var regAuth0UserId = userData.user_id.replace('auth0|', '');
-        if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
-            console.log("reg start detected");
-            if (localStorage.regStarted === regAuth0UserId) {
-                //valid registration to complete
-                console.log("valid registration to complete");
-                this.evt.createThngAction("_Activated", {
-                    customFields: {
-                        registeredUserIdType: 'evt',
-                        registeredUserId: regEvtUserId
-                    }
-                }, true).then(//called with anon user
-                function (//called with anon user
-                    es) {
-                    localStorage.removeItem("regStarted");
-                });
-            }
-        }
-    };
-    return AppProvider;
-}());
-AppProvider = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_8__providers_auth_auth_service__["a" /* AuthService */]])
-], AppProvider);
-
-//# sourceMappingURL=app.js.map
-
-/***/ }),
-
 /***/ 262:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1211,7 +1217,7 @@ var aura = [
         "Day": 1,
         "Course": "Mindfulness",
         "Title": "How to Sit",
-        "Description": "This meditation was designed with the beginner in mind. It will guide you through the basics of how to sit in meditation and help you to start developing your practice. \nby Happiness Insight",
+        "Description": "This meditation was designed with the beginner in mind. It will guide you through the basics of how to sit in meditation and help you to start developing your practice.",
         "Author": "Happiness Insight",
         "ID": "hi1",
         "path": "How to Sit.html"
@@ -1220,7 +1226,7 @@ var aura = [
         "Day": 2,
         "Course": "Mindfulness",
         "Title": "Beginner's Mind",
-        "Description": "There's a Chinese saying which states \"Renew yourself, completely each day. Do it again, and forever again.\" In this session we view our whole body as though it's brand new, no previous stories attached. Discover a new, curious relationship with your body, your mind and your life today. \nby Lauren Ziegler",
+        "Description": "There's a Chinese saying which states \"Renew yourself, completely each day. Do it again, and forever again.\" In this session we view our whole body as though it's brand new, no previous stories attached. Discover a new, curious relationship with your body, your mind and your life today.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e136",
         "path": "Beginner_s Mind.html"
@@ -1229,7 +1235,7 @@ var aura = [
         "Day": 3,
         "Course": "Mindfulness",
         "Title": "Body Scan",
-        "Description": "Give your mind and body the gift of compassionate presence through this core mindfulness practice.\nby Ryan James Kenny",
+        "Description": "Give your mind and body the gift of compassionate presence through this core mindfulness practice.",
         "Author": "Ryan James Kenny",
         "ID": "r6",
         "path": "Body Scan - Ryan James.html"
@@ -1238,7 +1244,7 @@ var aura = [
         "Day": 4,
         "Course": "Mindfulness",
         "Title": "Breath Sensing",
-        "Description": "This guided meditation will help quiet your mind and settle your nervous system by paying attention to your breath. Breath sensing is an effective way to calm down and refocus, and can be used anytime, anywhere to return to your center.\nby Cassandra Carlopio",
+        "Description": "This guided meditation will help quiet your mind and settle your nervous system by paying attention to your breath. Breath sensing is an effective way to calm down and refocus, and can be used anytime, anywhere to return to your center.",
         "Author": "Cassandra Carlopio",
         "ID": "-Kr3D9jPCHwW31EQ2lxK",
         "path": "Breath Sensing.html"
@@ -1247,7 +1253,7 @@ var aura = [
         "Day": 5,
         "Course": "Mindfulness",
         "Title": "Body Sweep Part by Part",
-        "Description": "Practice giving your full attention to your body, part by part.\nby Lisa Pollard",
+        "Description": "Practice giving your full attention to your body, part by part.",
         "Author": "Lisa Pollard",
         "ID": "lp4",
         "path": "Body Sweep Part by Part.html"
@@ -1256,7 +1262,7 @@ var aura = [
         "Day": 6,
         "Course": "Mindfulness",
         "Title": "Naming Thoughts",
-        "Description": "There is a common misconception about meditation that it is all about \"stopping thoughts.\" But that can be an exercise in frustration, since our minds are accustomed to thinking. Rather, mindfulness is about bringing our full awareness to whatever is present for us, including our thoughts. In this meditation, you will practice naming the kinds of thoughts coming up for you. You will learn how to be the observer of your own thinking, which ultimately will allow you to respond to events in your life with wisdom, rather than being a reaction to them.\nby Christina McMahon",
+        "Description": "There is a common misconception about meditation that it is all about \"stopping thoughts.\" But that can be an exercise in frustration, since our minds are accustomed to thinking. Rather, mindfulness is about bringing our full awareness to whatever is present for us, including our thoughts. In this meditation, you will practice naming the kinds of thoughts coming up for you. You will learn how to be the observer of your own thinking, which ultimately will allow you to respond to events in your life with wisdom, rather than being a reaction to them.",
         "Author": "Christina McMahon (Aura)",
         "ID": "b47",
         "path": "Naming Thoughts.html"
@@ -1265,7 +1271,7 @@ var aura = [
         "Day": 7,
         "Course": "Mindfulness",
         "Title": "Sounds",
-        "Description": "When you meditate, it is always helpful to have something to anchor your attention to. Usually, that is your breathing. In this meditation, however, you will use the sounds in your environment as your attention anchor. This will train you to be more in tune with your senses and can create a deeper sense of awareness in your everyday life.\nby Christina McMahon",
+        "Description": "When you meditate, it is always helpful to have something to anchor your attention to. Usually, that is your breathing. In this meditation, however, you will use the sounds in your environment as your attention anchor. This will train you to be more in tune with your senses and can create a deeper sense of awareness in your everyday life.",
         "Author": "Christina McMahon (Aura)",
         "ID": "b38",
         "path": "Sounds.html"
@@ -1274,7 +1280,7 @@ var aura = [
         "Day": 8,
         "Course": "Mindfulness",
         "Title": "Everyday Mindfulness",
-        "Description": "A natural byproduct of mindfulness is becoming aware of what is in the moment and what's possible. It's not to change us but to help us hold presence. This ancient technique of gazing is a potent mindfulness practice in order to grow consciousness and to cultivate fierce focus. \nby Lauren Ziegler",
+        "Description": "A natural byproduct of mindfulness is becoming aware of what is in the moment and what's possible. It's not to change us but to help us hold presence. This ancient technique of gazing is a potent mindfulness practice in order to grow consciousness and to cultivate fierce focus. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "b31",
         "path": "Everyday Mindfulness.html"
@@ -1283,7 +1289,7 @@ var aura = [
         "Day": 9,
         "Course": "Mindfulness",
         "Title": "Muscle Relaxation",
-        "Description": "Feeling stressed or tight? This practice will help you identify and release muscular tension.\nby Lyndi Smith",
+        "Description": "Feeling stressed or tight? This practice will help you identify and release muscular tension.",
         "Author": "Lyndi Smith",
         "ID": "l3",
         "path": "Muscle Relaxation.html"
@@ -1292,7 +1298,7 @@ var aura = [
         "Day": 10,
         "Course": "Mindfulness",
         "Title": "Lovingkindness for Ourself and Others",
-        "Description": "Loving yourself and others around you is one of the simplest yet most powerful way to bring happiness to yourself.\nby Kristy Arbon ",
+        "Description": "Loving yourself and others around you is one of the simplest yet most powerful way to bring happiness to yourself.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e72",
         "path": "Lovingkindness for Ourself and Others.html"
@@ -1301,7 +1307,7 @@ var aura = [
         "Day": 1,
         "Course": "Refreshing ",
         "Title": "Awakening Factor of Joy",
-        "Description": "By returning to our practice, time after time, we can realise a peaceful and heart-fufilling life. A permanent and deep joy naturally bubbles up and we feel that spread all over our bodies. \nby Lauren Ziegler",
+        "Description": "By returning to our practice, time after time, we can realise a peaceful and heart-fufilling life. A permanent and deep joy naturally bubbles up and we feel that spread all over our bodies. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e22",
         "path": "Awakening Factor of Joy.html"
@@ -1310,7 +1316,7 @@ var aura = [
         "Day": 4,
         "Course": "Refreshing ",
         "Title": "Breath Mindfulness",
-        "Description": "Focus on your breathing as you breath gently. There is nothing else to do except notice that you are breathing. Allowing your experience to be simple and nourishing. \nby Kristy Arbon",
+        "Description": "Focus on your breathing as you breath gently. There is nothing else to do except notice that you are breathing. Allowing your experience to be simple and nourishing. ",
         "Author": "Kristy Arbon (Aura) ",
         "ID": "b20",
         "path": "Breath Mindfulness.html"
@@ -1319,7 +1325,7 @@ var aura = [
         "Day": 2,
         "Course": "Refreshing ",
         "Title": "Be with Open Awareness",
-        "Description": "A broad awareness practice, to help us be with the whole of our present moment experience. \nby Mark Quirk",
+        "Description": "A broad awareness practice, to help us be with the whole of our present moment experience. ",
         "Author": "Mark Quirk",
         "ID": "-KqE-alcVOt93b8JYqvb",
         "path": "Be with Open Awareness.html"
@@ -1328,7 +1334,7 @@ var aura = [
         "Day": 3,
         "Course": "Refreshing ",
         "Title": "Becoming ",
-        "Description": "This session is about becoming something that you know you can be. Whether it's having more patience, being more compassionate - whatever it is - climb into the moment with a little more attention and a little more care. In this session a internal body scan technique is used to release resistence and soften into what you are and what you're becoming. \nby Lauren Ziegler",
+        "Description": "This session is about becoming something that you know you can be. Whether it's having more patience, being more compassionate - whatever it is - climb into the moment with a little more attention and a little more care. In this session a internal body scan technique is used to release resistence and soften into what you are and what you're becoming. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e107",
         "path": "Becoming.html"
@@ -1337,7 +1343,7 @@ var aura = [
         "Day": 5,
         "Course": "Refreshing ",
         "Title": "Daily Refresh ",
-        "Description": "Give yourself a time to refresh your perspective taking in the stillness of the moment, when we can feel deeply comfortable, relaxed and at ease. \nby Happiness Insight",
+        "Description": "Give yourself a time to refresh your perspective taking in the stillness of the moment, when we can feel deeply comfortable, relaxed and at ease. ",
         "Author": "Happiness Insight",
         "ID": "hi6",
         "path": "Good Morning.html"
@@ -1346,7 +1352,7 @@ var aura = [
         "Day": 6,
         "Course": "Refreshing ",
         "Title": "Gratitude For The People In Your Life",
-        "Description": "Learn to offer gratitude to someone who has been good to you, cultivate and savour feelings of kindness and appreciation as a way to support your own wellbeing.\nby Kristy Arbon",
+        "Description": "Learn to offer gratitude to someone who has been good to you, cultivate and savour feelings of kindness and appreciation as a way to support your own wellbeing.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e81",
         "path": "Gratitude For The People In Your Life.html"
@@ -1355,7 +1361,7 @@ var aura = [
         "Day": 7,
         "Course": "Refreshing ",
         "Title": "Light",
-        "Description": "Cultivate peace from within and share the light with everyone around you through this powerful visualisation practice. \nby Ryan James Kenny",
+        "Description": "Cultivate peace from within and share the light with everyone around you through this powerful visualisation practice. ",
         "Author": "Ryan James Kenny",
         "ID": "r4",
         "path": "Light.html"
@@ -1364,7 +1370,7 @@ var aura = [
         "Day": 8,
         "Course": "Refreshing ",
         "Title": "Sink into Stillness",
-        "Description": "Underneath the busyness of our lives and our minds, there is a calm pool of stillness that we can always dip into. In this meditation you will connect with that stillness and return recharged and rejuvenated after this session. \nby Christina McMahon",
+        "Description": "Underneath the busyness of our lives and our minds, there is a calm pool of stillness that we can always dip into. In this meditation you will connect with that stillness and return recharged and rejuvenated after this session. ",
         "Author": "Christina McMahon",
         "ID": "cd10",
         "path": "Sink Into Stillness.html"
@@ -1373,7 +1379,7 @@ var aura = [
         "Day": 9,
         "Course": "Refreshing ",
         "Title": "Spaciousness",
-        "Description": "Space is everywhere. It's open, accepting, infinite, and indestructible. Tap into these freeing qualities as you open up to the spaciousness within you and around you.\nby Ryan James Kenny",
+        "Description": "Space is everywhere. It's open, accepting, infinite, and indestructible. Tap into these freeing qualities as you open up to the spaciousness within you and around you.",
         "Author": "Ryan James Kenny",
         "ID": "-KpXhQlgYf2CwfkwIbwl",
         "path": "Spaciousness.html"
@@ -1382,7 +1388,7 @@ var aura = [
         "Day": 10,
         "Course": "Refreshing ",
         "Title": "Thank You",
-        "Description": "In this session we find an easy, natural breathing pattern and attach an affirmation of gratitude, \"thank you\". It's a general thank you, and a full on inquiry into what it is you can be thankful for. Gratitude is the understanding that so many things have come together for us to just take one more breath, and that we're a part of something that is a privilege.\nby Lauren Ziegler",
+        "Description": "In this session we find an easy, natural breathing pattern and attach an affirmation of gratitude, \"thank you\". It's a general thank you, and a full on inquiry into what it is you can be thankful for. Gratitude is the understanding that so many things have come together for us to just take one more breath, and that we're a part of something that is a privilege.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e41",
         "path": "Thank You.html"
@@ -1391,7 +1397,7 @@ var aura = [
         "Day": 1,
         "Course": "Focus",
         "Title": "21-Breaths Meditation ",
-        "Description": "This short meditation practice can be helpful at times when the mind is really active, agitated or restless. By engaging the mind in focusing on a breathing routine and counting each breath up to twenty-one, the mind is encouraged to become calmer and more focussed. However, our intention is merely to encourage the mind, not to force it. We are approaching the practice with a sense of non-striving, allowing the mind to be as it is; if it is willing to settle, that’s fine, if not, that’s fine too – we simply notice it’s activity. If you become distracted and lose track of counting at any point, or if you reach twenty-one, simply begin again at one, and any time you wish to, simply let go of counting and observe the breath.\nby William James Davies, DCMT",
+        "Description": "This short meditation practice can be helpful at times when the mind is really active, agitated or restless. By engaging the mind in focusing on a breathing routine and counting each breath up to twenty-one, the mind is encouraged to become calmer and more focussed. However, our intention is merely to encourage the mind, not to force it. We are approaching the practice with a sense of non-striving, allowing the mind to be as it is; if it is willing to settle, that’s fine, if not, that’s fine too – we simply notice it’s activity. If you become distracted and lose track of counting at any point, or if you reach twenty-one, simply begin again at one, and any time you wish to, simply let go of counting and observe the breath.",
         "Author": "William James Davies, DCMT",
         "ID": "-Kr7nvf3aTlO2-BB2K_4",
         "path": "21-Breaths Meditation.html"
@@ -1400,7 +1406,7 @@ var aura = [
         "Day": 2,
         "Course": "Focus",
         "Title": "Awareness of Sounds",
-        "Description": "When we are beginning a meditation practice, we tend to have the idea that sounds are a distraction and we desire a perfectly tranquil, or soundproofed setting, for our spiritual endeavors. We should overcome that and learn how to be present in the moment, exactly as it is. If sounds are part of that present moment, use them as an object of focus to help turn your attention inward.\nby Hilary Jackendoff",
+        "Description": "When we are beginning a meditation practice, we tend to have the idea that sounds are a distraction and we desire a perfectly tranquil, or soundproofed setting, for our spiritual endeavors. We should overcome that and learn how to be present in the moment, exactly as it is. If sounds are part of that present moment, use them as an object of focus to help turn your attention inward.",
         "Author": "Hilary Jackendoff",
         "ID": "-Krsk6E8H2wm2bJEID6t",
         "path": "Awareness of Sounds.html"
@@ -1409,7 +1415,7 @@ var aura = [
         "Day": 3,
         "Course": "Focus",
         "Title": "Body Scan",
-        "Description": "Want to relax or refresh? The body scan is a relaxing way to become present by noticing bodily sensations.\nby Lyndi Smith",
+        "Description": "Want to relax or refresh? The body scan is a relaxing way to become present by noticing bodily sensations.",
         "Author": "Lyndi Smith",
         "ID": "l10",
         "path": "Body Scan - Lyndi.html"
@@ -1418,7 +1424,7 @@ var aura = [
         "Day": 4,
         "Course": "Focus",
         "Title": "Breath & Sounds",
-        "Description": "Pay attention to your breath and the sounds around you to increase focus.\nby Lisa Pollard",
+        "Description": "Pay attention to your breath and the sounds around you to increase focus.",
         "Author": "Lisa Pollard",
         "ID": "lp6",
         "path": "Breath _ Sounds.html"
@@ -1427,7 +1433,7 @@ var aura = [
         "Day": 5,
         "Course": "Focus",
         "Title": "Calm Inward Focus",
-        "Description": "Gather yourself inward and for a few precious moments, stop focusing on the external environment and what's going on there. This session will give you intentional inward focus. We use a classical and effective yogic breathing technique to hone our focus and calm the mind. \nby Lauren Ziegler ",
+        "Description": "Gather yourself inward and for a few precious moments, stop focusing on the external environment and what's going on there. This session will give you intentional inward focus. We use a classical and effective yogic breathing technique to hone our focus and calm the mind. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e124",
         "path": "Calm Inward Focus.html"
@@ -1436,7 +1442,7 @@ var aura = [
         "Day": 6,
         "Course": "Focus",
         "Title": "Mindful Listening Meditation",
-        "Description": "This meditation helps you to cultivate your present moment awareness. \nby Carla-Jo Geraghty",
+        "Description": "This meditation helps you to cultivate your present moment awareness. ",
         "Author": "Carla-Jo Geraghty",
         "ID": "-KpqM6NnPOWMiPfazwBO",
         "path": "Mindful Listening Meditation.html"
@@ -1445,7 +1451,7 @@ var aura = [
         "Day": 7,
         "Course": "Focus",
         "Title": "The Art of Stillness",
-        "Description": "Experience the art and beauty of stillness in your mind and body so that you may experience a deeper calm that exists within you. \nby Dorothy Ratusny",
+        "Description": "Experience the art and beauty of stillness in your mind and body so that you may experience a deeper calm that exists within you. ",
         "Author": "Dorothy Ratusny",
         "ID": "-KsWjlnpMIaScf3xkTxe",
         "path": "The Art of Stillness.html"
@@ -1454,7 +1460,7 @@ var aura = [
         "Day": 8,
         "Course": "Focus",
         "Title": "Three-Step Being Space",
-        "Description": "Feeling a little overwhelmed or stuck? Use these 3 steps of awareness to create just enough space to make a decision about your next life steps.\nby Mark Quirk",
+        "Description": "Feeling a little overwhelmed or stuck? Use these 3 steps of awareness to create just enough space to make a decision about your next life steps.",
         "Author": "Mark Quirk",
         "ID": "-KqE8XxbYQuWS9e2yjHf",
         "path": "Three-Step Being Space.html"
@@ -1463,7 +1469,7 @@ var aura = [
         "Day": 9,
         "Course": "Focus",
         "Title": "Visualize Your Goals",
-        "Description": "Do you have a cherished goal you're working toward? Visualisation is a powerful tool to get you focused and clear about achieving your goals. In order to \"be it,\" you have to be able to \"see it.\" Step into your best life with this powerful visualisation technique.\nby C + D (Christina + Darrin)",
+        "Description": "Do you have a cherished goal you're working toward? Visualisation is a powerful tool to get you focused and clear about achieving your goals. In order to \"be it,\" you have to be able to \"see it.\" Step into your best life with this powerful visualisation technique.",
         "Author": "C + D (Christina + Darrin)",
         "ID": "-KsOJxY1rZyyLWXAYTDK",
         "path": "Visualize Your Goals.html"
@@ -1472,7 +1478,7 @@ var aura = [
         "Day": 10,
         "Course": "Focus",
         "Title": "Waves of Breath",
-        "Description": "Pause for a few minutes to let the breath wash away stress and bring you back to the present.\nby Ryan James Kenny",
+        "Description": "Pause for a few minutes to let the breath wash away stress and bring you back to the present.",
         "Author": "Ryan James Kenny",
         "ID": "-Kpmuh_YqL9tYvY1Jb3O",
         "path": "Waves of Breath.html"
@@ -1481,7 +1487,7 @@ var aura = [
         "Day": 1,
         "Course": "Happiness",
         "Title": "Heart Light",
-        "Description": "Find your true heart light\n                  by C + D (Christina + Darrin)\n                  ",
+        "Description": "Find your true heart light",
         "Author": "C + D (Christina + Darrin)",
         "ID": "cd9(3)",
         "path": "Heart Light.html"
@@ -1490,7 +1496,7 @@ var aura = [
         "Day": 2,
         "Course": "Happiness",
         "Title": "Appreciative Joy",
-        "Description": "In our world today we are subtly taught to focus on the flaws in others. But when we start re-training our brains to notice their goodness instead, we are actually investing in our own happiness. When we are able to notice others' virtues, we are better able to appreciate it in ourselves as well. That appreciation for goodness is what we will be practicing in this meditation.\nby Christina McMahon ",
+        "Description": "In our world today we are subtly taught to focus on the flaws in others. But when we start re-training our brains to notice their goodness instead, we are actually investing in our own happiness. When we are able to notice others' virtues, we are better able to appreciate it in ourselves as well. That appreciation for goodness is what we will be practicing in this meditation.",
         "Author": "Christina McMahon (Aura)",
         "ID": "b40",
         "path": "Appreciative Joy.html"
@@ -1499,7 +1505,7 @@ var aura = [
         "Day": 3,
         "Course": "Happiness",
         "Title": "Attention to Happiness",
-        "Description": "In this session we feel the sense of an inner smile radiating throughout the entire body, mind and more. We imagine pulsating cells brimming with joy and bliss. We will use breath and watch thoughts and sensations as they change, bringing a deep sense of enlivenment. \nby Lauren Ziegler",
+        "Description": "In this session we feel the sense of an inner smile radiating throughout the entire body, mind and more. We imagine pulsating cells brimming with joy and bliss. We will use breath and watch thoughts and sensations as they change, bringing a deep sense of enlivenment. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e4",
         "path": "Attention to Happiness.html"
@@ -1508,7 +1514,7 @@ var aura = [
         "Day": 4,
         "Course": "Happiness",
         "Title": "Comfortable Here",
-        "Description": "Negative thoughts? This practice helps us direct attention away from thinking and enjoy comfortable sensations we may not be noticing.\nby Lyndi Smith",
+        "Description": "Negative thoughts? This practice helps us direct attention away from thinking and enjoy comfortable sensations we may not be noticing.",
         "Author": "Lyndi Smith",
         "ID": "l6",
         "path": "Comfortable Here.html"
@@ -1517,7 +1523,7 @@ var aura = [
         "Day": 5,
         "Course": "Happiness",
         "Title": "Cultivating Joy",
-        "Description": "Want to increase your happiness quota today? It may be as simple as tapping into the joy that others are experiencing. When you can do this with an open heart, it is an important corrective to feelings of envy. When you can feel genuine happiness for another person's win, you are communicating a new belief in abundance that there's more than enough happiness to go around.\nby Christina McMahon ",
+        "Description": "Want to increase your happiness quota today? It may be as simple as tapping into the joy that others are experiencing. When you can do this with an open heart, it is an important corrective to feelings of envy. When you can feel genuine happiness for another person's win, you are communicating a new belief in abundance that there's more than enough happiness to go around.",
         "Author": "Christina McMahon (Aura)",
         "ID": "b35",
         "path": "Cultivating Joy.html"
@@ -1526,7 +1532,7 @@ var aura = [
         "Day": 6,
         "Course": "Happiness",
         "Title": "Gratitude",
-        "Description": "Practice gratitude to cultivate happiness in your life.\nby Heather Prete",
+        "Description": "Practice gratitude to cultivate happiness in your life.",
         "Author": "Heather Prete",
         "ID": "hp2",
         "path": "Gratitude.html"
@@ -1535,7 +1541,7 @@ var aura = [
         "Day": 7,
         "Course": "Happiness",
         "Title": "Gratitude Meditation",
-        "Description": "It's so easy to wish that our lives were different - that we had a different job, lived in a different place or had a different partner. This is so often our pattern - break free of that pattern by acknowledging it when it arises and consciously cultivating gratitude. \nby Hilary Jackendoff",
+        "Description": "It's so easy to wish that our lives were different - that we had a different job, lived in a different place or had a different partner. This is so often our pattern - break free of that pattern by acknowledging it when it arises and consciously cultivating gratitude. ",
         "Author": "Hilary Jackendoff",
         "ID": "-KrsjDZENifwb40CH-EL",
         "path": "Gratitude Meditation.html"
@@ -1544,7 +1550,7 @@ var aura = [
         "Day": 8,
         "Course": "Happiness",
         "Title": "Light of Lovingkindness",
-        "Description": "Lovingkindness is the essence of a happy life. By generating boundless heart energy for ourselves and others, we open a gateway for more love to flow to us.\nby Christina McMahon",
+        "Description": "Lovingkindness is the essence of a happy life. By generating boundless heart energy for ourselves and others, we open a gateway for more love to flow to us.",
         "Author": "Christina McMahon",
         "ID": "cd5",
         "path": "Light of Lovingkindness.html"
@@ -1553,7 +1559,7 @@ var aura = [
         "Day": 9,
         "Course": "Happiness",
         "Title": "Lovingkindness for a Friend",
-        "Description": "Open the heart and mind and deepen your sense of connection with this lovingkindness practice directed towards a dear friend.  \nby Pause Meditation",
+        "Description": "Open the heart and mind and deepen your sense of connection with this lovingkindness practice directed towards a dear friend.  ",
         "Author": "Pause Meditation",
         "ID": "-Kq4taDGjhykrzvCgCEB",
         "path": "Loving-Kindness for a Friend.html"
@@ -1562,7 +1568,7 @@ var aura = [
         "Day": 10,
         "Course": "Happiness",
         "Title": "Offering Out Compassion and Lovingkindness",
-        "Description": "When we're feeling great, when our own cup is full of feelings of well-being, we can make ourselves even happier by offering those feelings of kindness and well-being out to other people.\nby Kristy Arbon ",
+        "Description": "When we're feeling great, when our own cup is full of feelings of well-being, we can make ourselves even happier by offering those feelings of kindness and well-being out to other people.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e68",
         "path": "Offering Out Compassion and Lovingkindness.html"
@@ -1571,7 +1577,7 @@ var aura = [
         "Day": 1,
         "Course": "Selflove",
         "Title": "A Moment of Self-Appreciation to Use Later",
-        "Description": "Allowing yourself to feel some appreciation for yourself. Things that you've done in your life have lead to you feeling this way. Allow yourself to delight in yourself and all of your good work, and then save this feeling for a time when you'll need it in the future.\nby Kristy Arbon ",
+        "Description": "Allowing yourself to feel some appreciation for yourself. Things that you've done in your life have lead to you feeling this way. Allow yourself to delight in yourself and all of your good work, and then save this feeling for a time when you'll need it in the future.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e84",
         "path": "A Moment of Self-Appreciation to Use Later.html"
@@ -1580,7 +1586,7 @@ var aura = [
         "Day": 2,
         "Course": "Selflove",
         "Title": "May You Have Everything You Need",
-        "Description": "Sit with yourself, be with yourself for a few minutes and offer yourself words of support and encouragement. May you thrive, may you feel peaceful, may you remember that you are a precious human being, may you feel at ease.\nby Kristy Arbon ",
+        "Description": "Sit with yourself, be with yourself for a few minutes and offer yourself words of support and encouragement. May you thrive, may you feel peaceful, may you remember that you are a precious human being, may you feel at ease.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e80",
         "path": "May You Have Everything You Need.html"
@@ -1589,7 +1595,7 @@ var aura = [
         "Day": 3,
         "Course": "Selflove",
         "Title": "Compassionate Self-talk",
-        "Description": "We're so hard on ourselves. True healing takes place when we're able to show up to a given condition honestly and fully, the highs and the lows. In this session, create a hospitable space that includes kindness towards yourself.\nby Lauren Ziegler",
+        "Description": "We're so hard on ourselves. True healing takes place when we're able to show up to a given condition honestly and fully, the highs and the lows. In this session, create a hospitable space that includes kindness towards yourself.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e7",
         "path": "Compassionate Self-talk.html"
@@ -1598,7 +1604,7 @@ var aura = [
         "Day": 4,
         "Course": "Selflove",
         "Title": "I Am Enough",
-        "Description": "This session uses slow, measured breaths to set it up so that you may do some self-inquiry. Look into the feeling of being overwhelmed and what other feelings come with it. \nby Lauren Ziegler",
+        "Description": "This session uses slow, measured breaths to set it up so that you may do some self-inquiry. Look into the feeling of being overwhelmed and what other feelings come with it. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e131",
         "path": "I Am Enough.html"
@@ -1607,7 +1613,7 @@ var aura = [
         "Day": 5,
         "Course": "Selflove",
         "Title": "Just As It Is",
-        "Description": "Bit by bit, tune into your inner world and notice what it's like to be you right now in your life. No need to figure anything out or fix anything, just noticing and letting it be. In this session we will use a body scan technique, allowing each part of our body to be just as it is.\nby Lauren Ziegler",
+        "Description": "Bit by bit, tune into your inner world and notice what it's like to be you right now in your life. No need to figure anything out or fix anything, just noticing and letting it be. In this session we will use a body scan technique, allowing each part of our body to be just as it is.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e104",
         "path": "Just As It Is.html"
@@ -1616,7 +1622,7 @@ var aura = [
         "Day": 6,
         "Course": "Selflove",
         "Title": "Kindness to Self - Using Phrases",
-        "Description": "In this kindness to self meditation we will gently cultivate a sense of warmth and kindness to ourselves. \nby Carla-Jo Geraghty",
+        "Description": "In this kindness to self meditation we will gently cultivate a sense of warmth and kindness to ourselves. ",
         "Author": "Carla-Jo Geraghty",
         "ID": "-KsIu5LljrPj0tLf3qjj",
         "path": "Kindness to Self - Using Phrases.html"
@@ -1625,7 +1631,7 @@ var aura = [
         "Day": 7,
         "Course": "Selflove",
         "Title": "Manifestation and Empathetic Joy",
-        "Description": "Empathetic Joy is delight in others' good fortune. When we view the world through the eyes of abundance, there's not much we can fail to attract into our own lives.\nby Christina McMahon",
+        "Description": "Empathetic Joy is delight in others' good fortune. When we view the world through the eyes of abundance, there's not much we can fail to attract into our own lives.",
         "Author": "Christina McMahon",
         "ID": "cd7",
         "path": "Manifestation and Empathetic Joy.html"
@@ -1634,7 +1640,7 @@ var aura = [
         "Day": 8,
         "Course": "Selflove",
         "Title": "Meditation for Inner Peace",
-        "Description": "Experience inner peace deliberately as you choose a point of focus within your body and hold attention and awareness here. As you allow your breath to be directed into this area, feel the sensations of peacefulness throughout your body.\nby Dorothy Ratusny",
+        "Description": "Experience inner peace deliberately as you choose a point of focus within your body and hold attention and awareness here. As you allow your breath to be directed into this area, feel the sensations of peacefulness throughout your body.",
         "Author": "Dorothy Ratusny",
         "ID": "-Krxk-O0zpOZ9MCZf-Xo",
         "path": "Meditation for Inner Peace.html"
@@ -1643,7 +1649,7 @@ var aura = [
         "Day": 9,
         "Course": "Selflove",
         "Title": "Self-Appreciation: 3 Things I Like About Myself",
-        "Description": "Deep down, in the core of your being, there are some really good things about yourself that you really like - allow yourself to savour these good feelings.\nby Kristy Arbon",
+        "Description": "Deep down, in the core of your being, there are some really good things about yourself that you really like - allow yourself to savour these good feelings.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e90",
         "path": "Self-Appreciation- 3 Things I Like About Myself.html"
@@ -1652,7 +1658,7 @@ var aura = [
         "Day": 10,
         "Course": "Selflove",
         "Title": "Worthiness",
-        "Description": "This is a visualisation session. We imagine a golden spark that grows and grows, which is the energy that helps you see your self-worth and your higher self shining.\nby Lauren Ziegler",
+        "Description": "This is a visualisation session. We imagine a golden spark that grows and grows, which is the energy that helps you see your self-worth and your higher self shining.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e43",
         "path": "Worthiness.html"
@@ -1661,7 +1667,7 @@ var aura = [
         "Day": 1,
         "Course": "Healing",
         "Title": "Boulders",
-        "Description": "This is a motivating session for working through the thing that's holding you back. We use the metaphor of boulder in the center of your room that you keep ignoring. Choose what you're going to do to clear the way once and for all. Decide to change your life for the good. \nby Lauren Ziegler",
+        "Description": "This is a motivating session for working through the thing that's holding you back. We use the metaphor of boulder in the center of your room that you keep ignoring. Choose what you're going to do to clear the way once and for all. Decide to change your life for the good. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e36",
         "path": "Boulders.html"
@@ -1670,7 +1676,7 @@ var aura = [
         "Day": 2,
         "Course": "Healing",
         "Title": "Breathing Kindness In, Releasing Difficulty Out",
-        "Description": "Intentionally breathing in kindness. You especially need kindness right now and you can breathe this in for yourself. Breathing out whatever you don't need right now - intentionally letting go of any difficulty.\nby Kristy Arbon",
+        "Description": "Intentionally breathing in kindness. You especially need kindness right now and you can breathe this in for yourself. Breathing out whatever you don't need right now - intentionally letting go of any difficulty.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e56",
         "path": "Breathing Kindness In_ Releasing Difficulty Out.html"
@@ -1679,7 +1685,7 @@ var aura = [
         "Day": 3,
         "Course": "Healing",
         "Title": "Building Resilience",
-        "Description": "Sometimes it can feel like we're going through life pushing a boulder uphill that's three times the size of us. There are so many things all at once and we can get overwhelmed. This session isn't about fixing it all, because we'll never really stop pushing that boulder. However this session will teach you how to become so much more resilient and stronger, so that the uphill game of life is less burdensome.\nby Lauren Ziegler",
+        "Description": "Sometimes it can feel like we're going through life pushing a boulder uphill that's three times the size of us. There are so many things all at once and we can get overwhelmed. This session isn't about fixing it all, because we'll never really stop pushing that boulder. However this session will teach you how to become so much more resilient and stronger, so that the uphill game of life is less burdensome.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e37",
         "path": "Building Resilience.html"
@@ -1688,7 +1694,7 @@ var aura = [
         "Day": 4,
         "Course": "Healing",
         "Title": "Filled",
-        "Description": "In this session, we close our eyes and go through the whole body piece by piece, filling it with light. We bring relaxed and vibrant attention into the body, and we settle the mind. \nby Lauren Ziegler",
+        "Description": "In this session, we close our eyes and go through the whole body piece by piece, filling it with light. We bring relaxed and vibrant attention into the body, and we settle the mind. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e99",
         "path": "Filled.html"
@@ -1697,7 +1703,7 @@ var aura = [
         "Day": 5,
         "Course": "Healing",
         "Title": "Freakout Formula",
-        "Description": "This session will offer you a simple and profound freakout formula. See through your reactivity and ease your sufferring. These are steps to use mindfulness to help get out in front of the freaking out. \nby Lauren Ziegler",
+        "Description": "This session will offer you a simple and profound freakout formula. See through your reactivity and ease your sufferring. These are steps to use mindfulness to help get out in front of the freaking out. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e20",
         "path": "Freakout Formula.html"
@@ -1706,7 +1712,7 @@ var aura = [
         "Day": 6,
         "Course": "Healing",
         "Title": "Letting Go of Resistance ",
-        "Description": "When we fight our reality or struggle against change, we can inadvertently create more suffering for ourselves. By allowing ourselves to let go and accept things as they are, we suffer less. This meditation is designed to help you let go of the things that you can't control through the use of your body and mind. \nby Happiness Insight",
+        "Description": "When we fight our reality or struggle against change, we can inadvertently create more suffering for ourselves. By allowing ourselves to let go and accept things as they are, we suffer less. This meditation is designed to help you let go of the things that you can't control through the use of your body and mind. ",
         "Author": "Happiness Insight",
         "ID": "-Ksdh0wWxnyxA7vaXU8n",
         "path": "Letting Go of Resistance.html"
@@ -1715,7 +1721,7 @@ var aura = [
         "Day": 7,
         "Course": "Healing",
         "Title": "Reinforcements",
-        "Description": "In this session, we bring in all the reinforcements. Bring in your special memories, places, and people that give you a sense of peace and well-being and evoke feelings of comfort and rest. As the sense of ease and security remains, you'll discover that you have these inner resources with you all of the time. \nby Lauren Ziegler",
+        "Description": "In this session, we bring in all the reinforcements. Bring in your special memories, places, and people that give you a sense of peace and well-being and evoke feelings of comfort and rest. As the sense of ease and security remains, you'll discover that you have these inner resources with you all of the time. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e12",
         "path": "Reinforcements.html"
@@ -1724,7 +1730,7 @@ var aura = [
         "Day": 8,
         "Course": "Healing",
         "Title": "Self Compassion Break",
-        "Description": "Learn to take a self-compassion break in your day. You deserve it! \nby Dea Rivera",
+        "Description": "Learn to take a self-compassion break in your day. You deserve it! ",
         "Author": "Dea Rivera",
         "ID": "-Kqhcwmo7WUXVz8cmrwc",
         "path": "Self Compassion Break.html"
@@ -1733,7 +1739,7 @@ var aura = [
         "Day": 9,
         "Course": "Healing",
         "Title": "Soften and Let Go Again",
-        "Description": "This session begins with deep breathing to make it easier to soften and loosen the grip physically, mentally, emotionally, and spiritually.\nby Lauren Ziegler",
+        "Description": "This session begins with deep breathing to make it easier to soften and loosen the grip physically, mentally, emotionally, and spiritually.",
         "Author": "Lauren Ziegler",
         "ID": "-KsP1iYUGYIV9VrUQZdf",
         "path": "Soften and Let Go Again.html"
@@ -1742,7 +1748,7 @@ var aura = [
         "Day": 10,
         "Course": "Healing",
         "Title": "This Emotion is not Me or Mine",
-        "Description": "We don't choose to have difficult emotions. They are not ours to claim. We didn't create them, we can release them, and they don't define us. We can find a little relief in the moment by choosing to not hang on to difficult emotions.\nby Kristy Arbon",
+        "Description": "We don't choose to have difficult emotions. They are not ours to claim. We didn't create them, we can release them, and they don't define us. We can find a little relief in the moment by choosing to not hang on to difficult emotions.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e67",
         "path": "This Emotion is not Me or Mine.html"
@@ -1751,7 +1757,7 @@ var aura = [
         "Day": 1,
         "Course": "Relaxation",
         "Title": "Being Rocked by the Breath",
-        "Description": "Noticing the gentle rhythm of your breathing, the way your body is sweetly rocked by the breath like a child being rocked in their parent's arms, allowing your body to be caressed by the breath.\nby Kristy Arbon",
+        "Description": "Noticing the gentle rhythm of your breathing, the way your body is sweetly rocked by the breath like a child being rocked in their parent's arms, allowing your body to be caressed by the breath.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e64",
         "path": "Being Rocked by the Breath.html"
@@ -1760,7 +1766,7 @@ var aura = [
         "Day": 2,
         "Course": "Relaxation",
         "Title": "Belly Breathing",
-        "Description": "This session is focused on physically expanding your breathing. Breathing this way into the low abdomen will help calm emotions and the mind.\nby Lauren Ziegler",
+        "Description": "This session is focused on physically expanding your breathing. Breathing this way into the low abdomen will help calm emotions and the mind.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e96",
         "path": "Belly Breathing.html"
@@ -1769,7 +1775,7 @@ var aura = [
         "Day": 3,
         "Course": "Relaxation",
         "Title": "Body Scan",
-        "Description": "This body scan trains awareness and opens capacity for feeling more subtly. It trains the ability to hone in and feel more concentrated and then widen to allow your awareness to include a broader span. It can have the side effect of relieving pain and anxiety. \nby Lauren Ziegler",
+        "Description": "This body scan trains awareness and opens capacity for feeling more subtly. It trains the ability to hone in and feel more concentrated and then widen to allow your awareness to include a broader span. It can have the side effect of relieving pain and anxiety. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "b2",
         "path": "Body Scan.html"
@@ -1778,7 +1784,7 @@ var aura = [
         "Day": 4,
         "Course": "Relaxation",
         "Title": "Letting Go of the Work Day",
-        "Description": "When we transition from our work day to home, we can sometimes take home the work frustrations and stress from our day, and let it impact our home life. This meditation helps you to enter the \"third space\", a transitionary space that allows us to let go of work and our busy day, and enter into a new and replenished headspace. \nby Happiness Insight",
+        "Description": "When we transition from our work day to home, we can sometimes take home the work frustrations and stress from our day, and let it impact our home life. This meditation helps you to enter the \"third space\", a transitionary space that allows us to let go of work and our busy day, and enter into a new and replenished headspace. ",
         "Author": "Happiness Insight",
         "ID": "-Kqta0rtBcIYBpN3D5_P",
         "path": "Letting Go of the Work Day.html"
@@ -1787,7 +1793,7 @@ var aura = [
         "Day": 5,
         "Course": "Relaxation",
         "Title": "Letting Go Waterfall ",
-        "Description": "This session uses a breathing practice to create the effect of a longer exhale. This has a soothing effect on the nervous system, calming the body and mind. It's a specific yoga technique to connect you with yourself in a safe way. It's especially helpful for those times we want to go to sleep, let go more, be clearer, or speak when needed.\nby Lauren Ziegler",
+        "Description": "This session uses a breathing practice to create the effect of a longer exhale. This has a soothing effect on the nervous system, calming the body and mind. It's a specific yoga technique to connect you with yourself in a safe way. It's especially helpful for those times we want to go to sleep, let go more, be clearer, or speak when needed.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e125",
         "path": "Letting Go Waterfall.html"
@@ -1796,7 +1802,7 @@ var aura = [
         "Day": 6,
         "Course": "Relaxation",
         "Title": "One Breath At A Time",
-        "Description": "Distracted? Restless? This practice helps us become present by taking things one breath at a time.\nby Lyndi Smith",
+        "Description": "Distracted? Restless? This practice helps us become present by taking things one breath at a time.",
         "Author": "Lyndi Smith",
         "ID": "l9",
         "path": "One Breath At A Time.html"
@@ -1805,7 +1811,7 @@ var aura = [
         "Day": 7,
         "Course": "Relaxation",
         "Title": "Release",
-        "Description": "This session uses a yogic breathing technique that is cooling to the body and has a deep effect of calming the nervous system, difficult emotions, and even soothes inflamation and pain in the body. \nby Lauren Ziegler",
+        "Description": "This session uses a yogic breathing technique that is cooling to the body and has a deep effect of calming the nervous system, difficult emotions, and even soothes inflamation and pain in the body. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e94",
         "path": "Release.html"
@@ -1814,7 +1820,7 @@ var aura = [
         "Day": 8,
         "Course": "Relaxation",
         "Title": "Relaxation",
-        "Description": "Relaxation is an art and a science. By relaxation, we mean a release of tension in both the mind and the body for a period of time to allow complete rest and revitalisation. Like sleep, only these days we tend to go to bed with so much tension that we wake up feeling exhausted. It's a life changing thing to get to relax.\nby Lauren Ziegler",
+        "Description": "Relaxation is an art and a science. By relaxation, we mean a release of tension in both the mind and the body for a period of time to allow complete rest and revitalisation. Like sleep, only these days we tend to go to bed with so much tension that we wake up feeling exhausted. It's a life changing thing to get to relax.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e9",
         "path": "Relaxation.html"
@@ -1823,7 +1829,7 @@ var aura = [
         "Day": 9,
         "Course": "Relaxation",
         "Title": "Releasing Tension from the Body",
-        "Description": "This practice involves letting tension go from each part of the body sequentially.\nby Suzie Brown",
+        "Description": "This practice involves letting tension go from each part of the body sequentially.",
         "Author": "Suzie Brown",
         "ID": "-KqmVgS6yx2vqT6FXbI0",
         "path": "Releasing Tension from the Body.html"
@@ -1832,7 +1838,7 @@ var aura = [
         "Day": 10,
         "Course": "Relaxation",
         "Title": "Soothing Breath",
-        "Description": "Feeling tense? This practice helps us let go of tension and relax our mind and body.\nby Lyndi Smith",
+        "Description": "Feeling tense? This practice helps us let go of tension and relax our mind and body.",
         "Author": "Lyndi Smith",
         "ID": "-KpprCahe4rGNmbmQncQ",
         "path": "Soothing Breath.html"
@@ -1841,7 +1847,7 @@ var aura = [
         "Day": 1,
         "Course": "Stress",
         "Title": "Be a Tree",
-        "Description": "Imagine placing your back up against a large tree, feeling supported and steady. We use all the senses to imagine this tree and the warmth of the sun nourishing down into the trunk, to the roots. Relax into the tree and feel the sunlight nourishing you from the top of your head down into your feet. This is a meditation for becoming sturdy and grounded for when you're feeling under the weather or need some inspiration.\nby Lauren Ziegler",
+        "Description": "Imagine placing your back up against a large tree, feeling supported and steady. We use all the senses to imagine this tree and the warmth of the sun nourishing down into the trunk, to the roots. Relax into the tree and feel the sunlight nourishing you from the top of your head down into your feet. This is a meditation for becoming sturdy and grounded for when you're feeling under the weather or need some inspiration.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e93",
         "path": "Be a Tree.html"
@@ -1850,7 +1856,7 @@ var aura = [
         "Day": 2,
         "Course": "Stress",
         "Title": "Calmness in Mind and Body",
-        "Description": "Calm your mind and body during stressful times. \nby Dorothy Ratusny",
+        "Description": "Calm your mind and body during stressful times. ",
         "Author": "Dorothy Ratusny",
         "ID": "d9",
         "path": "Calmness in Mind and Body.html"
@@ -1859,7 +1865,7 @@ var aura = [
         "Day": 3,
         "Course": "Stress",
         "Title": "Equanimity in You",
-        "Description": "The only thing constant in life is change. So even when you are going through something difficult, you can take comfort in the fact that your life is always changing, and even difficult emotions eventually transform. We are all in a constant state of flux. When you can approach life from this perspective, you start living on an even keel, and even the most challenging of emotions don't seem so overwhelming.\nby Christina McMahon",
+        "Description": "The only thing constant in life is change. So even when you are going through something difficult, you can take comfort in the fact that your life is always changing, and even difficult emotions eventually transform. We are all in a constant state of flux. When you can approach life from this perspective, you start living on an even keel, and even the most challenging of emotions don't seem so overwhelming.",
         "Author": "Christina McMahon (Aura)",
         "ID": "e53",
         "path": "Equanimity in You.html"
@@ -1868,7 +1874,7 @@ var aura = [
         "Day": 4,
         "Course": "Stress",
         "Title": "I Need to Take a Breather",
-        "Description": "There are certain times in the day when we just need to take a breath and reconnect with ourselves. This meditaiton helps you to step out of the busyness of your day and gain back some clarity. \nby Happiness Insight",
+        "Description": "There are certain times in the day when we just need to take a breath and reconnect with ourselves. This meditaiton helps you to step out of the busyness of your day and gain back some clarity. ",
         "Author": "Happiness Insight",
         "ID": "hi2",
         "path": "I Need to Take a Breather.html"
@@ -1877,7 +1883,7 @@ var aura = [
         "Day": 5,
         "Course": "Stress",
         "Title": "Shifting from \"Doing\" to \"Being\"",
-        "Description": "Are you firmly in \"doing\" mode today? Find some stress relief by giving yourself three minutes to sink into \"being.\" After you rejuvenate yourself, the action that you take today will be much more effective.\nby C + D (Christina + Darrin)",
+        "Description": "Are you firmly in \"doing\" mode today? Find some stress relief by giving yourself three minutes to sink into \"being.\" After you rejuvenate yourself, the action that you take today will be much more effective.",
         "Author": "C + D (Christina + Darrin)",
         "ID": "-KrNEFJ4vZygme71d56Z",
         "path": "Shifting from _Doing_ to _Being_.html"
@@ -1886,7 +1892,7 @@ var aura = [
         "Day": 6,
         "Course": "Stress",
         "Title": "Slowing Down in a Busy Day",
-        "Description": "Our lives are busy. We tend to spend a lot of our day rushing from one thing to the next. This meditation allows you to slow down, find peace and serenity, and is particularly helpful if you have been feeling stressed or overwhelmed. \nby Happiness Insight",
+        "Description": "Our lives are busy. We tend to spend a lot of our day rushing from one thing to the next. This meditation allows you to slow down, find peace and serenity, and is particularly helpful if you have been feeling stressed or overwhelmed. ",
         "Author": "Happiness Insight",
         "ID": "-KsAEVTtVKqEx-8dqj8Q",
         "path": "Slowing Down in a Busy Day.html"
@@ -1895,7 +1901,7 @@ var aura = [
         "Day": 7,
         "Course": "Stress",
         "Title": "Taking Off the Shield",
-        "Description": "Imagine being in a place where you just let the stressful things drip off you. Imagine letting some of the rigidity lift up off you so your breathing flows in and out with no hindrance. In this session we take off the shield and focus on ease of breathing. \nby Lauren Ziegler",
+        "Description": "Imagine being in a place where you just let the stressful things drip off you. Imagine letting some of the rigidity lift up off you so your breathing flows in and out with no hindrance. In this session we take off the shield and focus on ease of breathing. ",
         "Author": "Lauren Ziegler",
         "ID": "-KrECP1Nz_TtlY7D2N5L",
         "path": "Taking Off the Shield.html"
@@ -1904,7 +1910,7 @@ var aura = [
         "Day": 8,
         "Course": "Stress",
         "Title": "Thoughts on a Leaf",
-        "Description": "Quiet your mind with this practice as you visualize a lovely stream alongside you.  It may be helpful when your mind feels busy or emotions feel strong\nby Dea Rivera",
+        "Description": "Quiet your mind with this practice as you visualize a lovely stream alongside you.  It may be helpful when your mind feels busy or emotions feel strong",
         "Author": "Dea Rivera",
         "ID": "-KsHBNpfqyvomcc98SH7",
         "path": "Thoughts on a Leaf.html"
@@ -1913,7 +1919,7 @@ var aura = [
         "Day": 9,
         "Course": "Stress",
         "Title": "Time Alone in Nature ",
-        "Description": "This is a visualisation session. We bring to mind a special place in nature and access the feelings this place provides. This is about cultivating an \"inner resource\" by recalling the feeling of time alone in nature. \nby Lauren Ziegler",
+        "Description": "This is a visualisation session. We bring to mind a special place in nature and access the feelings this place provides. This is about cultivating an \"inner resource\" by recalling the feeling of time alone in nature. ",
         "Author": "Lauren Ziegler",
         "ID": "-KrEE4frzzd3ZZcHV-4P",
         "path": "Time Alone in Nature .html"
@@ -1922,7 +1928,7 @@ var aura = [
         "Day": 10,
         "Course": "Stress",
         "Title": "Systematic Body Relaxation",
-        "Description": "A stressed mind automatically implies a stressed body. In this session we work to relax the mind and body,  to help relieve stress and give you that much needed break. Recieve expert guidance in cycling your attention through your body systematically, a technique for feeling and releasing the tension that you don't need to be carrying. \nby Lauren Ziegler",
+        "Description": "A stressed mind automatically implies a stressed body. In this session we work to relax the mind and body,  to help relieve stress and give you that much needed break. Recieve expert guidance in cycling your attention through your body systematically, a technique for feeling and releasing the tension that you don't need to be carrying. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e13",
         "path": "Systematic Body Relaxation.html"
@@ -1931,7 +1937,7 @@ var aura = [
         "Day": 1,
         "Course": "Anxiety",
         "Title": "10 Mindful Breaths",
-        "Description": "Challenge yourself with this practice of breathing and counting, focusing solely on the breath. It's a simple practice, but not easy. \nby Dea Rivera",
+        "Description": "Challenge yourself with this practice of breathing and counting, focusing solely on the breath. It's a simple practice, but not easy. ",
         "Author": "Dea Rivera",
         "ID": "-Kr8WOMm_AOnOrxj2YFl",
         "path": "10 Mindful Breaths.html"
@@ -1940,7 +1946,7 @@ var aura = [
         "Day": 2,
         "Course": "Anxiety",
         "Title": "Slowing Down",
-        "Description": "When you're feeling stressed or anxious, everything seems to be moving quickly: thoughts race through your mind, and your heart may feel like it is going to explode in your chest. In this meditation, you'll intentionally slow down the breath, and then check in with your thoughts and your heart rate to see if they have also slowed.\n                     by C + D (Christina + Darrin)\n                  ",
+        "Description": "When you're feeling stressed or anxious, everything seems to be moving quickly: thoughts race through your mind, and your heart may feel like it is going to explode in your chest. In this meditation, you'll intentionally slow down the breath, and then check in with your thoughts and your heart rate to see if they have also slowed.",
         "Author": "C + D (Christina + Darrin)",
         "ID": "-KqoTTpIs4i6PHKsTaIF",
         "path": "Slowing Down.html"
@@ -1949,7 +1955,7 @@ var aura = [
         "Day": 3,
         "Course": "Anxiety",
         "Title": "Befriending Difficulty",
-        "Description": "Overwhelmed with emotions? This practice helps us accept and let go of our struggling.\nby Lyndi Smith",
+        "Description": "Overwhelmed with emotions? This practice helps us accept and let go of our struggling.",
         "Author": "Lyndi Smith",
         "ID": "l11",
         "path": "Befriending Difficulty.html"
@@ -1958,7 +1964,7 @@ var aura = [
         "Day": 4,
         "Course": "Anxiety",
         "Title": "Calm",
-        "Description": "Calm the mind with this simple yet powerful breath meditation. \nby Ryan James Kenny",
+        "Description": "Calm the mind with this simple yet powerful breath meditation. ",
         "Author": "Ryan James Kenny",
         "ID": "r2",
         "path": "Calm.html"
@@ -1967,7 +1973,7 @@ var aura = [
         "Day": 5,
         "Course": "Anxiety",
         "Title": "Where to Park Your Mind",
-        "Description": "This session is about thought management and mature perspective and will give you the gift of looking at your situation in a new way, so that you can park your mind there and move forward with hope and strength. \nby Lauren Ziegler",
+        "Description": "This session is about thought management and mature perspective and will give you the gift of looking at your situation in a new way, so that you can park your mind there and move forward with hope and strength. ",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e44",
         "path": "Where to Park Your Mind.html"
@@ -1976,7 +1982,7 @@ var aura = [
         "Day": 6,
         "Course": "Anxiety",
         "Title": "Gentleness",
-        "Description": "We use a gently expanded breathing technique to bring relaxation into parts of the body, mind and more. This yogic technique of breathing into the back body (the lungs in the back) brings a sense of tenderness and ease, while leaving your feeling energised and poised for moving softly through your day with more flexibility.\nby Lauren Ziegler",
+        "Description": "We use a gently expanded breathing technique to bring relaxation into parts of the body, mind and more. This yogic technique of breathing into the back body (the lungs in the back) brings a sense of tenderness and ease, while leaving your feeling energised and poised for moving softly through your day with more flexibility.",
         "Author": "Lauren Ziegler (Aura)",
         "ID": "e112",
         "path": "Gentleness.html"
@@ -1985,7 +1991,7 @@ var aura = [
         "Day": 7,
         "Course": "Anxiety",
         "Title": "Letting Go of Anxiety ",
-        "Description": "In our daily lives, if we stop and tune in, we can often sense a background hum of anxiety or stress. This meditation has been designed to help you let go of this constant feeling of stress and anxiety, and to inside find equanimity and peace. \nby Happiness Insight",
+        "Description": "In our daily lives, if we stop and tune in, we can often sense a background hum of anxiety or stress. This meditation has been designed to help you let go of this constant feeling of stress and anxiety, and to inside find equanimity and peace. ",
         "Author": "Happiness Insight",
         "ID": "-KsM12wH81JsVHs7jblW",
         "path": "Letting Go of Anxiety.html"
@@ -1994,7 +2000,7 @@ var aura = [
         "Day": 8,
         "Course": "Anxiety",
         "Title": "S T O P Meditation",
-        "Description": "The STOP meditation is a simple way to reconnect to yourself physically, mentally, and emotionally. You can do this practice throughout your day whenever you feel disconnected from yourself.\nby Bill Scheinman",
+        "Description": "The STOP meditation is a simple way to reconnect to yourself physically, mentally, and emotionally. You can do this practice throughout your day whenever you feel disconnected from yourself.",
         "Author": "Bill Scheinman",
         "ID": "-KqjDZXtyL2_G3QE53E4",
         "path": "S T O P Meditation.html"
@@ -2003,7 +2009,7 @@ var aura = [
         "Day": 9,
         "Course": "Anxiety",
         "Title": "Relief from Anxiety",
-        "Description": "Experience a simple and effective way to regulate your breath that instantly slows your breathing rate, blood pressure and heart rate - allowing you relief from anxiety.\nby Dorothy Ratusny",
+        "Description": "Experience a simple and effective way to regulate your breath that instantly slows your breathing rate, blood pressure and heart rate - allowing you relief from anxiety.",
         "Author": "Dorothy Ratusny",
         "ID": "-KrxqdWyodGUPsx506wa",
         "path": "Relief from Anxiety.html"
@@ -2012,7 +2018,7 @@ var aura = [
         "Day": 10,
         "Course": "Anxiety",
         "Title": "You Are A Deeply Caring Person",
-        "Description": "We need to take care of ourselves so that we can take care of the people and tasks in our life. Take a few moments to connect with yourself and to remind yourself that you are worthy of your own care and concern, and the reason you feel stressed is because you are a deeply caring person.\nby Kristy Arbon ",
+        "Description": "We need to take care of ourselves so that we can take care of the people and tasks in our life. Take a few moments to connect with yourself and to remind yourself that you are worthy of your own care and concern, and the reason you feel stressed is because you are a deeply caring person.",
         "Author": "Kristy Arbon (Aura)",
         "ID": "e62",
         "path": "You Are A Deeply Caring Person.html"
@@ -2032,7 +2038,7 @@ var aura = [
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assets_aura_config_aura_config__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__ = __webpack_require__(287);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2073,7 +2079,8 @@ var AuraContentPage = (function () {
             title: "Morning Meditations",
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut blandit mi. Proin condimentum dolor vitae porttitor imperdiet. Cras erat ipsum, cursus feugiat ligula ac, posuere placerat elit. Nunc volutpat sollicitudin imperdiet. Maecenas lobortis quis sapien vel porta. Aenean cursus felis et tortor volutpat consectetur. Duis in condimentum ante, id viverra justo.ips",
             id: 'h1',
-            link: this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html")
+            link: this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/10%20Mindful%20Breaths.html"),
+            author: 'AURA'
         };
         var data = this.navParams.get('data');
         /* If there are no data in navparams *
@@ -2089,6 +2096,7 @@ var AuraContentPage = (function () {
             this.module.id = data.id;
             this.module.course = data.course;
             this.module.day = data.day;
+            this.module.author = data.author;
             this.module.link = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/aura/Neutrogena_widgets/" + encodeURIComponent(data.path));
         }
     }
@@ -2208,7 +2216,7 @@ __decorate([
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
+        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n\n      <p class="author">\n        by {{module?.author}}\n      </p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -2309,7 +2317,7 @@ ScriptService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2340,14 +2348,9 @@ var ProgressModalComponent = (function () {
         this.show = false;
     }
     ProgressModalComponent.prototype.ngOnInit = function () {
-        if (this.app.hasLoggedIn()) {
-            this.day = this.app.nextLesson(this.app.currentCourse);
-        }
-        else {
-            this.day = this.app.lastLesson(this.app.currentCourse);
-        }
+        this.day = this.app.nextLesson(this.app.currentCourse);
         this.length = this.app.getCourseDuration(this.app.currentCourse);
-        console.log(this);
+        console.log("progress set", this.day, this.length);
     };
     ProgressModalComponent.prototype.toHome = function () {
         var _this = this;
@@ -2401,7 +2404,7 @@ ProgressModalComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(49);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2509,12 +2512,91 @@ ForgotPasswordPage = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScanPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_age_gate_age_gate__ = __webpack_require__(68);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+/**
+ * Native QR scan handler / redirector
+ *
+ */
+var ScanPage = (function () {
+    function ScanPage(navCtrl, navParams, evt, app, loader) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.evt = evt;
+        this.app = app;
+        this.loader = loader;
+    }
+    ScanPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad ScanPage');
+    };
+    ScanPage.prototype.ionViewWillEnter = function () {
+        var _this = this;
+        console.log("ngOnInit ScanPage");
+        var load = this.loader.create({
+            spinner: 'crescent',
+            dismissOnPageChange: true,
+            showBackdrop: true,
+            content: "Please wait...",
+            enableBackdropDismiss: false
+        });
+        load.present();
+        var thng = this.navParams.get("thng");
+        this.evt.createAppUser(!this.app.hasLoggedIn()).then(function (usr) {
+            _this.evt.getThngContextById(thng, !_this.app.hasLoggedIn()).then(function (thng) {
+                _this.app.saveThngContext(thng);
+                load.dismiss();
+                _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__pages_age_gate_age_gate__["a" /* AgeGatePage */]);
+            }).catch(function (err) {
+                load.dismiss();
+                console.log("no thng like that", err);
+                _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */]);
+            });
+        });
+    };
+    return ScanPage;
+}());
+ScanPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-scan',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/scan/scan.html"*/'<ion-content padding id="homeMobile">\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/scan/scan.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], ScanPage);
+
+//# sourceMappingURL=scan.js.map
+
+/***/ }),
+
+/***/ 290:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeleteAccountPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_account_my_account__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2586,14 +2668,14 @@ DeleteAccountPage = __decorate([
 
 /***/ }),
 
-/***/ 290:
+/***/ 291:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(45);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2670,13 +2752,13 @@ ReorderModalComponent = __decorate([
 
 /***/ }),
 
-/***/ 291:
+/***/ 292:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(292);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(296);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(293);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(297);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -2684,7 +2766,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 296:
+/***/ 297:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2692,26 +2774,27 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(333);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(334);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(646);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(648);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(290);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(647);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(649);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_components_module__ = __webpack_require__(648);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_scan_scan__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__providers_app_script_service__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_components_module__ = __webpack_require__(650);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2726,6 +2809,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /* Pages */
+
 
 
 
@@ -2756,7 +2840,8 @@ var pages = [
     __WEBPACK_IMPORTED_MODULE_15__pages_age_gate_age_gate__["a" /* AgeGatePage */],
     __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__["a" /* ResetPasswordPage */],
     __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__["a" /* AuraContentPage */],
-    __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */]
+    __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__["a" /* AuraMainPage */],
+    __WEBPACK_IMPORTED_MODULE_18__pages_scan_scan__["a" /* ScanPage */]
 ];
 var AppModule = (function () {
     function AppModule() {
@@ -2767,7 +2852,7 @@ AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["L" /* NgModule */])({
         declarations: pages,
         imports: [
-            __WEBPACK_IMPORTED_MODULE_22__components_components_module__["a" /* ComponentsModule */],
+            __WEBPACK_IMPORTED_MODULE_23__components_components_module__["a" /* ComponentsModule */],
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */], {}, {
@@ -2775,6 +2860,7 @@ AppModule = __decorate([
                     { component: __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */], name: 'Home', segment: 'home' },
                     { component: __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__["a" /* SignUpPage */], name: 'SignUpPage', segment: 'sign-up' },
                     { component: __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__["a" /* AuthPage */], name: 'Auth0Page', segment: ':data' },
+                    { component: __WEBPACK_IMPORTED_MODULE_18__pages_scan_scan__["a" /* ScanPage */], name: 'NativeScanPage', segment: 'scan' },
                     { component: __WEBPACK_IMPORTED_MODULE_10__pages_login_login__["a" /* LoginPage */], name: 'LoginPage', segment: 'login' },
                     { component: __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__["a" /* MyAccountPage */], name: 'MyAccountPage', segment: 'my-account' },
                     { component: __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__["a" /* DeleteAccountPage */], name: 'DeleteAccountPage', segment: 'delete-account' },
@@ -2792,10 +2878,10 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__["a" /* SplashScreen */],
             { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicErrorHandler */] },
-            __WEBPACK_IMPORTED_MODULE_18__providers_evt_evt__["a" /* EvtProvider */],
-            __WEBPACK_IMPORTED_MODULE_19__providers_app_app__["a" /* AppProvider */],
-            __WEBPACK_IMPORTED_MODULE_20__providers_auth_auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_21__providers_app_script_service__["a" /* ScriptService */]
+            __WEBPACK_IMPORTED_MODULE_19__providers_evt_evt__["a" /* EvtProvider */],
+            __WEBPACK_IMPORTED_MODULE_20__providers_app_app__["a" /* AppProvider */],
+            __WEBPACK_IMPORTED_MODULE_21__providers_auth_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_22__providers_app_script_service__["a" /* ScriptService */]
         ]
     })
 ], AppModule);
@@ -2804,148 +2890,20 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 333:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-//import { NoticeComponent } from "../components/notice/notice";
-//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
-
-
-var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
-        this.platform = platform;
-        this.statusBar = statusBar;
-        this.splashScreen = splashScreen;
-        this.app = app;
-        this.evt = evt;
-        this.loading = loading;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
-        this.text = "";
-        this.show = false;
-        this.noLink = true;
-        this.initializeApp();
-        // used for an example of ngFor and navigation
-        this.pages = [
-            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] }
-        ];
-    }
-    MyApp.prototype.ngOnInit = function () {
-        var _this = this;
-        if (!this.evt.hasUserContext()) {
-            return;
-        }
-        var self = this;
-        var loading = self.loading.create({
-            spinner: 'crescent',
-            content: "Please wait...",
-            enableBackdropDismiss: true
-        });
-        loading.present();
-        this.app.initCourses().then(function () {
-            _this.app.initProgArr().then(function () {
-                console.log("Last completed:" + _this.app.getLastCompletedCourse());
-                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-                _this.app.completeLogin(); //if login() is called
-                loading.dismiss();
-                _this.nav.setRoot("AuraMainPage");
-            });
-        });
-    };
-    MyApp.prototype.ngAfterViewInit = function () {
-        var _this = this;
-        this.nav.viewDidEnter.subscribe(function (data) {
-            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
-                _this.noticePopUp();
-            }
-        });
-    };
-    MyApp.prototype.noticePopUp = function () {
-        if (this.app.hasSignInNotice()) {
-            this.show = true;
-            this.text = 'Sign in to track your progress.';
-            this.noLink = true;
-        }
-        else if (this.app.hasReorderNotice()) {
-            this.show = true;
-            this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
-            this.noLink = false;
-            this.ext_url = {
-                name: 'reorder',
-                link: __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__["a" /* Config */].ext_links.reorder
-            };
-        }
-    };
-    MyApp.prototype.initializeApp = function () {
-        var _this = this;
-        var self = this;
-        self.platform.ready().then(function () {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
-            _this.statusBar.styleDefault();
-            _this.splashScreen.hide();
-            //self.evt.init();
-            _this.app.setBeginTS();
-            console.log("EVT");
-        });
-    };
-    return MyApp;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
-], MyApp.prototype, "nav", void 0);
-MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'\n<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
-], MyApp);
-
-//# sourceMappingURL=app.component.js.map
-
-/***/ }),
-
-/***/ 37:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2990,6 +2948,7 @@ var HomePage = (function () {
             __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__["Cookie"].set('cookie_notice', '1');
             this.noticeViewed = false;
         }
+        console.log(this.platform.is('mobile'));
         this.mobileVersion = this.platform.is('mobile');
     };
     HomePage.prototype.scan = function () {
@@ -3011,9 +2970,10 @@ var HomePage = (function () {
         }).then(function (res) {
             console.log(res);
             /* set user context for anonymous user */
-            _this.evt.setAnonUserContext(res, _this.isNotLoggedIn);
+            var user = typeof res[0] != 'undefined' ? res[0].user : null;
+            _this.evt.setAnonUserContext(user, _this.isNotLoggedIn);
             load.data.enableBackdropDismiss = false;
-            if (res.length === 0) {
+            if (typeof res === 'undefined' || res.length === 0) {
                 /* Scan failed. we should create a 'not recognized' action */
                 console.log("not Found");
                 self.scanFailed = true;
@@ -3033,12 +2993,14 @@ var HomePage = (function () {
                 var usr = res[0].user;
                 usr.thng(item.id).read().then(function (thng) {
                     self.scanFailed = false;
-                    //thng.action("scans").create().catch(err=>console.error(err));
-                    //thng.action("_Activated").create().then(console.log).catch(console.error);
-                    //usr.update({customFields:{myThng:thng.id}}).then(console.log);
-                    //TODO: Redirect to content page. Still in progress
-                    // self.navCtrl.setRoot(AuraMainPage);
-                    self.gotoNexPage();
+                    // scan action, then update, _Activated action after scan have been moved to anon->reg user transition
+                    self.evt.createThngAction("scans", {}, true); //anon user context
+                    self.evt.updateMyThng(thng, true).then(function () {
+                        self.gotoNexPage();
+                    }).catch(function (err) {
+                        console.log(err);
+                        self.gotoNexPage();
+                    });
                 })
                     .catch(function (err) {
                     self.scanFailed = true;
@@ -3049,59 +3011,58 @@ var HomePage = (function () {
             else if (typeof res[0].results[0].thng !== "undefined" && !_this.isNotLoggedIn) {
                 /* Scanned QR code. It is a thng */
                 console.log("thing activated by logged in user");
-                var item_1 = res[0].results[0].thng;
-                self.evt.getUserContext().then(function (usr) {
-                    usr.thng(item_1.id).read().then(function (thng) {
-                        self.scanFailed = false;
-                        thng.action("scans").create().catch(function (err) { return console.error(err); });
-                        thng.action("_Activated").create().then(console.log).catch(console.error);
-                        usr.update({ customFields: { myThng: thng.id } }).then(console.log);
-                        //TODO: Redirect to content page. Still in progress
-                        // self.navCtrl.setRoot(AuraMainPage);
-                        self.gotoNexPage();
-                    })
-                        .catch(function (err) {
-                        self.scanFailed = true;
-                        console.log(err, 'thng error');
-                        load.dismiss();
-                    });
-                })
-                    .catch(function (err) {
-                    console.log(err);
+                var thng = res[0].results[0].thng;
+                self.scanFailed = false;
+                // scan action, then update, _Activated action after scan have been moved to anon->reg user transition
+                self.evt.createThngAction("scans"); //reg user context
+                self.evt.updateMyThng(thng).then(function () {
                     load.dismiss();
+                    self.gotoNexPage();
+                }).catch(function (err) {
+                    console.log('scanthng error', err);
+                    load.dismiss();
+                    self.gotoNexPage();
                 });
             }
             else if (typeof res[0].results[0].product !== "undefined") {
                 console.log("image recognition");
-                /* Scanned via image recognition. it is a product */
-                var item_2 = res[0].results[0].product;
-                self.evt.getUserContext().then(function (usr) {
-                    usr.product(item_2.id).read().then(function (prod) {
+                //Scanned via image recognition. it is a product
+                //IF anon or registered user
+                //register a scan to product
+                //IF NOT THNG for user exist
+                //THEN create a THNG, ELSE ignore
+                //save the context to local storage
+                //safe user context resolution
+                var usrC = self.evt.getUserContext();
+                if (_this.isNotLoggedIn) {
+                    usrC = self.evt.getAnonUserContext();
+                }
+                var item_1 = res[0].results[0].product;
+                usrC.then(function (usr) {
+                    usr.product(item_1.id).read().then(function (prod) {
                         self.scanFailed = false;
                         prod.action("scans").create().catch(function (err) { return console.error(err); });
                         self.evt.getUserCustomFields().then(function (cf) {
-                            if (cf) {
-                                /* Already has a thng */
+                            if (cf && typeof cf.myThng != 'undefined') {
+                                // Already has a THNG
                                 console.log('You already have a thng!');
                                 self.gotoNexPage();
                             }
                             else {
-                                /* Create a thng */
+                                // Create a THNG
                                 var thng = {
                                     name: "User Thng - " + usr.id,
                                     tags: ["Image Recognition"],
-                                    product: item_2.id
+                                    product: item_1.id
                                 };
                                 _this.evt.createThng(thng).then(function () {
                                     self.gotoNexPage();
                                 }).catch(function (err) {
-                                    console.log(err);
-                                    console.log("Failed to create a thng");
+                                    console.log("Failed to create a thng", err);
                                 });
                             }
                         }).catch(function (err) {
-                            console.log(err);
-                            console.error("Failed to save");
+                            console.log("custom fields context error", err);
                         });
                     })
                         .catch(function (err) {
@@ -3115,7 +3076,7 @@ var HomePage = (function () {
                     load.dismiss();
                 });
             } // END OF SCAN PROCESS
-            //save the thng to localStorage for later use
+            //save the thng or product to localStorage for later use
             _this.app.saveThngContext(res);
         }).catch(function (err) {
             self.scanFailed = true;
@@ -3134,7 +3095,7 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/activator_desktop.jpg"> </ion-img>\n      <p padding>To access on desktop, upload a photo of the Neutrogena&copy; logo on your\nVisibly Clear&copy; Light Therapy Acne Mask Activator</p>\n\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>\n      <div>\n        <p padding>\n          Scan the QR code or visit <a href="//www.scan.neutrogena.co.uk">www.scan.neutrogena.co.uk</a> on\n          your mobile browser to continue with the experience.\n        </p>\n      </div>\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -3148,17 +3109,17 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 38:
+/***/ 33:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EvtProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3379,7 +3340,8 @@ var EvtProvider = (function () {
         }
         if (typeof localStorage.myThng !== 'undefined') {
             var myThng = JSON.parse(localStorage.myThng);
-            return userC.thng(myThng.id).read();
+            console.log('has thng', myThng);
+            return userC.thng(myThng.id).read(function (th) { });
         }
         else {
             return userCF.then(function (cf) {
@@ -3390,15 +3352,54 @@ var EvtProvider = (function () {
                     });
                 }
                 else if (typeof localStorage.myProduct != 'undefined') {
+                    console.log('no thng - product');
                     var thngData = {
                         name: 'User Thng - ' + userC.id,
                         tags: ["Image Recognition"],
                         product: localStorage.myProduct.id
                     };
-                    self.createThng(thngData, anonUser);
+                    return self.createThng(thngData, anonUser);
+                }
+                else {
+                    console.log('no thng');
                 }
             });
         }
+    };
+    /**
+     * Get a THNG context by giving it an ADI or THNG id
+     *
+     * @param thngId
+     * @param anonUser
+     * @returns {Promise<R>|any|Function}
+     */
+    EvtProvider.prototype.getThngContextById = function (thngId, anonUser) {
+        if (anonUser === void 0) { anonUser = false; }
+        var userC = this.getUser();
+        if (anonUser) {
+            userC = this.getAnonUser();
+        }
+        return userC.thng(thngId).read().catch(function (err) {
+            userC.action("_NotRecognised").create().catch(function (err) { return console.error(err); });
+            console.log('err fetch thng by id', err);
+        });
+    };
+    /**
+     * Get a product context by giving it a product Id
+     *
+     * @param productId
+     * @param anonUser
+     * @returns {Promise<R>|any|Function}
+     */
+    EvtProvider.prototype.getProductContextById = function (productId, anonUser) {
+        if (anonUser === void 0) { anonUser = false; }
+        var userC = this.getUser();
+        if (anonUser) {
+            userC = this.getAnonUser();
+        }
+        return userC.thng(productId).read().catch(function (err) {
+            console.log('err fetch product by id', err);
+        });
     };
     /* EVT Scan */
     EvtProvider.prototype.scan = function (opt) {
@@ -3473,6 +3474,62 @@ var EvtProvider = (function () {
             console.log("Failed to create a thng");
         });
     };
+    /**
+     * Update the myThng custom field of chosen user context.
+     *
+     * @param thngData
+     * @param anonUser
+     * @param allowUpdateIfExists
+     * @returns {any}
+     */
+    EvtProvider.prototype.updateMyThng = function (thngData, anonUser, allowUpdateIfExists) {
+        var _this = this;
+        if (anonUser === void 0) { anonUser = false; }
+        if (allowUpdateIfExists === void 0) { allowUpdateIfExists = false; }
+        if (typeof thngData != 'undefined') {
+            return new Promise(function (resolve) {
+                resolve(false);
+            });
+        }
+        var usr = this.getUser();
+        var usrCF = this.getUserCustomFields();
+        if (anonUser) {
+            usr = this.getAnonUser();
+            usrCF = this.getAnonUserCustomFields();
+        }
+        if (!allowUpdateIfExists) {
+            usrCF.then(function (cf) {
+                if (typeof cf != 'undefined' && cf) {
+                    if (typeof cf.myThng == 'undefined') {
+                        return _this._updateMyThng(usr, thngData);
+                    }
+                }
+            });
+        }
+        else {
+            return this._updateMyThng(usr, thngData);
+        }
+    };
+    /***
+     * private method for raw update to user custom fields
+     *
+     * @param usr
+     * @param thngData
+     * @returns {Function|any|Thenable<undefined>|SyncAsync<R>|Promise<R>}
+     * @private
+     */
+    EvtProvider.prototype._updateMyThng = function (usr, thngData) {
+        return usr.update({
+            customFields: {
+                myThng: thngData.id
+            }
+        }).then(function () {
+            localStorage.myThng = JSON.stringify(thngData);
+            console.log('myTHng updated');
+        }).catch(function (err) {
+            console.log('update myTHng err', err);
+        });
+    };
     EvtProvider.prototype.anonymousDataModel = function (data) {
         var obj = {
             "sub": "anonymous",
@@ -3498,20 +3555,38 @@ var EvtProvider = (function () {
         };
         return obj;
     };
-    EvtProvider.prototype.setAnonUserContext = function (res, anonUser) {
+    EvtProvider.prototype.setAnonUserContext = function (user, anonUser) {
         if (typeof anonUser == 'undefined' || anonUser) {
             localStorage.isAnon = true;
-            localStorage.anonUserInfo = JSON.stringify(this.anonymousDataModel(res[0].user));
+            localStorage.anonUserInfo = JSON.stringify(this.anonymousDataModel(user));
             var evtInfo = {
                 anonymousUser: true,
-                evrythngUser: res[0].user.id,
-                evrythngApiKey: res[0].user.apiKey
+                evrythngUser: user.id,
+                evrythngApiKey: user.apiKey
             };
             localStorage.anonEvrythngInfo = JSON.stringify(evtInfo);
         }
         else {
             localStorage.isAnon = false;
         }
+    };
+    /**
+     * Abstraction to get an anon user instance and save state to local store
+     *
+     * @param anonUser
+     * @returns {Thenable<undefined>|Function|any|SyncAsync<R>|Promise<R>}
+     */
+    EvtProvider.prototype.createAppUser = function (anonUser) {
+        var _this = this;
+        return this.evtapp.appUser().create({
+            anonymous: anonUser
+        }).then(function (usr) {
+            console.log(typeof usr, usr);
+            _this.setAnonUserContext(usr, anonUser);
+            return usr;
+        }).catch(function (err) {
+            console.log(err);
+        });
     };
     return EvtProvider;
 }());
@@ -3525,6 +3600,199 @@ EvtProvider = __decorate([
 
 /***/ }),
 
+/***/ 334:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+//import { NoticeComponent } from "../components/notice/notice";
+//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
+
+
+var MyApp = (function () {
+    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
+        this.platform = platform;
+        this.statusBar = statusBar;
+        this.splashScreen = splashScreen;
+        this.app = app;
+        this.evt = evt;
+        this.loading = loading;
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
+        this.text = "";
+        this.show = false;
+        this.noLink = true;
+        this.initializeApp();
+        // used for an example of ngFor and navigation
+        this.pages = [
+            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] }
+        ];
+    }
+    MyApp.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.platform.is('mobile')) {
+            //redirect to context switcher for mobile vs desktop
+            this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */]);
+            return;
+        }
+        if (!this.evt.hasUserContext()) {
+            return;
+        }
+        var self = this;
+        var loading = self.loading.create({
+            spinner: 'crescent',
+            content: "Please wait...",
+            enableBackdropDismiss: true
+        });
+        loading.present();
+        this.app.initCourses().then(function () {
+            _this.app.initProgArr().then(function () {
+                console.log("Last completed:" + _this.app.getLastCompletedCourse());
+                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+                _this.app.completeLogin(); //if login() is called
+                loading.dismiss();
+                _this.nav.setRoot("AuraMainPage");
+            });
+        });
+    };
+    MyApp.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.nav.viewDidEnter.subscribe(function (data) {
+            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
+                _this.noticePopUp();
+            }
+        });
+    };
+    MyApp.prototype.noticePopUp = function () {
+        if (this.app.hasSignInNotice()) {
+            this.show = true;
+            this.text = 'Sign in to track your progress.';
+            this.noLink = true;
+        }
+        else if (this.app.hasReorderNotice()) {
+            this.show = true;
+            this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
+            this.noLink = false;
+            this.ext_url = {
+                name: 'reorder',
+                link: __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__["a" /* Config */].ext_links.reorder
+            };
+        }
+    };
+    MyApp.prototype.initializeApp = function () {
+        var _this = this;
+        var self = this;
+        self.platform.ready().then(function () {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            _this.statusBar.styleDefault();
+            _this.splashScreen.hide();
+            //self.evt.init();
+            _this.app.setBeginTS();
+            console.log("EVT");
+        });
+    };
+    return MyApp;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
+], MyApp.prototype, "nav", void 0);
+MyApp = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
+        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], MyApp);
+
+//# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 381:
+/***/ (function(module, exports) {
+
+/**
+ * Created by rexmupas on 12/11/2017.
+ * TEP, common libraries and primitive overrides
+ *
+ */
+/**
+ * @ref: https://stackoverflow.com/questions/1199352/smart-way-to-shorten-long-strings-with-javascript
+ * @param n
+ * @param useWordBoundary
+ * @returns {any}
+ *
+ * Note: add trunc method to JS String primitive so it is easier to use across
+ * the app
+ *
+ */
+String.prototype.trunc = function (n, useWordBoundary) {
+    if (this.length <= n) {
+        return this;
+    }
+    var subString = this.substr(0, n - 1);
+    return (useWordBoundary
+        ? subString.substr(0, subString.lastIndexOf(' '))
+        : subString) + "...";
+};
+/**
+ * @ref: https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+ * Quick, non-secure hashing algorithm to get a cleaner string digest
+ * @returns {String}
+ */
+String.prototype.tephash = function () {
+    var hash = 0;
+    var char = 0;
+    if (this.length == 0)
+        return "";
+    for (var i = 0; i < this.length; i++) {
+        char = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString(36).substring(2, 10);
+};
+/**
+ * Extend Array to sort the numbers easily
+ * @ref: https://stackoverflow.com/questions/1063007/how-to-sort-an-array-of-integers-correctly
+ *
+ * @param a
+ * @param b
+ * @returns {Array}
+ */
+Array.prototype.sortNum = function () {
+    this.sort(function (a, b) { return (a - b); });
+    return this;
+};
+//# sourceMappingURL=tep.js.map
+
+/***/ }),
+
 /***/ 39:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3533,10 +3801,10 @@ EvtProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_environment_dev__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(32);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3577,7 +3845,9 @@ var AuraMainPage = (function () {
         this.dur = 10;
         this.arrDay = [];
         this.noticeClass = 'pink';
-        this.activeCourse = [{ desc: "", id: "", path: "", title: "", course: "" }];
+        this.activeCourse = [
+            { desc: "", id: "", path: "", title: "", course: "", author: "" }
+        ];
         this.courseTitle = "Mindfulness";
         this.addLesson = 0;
         this.labelIntro = "Start this course";
@@ -3815,12 +4085,12 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -3936,19 +4206,20 @@ LoginPage = __decorate([
 
 /***/ }),
 
-/***/ 646:
+/***/ 648:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scan_scan__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__age_gate_age_gate__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3966,6 +4237,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * This is the catch-all page. All paths are checked here first.
  * The access_token and id_token variables are stored in localstorage
@@ -3973,12 +4245,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  *
  */
 var AuthPage = (function () {
-    function AuthPage(navCtrl, navParams, app, auth0, loader, evt) {
+    function AuthPage(navCtrl, navParams, app, auth0, loader, platform, evt) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.app = app;
         this.auth0 = auth0;
         this.loader = loader;
+        this.platform = platform;
         this.evt = evt;
         this.isNotLoggedIn = true;
     }
@@ -3986,64 +4259,17 @@ var AuthPage = (function () {
     AuthPage.prototype.ngOnInit = function () {
         var _this = this;
         var data = this.navParams.get('data');
-        if (data === "") {
+        console.log(data);
+        if (data === "" || !this.platform.is('mobile')) {
             //experience starts with SCAN page (HomePage)
             this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */]);
         }
         else if (this.URLToArray(data).hasOwnProperty('thng')) {
-            var load_1 = this.loader.create({
-                spinner: 'crescent',
-                dismissOnPageChange: true,
-                showBackdrop: true,
-                content: "Please wait...",
-                enableBackdropDismiss: true
+            var pData = this.URLToArray(data);
+            //there's a THNG
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__scan_scan__["a" /* ScanPage */], {
+                thng: pData["thng"]
             });
-            load_1.present();
-            if (localStorage.getItem('access_token') && localStorage.getItem('id_token')) {
-                this.isNotLoggedIn = false;
-            }
-            if (this.isNotLoggedIn) {
-                var queryObject_1 = this.URLToArray(data);
-                setTimeout(function () {
-                    _this.evt.evtapp.$init.then(function (app) {
-                        console.log(app);
-                        app.appUser().create({
-                            anonymous: true
-                        }).then(function (anonymousUser) {
-                            // Returns a ready to use User Scope that doesn't need validation
-                            console.log("Created anonymous user: " + anonymousUser);
-                            // Store anonymous user details locally
-                            if (window.localStorage) {
-                                localStorage.userId = anonymousUser.id;
-                                localStorage.apiKey = anonymousUser.apiKey;
-                            }
-                            // Load the user from localstorage
-                            var user = new EVT.User({
-                                id: localStorage.userId,
-                                apiKey: localStorage.apiKey
-                            }, app);
-                            anonymousUser.thng(queryObject_1["thng"]).read().then(function (thng) {
-                                if (_this.isNotLoggedIn) {
-                                    localStorage.isAnon = true;
-                                    localStorage.evrythngInfo = '{"anonymousUser":"' + _this.isNotLoggedIn + '","evrythngUser":"' + localStorage.userId + '","evrythngApiKey":"' + localStorage.apiKey + '"}';
-                                    // console.log("set userContext");
-                                }
-                                else {
-                                    localStorage.isAnon = true;
-                                }
-                                load_1.data.enableBackdropDismiss = false;
-                                thng.action("scans").create().catch(function (err) { return console.error(err); });
-                                user.update({ customFields: { myThng: thng.id } }).then(console.log);
-                                _this.gotoNexPage();
-                                localStorage.setItem('myThng', JSON.stringify(thng));
-                            });
-                        });
-                    });
-                }, 2000);
-            }
-            else {
-                this.gotoNexPage();
-            }
         }
         else {
             var authData = this.URLToArray(data);
@@ -4056,7 +4282,7 @@ var AuthPage = (function () {
                     /**
                      * has THNG in localStorage
                      */
-                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__["a" /* AuraMainPage */]);
+                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__["a" /* AuraMainPage */]);
                 }
                 else {
                     /**
@@ -4084,9 +4310,9 @@ var AuthPage = (function () {
     AuthPage.prototype.gotoNexPage = function () {
         /*check if age gate*/
         if (this.app.isValidAge())
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__aura_main_aura_main__["a" /* AuraMainPage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__["a" /* AuraMainPage */]);
         else
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__age_gate_age_gate__["a" /* AgeGatePage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__age_gate_age_gate__["a" /* AgeGatePage */]);
     };
     return AuthPage;
 }());
@@ -4096,27 +4322,28 @@ AuthPage = __decorate([
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_auth_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_auth_auth_service__["a" /* AuthService */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
-        __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__["a" /* EvtProvider */]])
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__["a" /* EvtProvider */]])
 ], AuthPage);
 
 //# sourceMappingURL=auth.js.map
 
 /***/ }),
 
-/***/ 647:
+/***/ 649:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResetPasswordPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(32);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4207,21 +4434,21 @@ ResetPasswordPage = __decorate([
 
 /***/ }),
 
-/***/ 648:
+/***/ 650:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentsModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scan_scan__ = __webpack_require__(649);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__side_menu_side_menu_module__ = __webpack_require__(650);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__notice_notice_module__ = __webpack_require__(652);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__footer_footer_module__ = __webpack_require__(654);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sub_course_sub_course_module__ = __webpack_require__(656);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_head_aura_head_module__ = __webpack_require__(658);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__aura_foot_aura_foot_module__ = __webpack_require__(660);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__ = __webpack_require__(662);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__reorder_modal_reorder_modal_module__ = __webpack_require__(663);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scan_scan__ = __webpack_require__(651);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__side_menu_side_menu_module__ = __webpack_require__(652);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__notice_notice_module__ = __webpack_require__(654);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__footer_footer_module__ = __webpack_require__(656);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sub_course_sub_course_module__ = __webpack_require__(658);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_head_aura_head_module__ = __webpack_require__(660);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__aura_foot_aura_foot_module__ = __webpack_require__(662);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__progress_modal_progress_modal_module__ = __webpack_require__(664);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__reorder_modal_reorder_modal_module__ = __webpack_require__(665);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4264,7 +4491,7 @@ ComponentsModule = __decorate([
 
 /***/ }),
 
-/***/ 649:
+/***/ 651:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4304,13 +4531,13 @@ ScanComponent = __decorate([
 
 /***/ }),
 
-/***/ 650:
+/***/ 652:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideMenuComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__side_menu__ = __webpack_require__(651);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__side_menu__ = __webpack_require__(653);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4344,14 +4571,14 @@ SideMenuComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 651:
+/***/ 653:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideMenuComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
@@ -4439,13 +4666,13 @@ SideMenuComponent = __decorate([
 
 /***/ }),
 
-/***/ 652:
+/***/ 654:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NoticeComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notice__ = __webpack_require__(653);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notice__ = __webpack_require__(655);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4479,7 +4706,7 @@ NoticeComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 653:
+/***/ 655:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4487,8 +4714,8 @@ NoticeComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4594,13 +4821,13 @@ NoticeComponent = __decorate([
 
 /***/ }),
 
-/***/ 654:
+/***/ 656:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__footer__ = __webpack_require__(655);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__footer__ = __webpack_require__(657);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4634,7 +4861,7 @@ FooterComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 655:
+/***/ 657:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4699,13 +4926,13 @@ FooterComponent = __decorate([
 
 /***/ }),
 
-/***/ 656:
+/***/ 658:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SubCourseComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sub_course__ = __webpack_require__(657);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sub_course__ = __webpack_require__(659);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4739,15 +4966,15 @@ SubCourseComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 657:
+/***/ 659:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SubCourseComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__ = __webpack_require__(67);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4867,13 +5094,13 @@ SubCourseComponent = __decorate([
 
 /***/ }),
 
-/***/ 658:
+/***/ 660:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraHeadComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_head__ = __webpack_require__(659);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_head__ = __webpack_require__(661);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4907,14 +5134,14 @@ AuraHeadComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 659:
+/***/ 661:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraHeadComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_my_account_my_account__ = __webpack_require__(96);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -4979,13 +5206,13 @@ AuraHeadComponent = __decorate([
 
 /***/ }),
 
-/***/ 660:
+/***/ 662:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraFootComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_foot__ = __webpack_require__(661);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__aura_foot__ = __webpack_require__(663);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5019,7 +5246,7 @@ AuraFootComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 661:
+/***/ 663:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5027,8 +5254,8 @@ AuraFootComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__ = __webpack_require__(291);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5130,7 +5357,7 @@ AuraFootComponent = __decorate([
 
 /***/ }),
 
-/***/ 662:
+/***/ 664:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5170,13 +5397,13 @@ ProgressModalComponentModule = __decorate([
 
 /***/ }),
 
-/***/ 663:
+/***/ 665:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponentModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__reorder_modal__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__reorder_modal__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular_index__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5217,15 +5444,15 @@ ReorderModalComponentModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignUpPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5381,17 +5608,17 @@ SignUpPage = __decorate([
 
 /***/ }),
 
-/***/ 95:
+/***/ 68:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AgeGatePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5439,6 +5666,9 @@ var AgeGatePage = (function () {
         else {
             __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('cookie_notice', '1');
             this.noticeViewed = false;
+        }
+        if (this.app.isValidAge()) {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
         }
     };
     AgeGatePage.prototype.changedDate = function () {
@@ -5510,10 +5740,10 @@ AgeGatePage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyAccountPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(290);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5607,5 +5837,5 @@ MyAccountPage = __decorate([
 
 /***/ })
 
-},[291]);
+},[292]);
 //# sourceMappingURL=main.js.map

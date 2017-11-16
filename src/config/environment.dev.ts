@@ -55,6 +55,11 @@ export const Config = {
     name: "AURA health",
     target: "_blank"
   },
+  desktop_scan_url: {
+    link: "www.scan.neutrogena.co.uk",
+    name: "www.scan.neutrogena.co.uk",
+    target: "_blank"
+  },
   lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count

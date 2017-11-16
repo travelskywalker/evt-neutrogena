@@ -5,6 +5,7 @@ import { EvtProvider} from '../../providers/evt/evt';
 import { AuthService } from '../../providers/auth/auth.service';
 
 import { Cookie } from 'ng2-cookies';
+import { Config } from '../../config/environment.dev';
 
 import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';
@@ -26,6 +27,7 @@ export class HomePage {
   logos : any;
   noticeViewed : boolean;
   isNotLoggedIn: boolean = true;
+  config: any = Config;
   constructor(
     public platform: Platform,
     public navCtrl: NavController,
@@ -35,7 +37,6 @@ export class HomePage {
     private loader: LoadingController
   ) {
     this.isNotLoggedIn = !this.auth0.loggedIn();
-
   }
 
   ngOnInit(){
@@ -48,7 +49,7 @@ export class HomePage {
       Cookie.set('cookie_notice','1');
       this.noticeViewed = false;
     }
-
+    console.log(this.platform.is('mobile'));
     this.mobileVersion = this.platform.is('mobile');
   }
 

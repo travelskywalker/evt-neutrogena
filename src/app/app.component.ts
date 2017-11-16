@@ -39,6 +39,11 @@ export class MyApp {
   }
 
   ngOnInit() {
+    if (!this.platform.is('mobile')) {
+      //redirect to context switcher for mobile vs desktop
+      this.nav.setRoot(HomePage);
+      return;
+    }
     if (!this.evt.hasUserContext()) {
       return;
     }
@@ -55,6 +60,7 @@ export class MyApp {
         this.app.setActiveCourse(this.app.getLastCompletedCourse());
         this.app.completeLogin(); //if login() is called
         loading.dismiss();
+
         this.nav.setRoot("AuraMainPage");
       })
     })
@@ -99,6 +105,7 @@ export class MyApp {
       //self.evt.init();
       this.app.setBeginTS();
       console.log("EVT");
+
     });
 
   }
