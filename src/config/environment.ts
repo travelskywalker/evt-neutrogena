@@ -7,18 +7,18 @@ export const Config = {
   projectId: "U3NNqQhUe6s7QraRakG4fpNc",
   appId: "UG7N6Q2yVMsrtNRaak34fprg",
   auth0:{
-  	clientID: '67JAI87YgeGyMWDBKZHedJ9LccRcjBC7',
-    domain: 'evtjandj.eu.auth0.com',
+    clientID: 'w9VzQPQgiQaldMl3MaGkfEph63N6VJhi',
+    domain: 'demo-evt.eu.auth0.com',
     responseType: 'token id_token',
-    audience: 'https://evtjandj.eu.auth0.com/userinfo',
+    audience: 'https://demo-evt.eu.auth0.com/userinfo',
     redirectUri: window.location.origin,//'http://localhost:8100',
     scope: 'openid'
   },
   auth0Mgmt:{
-  	grant_type: 'client_credentials',
-    client_id: 'zKoRrruPUllNs6C0O8MAxvqY2GLqqSTu',
-    client_secret: 'Bn2nd4noGOCnBfByADZ90UrULETuHMvf12vLCecw2A7txB8j4R_PIttKqfJ31FWb',
-    audience: 'https://evtjandj.eu.auth0.com/api/v2/'
+    grant_type: 'client_credentials',
+    client_id: 'iFF5t1pmHIXS9vsOV14KGt5V4XfEh37n',
+    client_secret: '4gAx_w6YVA-uC1CtOGEvwCqyKoxRgKqyvf39i2axHVmOuZLr0U2fRCghMholpQqy',
+    audience: 'https://demo-evt.eu.auth0.com/api/v2/'
   },
   ext_links:{
     privacyPolicy:"//www.neutrogena.co.uk/privacypolicy",
@@ -60,7 +60,7 @@ export const Config = {
     name: "www.scan.neutrogena.co.uk",
     target: "_blank"
   },
-  lessonCompletionTimeLimit: 60 * 10, //seconds till content consumption completion event is triggered
+  lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
