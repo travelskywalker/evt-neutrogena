@@ -8,7 +8,7 @@ import { AgeGatePage } from '../age-gate/age-gate';
 import { AuthService } from "../../providers/auth/auth.service";
 import { AppProvider } from "../../providers/app/app";
 import { EvtProvider } from "../../providers/evt/evt";
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 declare var EVT: any;
 /**
  * This is the catch-all page. All paths are checked here first.

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { App } from 'ionic-angular';
 import { AuthService } from '../../providers/auth/auth.service';
 
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 import { LoginPage } from '../../pages/login/login';
 import { MyAccountPage } from '../../pages/my-account/my-account';
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';

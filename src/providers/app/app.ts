@@ -9,7 +9,7 @@ import { aura } from "../../assets/aura/config/aura.config";
 import { EvtProvider } from "../../providers/evt/evt";
 import { Observable } from 'rxjs';
 
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 import { AuthService } from '../../providers/auth/auth.service';
 
 /*

@@ -5,7 +5,7 @@ import { EvtProvider} from '../../providers/evt/evt';
 import { AuthService } from '../../providers/auth/auth.service';
 
 import { Cookie } from 'ng2-cookies';
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 
 import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';

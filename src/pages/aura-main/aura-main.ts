@@ -3,7 +3,7 @@ import { Component, ViewChild} from '@angular/core';
 //import { IonicPage, NavController, NavParams, ViewController, Content, Slides } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, Slides, LoadingController } from 'ionic-angular';
 
-import { Config } from "../../config/environment.dev";
+import { Config } from "../../config/environment";
 import { AppProvider } from "../../providers/app/app";
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";

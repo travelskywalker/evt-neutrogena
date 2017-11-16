@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 
 import { AuthService } from '../auth/auth.service';
 declare var EVT : any;

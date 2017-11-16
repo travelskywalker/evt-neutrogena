@@ -1,5 +1,5 @@
 // src/app/auth/auth.service.ts
-import { Config } from '../../config/environment.dev';
+import { Config } from '../../config/environment';
 import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
 // import { HomePage } from '../../pages/home/home';

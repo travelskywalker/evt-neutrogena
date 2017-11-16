@@ -3,7 +3,7 @@ import { Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { Config } from '../config/environment.dev';
+import { Config } from '../config/environment';
 import { HomePage } from '../pages/home/home';
 
 //import { NoticeComponent } from "../components/notice/notice";

@@ -2,7 +2,7 @@ import { Component, Input, Renderer2, ElementRef } from '@angular/core';
 //import { NavController } from 'ionic-angular';
 import { EvtProvider } from "../../providers/evt/evt";
 import { AppProvider } from "../../providers/app/app";
-import { Config } from "../../config/environment.dev";
+import { Config } from "../../config/environment";
 //import { NoticeComponent } from "../notice/notice";
 /**
  * Generated class for the ReorderModalComponent component.
