@@ -27264,6 +27264,13 @@ page-home ion-content#homeDesktop div.scroll-content section#client-content > io
 page-home ion-content#homeDesktop div.scroll-content section#client-content > div p {
   text-align: center;
   color: #f07721;
+  font-size: 2vh;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div p.prominent, page-home ion-content#homeDesktop div.scroll-content section#client-content div p.prominent a {
+  text-align: center;
+  font-size: 2vh;
+  font-weight: bold;
 }
 
 page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span {

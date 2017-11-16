@@ -218,7 +218,13 @@ page-home {
               &> div p{
                 text-align: center;
                 color:rgba(240,119,33,1);
+                font-size: 2vh;
+              }
 
+              &> div p.prominent, div p.prominent a {
+                text-align: center;
+                font-size: 2vh;
+                font-weight: bold;
               }
             }
 
