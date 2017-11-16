@@ -51,7 +51,7 @@ webpackEmptyAsyncContext.id = 203;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs__ = __webpack_require__(382);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -91,7 +91,7 @@ var AppProvider = (function () {
         //total lessons / days in a course
         this.activeDur = 1;
         this.hasValidUserAge = false;
-        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].lessonCompletionTimeLimit; //seconds
+        this.lessonTimeLimit = __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].lessonCompletionTimeLimit; //seconds
         this.currentLesson = 1;
         this.courseHistory = [];
         this.today = new Date();
@@ -451,16 +451,16 @@ var AppProvider = (function () {
          *
          */
         if (typeof course == 'undefined') {
-            return (__WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
+            return (__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
         }
         else {
             if (this.courses[course] != 'undefined') {
-                var remCnt = (__WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+                var remCnt = (__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
                 if (this.hasLoggedIn()) {
                     return (remCnt >= 0 ? remCnt : 0);
                 }
                 else {
-                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                    if (this.nextLesson(course) <= __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].anonUserLessonLimit) {
                         return 1;
                     }
                     else {
@@ -643,8 +643,8 @@ var AppProvider = (function () {
         else {
             var progressCnt = this.getCourseProgress(course);
             console.log("progressCnt" + progressCnt);
-            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
-                return __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
+            if (progressCnt >= __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].anonUserLessonLimit) {
+                return __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].anonUserLessonLimit; //only 1 lesson available for anon user
             }
             else {
                 return this.lastLesson(course);
@@ -713,7 +713,7 @@ var AppProvider = (function () {
             //logged in, no lock, don't bother
             var nextLesson = this.nextLesson(course);
             if (typeof nextLesson != 'undefined') {
-                if (nextLesson > __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserLessonLimit) {
+                if (nextLesson > __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].anonUserLessonLimit) {
                     return true;
                 }
             }
@@ -755,7 +755,7 @@ var AppProvider = (function () {
         console.log(typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin'));
         if (typeof __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin') == 'undefined' || !__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get('ts_begin')) {
             var dy = Date.now(); //start of the day
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].thngDaysLifeSpan);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('ts_begin', dy.toString(), __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].thngDaysLifeSpan);
         }
     };
     AppProvider.prototype.getBeginTS = function () {
@@ -770,7 +770,7 @@ var AppProvider = (function () {
          */
         if (!this.hasLoggedIn()) {
             var daysSince = Math.floor((Date.now() - parseInt(this.getBeginTS())) / (86400 * 1000));
-            if (daysSince >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].anonUserDaysToSignInNotice) {
+            if (daysSince >= __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].anonUserDaysToSignInNotice) {
                 console.log('daysSince:' + daysSince);
                 return true;
             }
@@ -789,7 +789,7 @@ var AppProvider = (function () {
         if (this.hasLoggedIn()) {
             var daysSinceCreatedAt = Math.floor((Date.now() - this.getUserCreatedAt().getTime()) / (86400 * 1000));
             console.log('daysSinceCreatedAt: ' + daysSinceCreatedAt);
-            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_8__config_environment_dev__["a" /* Config */].dayToReorderNotice) {
+            if (daysSinceCreatedAt >= __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].dayToReorderNotice) {
                 return true;
             }
         }
@@ -860,7 +860,7 @@ AppProvider = __decorate([
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(341);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
@@ -890,15 +890,15 @@ var AuthService = (function () {
         this.clientDefSecret = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
         /* main auth0 variable. */
         this.webAuth = new __WEBPACK_IMPORTED_MODULE_2_auth0_js__["WebAuth"]({
-            clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.clientID,
-            domain: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain,
-            responseType: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.responseType,
-            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.audience,
-            redirectUri: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.redirectUri,
+            clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.clientID,
+            domain: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain,
+            responseType: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.responseType,
+            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.audience,
+            redirectUri: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.redirectUri,
             scope: 'openid'
         });
-        this.lock = new Auth0Lock(__WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.clientID, __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain);
-        this.projectId = __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].projectId;
+        this.lock = new Auth0Lock(__WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.clientID, __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain);
+        this.projectId = __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].projectId;
     }
     /* Check if a user is logged in. */
     AuthService.prototype.loggedIn = function () {
@@ -1048,8 +1048,8 @@ var AuthService = (function () {
         localStorage.removeItem('myThng');
         localStorage.removeItem('isAnon');
         this.webAuth.logout({
-            returnTo: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.redirectUri,
-            clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.clientID
+            returnTo: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.redirectUri,
+            clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.clientID
         });
     };
     /* Update user metadata via auth0 manage */
@@ -1058,7 +1058,7 @@ var AuthService = (function () {
         umd["firstName"] = usrMetaData.firstName;
         umd["lastName"] = usrMetaData.lastName;
         var auth0Manage = new __WEBPACK_IMPORTED_MODULE_2_auth0_js__["Management"]({
-            domain: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain,
+            domain: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain,
             token: localStorage.getItem('id_token')
         });
         var usrInfo = this.getUserDetailsFromStorage();
@@ -1091,7 +1091,7 @@ var AuthService = (function () {
             _this.requestMgmtToken().then(function (res) {
                 hdr.append("Authorization", "Bearer " + res['access_token']);
                 var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.delete("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, opts)
+                self.http.delete("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, opts)
                     .toPromise()
                     .then(function (res) {
                     resolve(res);
@@ -1116,7 +1116,7 @@ var AuthService = (function () {
             _this.requestMgmtToken().then(function (res) {
                 hdr.append("Authorization", "Bearer " + res['access_token']);
                 var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.patch("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, body, opts)
+                self.http.patch("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, body, opts)
                     .toPromise()
                     .then(function (res) {
                     resolve(res);
@@ -1136,14 +1136,14 @@ var AuthService = (function () {
         var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         hdr.append("Content-Type", "application/json");
         var body = {
-            grant_type: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.grant_type,
-            client_id: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.client_id,
-            client_secret: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.client_secret,
-            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0Mgmt.audience
+            grant_type: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.grant_type,
+            client_id: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.client_id,
+            client_secret: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.client_secret,
+            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.audience
         };
         var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
         return new Promise(function (resolve, reject) {
-            _this.http.post('https://' + __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain + '/oauth/token', body, opts)
+            _this.http.post('https://' + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + '/oauth/token', body, opts)
                 .toPromise()
                 .then(function (res) {
                 localStorage.setItem('managementToken', JSON.stringify(res.json()));
@@ -1165,7 +1165,7 @@ var AuthService = (function () {
             _this.requestMgmtToken().then(function (res) {
                 hdr.append("Authorization", "Bearer " + res['access_token']);
                 var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.get("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment_dev__["a" /* Config */].auth0.domain + "/api/v2/users?" + body, opts)
+                self.http.get("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users?" + body, opts)
                     .toPromise()
                     .then(function (res) {
                     resolve(res.json()[0]);
@@ -2676,7 +2676,7 @@ DeleteAccountPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2704,7 +2704,7 @@ var ReorderModalComponent = (function () {
         this.elem = elem;
         this.evt = evt;
         this.app = app;
-        this.reorder_links = __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].reorder_links;
+        this.reorder_links = __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].reorder_links;
         this.show = true;
     }
     ReorderModalComponent.prototype.ngAfterViewInit = function () {
@@ -2903,7 +2903,7 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_app_app__ = __webpack_require__(21);
@@ -2940,7 +2940,7 @@ var HomePage = (function () {
         this.links = [];
         this.scanFailed = false;
         this.isNotLoggedIn = true;
-        this.config = __WEBPACK_IMPORTED_MODULE_5__config_environment_dev__["a" /* Config */];
+        this.config = __WEBPACK_IMPORTED_MODULE_5__config_environment__["a" /* Config */];
         this.isNotLoggedIn = !this.auth0.loggedIn();
     }
     HomePage.prototype.ngOnInit = function () {
@@ -3123,7 +3123,7 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3149,7 +3149,7 @@ var EvtProvider = (function () {
     function EvtProvider(http, auth) {
         this.http = http;
         this.auth = auth;
-        console.log('Hello EvtProvider Provider', __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
+        console.log('Hello EvtProvider Provider', __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].evt_app);
         this.init();
     }
     EvtProvider.prototype.createAppAction = function (actionType, action) {
@@ -3190,7 +3190,7 @@ var EvtProvider = (function () {
     EvtProvider.prototype.init = function () {
         EVT.use(EVT.Scan);
         EVT.setup({
-            apiUrl: __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_base_url,
+            apiUrl: __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].evt_base_url,
             geolocation: false
         });
         EVT.Scan.setup({
@@ -3198,7 +3198,7 @@ var EvtProvider = (function () {
                 method: ["ir", "2d"]
             }
         });
-        this.evtapp = new EVT.App(__WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].evt_app);
+        this.evtapp = new EVT.App(__WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].evt_app);
     };
     EvtProvider.prototype.hasUserContext = function () {
         return (this.getUserContextKeys() ? true : false);
@@ -3614,7 +3614,7 @@ EvtProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
@@ -3702,7 +3702,7 @@ var MyApp = (function () {
             this.noLink = false;
             this.ext_url = {
                 name: 'reorder',
-                link: __WEBPACK_IMPORTED_MODULE_4__config_environment_dev__["a" /* Config */].ext_links.reorder
+                link: __WEBPACK_IMPORTED_MODULE_4__config_environment__["a" /* Config */].ext_links.reorder
             };
         }
     };
@@ -3873,7 +3873,7 @@ var Config = {
     thngDaysLifeSpan: 30,
     dayToReorderNotice: 1 //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
 };
-//# sourceMappingURL=environment.dev.js.map
+//# sourceMappingURL=environment.js.map
 
 /***/ }),
 
@@ -3884,7 +3884,7 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraMainPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(49);
@@ -3935,7 +3935,7 @@ var AuraMainPage = (function () {
         this.courseTitle = "Mindfulness";
         this.addLesson = 0;
         this.labelIntro = "Start this course";
-        this.aura_url = __WEBPACK_IMPORTED_MODULE_2__config_environment_dev__["a" /* Config */].aura_url;
+        this.aura_url = __WEBPACK_IMPORTED_MODULE_2__config_environment__["a" /* Config */].aura_url;
     }
     AuraMainPage.prototype.ionViewWillEnter = function () {
         var _this = this;
@@ -4589,7 +4589,7 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
@@ -4621,7 +4621,7 @@ var SideMenuComponent = (function () {
         this.app = app;
         this.dom = dom;
         this.links = [];
-        this.ext = __WEBPACK_IMPORTED_MODULE_3__config_environment_dev__["a" /* Config */].ext_links;
+        this.ext = __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].ext_links;
     }
     SideMenuComponent.prototype.ngOnInit = function () {
         this.links = [
@@ -4877,7 +4877,7 @@ FooterComponentModule = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment_dev__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4907,19 +4907,19 @@ var FooterComponent = (function () {
         this.links = [
             {
                 text: "Privacy Policy",
-                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment_dev__["a" /* Config */].ext_links.privacyPolicy)
+                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment__["a" /* Config */].ext_links.privacyPolicy)
             },
             {
                 text: "Cookie Policy",
-                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment_dev__["a" /* Config */].ext_links.cookiePolicy)
+                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment__["a" /* Config */].ext_links.cookiePolicy)
             },
             {
                 text: "Legal Notice",
-                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment_dev__["a" /* Config */].ext_links.legalNotice)
+                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment__["a" /* Config */].ext_links.legalNotice)
             },
             {
                 text: "Modern Slavery Act Statement",
-                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment_dev__["a" /* Config */].ext_links.slaveryAct)
+                href: this.dom.bypassSecurityTrustResourceUrl(__WEBPACK_IMPORTED_MODULE_1__config_environment__["a" /* Config */].ext_links.slaveryAct)
             },
         ];
     };
