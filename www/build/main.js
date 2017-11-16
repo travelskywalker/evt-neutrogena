@@ -3085,6 +3085,7 @@ var HomePage = (function () {
             _this.app.saveThngContext(res);
         }).catch(function (err) {
             self.scanFailed = true;
+            self.evt.createUserAction("_NotRecognised", {}, true).then(function () { });
             console.log('scan failed', err);
             load.dismiss();
         });
@@ -3161,10 +3162,18 @@ var EvtProvider = (function () {
             console.log(err);
         });
     };
-    EvtProvider.prototype.createUserAction = function (actionType, action) {
+    EvtProvider.prototype.createUserAction = function (actionType, action, anonUser) {
         if (actionType === void 0) { actionType = ''; }
         if (action === void 0) { action = {}; }
-        return this.getUserContext().then(function (usr) {
+        if (anonUser === void 0) { anonUser = false; }
+        var userC;
+        if (anonUser) {
+            userC = this.getAnonUserContext();
+        }
+        else {
+            userC = this.getUserContext();
+        }
+        return userC.then(function (usr) {
             usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
         });
     };
@@ -3214,6 +3223,12 @@ var EvtProvider = (function () {
                 var userContext = JSON.parse(localStorage.anonEvrythngInfo);
                 lsId = userContext.evrythngUser;
                 lsApiKey = userContext.evrythngApiKey;
+            }
+            else {
+                this.createAppUser(forceAnon).then(function (usr) {
+                    lsId = usr.evrythngUser;
+                    lsApiKey = usr.evrythngApiKey;
+                });
             }
             console.log(lsId, lsApiKey);
         }
