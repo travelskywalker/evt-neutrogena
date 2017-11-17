@@ -224,9 +224,13 @@ export class HomePage {
       this.app.saveThngContext(res);
 
     }).catch(err=>{
+
       self.scanFailed = true;
+      self.evt.createUserAction("_NotRecognised", {}, true).then(() => {});
+
       console.log('scan failed',err);
       load.dismiss();
+
     });
   }
 

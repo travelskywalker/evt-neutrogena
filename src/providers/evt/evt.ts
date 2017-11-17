@@ -32,10 +32,18 @@ export class EvtProvider {
   	});
   }
 
-  createUserAction(actionType:string='',action:any = {}): Promise<any> {
-  	return this.getUserContext().then(usr=>{
+  createUserAction(actionType:string='',action:any = {}, anonUser: boolean=false): Promise<any> {
+
+    let userC;
+    if (anonUser) {
+      userC = this.getAnonUserContext();
+    } else {
+      userC = this.getUserContext();
+    }
+
+  	return userC.then(usr=>{
   		usr.action(actionType).create(action).then(console.log(actionType)).catch(err=>console.error(err));
-  	})
+  	});
   }
 
   /**
@@ -60,15 +68,15 @@ export class EvtProvider {
   	EVT.use(EVT.Scan);
 
   	EVT.setup({
-	  apiUrl: Config.evt_base_url,
-	  geolocation: false
-	});
+      apiUrl: Config.evt_base_url,
+      geolocation: false
+    });
 
-	EVT.Scan.setup({
-		filter: {
-			method: ["ir", "2d"]
-		}
-	});
+    EVT.Scan.setup({
+      filter: {
+        method: ["ir", "2d"]
+      }
+    });
 
   	this.evtapp = new EVT.App(Config.evt_app);
 
@@ -89,6 +97,11 @@ export class EvtProvider {
         let userContext = JSON.parse(localStorage.anonEvrythngInfo);
         lsId = userContext.evrythngUser;
         lsApiKey = userContext.evrythngApiKey;
+      } else {
+        this.createAppUser(forceAnon).then(usr=>{
+          lsId = usr.evrythngUser;
+          lsApiKey = usr.evrythngApiKey;
+        })
       }
       console.log(lsId, lsApiKey);
     } else {
