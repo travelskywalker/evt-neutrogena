@@ -165,7 +165,12 @@ export class AuraMainPage {
   initLabelIntro() {
     if (this.app.hasLoggedIn()) {
       if (this.app.hasStartedCourse(this.courseTitle)) {
-        this.labelIntro = "Continue";
+        if (this.app.hasCompletedCourse(this.courseTitle)) {
+          this.labelIntro = "Completed";
+        } else {
+          this.labelIntro = "Continue";
+        }
+
       } else {
         this.labelIntro = "Start this course";
       }

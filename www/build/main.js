@@ -519,6 +519,9 @@ var AppProvider = (function () {
         console.log(this.progressArr);
         return (typeof this.progressArr[course] != 'undefined');
     };
+    AppProvider.prototype.hasCompletedCourse = function (course) {
+        return (this.hasStartedCourse(course) && this.getCourseProgress(course) == this.getCourseDuration(course));
+    };
     AppProvider.prototype.hasLessonCompleted = function (lessonData) {
         if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
             return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
@@ -3997,7 +4000,12 @@ var AuraMainPage = (function () {
     AuraMainPage.prototype.initLabelIntro = function () {
         if (this.app.hasLoggedIn()) {
             if (this.app.hasStartedCourse(this.courseTitle)) {
-                this.labelIntro = "Continue";
+                if (this.app.hasCompletedCourse(this.courseTitle)) {
+                    this.labelIntro = "Completed";
+                }
+                else {
+                    this.labelIntro = "Continue";
+                }
             }
             else {
                 this.labelIntro = "Start this course";
@@ -5019,6 +5027,19 @@ var SubCourseComponent = (function () {
     SubCourseComponent.prototype.toSignUp = function () {
         this.nav.push(__WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__["a" /* SignUpPage */]);
     };
+    SubCourseComponent.prototype.getProgLabel = function () {
+        if (this.getProg() == 0) {
+            return "Begin";
+        }
+        else {
+            if (this.progress != this.duration) {
+                return "Continue";
+            }
+            else {
+                return "Complete";
+            }
+        }
+    };
     return SubCourseComponent;
 }());
 __decorate([
@@ -5055,7 +5076,7 @@ __decorate([
 ], SubCourseComponent.prototype, "crs", void 0);
 SubCourseComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'sub-course',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container">\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">{{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProg()==0?"Begin":"Continue"}}</button>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/sub-course/sub-course.html"*/
+        selector: 'sub-course',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container">\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">{{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/sub-course/sub-course.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]])
 ], SubCourseComponent);

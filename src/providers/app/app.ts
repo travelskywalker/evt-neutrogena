@@ -517,6 +517,10 @@ export class AppProvider {
     return (typeof this.progressArr[course] != 'undefined');
   }
 
+  hasCompletedCourse(course: any): boolean {
+    return (this.hasStartedCourse(course) && this.getCourseProgress(course) == this.getCourseDuration(course));
+  }
+
   hasLessonCompleted(lessonData) {
     if (typeof this.progressArr != 'undefined' && typeof this.progressArr[lessonData.course] != 'undefined') {
       return (this.progressArr[lessonData.course].indexOf(lessonData.day) >= 0);
