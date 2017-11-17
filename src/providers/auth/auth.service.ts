@@ -2,13 +2,10 @@
 import { Config } from '../../config/environment';
 import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
-// import { HomePage } from '../../pages/home/home';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 declare var Auth0Lock;
 
-@Injectable()
 @Injectable()
 export class AuthService {
   clientDefId:string = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
@@ -27,7 +24,7 @@ export class AuthService {
   lock = new Auth0Lock(Config.auth0.clientID,Config.auth0.domain);
   userInfo : any;
 
-  constructor(private http: Http) {
+  constructor() {
     this.projectId = Config.projectId;
   }
 
@@ -110,12 +107,15 @@ export class AuthService {
       /* Proceed with authentication */
       else if (typeof authResult.access_token != 'undefined'){
 
-        localStorage.setItem('access_token', authResult.access_token);
-        localStorage.setItem('id_token', authResult.id_token);
+
         this.webAuth.client.userInfo(authResult.access_token,function(err, user){
 
           /* Successful auth */
-          if (user) {
+          if (user && typeof user.user_metadata.deleted == 'undefined') {
+
+            localStorage.setItem('access_token', authResult.access_token);
+            localStorage.setItem('id_token', authResult.id_token);
+
             console.log("auth result is ", authResult);
             console.log(user);
             localStorage.setItem('userInfo',JSON.stringify(user));
@@ -124,18 +124,32 @@ export class AuthService {
 
           /* Failure at auth */
           } else if (err) {
+
+
             // Handle errors
             console.log(err);
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('id_token');
-            localStorage.removeItem('userInfo');
-            localStorage.removeItem('evrythngInfo');
+            self._removeLocalUserData();
             reject(err);
+
+          } else {
+
+            self._removeLocalUserData();
+            reject(user.user_metadata.deleted ? "deleted user" : "");
+
           }
         })
       }
     }
     );
+  }
+
+  private _removeLocalUserData(): void {
+
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('evrythngInfo');
+
   }
 
   /* store EVT info in the localstorage */
@@ -200,6 +214,9 @@ export class AuthService {
     let umd = this.getUserMetadataFromStorage();
     umd["firstName"] = usrMetaData.firstName;
     umd["lastName"] = usrMetaData.lastName;
+    if (typeof usrMetaData.deleted != 'undefined') {
+      umd["deleted"] = usrMetaData.deleted;
+    }
     let auth0Manage = new auth0.Management({
       domain: Config.auth0.domain,
       token: localStorage.getItem('id_token')
@@ -231,107 +248,39 @@ export class AuthService {
   }
 
 
-  /* Delete the user account via user management client */
+  /*
+  * Delete the user account via user management client
+  * User management should not be used. by Rex 11/17/2017
+  *
+  * */
   deleteUser(){
-    let self = this;
-    let id = (self.isFB() ? this.getUserDetailsFromStorage()['sub'] : self.getUserDetailsFromStorage()['user_id']);
-    let hdr = new Headers();
-    hdr.append("Content-Type","application/json");
-    return new Promise((resolve,reject)=>{
-      this.requestMgmtToken().then(res=>{
-        hdr.append("Authorization", "Bearer "+res['access_token']);
-        let opts = new RequestOptions({headers:hdr});
-        self.http.delete("https://"+Config.auth0.domain+"/api/v2/users/"+id,opts)
-                  .toPromise()
-                  .then(res=>{
-                    resolve(res)
-                  })
-                  .catch(err=>{
-                    reject(err)
-                  })
-      }).catch(err=>{
-        console.log(err);
-      })
-    }
-    );
+
+    return new Promise((resolve, reject)=> resolve(false));
+
   }
 
-  /* Delete the user password via user management client */
+  /*
+  * User management should not be used. by Rex 11/17/2017
+  *
+  * */
   updatePassword(newPass : string){
-    let self = this;
-    let id = this.getUserDetailsFromStorage()['user_id'];
-    let hdr = new Headers();
-    hdr.append("Content-Type","application/json");
-    let body = {"password":newPass};
-    return new Promise((resolve,reject)=>{
-      this.requestMgmtToken().then(res=>{
-        hdr.append("Authorization", "Bearer "+res['access_token']);
-        let opts = new RequestOptions({headers:hdr});
-        self.http.patch("https://"+Config.auth0.domain+"/api/v2/users/"+id,body,opts)
-                  .toPromise()
-                  .then(res=>{
-                    resolve(res)
-                  })
-                  .catch(err=>{
-                    reject(err)
-                  })
-      }).catch(err=>{
-        console.log(err);
-      })
-    }
-    );
+
+    return new Promise((resolve, reject)=> resolve(false));
 
   }
 
-  /* request oauth token via auth0 management client *
-   * this will be used for management api requests   */
-  requestMgmtToken(){
-    let hdr = new Headers();
-    hdr.append("Content-Type","application/json");
-    let body = {
-      grant_type: Config.auth0Mgmt.grant_type,
-      client_id: Config.auth0Mgmt.client_id,
-      client_secret: Config.auth0Mgmt.client_secret,
-      audience: Config.auth0Mgmt.audience
-    };
-
-    let opts = new RequestOptions({headers:hdr});
-    return new Promise((resolve,reject)=>{
-    this.http.post('https://'+Config.auth0.domain+'/oauth/token',body,opts)
-             .toPromise()
-             .then(res=>{
-               localStorage.setItem('managementToken',JSON.stringify(res.json()))
-               resolve(res.json())
-             })
-             .catch(err=>{
-               reject(err)
-             })
-           });
-  }
-
-  /* Search user by email via auth0 management client */
+  /**
+   *
+   * Check user
+   * User management should not be used. by Rex 11/17/2017
+   *
+   * @param mail
+   * @returns {Promise<T>}
+   */
   searchUser(mail){
-    let self = this;
-    let hdr = new Headers();
-    hdr.append("Content-Type","application/json");
-    let body = `q=email%3A%22${encodeURIComponent(mail)}%22&search_engine=v2`;
 
-    return new Promise((resolve,reject)=>{
-      this.requestMgmtToken().then(res=>{
-          hdr.append("Authorization", "Bearer "+res['access_token']);
-          let opts = new RequestOptions({headers:hdr});
-          self.http.get("https://"+Config.auth0.domain+"/api/v2/users?"+body,opts)
-              .toPromise()
-              .then(res=>{
-                resolve(res.json()[0])
-              })
-              .catch(err=>{
-                reject(err)
-              })
-      }).catch(err=>{
-        console.log(err)
-      })
-    });
+    return new Promise((resolve, reject)=> resolve(false));
+
   }
 
   /* Update password */

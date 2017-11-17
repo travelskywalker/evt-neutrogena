@@ -33,24 +33,36 @@ export class DeleteAccountPage {
   	}
   }
 
-  delete(){
-  	//auth0 here
-  	let self = this;
-  	let load = this.loader.create({
+  safeDelete() {
+    /**
+     * Mark as deleted and log-out user
+     *
+     * @type {any}
+     */
+    let self = this;
+    let load = this.loader.create({
       spinner: 'crescent',
       dismissOnPageChange: true,
       showBackdrop: true,
       content: `Please wait...`,
       enableBackdropDismiss:true});
-  	load.present();
-  	this.auth0.deleteUser().then(res=>{
-  		self.auth0.logout();
-  		self.navCtrl.setRoot(LoginPage);
-  	})
-  	.catch(err=>{
-  		console.log("An error has occurred",err);
-  		load.dismiss();
-  	});
+    load.present();
+
+    this.auth0.updateUser({deleted:true}).then(res=>{
+      console.log(res);
+      self.auth0.setUserMetadata(res['user_metadata']);
+      this.auth0.logout();
+    }).catch(err=>{
+      console.log(err);
+      load.dismiss();
+    });
+  }
+
+  delete(){
+  	//auth0 here,
+    // update: Unused, removed by Rex 11/17/2017
+    this.auth0.logout();
+    this.navCtrl.setRoot(LoginPage);
   }
 
 }
