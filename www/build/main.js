@@ -48,10 +48,10 @@ webpackEmptyAsyncContext.id = 203;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_tep__ = __webpack_require__(381);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_tep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__app_tep__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__assets_aura_config_aura_config__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs__ = __webpack_require__(382);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -318,6 +318,7 @@ var AppProvider = (function () {
         var _this = this;
         var timer = __WEBPACK_IMPORTED_MODULE_7_rxjs__["Observable"].timer(1000, 1000);
         var alive = true;
+        console.log('timer started');
         this.lessonTimer =
             timer
                 .takeWhile(function () { return alive; })
@@ -328,6 +329,7 @@ var AppProvider = (function () {
                     _this.completeLesson(lessonData);
                     pmc.toggleView(true, lessonData.course);
                     _this.lessonTimer.unsubscribe();
+                    console.log('timer end');
                 }
             });
     };
@@ -860,7 +862,7 @@ AppProvider = __decorate([
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(341);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
@@ -2056,7 +2058,8 @@ var AuraContentPage = (function () {
         // }
         document.getElementsByTagName('page-aura-content')[0].appendChild(node);
     };
-    AuraContentPage.prototype.ngAfterViewInit = function () {
+    //ngAfterViewInit(){
+    AuraContentPage.prototype.ionViewWillEnter = function () {
         var self = this;
         self.pmc.toggleView(false);
         // this.loadScript('../assets/scripts/widget.js',this.module.id);
@@ -2073,16 +2076,20 @@ var AuraContentPage = (function () {
             // fp.contentWindow.document.getElementById('aura-widget-div')
             /* TO DO: Add listener to aura player to track	*
              * play, pause, and audio completion			*/
-            var elementDetected = 0;
             var handler = function (e) {
                 var playBtn = fp.contentWindow.document.querySelector('div.audio.play');
-                playBtn.addEventListener('click', function (e) {
-                    var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
-                    if (ifStartPlay) {
-                        self.controlButtons(playBtn);
-                    }
-                });
-                auraWidget.removeEventListener('DOMSubtreeModified', handler, true);
+                if (typeof self.listener == 'undefined') {
+                    console.log('playBtn', playBtn);
+                    playBtn.addEventListener('click', function (e) {
+                        self.listener = e;
+                        var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
+                        console.log('ifStartPlay', ifStartPlay);
+                        if (ifStartPlay) {
+                            self.controlButtons(playBtn);
+                        }
+                    });
+                }
+                auraWidget.removeEventListener('DOMSubtreeModified', this, true);
             };
             auraWidget.addEventListener('DOMSubtreeModified', handler, true);
         };
@@ -2137,30 +2144,24 @@ var AuraContentPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('aura'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
 ], AuraContentPage.prototype, "auraComponent", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Content */]) === "function" && _b || Object)
 ], AuraContentPage.prototype, "content", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */])
+    __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__components_progress_modal_progress_modal__["a" /* ProgressModalComponent */]) === "function" && _c || Object)
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-aura-content',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n<progress-modal></progress-modal>\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n\n      <p class="author">\n        by {{module?.author}}\n      </p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
-        __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
+    __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_app_app__["a" /* AppProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_app_script_service__["a" /* ScriptService */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]) === "function" && _l || Object])
 ], AuraContentPage);
 
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 //# sourceMappingURL=aura-content.js.map
 
 /***/ }),
@@ -2438,9 +2439,9 @@ ForgotPasswordPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScanPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_age_gate_age_gate__ = __webpack_require__(68);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2608,9 +2609,9 @@ DeleteAccountPage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReorderModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(32);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2714,7 +2715,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(334);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(648);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(49);
@@ -2726,7 +2727,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_scan_scan__ = __webpack_require__(289);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__providers_app_script_service__ = __webpack_require__(286);
@@ -2830,14 +2831,97 @@ AppModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
+var Config = {
+    production: false,
+    evt_app: "UNFlt65VdIwXzmNbndPc7LBKTPoQ68ROhq0nTdvXieu66esipebEBNXdL3NpcsMfbon8xOfhppVS60IN",
+    evt_base_url: "https://api-eu.evrythng.com",
+    //evt_operator: "87NneGCimPPb5eZTr6nKPudKMhKzkGiqf8mvCF2N1hY2R3nOQA3sijF8KOkiZCdV9KTUpeZ3PkGacWQG",
+    //evt_operator_apikey: "hohzaKH7VbVp659Pnr5m3xg2DpKBivg9rFh6PttT5AnBtEn3s17B8OPAOpBjNTWdoRlosLTxJmUrpjTi",
+    projectId: "U3NNqQhUe6s7QraRakG4fpNc",
+    appId: "UG7N6Q2yVMsrtNRaak34fprg",
+    auth0: {
+        clientID: 'w9VzQPQgiQaldMl3MaGkfEph63N6VJhi',
+        domain: 'demo-evt.eu.auth0.com',
+        responseType: 'token id_token',
+        audience: 'https://demo-evt.eu.auth0.com/userinfo',
+        redirectUri: window.location.origin,
+        scope: 'openid'
+    },
+    ext_links: {
+        privacyPolicy: "//www.neutrogena.co.uk/privacypolicy",
+        cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
+        legalNotice: "//www.neutrogena.co.uk/legal-statement",
+        slaveryAct: "//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
+        reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
+    },
+    reorder_links: [
+        {
+            link: "https://www.amazon.co.uk/Neutrogena-Visibly-Clear-Therapy-Activator/dp/B01MU9ML3G/ref=sr_1_2_s_it?s=beauty&ie=UTF8&qid=1509712796&sr=1-2&keywords=neutrogena+light+therapy+acne+mask",
+            name: "Amazon",
+            target: "_blank"
+        }, {
+            link: "http://www.boots.com/neutrogena-light-acne-therapy-mask-applicator-10229139",
+            name: "Boots",
+            target: "_blank"
+        }, {
+            link: "https://www.superdrug.com/Skin/Face/Face-Masks/Neutrogena-Visibly-Clear-Acne-Mask-Activator/p/737374",
+            name: "Superdrug",
+            target: "_blank"
+        }, {
+            link: "https://www.lookfantastic.com/neutrogena-visibly-clear-light-therapy-mask-activator/11433855.html",
+            name: "Lookfantastic",
+            target: "_blank"
+        }, {
+            link: "https://www.ocado.com/webshop/product/Neutrogena-Light-Therapy-Acne-Mask-Activator/357890011?from=search&tags=%7C20000&param=neutrogena+activator&parentContainer=SEARCHneutrogena+acti",
+            name: "Ocado",
+            target: "_blank"
+        },
+    ],
+    aura_url: {
+        link: "https://www.aurahealth.io/",
+        name: "AURA health",
+        target: "_blank"
+    },
+    desktop_scan_url: {
+        link: "scan.neutrogena.co.uk",
+        name: "scan.neutrogena.co.uk",
+        target: "_blank"
+    },
+    neutrogena_url: {
+        link: "www.neutrogena.co.uk",
+        name: "www.neutrogena.co.uk",
+        target: "_blank"
+    },
+    neutrogena_reorder_url: {
+        link: "http://www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator",
+        name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
+        target: "_blank"
+    },
+    lessonCompletionTimeLimit: 2,
+    totalDailyLessonLimit: 30,
+    courseDailyLessonLimit: 10,
+    anonUserLessonLimit: 1,
+    anonUserDaysToSignInNotice: 0,
+    thngDaysLifeSpan: 30,
+    dayToReorderNotice: 1 //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
+};
+//# sourceMappingURL=environment.js.map
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_app_app__ = __webpack_require__(21);
@@ -3049,7 +3133,140 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 33:
+/***/ 334:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+//import { NoticeComponent } from "../components/notice/notice";
+//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
+
+
+var MyApp = (function () {
+    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
+        this.platform = platform;
+        this.statusBar = statusBar;
+        this.splashScreen = splashScreen;
+        this.app = app;
+        this.evt = evt;
+        this.loading = loading;
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
+        this.text = "";
+        this.show = false;
+        this.noLink = true;
+        this.initializeApp();
+        // used for an example of ngFor and navigation
+        this.pages = [
+            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] }
+        ];
+    }
+    MyApp.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.platform.is('mobile')) {
+            //redirect to context switcher for mobile vs desktop
+            this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */]);
+            return;
+        }
+        if (!this.evt.hasUserContext()) {
+            return;
+        }
+        var self = this;
+        var loading = self.loading.create({
+            spinner: 'crescent',
+            content: "Please wait...",
+            enableBackdropDismiss: true
+        });
+        loading.present();
+        this.app.initCourses().then(function () {
+            _this.app.initProgArr().then(function () {
+                console.log("Last completed:" + _this.app.getLastCompletedCourse());
+                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
+                _this.app.completeLogin(); //if login() is called
+                loading.dismiss();
+                _this.nav.setRoot("AuraMainPage");
+            });
+        });
+    };
+    MyApp.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.nav.viewDidEnter.subscribe(function (data) {
+            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
+                _this.noticePopUp();
+            }
+        });
+    };
+    MyApp.prototype.noticePopUp = function () {
+        if (this.app.hasSignInNotice()) {
+            this.show = true;
+            this.text = 'Sign in to track your progress.';
+            this.noLink = true;
+        }
+        else if (this.app.hasReorderNotice()) {
+            this.show = true;
+            this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
+            this.noLink = false;
+            this.ext_url = {
+                name: 'reorder',
+                link: __WEBPACK_IMPORTED_MODULE_4__config_environment__["a" /* Config */].ext_links.reorder
+            };
+        }
+    };
+    MyApp.prototype.initializeApp = function () {
+        var _this = this;
+        var self = this;
+        self.platform.ready().then(function () {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            _this.statusBar.styleDefault();
+            _this.splashScreen.hide();
+            //self.evt.init();
+            _this.app.setBeginTS();
+            console.log("EVT");
+        });
+    };
+    return MyApp;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
+], MyApp.prototype, "nav", void 0);
+MyApp = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
+        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+], MyApp);
+
+//# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 34:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3058,7 +3275,7 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3554,139 +3771,6 @@ EvtProvider = __decorate([
 
 /***/ }),
 
-/***/ 334:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_environment__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-//import { NoticeComponent } from "../components/notice/notice";
-//import { ReorderModalComponent } from "../components/reorder-modal/reorder-modal";
-
-
-var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, app, evt, loading) {
-        this.platform = platform;
-        this.statusBar = statusBar;
-        this.splashScreen = splashScreen;
-        this.app = app;
-        this.evt = evt;
-        this.loading = loading;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
-        this.text = "";
-        this.show = false;
-        this.noLink = true;
-        this.initializeApp();
-        // used for an example of ngFor and navigation
-        this.pages = [
-            { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] }
-        ];
-    }
-    MyApp.prototype.ngOnInit = function () {
-        var _this = this;
-        if (!this.platform.is('mobile')) {
-            //redirect to context switcher for mobile vs desktop
-            this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */]);
-            return;
-        }
-        if (!this.evt.hasUserContext()) {
-            return;
-        }
-        var self = this;
-        var loading = self.loading.create({
-            spinner: 'crescent',
-            content: "Please wait...",
-            enableBackdropDismiss: true
-        });
-        loading.present();
-        this.app.initCourses().then(function () {
-            _this.app.initProgArr().then(function () {
-                console.log("Last completed:" + _this.app.getLastCompletedCourse());
-                _this.app.setActiveCourse(_this.app.getLastCompletedCourse());
-                _this.app.completeLogin(); //if login() is called
-                loading.dismiss();
-                _this.nav.setRoot("AuraMainPage");
-            });
-        });
-    };
-    MyApp.prototype.ngAfterViewInit = function () {
-        var _this = this;
-        this.nav.viewDidEnter.subscribe(function (data) {
-            if ((data.component.name == 'AuraMainPage') || (data.component.name == 'AuraContentPage')) {
-                _this.noticePopUp();
-            }
-        });
-    };
-    MyApp.prototype.noticePopUp = function () {
-        if (this.app.hasSignInNotice()) {
-            this.show = true;
-            this.text = 'Sign in to track your progress.';
-            this.noLink = true;
-        }
-        else if (this.app.hasReorderNotice()) {
-            this.show = true;
-            this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
-            this.noLink = false;
-            this.ext_url = {
-                name: 'reorder',
-                link: __WEBPACK_IMPORTED_MODULE_4__config_environment__["a" /* Config */].ext_links.reorder
-            };
-        }
-    };
-    MyApp.prototype.initializeApp = function () {
-        var _this = this;
-        var self = this;
-        self.platform.ready().then(function () {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
-            _this.statusBar.styleDefault();
-            _this.splashScreen.hide();
-            //self.evt.init();
-            _this.app.setBeginTS();
-            console.log("EVT");
-        });
-    };
-    return MyApp;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Nav */])
-], MyApp.prototype, "nav", void 0);
-MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/'<ion-menu [content]="content" side="right">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/app/app.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
-], MyApp);
-
-//# sourceMappingURL=app.component.js.map
-
-/***/ }),
-
 /***/ 381:
 /***/ (function(module, exports) {
 
@@ -3747,84 +3831,6 @@ Array.prototype.sortNum = function () {
 
 /***/ }),
 
-/***/ 39:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
-var Config = {
-    production: false,
-    evt_app: "UNFlt65VdIwXzmNbndPc7LBKTPoQ68ROhq0nTdvXieu66esipebEBNXdL3NpcsMfbon8xOfhppVS60IN",
-    evt_base_url: "https://api-eu.evrythng.com",
-    //evt_operator: "87NneGCimPPb5eZTr6nKPudKMhKzkGiqf8mvCF2N1hY2R3nOQA3sijF8KOkiZCdV9KTUpeZ3PkGacWQG",
-    //evt_operator_apikey: "hohzaKH7VbVp659Pnr5m3xg2DpKBivg9rFh6PttT5AnBtEn3s17B8OPAOpBjNTWdoRlosLTxJmUrpjTi",
-    projectId: "U3NNqQhUe6s7QraRakG4fpNc",
-    appId: "UG7N6Q2yVMsrtNRaak34fprg",
-    auth0: {
-        clientID: 'w9VzQPQgiQaldMl3MaGkfEph63N6VJhi',
-        domain: 'demo-evt.eu.auth0.com',
-        responseType: 'token id_token',
-        audience: 'https://demo-evt.eu.auth0.com/userinfo',
-        redirectUri: window.location.origin,
-        scope: 'openid'
-    },
-    ext_links: {
-        privacyPolicy: "//www.neutrogena.co.uk/privacypolicy",
-        cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
-        legalNotice: "//www.neutrogena.co.uk/legal-statement",
-        slaveryAct: "//www.neutrogena.co.uk/sites/neutrogena.co.uk/files/modern_slavery_act_statement.pdf",
-        reorder: "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator"
-    },
-    reorder_links: [
-        {
-            link: "https://www.amazon.co.uk/Neutrogena-Visibly-Clear-Therapy-Activator/dp/B01MU9ML3G/ref=sr_1_2_s_it?s=beauty&ie=UTF8&qid=1509712796&sr=1-2&keywords=neutrogena+light+therapy+acne+mask",
-            name: "Amazon",
-            target: "_blank"
-        }, {
-            link: "http://www.boots.com/neutrogena-light-acne-therapy-mask-applicator-10229139",
-            name: "Boots",
-            target: "_blank"
-        }, {
-            link: "https://www.superdrug.com/Skin/Face/Face-Masks/Neutrogena-Visibly-Clear-Acne-Mask-Activator/p/737374",
-            name: "Superdrug",
-            target: "_blank"
-        }, {
-            link: "https://www.lookfantastic.com/neutrogena-visibly-clear-light-therapy-mask-activator/11433855.html",
-            name: "Lookfantastic",
-            target: "_blank"
-        }, {
-            link: "https://www.ocado.com/webshop/product/Neutrogena-Light-Therapy-Acne-Mask-Activator/357890011?from=search&tags=%7C20000&param=neutrogena+activator&parentContainer=SEARCHneutrogena+acti",
-            name: "Ocado",
-            target: "_blank"
-        },
-    ],
-    aura_url: {
-        link: "https://www.aurahealth.io/",
-        name: "AURA health",
-        target: "_blank"
-    },
-    desktop_scan_url: {
-        link: "scan.neutrogena.co.uk",
-        name: "scan.neutrogena.co.uk",
-        target: "_blank"
-    },
-    neutrogena_url: {
-        link: "www.neutrogena.co.uk",
-        name: "www.neutrogena.co.uk",
-        target: "_blank"
-    },
-    lessonCompletionTimeLimit: 2,
-    totalDailyLessonLimit: 30,
-    courseDailyLessonLimit: 10,
-    anonUserLessonLimit: 1,
-    anonUserDaysToSignInNotice: 0,
-    thngDaysLifeSpan: 30,
-    dayToReorderNotice: 1 //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
-};
-//# sourceMappingURL=environment.js.map
-
-/***/ }),
-
 /***/ 40:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3832,11 +3838,11 @@ var Config = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuraMainPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_aura_content_aura_content__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4044,11 +4050,11 @@ AuraMainPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__forgot_password_forgot_password__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__aura_main_aura_main__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -4171,13 +4177,13 @@ LoginPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scan_scan__ = __webpack_require__(289);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4301,7 +4307,7 @@ AuthPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4537,7 +4543,7 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
@@ -4672,7 +4678,7 @@ NoticeComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4825,7 +4831,7 @@ FooterComponentModule = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5214,6 +5220,7 @@ AuraFootComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_reorder_modal_reorder_modal__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment__ = __webpack_require__(32);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5223,6 +5230,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -5242,6 +5250,7 @@ var AuraFootComponent = (function () {
         this.appState = appState;
         /* This is the reorder link */
         this.ext_url = "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator";
+        this.neutrogena_reorder_url = __WEBPACK_IMPORTED_MODULE_5__config_environment__["a" /* Config */].neutrogena_reorder_url;
         console.log('Hello AuraFootComponent Component');
     }
     /***
@@ -5296,6 +5305,9 @@ var AuraFootComponent = (function () {
     AuraFootComponent.prototype.reorderAction = function () {
         this.reorder.toggleView();
     };
+    AuraFootComponent.prototype.logAction = function () {
+        this.appState.evt.createUserAction('_Reorder', {}, !this.appState.hasLoggedIn());
+    };
     return AuraFootComponent;
 }());
 __decorate([
@@ -5304,7 +5316,7 @@ __decorate([
 ], AuraFootComponent.prototype, "reorder", void 0);
 AuraFootComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'aura-foot',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder" (tap)="reorderAction()">\n  			<!--<a (tap)="logAction()" [href]="ext_url" target="_blank">-->\n        <img src="../assets/images/reorder.png"/>\n  			<!--</a>-->\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
+        selector: 'aura-foot',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder">\n  			<a (tap)="logAction()" [href]="neutrogena_reorder_url.link" [title]="neutrogena_reorder_url.name" [target]="" target="neutrogena_reorder_url.target">\n          <img src="../assets/images/reorder.png"/>\n  			</a>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */],
@@ -5403,10 +5415,10 @@ ReorderModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
@@ -5576,7 +5588,7 @@ SignUpPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5700,7 +5712,7 @@ AgeGatePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__delete_account_delete_account__ = __webpack_require__(290);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

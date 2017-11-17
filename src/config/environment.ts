@@ -59,6 +59,11 @@ export const Config = {
     name: "www.neutrogena.co.uk",
     target: "_blank"
   },
+  neutrogena_reorder_url: {
+    link: "http://www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator",
+    name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
+    target: "_blank"
+  },
   lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
