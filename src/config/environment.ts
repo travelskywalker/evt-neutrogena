@@ -14,12 +14,6 @@ export const Config = {
     redirectUri: window.location.origin,//'http://localhost:8100',
     scope: 'openid'
   },
-  auth0Mgmt:{
-    grant_type: 'client_credentials',
-    client_id: 'iFF5t1pmHIXS9vsOV14KGt5V4XfEh37n',
-    client_secret: '4gAx_w6YVA-uC1CtOGEvwCqyKoxRgKqyvf39i2axHVmOuZLr0U2fRCghMholpQqy',
-    audience: 'https://demo-evt.eu.auth0.com/api/v2/'
-  },
   ext_links:{
     privacyPolicy:"//www.neutrogena.co.uk/privacypolicy",
     cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
@@ -56,8 +50,8 @@ export const Config = {
     target: "_blank"
   },
   desktop_scan_url: {
-    link: "www.scan.neutrogena.co.uk",
-    name: "www.scan.neutrogena.co.uk",
+    link: "scan.neutrogena.co.uk",
+    name: "scan.neutrogena.co.uk",
     target: "_blank"
   },
   neutrogena_url: {
