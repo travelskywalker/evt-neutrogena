@@ -40,8 +40,8 @@ webpackEmptyAsyncContext.id = 203;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
@@ -846,7 +846,7 @@ var AppProvider = (function () {
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
         __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
         __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]])
 ], AppProvider);
@@ -864,9 +864,8 @@ AppProvider = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js__ = __webpack_require__(341);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_auth0_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_auth0_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__(261);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -880,12 +879,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import { HomePage } from '../../pages/home/home';
-
 
 var AuthService = (function () {
-    function AuthService(http) {
-        this.http = http;
+    function AuthService() {
         this.clientDefId = "ZQzpUoZgrpMC4pKn3ipIfgSudQ9J_uE1";
         this.clientDefSecret = "1omoA1OU8WmxdLpiCXvaTcsgLDRXsOUCbrmQ1U3BTtLg_P0MinVMqDRoYmQFcJxG";
         /* main auth0 variable. */
@@ -978,11 +974,11 @@ var AuthService = (function () {
                 reject(authResult.error);
             }
             else if (typeof authResult.access_token != 'undefined') {
-                localStorage.setItem('access_token', authResult.access_token);
-                localStorage.setItem('id_token', authResult.id_token);
                 _this.webAuth.client.userInfo(authResult.access_token, function (err, user) {
                     /* Successful auth */
-                    if (user) {
+                    if (user && typeof user.user_metadata.deleted == 'undefined') {
+                        localStorage.setItem('access_token', authResult.access_token);
+                        localStorage.setItem('id_token', authResult.id_token);
                         console.log("auth result is ", authResult);
                         console.log(user);
                         localStorage.setItem('userInfo', JSON.stringify(user));
@@ -993,15 +989,22 @@ var AuthService = (function () {
                     else if (err) {
                         // Handle errors
                         console.log(err);
-                        localStorage.removeItem('access_token');
-                        localStorage.removeItem('id_token');
-                        localStorage.removeItem('userInfo');
-                        localStorage.removeItem('evrythngInfo');
+                        self._removeLocalUserData();
                         reject(err);
+                    }
+                    else {
+                        self._removeLocalUserData();
+                        reject(user.user_metadata.deleted ? "deleted user" : "");
                     }
                 });
             }
         });
+    };
+    AuthService.prototype._removeLocalUserData = function () {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('evrythngInfo');
     };
     /* store EVT info in the localstorage */
     AuthService.prototype.setEVTInfo = function () {
@@ -1057,6 +1060,9 @@ var AuthService = (function () {
         var umd = this.getUserMetadataFromStorage();
         umd["firstName"] = usrMetaData.firstName;
         umd["lastName"] = usrMetaData.lastName;
+        if (typeof usrMetaData.deleted != 'undefined') {
+            umd["deleted"] = usrMetaData.deleted;
+        }
         var auth0Manage = new __WEBPACK_IMPORTED_MODULE_2_auth0_js__["Management"]({
             domain: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain,
             token: localStorage.getItem('id_token')
@@ -1080,103 +1086,31 @@ var AuthService = (function () {
     AuthService.prototype.isFB = function () {
         return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
     };
-    /* Delete the user account via user management client */
+    /*
+    * Delete the user account via user management client
+    * User management should not be used. by Rex 11/17/2017
+    *
+    * */
     AuthService.prototype.deleteUser = function () {
-        var _this = this;
-        var self = this;
-        var id = (self.isFB() ? this.getUserDetailsFromStorage()['sub'] : self.getUserDetailsFromStorage()['user_id']);
-        var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
-        hdr.append("Content-Type", "application/json");
-        return new Promise(function (resolve, reject) {
-            _this.requestMgmtToken().then(function (res) {
-                hdr.append("Authorization", "Bearer " + res['access_token']);
-                var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.delete("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, opts)
-                    .toPromise()
-                    .then(function (res) {
-                    resolve(res);
-                })
-                    .catch(function (err) {
-                    reject(err);
-                });
-            }).catch(function (err) {
-                console.log(err);
-            });
-        });
+        return new Promise(function (resolve, reject) { return resolve(false); });
     };
-    /* Delete the user password via user management client */
+    /*
+    * User management should not be used. by Rex 11/17/2017
+    *
+    * */
     AuthService.prototype.updatePassword = function (newPass) {
-        var _this = this;
-        var self = this;
-        var id = this.getUserDetailsFromStorage()['user_id'];
-        var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
-        hdr.append("Content-Type", "application/json");
-        var body = { "password": newPass };
-        return new Promise(function (resolve, reject) {
-            _this.requestMgmtToken().then(function (res) {
-                hdr.append("Authorization", "Bearer " + res['access_token']);
-                var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.patch("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users/" + id, body, opts)
-                    .toPromise()
-                    .then(function (res) {
-                    resolve(res);
-                })
-                    .catch(function (err) {
-                    reject(err);
-                });
-            }).catch(function (err) {
-                console.log(err);
-            });
-        });
+        return new Promise(function (resolve, reject) { return resolve(false); });
     };
-    /* request oauth token via auth0 management client *
-     * this will be used for management api requests   */
-    AuthService.prototype.requestMgmtToken = function () {
-        var _this = this;
-        var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
-        hdr.append("Content-Type", "application/json");
-        var body = {
-            grant_type: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.grant_type,
-            client_id: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.client_id,
-            client_secret: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.client_secret,
-            audience: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0Mgmt.audience
-        };
-        var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-        return new Promise(function (resolve, reject) {
-            _this.http.post('https://' + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + '/oauth/token', body, opts)
-                .toPromise()
-                .then(function (res) {
-                localStorage.setItem('managementToken', JSON.stringify(res.json()));
-                resolve(res.json());
-            })
-                .catch(function (err) {
-                reject(err);
-            });
-        });
-    };
-    /* Search user by email via auth0 management client */
+    /**
+     *
+     * Check user
+     * User management should not be used. by Rex 11/17/2017
+     *
+     * @param mail
+     * @returns {Promise<T>}
+     */
     AuthService.prototype.searchUser = function (mail) {
-        var _this = this;
-        var self = this;
-        var hdr = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
-        hdr.append("Content-Type", "application/json");
-        var body = "q=email%3A%22" + encodeURIComponent(mail) + "%22&search_engine=v2";
-        return new Promise(function (resolve, reject) {
-            _this.requestMgmtToken().then(function (res) {
-                hdr.append("Authorization", "Bearer " + res['access_token']);
-                var opts = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["d" /* RequestOptions */]({ headers: hdr });
-                self.http.get("https://" + __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.domain + "/api/v2/users?" + body, opts)
-                    .toPromise()
-                    .then(function (res) {
-                    resolve(res.json()[0]);
-                })
-                    .catch(function (err) {
-                    reject(err);
-                });
-            }).catch(function (err) {
-                console.log(err);
-            });
-        });
+        return new Promise(function (resolve, reject) { return resolve(false); });
     };
     /* Update password */
     AuthService.prototype.changePassword = function (mail) {
@@ -1199,8 +1133,7 @@ var AuthService = (function () {
 }());
 AuthService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]])
+    __metadata("design:paramtypes", [])
 ], AuthService);
 
 //# sourceMappingURL=auth.service.js.map
@@ -2461,23 +2394,13 @@ var ForgotPasswordPage = (function () {
     };
     ForgotPasswordPage.prototype.reset_pass = function () {
         var self = this;
-        this.auth0.searchUser(this.formGroup.value.email)
+        self.auth0.changePassword(self.formGroup.value.email)
             .then(function (res) {
-            if (res) {
-                self.invalidEmail = false;
-                self.auth0.changePassword(self.formGroup.value.email)
-                    .then(function (res) {
-                    self.emailSent = true;
-                })
-                    .catch(function (err) {
-                    console.log(err);
-                });
-            }
-            else {
-                self.invalidEmail = true;
-            }
+            self.invalidEmail = false;
+            self.emailSent = true;
         })
             .catch(function (err) {
+            self.invalidEmail = true;
             console.log(err);
         });
     };
@@ -2594,7 +2517,7 @@ ScanPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeleteAccountPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_account_my_account__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2635,8 +2558,13 @@ var DeleteAccountPage = (function () {
             this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__my_account_my_account__["a" /* MyAccountPage */]);
         }
     };
-    DeleteAccountPage.prototype.delete = function () {
-        //auth0 here
+    DeleteAccountPage.prototype.safeDelete = function () {
+        var _this = this;
+        /**
+         * Mark as deleted and log-out user
+         *
+         * @type {any}
+         */
         var self = this;
         var load = this.loader.create({
             spinner: 'crescent',
@@ -2646,20 +2574,26 @@ var DeleteAccountPage = (function () {
             enableBackdropDismiss: true
         });
         load.present();
-        this.auth0.deleteUser().then(function (res) {
-            self.auth0.logout();
-            self.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */]);
-        })
-            .catch(function (err) {
-            console.log("An error has occurred", err);
+        this.auth0.updateUser({ deleted: true }).then(function (res) {
+            console.log(res);
+            self.auth0.setUserMetadata(res['user_metadata']);
+            _this.auth0.logout();
+        }).catch(function (err) {
+            console.log(err);
             load.dismiss();
         });
+    };
+    DeleteAccountPage.prototype.delete = function () {
+        //auth0 here,
+        // update: Unused, removed by Rex 11/17/2017
+        this.auth0.logout();
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */]);
     };
     return DeleteAccountPage;
 }());
 DeleteAccountPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="delete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
+        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="safeDelete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
 ], DeleteAccountPage);
@@ -2776,7 +2710,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(334);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(243);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(248);
@@ -2784,7 +2718,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_sign_up_sign_up__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_auth_auth__ = __webpack_require__(648);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_my_account_my_account__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_delete_account_delete_account__ = __webpack_require__(290);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_forgot_password_forgot_password__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_reset_password_reset_password__ = __webpack_require__(649);
@@ -2856,7 +2790,7 @@ AppModule = __decorate([
         imports: [
             __WEBPACK_IMPORTED_MODULE_23__components_components_module__["a" /* ComponentsModule */],
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */], {}, {
                 links: [
                     { component: __WEBPACK_IMPORTED_MODULE_7__pages_home_home__["a" /* HomePage */], name: 'Home', segment: 'home' },
@@ -2901,7 +2835,7 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__ = __webpack_require__(40);
@@ -3121,7 +3055,7 @@ HomePage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EvtProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
@@ -3612,7 +3546,7 @@ var EvtProvider = (function () {
 }());
 EvtProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
         __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
 ], EvtProvider);
 
@@ -3834,12 +3768,6 @@ var Config = {
         redirectUri: window.location.origin,
         scope: 'openid'
     },
-    auth0Mgmt: {
-        grant_type: 'client_credentials',
-        client_id: 'iFF5t1pmHIXS9vsOV14KGt5V4XfEh37n',
-        client_secret: '4gAx_w6YVA-uC1CtOGEvwCqyKoxRgKqyvf39i2axHVmOuZLr0U2fRCghMholpQqy',
-        audience: 'https://demo-evt.eu.auth0.com/api/v2/'
-    },
     ext_links: {
         privacyPolicy: "//www.neutrogena.co.uk/privacypolicy",
         cookiePolicy: "//www.neutrogena.co.uk/cookie-policy",
@@ -3876,8 +3804,8 @@ var Config = {
         target: "_blank"
     },
     desktop_scan_url: {
-        link: "www.scan.neutrogena.co.uk",
-        name: "www.scan.neutrogena.co.uk",
+        link: "scan.neutrogena.co.uk",
+        name: "scan.neutrogena.co.uk",
         target: "_blank"
     },
     neutrogena_url: {
@@ -4611,7 +4539,7 @@ SideMenuComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_environment__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_my_account_my_account__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5173,7 +5101,7 @@ AuraHeadComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_sign_up_sign_up__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_my_account_my_account__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_my_account_my_account__ = __webpack_require__(95);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5482,7 +5410,7 @@ ReorderModalComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__aura_main_aura_main__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_cookies__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5645,7 +5573,7 @@ SignUpPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AgeGatePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cookies__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home__ = __webpack_require__(32);
@@ -5763,7 +5691,7 @@ AgeGatePage = __decorate([
 
 /***/ }),
 
-/***/ 96:
+/***/ 95:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
