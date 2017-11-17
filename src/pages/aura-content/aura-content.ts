@@ -38,6 +38,7 @@ export class AuraContentPage{
 		};
 	auraRef : any;
 	auraSelect: any;
+  listener: any;
 	@ViewChild(ProgressModalComponent) pmc : ProgressModalComponent;
   message:any;
   constructor(private elRef:ElementRef,
@@ -94,9 +95,11 @@ export class AuraContentPage{
     // }
     document.getElementsByTagName('page-aura-content')[0].appendChild(node);
 
- }
+  }
 
-  ngAfterViewInit(){
+
+  //ngAfterViewInit(){
+  ionViewWillEnter() {
     let self = this;
     self.pmc.toggleView(false);
 
@@ -116,22 +119,24 @@ export class AuraContentPage{
       // fp.contentWindow.document.getElementById('aura-widget-div')
   		/* TO DO: Add listener to aura player to track	*
   		 * play, pause, and audio completion			*/
-       let elementDetected = 0;
-       let handler = function(e){
 
+       let handler = function(e){
          let playBtn = fp.contentWindow.document.querySelector('div.audio.play');
 
-         playBtn.addEventListener('click',function(e){
-           let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play')
-           if(ifStartPlay){
-             self.controlButtons(playBtn);
-           }
-
-         });
-         auraWidget.removeEventListener('DOMSubtreeModified',handler,true);
+         if (typeof self.listener == 'undefined') {
+           console.log('playBtn', playBtn);
+           playBtn.addEventListener('click',function(e){
+             self.listener = e;
+             let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play')
+             console.log('ifStartPlay', ifStartPlay);
+             if(ifStartPlay){
+               self.controlButtons(playBtn);
+             }
+           });
+         }
+         auraWidget.removeEventListener('DOMSubtreeModified', this, true);
        }
        auraWidget.addEventListener('DOMSubtreeModified',handler,true);
-
   	}
 
   }

@@ -11,5 +11,5 @@
 			<p class="completion">{{getProg()}}% Complete</p>
 		</span>
 	</span>
-	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProg()==0?"Begin":"Continue"}}</button>
+	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>
 </div>

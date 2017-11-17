@@ -295,6 +295,7 @@ export class AppProvider {
   startLessonTimer(lessonData: any, pmc?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
+    console.log('timer started');
     this.lessonTimer =
       timer
       .takeWhile(() => alive)
@@ -305,7 +306,7 @@ export class AppProvider {
           this.completeLesson(lessonData);
           pmc.toggleView(true, lessonData.course);
           this.lessonTimer.unsubscribe();
-
+          console.log('timer end');
         }
       })
 
@@ -514,6 +515,10 @@ export class AppProvider {
     console.log("hasStarted " + typeof this.progressArr[course] != 'undefined');
     console.log(this.progressArr);
     return (typeof this.progressArr[course] != 'undefined');
+  }
+
+  hasCompletedCourse(course: any): boolean {
+    return (this.hasStartedCourse(course) && this.getCourseProgress(course) == this.getCourseDuration(course));
   }
 
   hasLessonCompleted(lessonData) {

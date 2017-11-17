@@ -5,6 +5,7 @@ import { AuraMainPage } from "../../pages/aura-main/aura-main";
 
 import { AppProvider } from "../../providers/app/app";
 import { ReorderModalComponent } from "../../components/reorder-modal/reorder-modal";
+import { Config } from "../../config/environment";
 /**
  * Generated class for the AuraFootComponent component.
  *
@@ -20,7 +21,7 @@ export class AuraFootComponent {
   @Input('reorder') reorder?: ReorderModalComponent;
   /* This is the reorder link */
   ext_url ?: string = "//www.neutrogena.co.uk/product/visibly-clear-light-therapy-acne-mask-activator";
-
+  neutrogena_reorder_url = Config.neutrogena_reorder_url;
   constructor(private loader: LoadingController,
               private nav: NavController, private view: ViewController,
               private appState: AppProvider) {
@@ -81,6 +82,10 @@ export class AuraFootComponent {
    */
   reorderAction(): void{
     this.reorder.toggleView();
+  }
+
+  logAction(): void {
+    this.appState.evt.createUserAction('_Reorder', {}, !this.appState.hasLoggedIn());
   }
 
 }

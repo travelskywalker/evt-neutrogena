@@ -25,6 +25,7 @@ export class SubCourseComponent {
   @ViewChild('prog') prog : ElementRef;
   @Output('begin') bgn = new EventEmitter;
   @Input('activeCourse') crs : any;
+
   //daysLength ?: number = 0;
 
   constructor(private auth0: AuthService, private appService: AppProvider, private render: Renderer2, private nav: NavController) {
@@ -75,4 +76,16 @@ export class SubCourseComponent {
   	this.nav.push(SignUpPage);
   }
 
+  getProgLabel() {
+    if (this.getProg() == 0) {
+      return "Begin";
+    } else {
+      if (this.progress != this.duration) {
+        return "Continue"
+      } else {
+        return "Complete"
+      }
+
+    }
+  }
 }
