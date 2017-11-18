@@ -16,6 +16,10 @@ declare var EVT : any;
 export class EvtProvider {
 
   evtapp : any;
+  anonUserC: Promise<any>;
+  userC: Promise<any>;
+  anonEvtUser: any;
+  evtUser: any;
 
   constructor(public http: Http,
               private auth: AuthService
@@ -156,6 +160,10 @@ export class EvtProvider {
   /* return evt user context as a promise */
   getUserContext():Promise<any> {
 
+    if (typeof this.userC != 'undefined') {
+      return this.userC;
+    }
+
     let ls = this._getUserContextKeys();
 
     let lsId = typeof ls != 'undefined' ? ls[1] : '';
@@ -186,6 +194,10 @@ export class EvtProvider {
      * Return EVT user instance object (Not a promise)
      * @type {any}
      */
+    if (typeof this.evtUser != 'undefined') {
+      return this.evtUser;
+    }
+
     let ls = this._getUserContextKeys();
 
     let lsId = ls[1];
@@ -201,6 +213,10 @@ export class EvtProvider {
 
   /* return evt user context as a promise */
   getAnonUserContext():Promise<any> {
+
+    if (typeof this.anonUserC != 'undefined') {
+      return this.anonUserC;
+    }
 
     let ls = this.getUserContextKeys(true);
     let lsId = ls[1];
@@ -223,6 +239,11 @@ export class EvtProvider {
      * Return EVT user instance object (Not a promise)
      * @type {any}
      */
+
+    if (typeof this.anonEvtUser != 'undefined') {
+      return this.anonEvtUser;
+    }
+
     let ls = this.getUserContextKeys(true);
 
     let lsId = ls[1];
