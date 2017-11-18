@@ -2091,6 +2091,7 @@ var AuraContentPage = (function () {
                 auraWidget.removeEventListener('DOMSubtreeModified', this, true);
             };
             auraWidget.addEventListener('DOMSubtreeModified', handler, true);
+            console.log(e);
         };
     };
     AuraContentPage.prototype.controlButtons = function (element) {
@@ -2820,7 +2821,7 @@ var Config = {
         name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
         target: "_blank"
     },
-    lessonCompletionTimeLimit: 60 * 10,
+    lessonCompletionTimeLimit: 10,
     totalDailyLessonLimit: 30,
     courseDailyLessonLimit: 10,
     anonUserLessonLimit: 1,

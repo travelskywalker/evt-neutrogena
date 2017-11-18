@@ -62,7 +62,7 @@ export const Config = {
     name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
     target: "_blank"
   },
-  lessonCompletionTimeLimit: 60 * 10, //seconds till content consumption completion event is triggered
+  lessonCompletionTimeLimit: 10, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 30, //lesson completion count
   courseDailyLessonLimit: 10, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
