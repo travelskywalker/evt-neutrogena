@@ -3,7 +3,7 @@
 <ion-content >
 <progress-modal></progress-modal>
     <!-- <div id="aura-widget-div" #aura></div> -->
-    <iframe id="aura-widget-div" [src]="module?.link"></iframe>
+    <iframe id="aura-widget-div" [src]="module?.link" (load)="isframeLoaded()"></iframe>
 
     <section class="description">
     	<p class="title">

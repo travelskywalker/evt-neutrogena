@@ -1,10 +1,9 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
 // import { AuthService } from "../../providers/auth/auth.service";
 
 import { Cookie } from "ng2-cookies";
 import { AppProvider } from "../../providers/app/app";
-import { SignUpPage } from '../sign-up/sign-up';
 import { HomePage } from '../home/home';
 import { AuraMainPage } from '../aura-main/aura-main';
 
@@ -24,7 +23,6 @@ export class AgeGatePage {
 
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
-  				private render: Renderer2,
           public alertCtrl: AlertController,
           public app: AppProvider
   				) {

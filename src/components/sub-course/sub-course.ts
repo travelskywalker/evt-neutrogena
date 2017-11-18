@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, Renderer2, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, ViewChild, ElementRef } from '@angular/core';
 
 import { NavController } from "ionic-angular";
 import { AuthService } from "../../providers/auth/auth.service";

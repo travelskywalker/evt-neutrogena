@@ -3,13 +3,10 @@ import { IonicPage, NavController, NavParams, LoadingController, Platform } from
 import { HomePage } from "../home/home";
 import { ScanPage } from "../scan/scan";
 import { AuraMainPage } from "../aura-main/aura-main";
-import { LoginPage } from "../login/login";
 import { AgeGatePage } from '../age-gate/age-gate';
 import { AuthService } from "../../providers/auth/auth.service";
 import { AppProvider } from "../../providers/app/app";
 import { EvtProvider } from "../../providers/evt/evt";
-import { Config } from '../../config/environment';
-declare var EVT: any;
 /**
  * This is the catch-all page. All paths are checked here first.
  * The access_token and id_token variables are stored in localstorage

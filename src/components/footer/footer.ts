@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Config } from "../../config/environment";
-import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
+import { DomSanitizer} from '@angular/platform-browser';
 
 /**
  * Generated class for the FooterComponent component.

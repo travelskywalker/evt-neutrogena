@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
-
-import { LoginPage } from "../../pages/login/login";
 import { AuthService } from "../../providers/auth/auth.service";
 
 import { SignUpPage } from "../../pages/sign-up/sign-up";
@@ -29,7 +27,7 @@ export class AuraHeadComponent {
   toLogin(){
   	/*let nav = this.app.getRootNav();
   	nav.setRoot(LoginPage);*/
-  	
+
   	//this.navCtrl.setRoot(LoginPage);
 
   	this.navCtrl.push(SignUpPage);
@@ -44,7 +42,7 @@ export class AuraHeadComponent {
   	if(this.auth0.loggedIn()){
   		this.userData = this.auth0.getUserDetailsFromStorage();
   		this.logged = true;
-  		
+
 	  	if(this.auth0.isFB()){
 	  		this.name = this.userData.given_name;
 	  	}

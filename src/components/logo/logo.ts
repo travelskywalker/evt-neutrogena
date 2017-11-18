@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController} from 'ionic-angular';
 
 @Component({
   selector: 'component-logo',
@@ -7,6 +6,6 @@ import { NavParams, NavController} from 'ionic-angular';
 })
 export class LogoComponent {
 
-  constructor(private navCtrl : NavController) {}
+  constructor() {}
 
 }

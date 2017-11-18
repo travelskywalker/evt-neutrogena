@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController} from 'ionic-angular';
+import { IonicPage, NavController, LoadingController} from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
 import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
 import { HomePage } from '../home/home';
-import { AuraMainPage } from '../aura-main/aura-main';
 import { DeleteAccountPage } from '../delete-account/delete-account';
 
 @IonicPage()
@@ -18,7 +17,6 @@ export class MyAccountPage {
   private formGroup:FormGroup;
 
   constructor(public navCtrl:NavController,
-              public navParams:NavParams,
               private auth0:AuthService,
               private formBuilder:FormBuilder,
               private loader:LoadingController) {
@@ -45,11 +43,13 @@ export class MyAccountPage {
   }
 
   focused(event) {
-    let node = event._elementRef.nativeElement;
+    //let node = event._elementRef.nativeElement;
+    console.log(event);
   }
 
   blurred(event) {
-    let node = event._elementRef.nativeElement;
+    //let node = event._elementRef.nativeElement;
+    console.log(event);
   }
 
   dismissThis() {

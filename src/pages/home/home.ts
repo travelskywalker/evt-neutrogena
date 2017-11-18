@@ -7,7 +7,6 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Cookie } from 'ng2-cookies';
 import { Config } from '../../config/environment';
 
-import { LoginPage } from '../login/login';
 import { AuraMainPage } from '../aura-main/aura-main';
 import { AgeGatePage } from '../age-gate/age-gate';
 import { AppProvider } from "../../providers/app/app";

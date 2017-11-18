@@ -1,7 +1,6 @@
-import { Component, Input, Renderer2, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Renderer2, ElementRef } from '@angular/core';
 import { App } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
-import { EvtProvider } from '../../providers/evt/evt';
 import { AppProvider } from '../../providers/app/app';
 
 /**
@@ -24,7 +23,7 @@ export class NoticeComponent {
 
   style: any;
 	//@ViewChild(this) content ?: NoticeComponent;
-  constructor(public app: App, public appState: AppProvider, private evt: EvtProvider,private render: Renderer2, public elem:ElementRef) {
+  constructor(public app: App, public appState: AppProvider, private render: Renderer2, public elem:ElementRef) {
   }
 
   ngOnInit(){

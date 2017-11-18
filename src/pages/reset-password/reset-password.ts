@@ -1,5 +1,5 @@
-import { Component, Renderer2, ViewChild, ElementRef} from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Renderer2 } from '@angular/core';
+import { IonicPage, NavController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
@@ -17,7 +17,6 @@ export class ResetPasswordPage {
 	invalidLogin : boolean = false;
 	successfulReset : boolean = true;
   constructor(	public navCtrl: NavController,
-  				public navParams: NavParams,
   				private render: Renderer2,
   				private auth0: AuthService,
   				private formBuilder: FormBuilder) {

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { ScanComponent } from './scan/scan';
-import { LogoComponentModule } from './logo/logo.module';
 
 import { SideMenuComponentModule } from './side-menu/side-menu.module';
 import { NoticeComponentModule } from './notice/notice.module';

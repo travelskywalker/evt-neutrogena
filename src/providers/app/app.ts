@@ -287,7 +287,7 @@ export class AppProvider {
           "currentLessonContentId": lessonData.id
         }
       }
-    )
+    );
     this.setCurrentLesson(lessonData.day);
     this.setCurrentCourse(lessonData.course);
   }

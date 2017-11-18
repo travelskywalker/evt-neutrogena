@@ -1,16 +1,14 @@
-import { Component, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Content } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 
-import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 import { aura } from "../../assets/aura/config/aura.config";
 
-import { ScriptService } from "../../providers/app/script.service";
 import { AppProvider } from "../../providers/app/app"
 
 import { AuraMainPage } from "../aura-main/aura-main";
 import { ProgressModalComponent } from "../../components/progress-modal/progress-modal";
-import { Observable } from 'rxjs';
 /**
  * Generated class for the AuraContentPage page.
  *
@@ -41,13 +39,10 @@ export class AuraContentPage{
   listener: any;
 	@ViewChild(ProgressModalComponent) pmc : ProgressModalComponent;
   message:any;
-  constructor(private elRef:ElementRef,
+  constructor(
               public navCtrl: NavController,
               public navParams: NavParams,
               public app: AppProvider,
-              private render: Renderer2,
-              private viewCtrl : ViewController,
-              private scr : ScriptService,
               private sanitizer: DomSanitizer) {
 
   	let data = this.navParams.get('data');
@@ -97,7 +92,9 @@ export class AuraContentPage{
 
   }
 
-
+  isframeLoaded() {
+    console.log("isframeLoaded")
+  }
   //ngAfterViewInit(){
   ionViewWillEnter() {
     let self = this;
@@ -107,7 +104,6 @@ export class AuraContentPage{
   	/* check if iframe has loaded */
   	document.getElementById("aura-widget-div").onload = function(e){
   		let fp = <HTMLIFrameElement> e.srcElement;
-  		let hed : HTMLHeadElement = fp.contentWindow.document.getElementsByTagName('head')[0];
   		let frm : HTMLBodyElement = fp.contentWindow.document.getElementsByTagName('body')[0];
   		frm.style.maxHeight = "100%";	// assign max height
   		frm.style.margin = "0px";		// and margin css details
@@ -127,7 +123,7 @@ export class AuraContentPage{
            console.log('playBtn', playBtn);
            playBtn.addEventListener('click',function(e){
              self.listener = e;
-             let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play')
+             let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
              console.log('ifStartPlay', ifStartPlay);
              if(ifStartPlay){
                self.controlButtons(playBtn);
