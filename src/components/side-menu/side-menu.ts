@@ -6,6 +6,7 @@ import { Config } from '../../config/environment';
 import { LoginPage } from '../../pages/login/login';
 import { MyAccountPage } from '../../pages/my-account/my-account';
 import { DomSanitizer} from '@angular/platform-browser';
+import { EvtProvider } from '../../providers/evt/evt';
 
 /**
  * Generated class for the SideMenuComponent component.
@@ -20,7 +21,7 @@ import { DomSanitizer} from '@angular/platform-browser';
 export class SideMenuComponent {
   links : any = [];
   ext ?: any = Config.ext_links;
-  constructor(private auth0 : AuthService, private app: App, private dom: DomSanitizer) {
+  constructor(private auth0 : AuthService, private app: App, private dom: DomSanitizer, private evt: EvtProvider) {
 
   }
 
@@ -58,7 +59,8 @@ export class SideMenuComponent {
   }
 
   logout(){
-   this.auth0.logout();
+    this.evt.clearCache();
+    this.auth0.logout();
   }
 
   loggedIn() : boolean{

@@ -590,4 +590,11 @@ export class EvtProvider {
 
   }
 
+  clearCache() {
+    this.anonUserC = null;
+    this.userC = null;
+    this.anonEvtUser = null;
+    this.evtUser = null;
+  }
+
 }
