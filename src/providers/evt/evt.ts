@@ -112,8 +112,15 @@ export class EvtProvider {
       if (this.auth.loggedIn()) {
         console.log('user context is registered');
         let userContext = this.auth.getUserDetailsFromStorage();
-        lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
-        lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
+
+        if (typeof userContext.sub != 'undefined' && userContext.sub.indexOf("facebook") != -1) {
+          lsApiKey = userContext[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngApiKey;
+          lsId = userContext[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
+        } else {
+          lsApiKey = userContext.user_metadata.evrythngUserData.evrythngApiKey;
+          lsId = userContext.user_metadata.evrythngUserData.evrythngUser;
+        }
+
       } else {
         console.log('user context is ambigous');
         //possibly an anon user or just userContext was not set / reset
@@ -284,6 +291,7 @@ export class EvtProvider {
       return userC.thng(myThng.id).read(th=>{});
 
     } else {
+      console.log('no local thng');
       return userCF.then(cf => {
         if (typeof cf != 'undefined' && cf.hasOwnProperty('myThng')) {
 
@@ -308,6 +316,21 @@ export class EvtProvider {
     }
   }
 
+  hasLocalThng(): boolean {
+    if (typeof localStorage.myThng == 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  hasLocalProduct(): boolean {
+    if (typeof localStorage.myProduct == 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
+  }
   /**
    * Get a THNG context by giving it an ADI or THNG id
    *
@@ -382,7 +405,7 @@ export class EvtProvider {
 		  			resolve(user.customFields);
 		  		}
 		  		else{
-		  			resolve(false);
+            reject(false);
 		  		}
 	  		})
 	  	}).catch(err=>{
@@ -565,6 +588,13 @@ export class EvtProvider {
       console.log(err);
     })
 
+  }
+
+  clearCache() {
+    this.anonUserC = null;
+    this.userC = null;
+    this.anonEvtUser = null;
+    this.evtUser = null;
   }
 
 }

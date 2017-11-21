@@ -52,9 +52,10 @@ export class AuraMainPage {
 
   ionViewWillEnter() {
 
-    if (this.app.evt.hasUserContext()) {
+    if (this.app.evt.hasUserContext() && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())) {
 
-      console.log("ionViewWillEnter Aura Home");if (!this.app.hasActiveCourse()) {
+      console.log("ionViewWillEnter Aura Home");
+      if (!this.app.hasActiveCourse()) {
 
         let self = this;
         let loading = self.loading.create({

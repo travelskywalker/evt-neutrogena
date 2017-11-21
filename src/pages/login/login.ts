@@ -67,6 +67,10 @@ export class LoginPage {
   	this.navCtrl.push(SignUpPage);
   }
 
+  /**
+   *
+   * This is the email / password login CTA. Called when email+password and submit button is pressed
+   */
   login(){
   	let self = this;
   	let usr = this.formGroup.value;
@@ -89,7 +93,13 @@ export class LoginPage {
   	});
   }
 
+  /**
+   * This is the FB login CTA. Called when FB login button is pressed.
+   *
+   * @constructor
+   */
   FBauth(){
+    this.app.startLogin();
   	this.auth0.fbAuth();
   }
 
