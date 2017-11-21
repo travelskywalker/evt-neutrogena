@@ -78,7 +78,9 @@ export class SubCourseComponent {
   		self.render.setStyle(self.prog.nativeElement,"width",self.getProg()+"%");
   	}
 
-    if (typeof this.appService.activeCourse != 'undefined' && this.appService.activeCourse[1].course == this.title) {
+    if (typeof this.appService.activeCourse != 'undefined'
+      && typeof this.prog != 'undefined'
+      && this.appService.activeCourse[1].course == this.title) {
 
       let courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
       this.hideCourse(courseElem) ;
