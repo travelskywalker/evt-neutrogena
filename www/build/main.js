@@ -2879,9 +2879,9 @@ var Config = {
         name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
         target: "_blank"
     },
-    lessonCompletionTimeLimit: 10,
-    totalDailyLessonLimit: 30,
-    courseDailyLessonLimit: 10,
+    lessonCompletionTimeLimit: 10 * 60,
+    totalDailyLessonLimit: 10,
+    courseDailyLessonLimit: 1,
     anonUserLessonLimit: 1,
     anonUserDaysToSignInNotice: 2,
     thngDaysLifeSpan: 30,
@@ -3104,7 +3104,7 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>\n      <div>\n        <p class="prominent">\n          Scan the QR code or visit\n           <a href="//{{config.desktop_scan_url.link}}" [title]="config.desktop_scan_url.name" [target]="config.desktop_scan_url.target">\n            {{config.desktop_scan_url.name}}\n          </a> on your mobile browser to continue with the experience.\n        </p>\n\n        <p>\n          Alternatively visit\n          <a href="//{{config.neutrogena_url.link}}" [title]="config.neutrogena_url.name" [target]="config.neutrogena_url.target">\n            {{config.neutrogena_url.name}}\n          </a> on any device to learn more about Neutrogena.\n        </p>\n      </div>\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the Neutrogena&reg; logo on your</p>\n      <p>Neutrogena&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>\n      <div>\n        <p class="prominent">\n          Scan the QR code or visit\n           <a href="//{{config.desktop_scan_url.link}}"\n              [title]="config.desktop_scan_url.name"\n              [target]="config.desktop_scan_url.target">{{config.desktop_scan_url.name}}</a> on your mobile browser to continue with the experience.\n        </p>\n\n        <p>\n          Alternatively visit\n          <a href="//{{config.neutrogena_url.link}}"\n             [title]="config.neutrogena_url.name"\n             [target]="config.neutrogena_url.target">{{config.neutrogena_url.name}}</a> on any device to learn more about Neutrogena.\n        </p>\n      </div>\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -3398,7 +3398,7 @@ var EvtProvider = (function () {
         EVT.use(EVT.Scan);
         EVT.setup({
             apiUrl: __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].evt_base_url,
-            geolocation: false
+            geolocation: true
         });
         EVT.Scan.setup({
             filter: {
@@ -5086,8 +5086,18 @@ var SubCourseComponent = (function () {
         tes['progress'] = this.progress;
         tes['title'] = this.title;
         /* this assigns the progress and title 	*
-         * to the top element 					*/
+         * to the top element */
+        var courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+        this.hideCourse(courseElem);
         this.bgn.emit(tes);
+    };
+    SubCourseComponent.prototype.hideCourse = function (elem) {
+        this.render.setStyle(elem, "display", "none");
+        if (typeof this.appService.hiddenPar != 'undefined') {
+            //only one hidden at a given time.
+            this.render.setStyle(this.appService.hiddenPar, "display", "block");
+        }
+        this.appService.hiddenPar = elem;
     };
     SubCourseComponent.prototype.ngOnInit = function () {
         this.duration = Object.keys(this.crs).length;
@@ -5110,6 +5120,12 @@ var SubCourseComponent = (function () {
         var self = this;
         if (this.loggedIn()) {
             self.render.setStyle(self.prog.nativeElement, "width", self.getProg() + "%");
+        }
+        if (typeof this.appService.activeCourse != 'undefined'
+            && typeof this.prog != 'undefined'
+            && this.appService.activeCourse[1].course == this.title) {
+            var courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+            this.hideCourse(courseElem);
         }
     };
     SubCourseComponent.prototype.loggedIn = function () {
