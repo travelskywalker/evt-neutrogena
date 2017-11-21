@@ -73,7 +73,7 @@ export class EvtProvider {
 
   	EVT.setup({
       apiUrl: Config.evt_base_url,
-      geolocation: false
+      geolocation: true
     });
 
     EVT.Scan.setup({
