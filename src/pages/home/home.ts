@@ -50,6 +50,10 @@ export class HomePage {
     }
     console.log(this.platform.is('mobile'));
     this.mobileVersion = this.platform.is('mobile');
+
+    if (this.evt.hasUserContext() && this.evt.hasLocalThng()) {
+      this.navCtrl.setRoot(AuraMainPage);
+    }
   }
 
 

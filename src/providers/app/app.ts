@@ -829,9 +829,8 @@ export class AppProvider {
   }
 
   /**
-   * Registration have been started, completed in Auth0
-   * but not user local actions in not yet connected
-   * in EVT
+   * Registration have been started, completed in Auth0.
+   * Registered user local actions is not yet connected in EVT
    *
    * @param regAuth0UserId
    */
@@ -858,8 +857,21 @@ export class AppProvider {
    *
    */
   completeReg(userData: any): void {
-    let regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
-    let regAuth0UserId = userData.user_id.replace('auth0|', '');
+    let regEvtUserId:any;
+    let regAuth0UserId:any;
+
+    if (this.auth.isFB()) {
+
+      regEvtUserId = userData[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
+      regAuth0UserId = 'facebook';
+
+    } else {
+
+      regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+      regAuth0UserId = userData.user_id.replace('auth0|', '');
+
+    }
+
 
     if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
       console.log("reg start detected");

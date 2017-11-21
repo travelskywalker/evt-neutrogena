@@ -111,7 +111,8 @@ export class AuthService {
         this.webAuth.client.userInfo(authResult.access_token,function(err, user){
 
           /* Successful auth */
-          if (user && typeof user.user_metadata.deleted == 'undefined') {
+          let umd = self._parseUserMetadata(user);
+          if (user && typeof umd.deleted == 'undefined') {
 
             localStorage.setItem('access_token', authResult.access_token);
             localStorage.setItem('id_token', authResult.id_token);
@@ -127,20 +128,41 @@ export class AuthService {
 
 
             // Handle errors
-            console.log(err);
+            console.log(user, err);
             self._removeLocalUserData();
             reject(err);
 
           } else {
 
             self._removeLocalUserData();
-            reject(user.user_metadata.deleted ? "deleted user" : "");
-
+            try {
+              reject(umd.deleted ? "deleted user" : "");
+            } catch (err) {
+              reject(err);
+            }
           }
         })
       }
     }
     );
+  }
+
+  /***
+   * Private fn for parsing user_metadata or various namespaces - email, FB
+   *
+   * @param user
+   * @returns {any}
+   * @private
+   */
+  private _parseUserMetadata(user?: any) {
+    if (typeof user.sub != 'undefined' && user.sub.indexOf('facebook') > -1) {
+      //facebook
+      return user[Config.fbUserMetadataNS + 'user_metadata'];
+    } else if (typeof user.user_metadata != 'undefined') {
+      return user.user_metadata
+    } else {
+      return {};
+    }
   }
 
   private _removeLocalUserData(): void {
@@ -186,12 +208,19 @@ export class AuthService {
   public setUserMetadata(meta) {
     let usr = this.getUserDetailsFromStorage();
     usr.user_metadata = meta;
+    if (this.isFB()) {
+      //decorate the namespaced user_metadata field of FB users as well
+      usr[Config.fbUserMetadataNS + 'user_metadata'] = meta;
+    }
     console.log(usr);
     localStorage.setItem('userInfo',JSON.stringify(usr));
   }
 
   /* Get the user metadata from local storage */
   public getUserMetadataFromStorage() {
+    if (this.isFB()) {
+      return JSON.parse(localStorage.getItem('userInfo'))[Config.fbUserMetadataNS + 'user_metadata'];
+    }
     return JSON.parse(localStorage.getItem('userInfo'))['user_metadata'];
   }
 
@@ -212,6 +241,9 @@ export class AuthService {
   /* Update user metadata via auth0 manage */
   public updateUser(usrMetaData) {
     let umd = this.getUserMetadataFromStorage();
+    if (typeof umd == 'undefined') {
+      umd = {};
+    }
     umd["firstName"] = usrMetaData.firstName;
     umd["lastName"] = usrMetaData.lastName;
     if (typeof usrMetaData.deleted != 'undefined') {
@@ -223,9 +255,16 @@ export class AuthService {
     });
 
     let usrInfo = this.getUserDetailsFromStorage();
+    let uid: string;
+
+    if (this.isFB()) {
+      uid = usrInfo['sub'];
+    } else {
+      uid = usrInfo['user_id'];
+    }
     //console.log(usrInfo);
     return new Promise((resolve,reject)=>{
-        auth0Manage.patchUserMetadata(usrInfo['user_id'],
+        auth0Manage.patchUserMetadata(uid,
         umd,
         function(err, resp){
           if(err){
@@ -244,7 +283,13 @@ export class AuthService {
    * FB accounts have the 'sub' variable. This *
    * is what we check                          */
   isFB():boolean{
-    return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
+    try {
+      return this.getUserDetailsFromStorage()['sub'] && this.getUserDetailsFromStorage()['sub'].indexOf("facebook") > -1;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
   }
 
 

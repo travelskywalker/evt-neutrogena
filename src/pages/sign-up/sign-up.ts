@@ -90,6 +90,9 @@ export class SignUpPage {
   	}
   }
 
+  /**
+   * Register via email + password.
+   */
   signup(){
   	let usr = this.formGroup.value;
   	let self = this;
@@ -138,8 +141,17 @@ export class SignUpPage {
   	})
   }
 
+  /**
+   * register via facebook
+   *
+   * @constructor
+   */
   FBauth(){
   	this.auth0.fbAuth();
+    //FB registration will redirect to FB then back to app, at this point there is no registration ID, until
+    //it is back to the callback URL (auth module or route :data) which does not distinguish login vs registration thus
+    //we use 'facebook' as registration ID of auth0 instead.
+    this.app.startReg('facebook');
   }
 
   toLogin(){

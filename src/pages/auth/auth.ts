@@ -59,17 +59,13 @@ export class AuthPage {
         this.app.completeReg(res);
         this.app.completeLogin(); //if login() is called
 
-        if (this.app.getThngContext()) {
+        //if (this.evt.hasUserContext()) {
           /**
            * has THNG in localStorage
            */
           this.navCtrl.setRoot(AuraMainPage);
-        } else {
-          /**
-           * Lead User to re-scan
-           */
-          this.navCtrl.setRoot(HomePage);
-        }
+
+        //}
 
       }).catch(err => {
         console.log(err);
