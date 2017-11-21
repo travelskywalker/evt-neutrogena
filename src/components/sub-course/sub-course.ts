@@ -35,9 +35,24 @@ export class SubCourseComponent {
   	tes['progress'] = this.progress;
   	tes['title'] = this.title;
   	/* this assigns the progress and title 	*
-  	 * to the top element 					*/
+  	 * to the top element */
+
+    let courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+    this.hideCourse(courseElem);
   	this.bgn.emit(tes);
   }
+
+  hideCourse(elem?: ElementRef) {
+
+    this.render.setStyle(elem, "display", "none");
+    if (typeof this.appService.hiddenPar != 'undefined') {
+      //only one hidden at a given time.
+      this.render.setStyle(this.appService.hiddenPar, "display", "block");
+    }
+    this.appService.hiddenPar = elem;
+
+  }
+
 
   ngOnInit(){
   	this.duration = Object.keys(this.crs).length;
@@ -62,6 +77,13 @@ export class SubCourseComponent {
   	if(this.loggedIn()){
   		self.render.setStyle(self.prog.nativeElement,"width",self.getProg()+"%");
   	}
+
+    if (typeof this.appService.activeCourse != 'undefined' && this.appService.activeCourse[1].course == this.title) {
+
+      let courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+      this.hideCourse(courseElem) ;
+
+    }
   }
 
   loggedIn() : boolean{

@@ -46,6 +46,7 @@ export class AppProvider {
    * Holds the instance of reorder popup when it gets created.
    */
   public reorderViewManager?: any;
+  public hiddenPar?: any;
   constructor(
     public http: Http,
     public evt: EvtProvider,
