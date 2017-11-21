@@ -63,7 +63,7 @@ export class AuthPage {
           /**
            * has THNG in localStorage
            */
-          this.navCtrl.setRoot(AuraMainPage);
+        this.navCtrl.setRoot(AuraMainPage);
 
         //}
 

@@ -51,7 +51,7 @@ export class HomePage {
     console.log(this.platform.is('mobile'));
     this.mobileVersion = this.platform.is('mobile');
 
-    if (this.evt.hasUserContext() && this.evt.hasLocalThng()) {
+    if (this.evt.hasUserContext() && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')) {
       this.navCtrl.setRoot(AuraMainPage);
     }
   }
