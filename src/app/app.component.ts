@@ -86,16 +86,18 @@ export class MyApp {
 
   noticePopUp(){
     if(this.app.hasSignInNotice()){
+
       this.show = true;
       this.text = 'Sign in to track your progress.';
-      this.noLink = true;
+      this.noLink = false;
+
     } else if (this.app.hasReorderNotice()) {
       this.show = true;
       this.text = 'Re-order your Neutrogena© Visibility Clear® Light Theraphy Acne Mask';
       this.noLink = false;
       this.ext_url = {
-        name:'reorder',
-        link: Config.ext_links.reorder
+        name: Config.neutrogena_reorder_url.name,
+        link: Config.neutrogena_reorder_url.link
       };
     }
 

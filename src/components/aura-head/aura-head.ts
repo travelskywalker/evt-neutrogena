@@ -34,7 +34,11 @@ export class AuraHeadComponent {
   }
 
   myAccount(){
-  	this.navCtrl.push(MyAccountPage);
+    if (this.logged) {
+      this.navCtrl.push(MyAccountPage);
+    } else {
+      this.toLogin();
+    }
   }
 
   ngOnInit(){
