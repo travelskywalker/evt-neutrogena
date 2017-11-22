@@ -23,6 +23,7 @@ export class SubCourseComponent {
   @Input('enabled') enabled ?: boolean = false;
   @Input('progress') progress ?: number = 0;
   @ViewChild('prog') prog : ElementRef;
+  @ViewChild('courseElem') courseElem : ElementRef;
   @Output('begin') bgn = new EventEmitter;
   @Input('activeCourse') crs : any;
 
@@ -37,7 +38,7 @@ export class SubCourseComponent {
   	/* this assigns the progress and title 	*
   	 * to the top element */
 
-    let courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+    let courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
     this.hideCourse(courseElem);
   	this.bgn.emit(tes);
   }
@@ -82,8 +83,17 @@ export class SubCourseComponent {
       && typeof this.prog != 'undefined'
       && this.appService.activeCourse[1].course == this.title) {
 
-      let courseElem = this.prog.nativeElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+      let courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
       this.hideCourse(courseElem) ;
+
+    } else {
+
+      if (this.title == 'Mindfulness') {
+
+        let courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
+        this.hideCourse(courseElem) ;
+
+      }
 
     }
   }

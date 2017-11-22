@@ -1,5 +1,5 @@
 <!-- Generated template for the SubCourseComponent component -->
-<div class="container">
+<div class="container" #courseElem>
 	<span class="image-container" [ngStyle]="{'background-image':'url('+bgImg+')'}">
 		<p class="title">{{title}}</p>
 		<p class="duration">{{duration}} days</p>
@@ -11,5 +11,6 @@
 			<p class="completion">{{getProg()}}% Complete</p>
 		</span>
 	</span>
-	<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>
+	<!--<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>-->
+	<button ion-button class="begin" (tap)="begin(crs)">{{getProgLabel()}}</button>
 </div>
