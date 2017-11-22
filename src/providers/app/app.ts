@@ -250,7 +250,7 @@ export class AppProvider {
     })
   }
 
-  playLesson(lessonData: any, pmc?: any) {
+  playLesson(lessonData: any, pmc?: any, ifStartPlayClassList?: any) {
     /**
      * single-point entry for handling play button actions for AURA content
      */
@@ -273,7 +273,7 @@ export class AppProvider {
     if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       this.evt.createThngAction('_Play');
       this.startLesson(lessonData);
-      this.startLessonTimer(lessonData, pmc);
+      this.startLessonTimer(lessonData, pmc, ifStartPlayClassList);
     } else {
       this.stopLessonTimer(lessonData);
     }
@@ -299,7 +299,7 @@ export class AppProvider {
     this.setCurrentCourse(lessonData.course);
   }
 
-  startLessonTimer(lessonData: any, pmc?: any) {
+  startLessonTimer(lessonData: any, pmc?: any, ifStartPlayClassList?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
     console.log('timer started');
@@ -308,9 +308,10 @@ export class AppProvider {
       .takeWhile(() => alive)
       .subscribe((val) => {
         if (val % 10 == 0) {
-          console.log("lesson timer ping " + val);
+          console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'));
+
         }
-        if (val >= (this.lessonTimeLimit)) { //Todo: put this in config
+        if (val >= (this.lessonTimeLimit) || (val > 0 && ifStartPlayClassList.contains('fa-play')===true)) {
         // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
           this.completeLesson(lessonData);

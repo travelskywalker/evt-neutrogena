@@ -274,7 +274,7 @@ var AppProvider = (function () {
             }
         });
     };
-    AppProvider.prototype.playLesson = function (lessonData, pmc) {
+    AppProvider.prototype.playLesson = function (lessonData, pmc, ifStartPlayClassList) {
         /**
          * single-point entry for handling play button actions for AURA content
          */
@@ -296,7 +296,7 @@ var AppProvider = (function () {
         if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
             this.evt.createThngAction('_Play');
             this.startLesson(lessonData);
-            this.startLessonTimer(lessonData, pmc);
+            this.startLessonTimer(lessonData, pmc, ifStartPlayClassList);
         }
         else {
             this.stopLessonTimer(lessonData);
@@ -319,7 +319,7 @@ var AppProvider = (function () {
         this.setCurrentLesson(lessonData.day);
         this.setCurrentCourse(lessonData.course);
     };
-    AppProvider.prototype.startLessonTimer = function (lessonData, pmc) {
+    AppProvider.prototype.startLessonTimer = function (lessonData, pmc, ifStartPlayClassList) {
         var _this = this;
         var timer = __WEBPACK_IMPORTED_MODULE_7_rxjs__["Observable"].timer(1000, 1000);
         var alive = true;
@@ -329,9 +329,9 @@ var AppProvider = (function () {
                 .takeWhile(function () { return alive; })
                 .subscribe(function (val) {
                 if (val % 10 == 0) {
-                    console.log("lesson timer ping " + val);
+                    console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'));
                 }
-                if (val >= (_this.lessonTimeLimit)) {
+                if (val >= (_this.lessonTimeLimit) || (val > 0 && ifStartPlayClassList.contains('fa-play') === true)) {
                     // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
                     //if 10 mins, trigger a _LessonCompleted action
                     _this.completeLesson(lessonData);
@@ -2149,9 +2149,10 @@ var AuraContentPage = (function () {
                     playBtn.addEventListener('click', function (e) {
                         self.listener = e;
                         var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
+                        var ifStartPlayClassList = fp.contentWindow.document.getElementById('play-btn').classList;
                         console.log('ifStartPlay', ifStartPlay);
                         if (ifStartPlay) {
-                            self.controlButtons(playBtn);
+                            self.controlButtons(ifStartPlayClassList);
                         }
                     });
                 }
@@ -2160,8 +2161,8 @@ var AuraContentPage = (function () {
             auraWidget.addEventListener('DOMSubtreeModified', handler, true);
         };
     };
-    AuraContentPage.prototype.controlButtons = function (element) {
-        this.app.playLesson(this.module, this.pmc);
+    AuraContentPage.prototype.controlButtons = function (ifStartPlayClassList) {
+        this.app.playLesson(this.module, this.pmc, ifStartPlayClassList);
         //this.startLessonTimer(element);
     };
     //startLessonTimer(element) {
