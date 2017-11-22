@@ -34,7 +34,7 @@ export class AuraHeadComponent {
   }
 
   myAccount(){
-    if (this.logged) {
+    if (this.auth0.loggedIn()) {
       this.navCtrl.push(MyAccountPage);
     } else {
       this.toLogin();
