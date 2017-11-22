@@ -175,9 +175,15 @@ export class AppProvider {
      * Save age gating info for user into Cookie
      */
     if(cookiesOn){ // remember the user, for 24 hours or more, used 7 days
-      Cookie.set('agd', ageGated, 7);
-      Cookie.set('age_gate',"true", 7);
-      Cookie.set('birthdate',JSON.stringify(selectedDate), 7);
+      Cookie.set('agd', ageGated, Config.age_gate_expiry);
+      Cookie.set('age_gate',"true", Config.age_gate_expiry);
+      Cookie.set('birthdate',JSON.stringify(selectedDate), Config.age_gate_expiry);
+
+    } else {
+
+      Cookie.set('agd', ageGated);
+      Cookie.set('age_gate',"true");
+      Cookie.set('birthdate',JSON.stringify(selectedDate));
     }
   }
 
@@ -301,7 +307,10 @@ export class AppProvider {
       timer
       .takeWhile(() => alive)
       .subscribe((val) => {
-        if (val == (this.lessonTimeLimit)) { //Todo: put this in config
+        if (val % 10 == 0) {
+          console.log("lesson timer ping " + val);
+        }
+        if (val >= (this.lessonTimeLimit)) { //Todo: put this in config
         // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
           //if 10 mins, trigger a _LessonCompleted action
           this.completeLesson(lessonData);
