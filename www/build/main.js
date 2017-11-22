@@ -208,9 +208,14 @@ var AppProvider = (function () {
          * Save age gating info for user into Cookie
          */
         if (cookiesOn) {
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", 7);
-            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), 7);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated, __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].age_gate_expiry);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true", __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].age_gate_expiry);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate), __WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].age_gate_expiry);
+        }
+        else {
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('agd', ageGated);
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('age_gate', "true");
+            __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('birthdate', JSON.stringify(selectedDate));
         }
     };
     AppProvider.prototype.saveThngContext = function (result) {
@@ -323,7 +328,10 @@ var AppProvider = (function () {
             timer
                 .takeWhile(function () { return alive; })
                 .subscribe(function (val) {
-                if (val == (_this.lessonTimeLimit)) {
+                if (val % 10 == 0) {
+                    console.log("lesson timer ping " + val);
+                }
+                if (val >= (_this.lessonTimeLimit)) {
                     // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
                     //if 10 mins, trigger a _LessonCompleted action
                     _this.completeLesson(lessonData);
@@ -858,11 +866,10 @@ var AppProvider = (function () {
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _c || Object])
 ], AppProvider);
 
+var _a, _b, _c;
 //# sourceMappingURL=app.js.map
 
 /***/ }),
@@ -2879,6 +2886,7 @@ var Config = {
         name: "VISIBLY CLEAR® Light Therapy Acne Mask Activator",
         target: "_blank"
     },
+    age_gate_expiry: 30,
     lessonCompletionTimeLimit: 10 * 60,
     totalDailyLessonLimit: 10,
     courseDailyLessonLimit: 1,
