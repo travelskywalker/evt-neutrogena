@@ -27456,24 +27456,23 @@ page-login section.main form ion-row ion-input[type=email].error:after {
   position: relative;
 }
 
+page-login section.main form ion-row ion-input[type=password].error:after {
+  content: "Password Incorrect";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+}
+
 page-login section.main form ion-row ion-input.focused {
   -webkit-box-shadow: 1px 1px 0px 1px #f07721;
   box-shadow: 1px 1px 0px 1px #f07721;
-  /*&[type=password]{
-							&:after{
-								content:"Please enter a password of 8+ characters";
-								display: block;
-								clear: both;
-								width: 100%;
-								font-family: 'HelveticaNeue-Bold';
-								font-size: 9px;
-								text-transform: uppercase;
-								margin-top: 6px;
-								text-indent: 10px;
-								color: rgb(240,119,33);
-								text-align: left;
-							}
-						}*/
 }
 
 page-login section.main form button[ion-button] {
