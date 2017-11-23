@@ -17,3 +17,6 @@
 
   # To enable the following to disable script-src, style-src and font-src to self
 
+/assets/aura/neutrogena_widgets/*
+  # Prevent the website from being embedded as iFrame
+  X-Frame-Options: ALLOW
