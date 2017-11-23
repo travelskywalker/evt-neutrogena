@@ -42,7 +42,7 @@ export class SignUpPage {
   	this.formGroup = this.formBuilder.group({
   		firstName: ['', Validators.required],
   		lastName: ['', Validators.required],
-  		email: ['', Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+  		email: ['', Validators.compose([Validators.required,Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/)])],
   		password: ['', Validators.compose([Validators.minLength(8),Validators.required, Validators.pattern(/.*([A-Z+]|[0-9+]).*$/)])]
   	});
   	console.log(navParams.data);
@@ -131,7 +131,7 @@ export class SignUpPage {
 		  		this.navCtrl.setRoot(LoginPage);
 		  	})
 		  	.catch(err=>{
-		  		console.log(err);
+		  		console.log(JSON.stringify(err));
 		  		self.invalidReg = true;
 		  		load.dismiss();
 		  	});
