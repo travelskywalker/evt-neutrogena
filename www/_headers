@@ -8,12 +8,12 @@
   X-XSS-Protection: 1; mode=block
 
   # Prevent browsers from incorrectly detecting non-scripts as scripts
-  X-Content-Type-Options: nosniff
+  # X-Content-Type-Options: nosniff
 
   # Don't load any resource type not explicitly enabled
   # Disable plugins like Flash or Silverlight
   # Load images, stylesheets and fonts from self
-  Content-Security-Policy: default-src 'none'; object-src 'none'; img-src 'self'; style-src 'self';
+  # Content-Security-Policy: default-src 'none'; object-src 'none'; img-src 'self'; style-src 'self';
 
   # To enable the following to disable script-src, style-src and font-src to self
 
