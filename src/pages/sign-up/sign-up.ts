@@ -131,7 +131,10 @@ export class SignUpPage {
 		  		this.navCtrl.setRoot(LoginPage);
 		  	})
 		  	.catch(err=>{
-		  		console.log(JSON.stringify(err));
+		  		console.log(err);
+          if (this.auth0.parseErrCode(err) === 'user_exists') {
+            this.emailTaken = true;
+          }
 		  		self.invalidReg = true;
 		  		load.dismiss();
 		  	});

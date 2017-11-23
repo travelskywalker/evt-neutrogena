@@ -351,4 +351,12 @@ export class AuthService {
     })
   }
 
+  parseErrCode(err?: any){
+
+    if (typeof err.code != 'undefined') {
+      return err.code
+    }
+
+  }
+
 }
