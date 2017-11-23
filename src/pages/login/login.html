@@ -9,7 +9,7 @@
 			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin}"></ion-input>
 		</ion-row>
 		<ion-row>
-			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>
+			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidPass}"></ion-input>
 		</ion-row>
 		<ion-row class="extra-top">
 			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>

@@ -18,6 +18,7 @@ import { AuraMainPage } from '../aura-main/aura-main';
 export class LoginPage {
 	private formGroup : FormGroup;
 	invalidLogin : boolean = false;
+	invalidPass : boolean = false;
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
   				private render: Renderer2,
@@ -88,7 +89,13 @@ export class LoginPage {
   	})
   	.catch(err=>{
   		console.log(err);
-      self.invalidLogin = true;
+      //there is only 1 error state: invalid_user_password
+      //
+      if (this.auth0.parseErrCode(err) == 'invalid_user_password') {
+        self.invalidLogin = true;
+        self.invalidPass = true;
+      }
+
   		load.dismiss();
   	});
   }
