@@ -39,6 +39,10 @@ export class AppProvider {
   activeCourseState?: Array<any> = [0, 0, 0, 1];
   playToggleMap?: Array<any> = [];
   /**
+   * holds the time played in seconds used to get time remaining till completion
+   */
+  playTimerMap?: Array<any> = [];
+  /**
    * Holds the instance of notice component when it gets created.
    */
   public noticeViewManager?: any;
@@ -258,18 +262,22 @@ export class AppProvider {
     if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
       this.playToggleMap[lessonData.course] = {}
     }
-
+    console.log("toggle", this.playToggleMap[lessonData.course][lessonData.id] );
     if ( typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined' ) {
       //playing
+      console.log('toggle set')
       this.playToggleMap[lessonData.course][lessonData.id] = 1
+
     } else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       //stopped
       this.playToggleMap[lessonData.course][lessonData.id] = 0
+
     } else if (this.playToggleMap[lessonData.course][lessonData.id] === 0) {
       //playing
       this.playToggleMap[lessonData.course][lessonData.id] = 1
-    }
 
+    }
+    console.log("toggle", this.playToggleMap[lessonData.course][lessonData.id] );
     if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
       this.evt.createThngAction('_Play');
       this.startLesson(lessonData);
@@ -298,7 +306,7 @@ export class AppProvider {
     this.setCurrentLesson(lessonData.day);
     this.setCurrentCourse(lessonData.course);
   }
-
+  
   startLessonTimer(lessonData: any, pmc?: any, ifStartPlayClassList?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
@@ -308,12 +316,14 @@ export class AppProvider {
       .takeWhile(() => alive)
       .subscribe((val) => {
         if (val % 10 == 0) {
-          console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'));
-
+          console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'), this.playToggleMap[lessonData.course][lessonData.id]);
         }
-        if (val >= (this.lessonTimeLimit) || (val > 0 && ifStartPlayClassList.contains('fa-play')===true)) {
-        // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
-          //if 10 mins, trigger a _LessonCompleted action
+
+        //checks for time remaining to completion or has completed based on widget timer,
+        //fa-play class btn, and if it was still playing using the toggle info
+        if (this.getLessonTimeRemaining(lessonData, val) <= 0 || (val > 0
+          && ifStartPlayClassList.contains('fa-play')===true
+          && this.playToggleMap[lessonData.course][lessonData.id]==1)) {
           this.completeLesson(lessonData);
           pmc.toggleView(true, lessonData.course);
           this.lessonTimer.unsubscribe();
@@ -323,8 +333,35 @@ export class AppProvider {
 
   }
 
+  /**
+   * Get the time remaining for lesson based on configured lesson time limit
+   *
+   * @param lessonData
+   * @param timerVal
+   * @returns {number}
+   */
+  getLessonTimeRemaining(lessonData?: any, timerVal?: number): number {
+    if (typeof this.playTimerMap[lessonData.course]=='undefined') {
+      this.playTimerMap[lessonData.course] = {}
+    }
+    if (typeof this.playTimerMap[lessonData.course][lessonData.id]=='undefined') {
+      this.playTimerMap[lessonData.course][lessonData.id] = timerVal;
+    } else {
+      this.playTimerMap[lessonData.course][lessonData.id] += 1;
+    }
+
+    let timeRemaining = this.lessonTimeLimit - this.playTimerMap[lessonData.course][lessonData.id];
+    console.log('time remaining', timeRemaining);
+    return timeRemaining;
+
+  }
+
   stopLessonTimer(lessonData?: any) {
     if (typeof this.lessonTimer !== 'undefined') {
+      if (typeof lessonData != 'undefined')  {
+        //ensure that the play toggle is also marked as zero, when stop is called from content page
+        this.playToggleMap[lessonData.course][lessonData.id] = 0;
+      }
       this.lessonTimer.unsubscribe();
     }
   }

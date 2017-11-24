@@ -126,9 +126,7 @@ export class AuraContentPage{
              let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
              let ifStartPlayClassList = fp.contentWindow.document.getElementById('play-btn').classList;
              console.log('ifStartPlay', ifStartPlay);
-             if(ifStartPlay){
-               self.controlButtons(ifStartPlayClassList);
-             }
+             self.controlButtons(ifStartPlayClassList);
            });
          }
          auraWidget.removeEventListener('DOMSubtreeModified', this, true);
