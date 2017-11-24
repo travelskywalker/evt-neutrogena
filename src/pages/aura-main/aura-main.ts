@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams, Slides, LoadingController } from '
 
 import { Config } from "../../config/environment";
 import { AppProvider } from "../../providers/app/app";
+import { AuthService } from '../../providers/auth/auth.service';
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
 import { LoginPage } from "../../pages/login/login";
@@ -43,7 +44,8 @@ export class AuraMainPage {
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
-              public loading: LoadingController
+              public loading: LoadingController,
+              private auth0: AuthService
               //private render: Renderer2,
               //private viewCtrl : ViewController,
               //private scr : ScriptService
@@ -75,8 +77,8 @@ export class AuraMainPage {
       }
 
     } else {
-
-      this.navCtrl.setRoot(HomePage);
+      if(this.auth0.isFB) this.navCtrl.setRoot("AuraMainPage");
+      else this.navCtrl.setRoot(HomePage);
 
     }
   }
