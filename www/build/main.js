@@ -2926,7 +2926,7 @@ var Config = {
         target: "_blank"
     },
     age_gate_expiry: 30,
-    lessonCompletionTimeLimit: 10,
+    lessonCompletionTimeLimit: 10 * 60,
     totalDailyLessonLimit: 10,
     courseDailyLessonLimit: 1,
     anonUserLessonLimit: 1,
