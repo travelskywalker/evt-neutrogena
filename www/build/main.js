@@ -97,6 +97,10 @@ var AppProvider = (function () {
         this.today = new Date();
         this.activeCourseState = [0, 0, 0, 1];
         this.playToggleMap = [];
+        /**
+         * holds the time played in seconds used to get time remaining till completion
+         */
+        this.playTimerMap = [];
     }
     /* GET the aura variable containing the content details, path..etc. */
     AppProvider.prototype.toGroup = function () {
@@ -281,8 +285,10 @@ var AppProvider = (function () {
         if (typeof this.playToggleMap[lessonData.course] === 'undefined') {
             this.playToggleMap[lessonData.course] = {};
         }
+        console.log("toggle", this.playToggleMap[lessonData.course][lessonData.id]);
         if (typeof this.playToggleMap[lessonData.course][lessonData.id] === 'undefined') {
             //playing
+            console.log('toggle set');
             this.playToggleMap[lessonData.course][lessonData.id] = 1;
         }
         else if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
@@ -293,6 +299,7 @@ var AppProvider = (function () {
             //playing
             this.playToggleMap[lessonData.course][lessonData.id] = 1;
         }
+        console.log("toggle", this.playToggleMap[lessonData.course][lessonData.id]);
         if (this.playToggleMap[lessonData.course][lessonData.id] === 1) {
             this.evt.createThngAction('_Play');
             this.startLesson(lessonData);
@@ -329,11 +336,13 @@ var AppProvider = (function () {
                 .takeWhile(function () { return alive; })
                 .subscribe(function (val) {
                 if (val % 10 == 0) {
-                    console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'));
+                    console.log("lesson timer ping " + val, ifStartPlayClassList.contains('fa-play'), _this.playToggleMap[lessonData.course][lessonData.id]);
                 }
-                if (val >= (_this.lessonTimeLimit) || (val > 0 && ifStartPlayClassList.contains('fa-play') === true)) {
-                    // if (val % this.lessonTimeLimit === 0) { //Todo: put this in config
-                    //if 10 mins, trigger a _LessonCompleted action
+                //checks for time remaining to completion or has completed based on widget timer,
+                //fa-play class btn, and if it was still playing using the toggle info
+                if (_this.getLessonTimeRemaining(lessonData, val) <= 0 || (val > 0
+                    && ifStartPlayClassList.contains('fa-play') === true
+                    && _this.playToggleMap[lessonData.course][lessonData.id] == 1)) {
                     _this.completeLesson(lessonData);
                     pmc.toggleView(true, lessonData.course);
                     _this.lessonTimer.unsubscribe();
@@ -341,8 +350,33 @@ var AppProvider = (function () {
                 }
             });
     };
+    /**
+     * Get the time remaining for lesson based on configured lesson time limit
+     *
+     * @param lessonData
+     * @param timerVal
+     * @returns {number}
+     */
+    AppProvider.prototype.getLessonTimeRemaining = function (lessonData, timerVal) {
+        if (typeof this.playTimerMap[lessonData.course] == 'undefined') {
+            this.playTimerMap[lessonData.course] = {};
+        }
+        if (typeof this.playTimerMap[lessonData.course][lessonData.id] == 'undefined') {
+            this.playTimerMap[lessonData.course][lessonData.id] = timerVal;
+        }
+        else {
+            this.playTimerMap[lessonData.course][lessonData.id] += 1;
+        }
+        var timeRemaining = this.lessonTimeLimit - this.playTimerMap[lessonData.course][lessonData.id];
+        console.log('time remaining', timeRemaining);
+        return timeRemaining;
+    };
     AppProvider.prototype.stopLessonTimer = function (lessonData) {
         if (typeof this.lessonTimer !== 'undefined') {
+            if (typeof lessonData != 'undefined') {
+                //ensure that the play toggle is also marked as zero, when stop is called from content page
+                this.playToggleMap[lessonData.course][lessonData.id] = 0;
+            }
             this.lessonTimer.unsubscribe();
         }
     };
@@ -2156,9 +2190,7 @@ var AuraContentPage = (function () {
                         var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
                         var ifStartPlayClassList = fp.contentWindow.document.getElementById('play-btn').classList;
                         console.log('ifStartPlay', ifStartPlay);
-                        if (ifStartPlay) {
-                            self.controlButtons(ifStartPlayClassList);
-                        }
+                        self.controlButtons(ifStartPlayClassList);
                     });
                 }
                 auraWidget.removeEventListener('DOMSubtreeModified', this, true);
@@ -2369,7 +2401,7 @@ var ForgotPasswordPage = (function () {
         this.invalidEmail = false;
         this.emailSent = false;
         this.formGroup = this.formBuilder.group({
-            email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
+            email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/)])],
         });
     }
     ForgotPasswordPage.prototype.ionViewDidLoad = function () {
