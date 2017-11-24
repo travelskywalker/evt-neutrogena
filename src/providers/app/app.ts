@@ -306,7 +306,7 @@ export class AppProvider {
     this.setCurrentLesson(lessonData.day);
     this.setCurrentCourse(lessonData.course);
   }
-  
+
   startLessonTimer(lessonData: any, pmc?: any, ifStartPlayClassList?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
