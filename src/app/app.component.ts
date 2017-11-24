@@ -93,7 +93,7 @@ export class MyApp {
 
     } else if (this.app.hasReorderNotice()) {
       this.show = true;
-      this.text = 'Re-order your NEUTROGENA© Visibility Clear® Light Theraphy Acne Mask';
+      this.text = 'Re-order your NEUTROGENA© Visibility Clear® Light Therapy Acne Mask';
       this.noLink = false;
       this.ext_url = {
         name: Config.neutrogena_reorder_url.name,
