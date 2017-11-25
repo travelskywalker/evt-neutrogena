@@ -25,7 +25,6 @@ export class ProgressModalComponent {
 
   ngOnInit(){
 
-    this.day = this.app.nextLesson(this.app.currentCourse);
     this.length = this.app.getCourseDuration(this.app.currentCourse);
   	console.log("progress set" , this.day, this.length);
 
@@ -44,10 +43,11 @@ export class ProgressModalComponent {
   toggleView(stat: boolean = !this.show, course?: any){
 
   	this.show = stat;
-
+    this.day = course.day;
   	if(!this.show){
   		this.render.setStyle(this.elem.nativeElement,"display","none");
   	}else{
+
   		this.render.setStyle(this.elem.nativeElement,"display","block");
   	}
   }

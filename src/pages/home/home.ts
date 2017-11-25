@@ -64,7 +64,9 @@ export class HomePage {
     ) {
 
       //has evt user and thng (or product) but no valid age, take it age gate
-      this.navCtrl.setRoot(AgeGatePage);
+      if (this.navCtrl.last().component.name != 'AgeGatePage') {
+        this.navCtrl.setRoot(AgeGatePage);
+      }
 
     }
   }

@@ -348,7 +348,7 @@ export class AppProvider {
           && ifStartPlayClassList.contains('fa-play')===true
           && this.playToggleMap[lessonData.course][lessonData.id]==1)) {
           this.completeLesson(lessonData);
-          pmc.toggleView(true, lessonData.course);
+          pmc.toggleView(true, lessonData);
           this.lessonTimer.unsubscribe();
           console.log('timer end');
         }
