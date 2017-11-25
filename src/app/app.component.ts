@@ -44,32 +44,33 @@ export class MyApp {
       //redirect to context switcher for mobile vs desktop
       this.nav.setRoot(HomePage);
 
-    } else if (!this.evt.hasUserContext()) {
-
-      //redirect to scan if evt user has not been established yet
-      this.nav.setRoot(HomePage);
-
-    } else {
-
-      let self = this;
-      let loading = self.loading.create({
-        spinner: 'crescent',
-        content: `Please wait...`,
-        enableBackdropDismiss: true
-      })
-      loading.present();
-      this.app.initCourses().then(()=> {
-        this.app.initProgArr().then(()=> {
-          console.log("Last completed:" + this.app.getLastCompletedCourse());
-          this.app.setActiveCourse(this.app.getLastCompletedCourse());
-          this.app.completeLogin(); //if login() is called
-          loading.dismiss();
-
-          this.nav.setRoot(HomePage);
-        })
-      })
-
     }
+    //else if (!this.evt.hasUserContext()) {
+    //
+    //  //redirect to scan if evt user has not been established yet
+    //  this.nav.setRoot(HomePage);
+    //
+    //} else {
+    //
+    //  let self = this;
+    //  let loading = self.loading.create({
+    //    spinner: 'crescent',
+    //    content: `Please wait...`,
+    //    enableBackdropDismiss: true
+    //  })
+    //  loading.present();
+    //  this.app.initCourses().then(()=> {
+    //    this.app.initProgArr().then(()=> {
+    //      console.log("Last completed:" + this.app.getLastCompletedCourse());
+    //      this.app.setActiveCourse(this.app.getLastCompletedCourse());
+    //      this.app.completeLogin(); //if login() is called
+    //      loading.dismiss();
+    //
+    //      this.nav.setRoot(HomePage);
+    //    })
+    //  })
+    //
+    //}
 
   }
 

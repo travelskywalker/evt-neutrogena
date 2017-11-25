@@ -51,12 +51,15 @@ export class HomePage {
     console.log(this.platform.is('mobile'));
     this.mobileVersion = this.platform.is('mobile');
 
-    if (this.evt.hasUserContext() && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')) {
+    if (this.evt.hasUserContext()
+      && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+      && this.app.isValidAge()
+    ) {
+
       this.navCtrl.setRoot(AuraMainPage);
+
     }
   }
-
-
 
   scan(){
     let self = this;

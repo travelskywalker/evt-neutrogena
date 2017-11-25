@@ -50,13 +50,17 @@ export class AuraMainPage {
               //private viewCtrl : ViewController,
               //private scr : ScriptService
   ) {
+
   }
 
   ionViewWillEnter() {
 
-    if (this.app.evt.hasUserContext() && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())) {
+    //to enter this page, a user must have an evt user context, has either a product or thng context and
+    //is age gated with valid age. Otherwise, take the user to the scan page
+    if (this.app.evt.hasUserContext()
+      && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())
+      && this.app.isValidAge()) {
 
-      console.log("ionViewWillEnter Aura Home");
       if (!this.app.hasActiveCourse()) {
 
         let self = this;
@@ -77,8 +81,8 @@ export class AuraMainPage {
       }
 
     } else {
-      if(this.auth0.isFB) this.navCtrl.setRoot("AuraMainPage");
-      else this.navCtrl.setRoot(HomePage);
+
+      this.navCtrl.setRoot(HomePage);
 
     }
   }
