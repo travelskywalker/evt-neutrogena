@@ -25606,6 +25606,10 @@ aura-foot div.body ion-row ion-col div p {
   text-align: center;
 }
 
+aura-foot div.body ion-row ion-col div p:nth-child(2) {
+  margin-left: -5px;
+}
+
 aura-head {
   display: inline-block;
   position: relative;
@@ -25756,7 +25760,7 @@ notice > section.body button[ion-button] ion-icon {
 }
 
 progress-modal {
-  z-index: 10;
+  z-index: 99;
   position: fixed;
   display: inline-block;
   height: calc(100% - 50px);
@@ -25769,7 +25773,7 @@ progress-modal {
 
 progress-modal .overlay {
   content: "";
-  z-index: 9;
+  z-index: 98;
   display: none;
   position: relative;
   top: 0;
@@ -25782,7 +25786,7 @@ progress-modal div.container {
   position: relative;
   top: 0;
   left: 0;
-  z-index: 11;
+  z-index: 100;
   height: 100%;
   width: 100%;
   background-color: #fff;

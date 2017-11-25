@@ -1,7 +1,7 @@
 <aura-head></aura-head>
 <reorder-modal #reorder></reorder-modal>
 <ion-content >
-<progress-modal></progress-modal>
+<progress-modal [day]="module?.day" [course]="module?.course"></progress-modal>
     <!-- <div id="aura-widget-div" #aura></div> -->
     <iframe id="aura-widget-div" [src]="module?.link" (load)="isframeLoaded()"></iframe>
 

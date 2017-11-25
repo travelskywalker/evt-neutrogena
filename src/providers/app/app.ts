@@ -21,7 +21,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 */
 @Injectable()
 export class AppProvider {
-	progressArr ?: Array<any> = [];
+	progressArr ?: any = {};
 	progressKeys ?: Array<any> = [];
 	private courses ?: Array<any> = [];
   //array of lessons in a course
@@ -60,7 +60,7 @@ export class AppProvider {
 
   /* GET the aura variable containing the content details, path..etc. */
   toGroup():Promise<any>{
-  	let mast = [];
+  	let mast = {};
 	  let promises = aura.map(ar=>{
 			let crs = ar.Course.trim();
 			if(mast.hasOwnProperty(crs)){
@@ -90,9 +90,9 @@ export class AppProvider {
 
   /* set the active course for the top component in the main page */
   setActiveCourse(courseTitle?: any){
-    console.log("Activecourse is set");
+
+    console.log("Activecourse is set", courseTitle);
   	this.activeCourse = this.getCourseData(courseTitle);
-    console.log(this.activeCourse);
     this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
     this.activeDur = this.getCourseDuration(courseTitle);
     this.currentCourse = courseTitle;
@@ -118,45 +118,66 @@ export class AppProvider {
      * initialize courses
      */
   	let self = this;
-  	return this.toGroup().then(res=>{
-      console.log("initCourses");
-      console.log(res);
-      self.courses = res;
-      console.log(self.courses);
 
-      self.currentCourse = 'Mindfulness';
-      self.activeCourse = res['Mindfulness'];
-      self.activeDur = Object.keys(self.activeCourse).length;
+    if (typeof localStorage.courses != 'undefined') {
+      console.log('courses from storage')
+      return new Promise(function(resolve) {
+        self.courses = JSON.parse(localStorage.courses);
+        resolve(true);
+      })
+    } else {
+      return this.toGroup().then(res=>{
+        console.log("initCourses");
+        console.log(typeof res, JSON.stringify(res));
+        self.courses = res;
+        localStorage.courses = JSON.stringify(res);
+      })
+    }
 
-      if (this.evt.hasUserContext()) {
-        return this.initProgArr();
-      }
-  	})
+
   }
 
-  initProgArr(): Promise<any> {
-    /**
-     *
-     * @type {AppProvider}
-     *
-     * Get data from EVT and store it a progress array in-memory
-     */
-  	let self = this;
-    return this.getProgressStateFromEvt().then(customFields =>{
-      console.log("COURSE HISTORY");
-      console.log(self.courseHistory);
-      self.courseHistory.forEach((val)=>{
-        if (typeof self.progressArr[val.courseNumber] === 'undefined') {
-          self.progressArr[val.courseNumber] = [];
-        }
-        if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
-          self.progressArr[val.courseNumber].push(val.lessonNumber);
-        }
+  getCourses() {
+    return this.courses;
+  }
 
+  /**
+   * Get data from EVT and store it a progress array in-memory
+   * @returns Promise<any>
+   */
+  initProgArr(): Promise<any> {
+
+  	let self = this;
+    if (typeof localStorage.courseHistory != 'undefined') {
+      console.log('progressArr from storage')
+      return new Promise(function(resolve) {
+
+        self.courseHistory = JSON.parse(localStorage.courseHistory);
+        let progArr = self._initProgArr();
+        resolve(progArr);
+
+      })
+
+    } else {
+
+      return self.getProgressStateFromEvt().then(customFields =>{
+         self._initProgArr();
       });
 
-    });
+    }
+  }
 
+  private _initProgArr(): any {
+    this.courseHistory.forEach((val)=>{
+      if (typeof this.progressArr[val.courseNumber] === 'undefined') {
+        this.progressArr[val.courseNumber] = [];
+      }
+      if (this.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
+        this.progressArr[val.courseNumber].push(val.lessonNumber);
+      }
+
+    });
+    return this.progressArr;
   }
 
   static isAgeGated() {
@@ -174,10 +195,11 @@ export class AppProvider {
     return this.hasValidUserAge;
   }
 
-  saveAgeGateData(ageGated: any, cookiesOn: any, selectedDate: JSON) {
+  saveAgeGateData(ageGated?: any, cookiesOn?: any, selectedDate?: JSON) {
     /**
      * Save age gating info for user into Cookie
      */
+
     if(cookiesOn){ // remember the user, for 24 hours or more, used 7 days
       Cookie.set('agd', ageGated, Config.age_gate_expiry);
       Cookie.set('age_gate',"true", Config.age_gate_expiry);
@@ -188,6 +210,28 @@ export class AppProvider {
       Cookie.set('agd', ageGated);
       Cookie.set('age_gate',"true");
       Cookie.set('birthdate',JSON.stringify(selectedDate));
+    }
+
+    if (this.hasLoggedIn()) {
+      //save the birthdate, dob for relog-in use.
+      let self = this;
+      this.auth.updateUser({dob: selectedDate}).then(res=>{
+        self.auth.setUserMetadata(res['user_metadata']);
+      })
+
+    }
+  }
+
+  getCookieDOB() {
+    return Cookie.get('birthdate');
+  }
+
+  getCookieAge(precalc: boolean = false) {
+    if (precalc == true) {
+      return parseInt(Cookie.get("agd"));
+    } else{
+      let currentDate = new Date().getFullYear();
+      return (currentDate - new Date(this.getCookieDOB()).getFullYear());
     }
   }
 
@@ -325,8 +369,9 @@ export class AppProvider {
           && ifStartPlayClassList.contains('fa-play')===true
           && this.playToggleMap[lessonData.course][lessonData.id]==1)) {
           this.completeLesson(lessonData);
-          pmc.toggleView(true, lessonData.course);
-          this.lessonTimer.unsubscribe();
+          pmc.toggleView(true, lessonData);
+          this.stopLessonTimer(lessonData, true);
+
           console.log('timer end');
         }
       })
@@ -356,11 +401,16 @@ export class AppProvider {
 
   }
 
-  stopLessonTimer(lessonData?: any) {
+  stopLessonTimer(lessonData?: any, reset: boolean=false) {
     if (typeof this.lessonTimer !== 'undefined') {
       if (typeof lessonData != 'undefined')  {
         //ensure that the play toggle is also marked as zero, when stop is called from content page
         this.playToggleMap[lessonData.course][lessonData.id] = 0;
+        if (reset) {
+          //reached the end of the audio and timer is reset to 0
+          this.playTimerMap[lessonData.course][lessonData.id] = 0;
+        }
+
       }
       this.lessonTimer.unsubscribe();
     }
@@ -370,11 +420,13 @@ export class AppProvider {
     /**
      * App helper to put Lesson completed data to EVT
      */
+
     if (this.hasLessonCompleted(lessonData)) {
       return;
     }
 
     let self = this;
+    localStorage.removeItem('courseHistory');
     return this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
@@ -488,21 +540,29 @@ export class AppProvider {
     return str.tephash();
   }
 
-  getLessonsRemainingToday(course?: any) {
-    /**
-     * Check total remaining new lessons for the day
-     * w/o params shows total for all courses
-     *
-     */
+  /**
+   *
+   * Check total remaining new lessons for the day
+   * w/o params shows total for all courses
+   *
+   * @param course
+   * @returns {number}
+   */
+  getLessonsRemainingToday(course?: any): number {
+
     if (typeof course == 'undefined') {
       return (Config.totalDailyLessonLimit - this.getLessonsCompletedToday());
     } else {
       if (this.courses[course] != 'undefined') {
         let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+
         if (this.hasLoggedIn()) {
           return (remCnt >= 0 ? remCnt : 0);
+
         } else {
-          if (this.nextLesson(course) <= Config.anonUserLessonLimit) {
+          //add 1 for locked lesson day
+          let remCntPlusLocked = remCnt + 1;
+          if (remCntPlusLocked >= Config.anonUserLessonLimit) {
             return 1;
           } else {
             return 0;
@@ -589,12 +649,14 @@ export class AppProvider {
     let crsLastLesson = 0;
     let crsNextLesson = 1;
     if (typeof this.progressArr[course] != 'undefined') {
+      console.log('course state this.progressArr');
       crsProgress = this.getCourseProgress(course);
       crsDuration = this.getCourseDuration(course);
       crsLastLesson = this.getCurrentLesson(course);
 
       if (crsDuration > crsLastLesson) {
         crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
+        console.log('course state getAdditionalLesson', this.getAdditionalLesson(course));
       } else {
         crsNextLesson = crsLastLesson;
       }
@@ -606,14 +668,14 @@ export class AppProvider {
       crsNextLesson = 1;
     }
     let st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
-    console.log('course state: ');
+    console.log('course state: ', course, st);
     console.log(st);
-    this.activeCourseState[course] = st;
+    //this.activeCourseState[course] = st;
     return st;
   }
 
 
-  nextLesson(course?: any) {
+  nextLesson(course?: any): any {
     /**
      * current course state helper
      */
@@ -742,7 +804,7 @@ export class AppProvider {
     }
   }
 
-  getLastCompletedCourse() {
+  getLastActiveCourse() {
     if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
       return this.getLastCompletedLesson()['courseNumber'];
     } else {
@@ -802,25 +864,48 @@ export class AppProvider {
     localStorage.removeItem("myProduct");
   }
 
-  completeLogin() {
-    if (typeof localStorage.loginStarted != 'undefined') {
-      console.log("finalizeLogin");
-      let self = this;
-      this.auth.setEVTInfo();
-      this.resetThngContext();
-      this.evt.createUserAction("_Login").then(()=>{
-        self.evt.getThngContext().then(th=>{
-          console.log("getThngContext");
-          console.log(th);
-          if (typeof th != "undefined") {
-            if (typeof localStorage.myThng == 'undefined') {
-              self.saveThngContext(th);
-            }
+  completeLogin(userData?:any): Promise<any> {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      if (typeof localStorage.loginStarted != 'undefined') {
+        console.log("finalizeLogin");
+        //set evt user info
+        self.auth.setEVTInfo();
+
+        //reset the THNG context
+        self.resetThngContext();
+
+        //set the age gate data from auth0 user metadata
+        if (typeof userData != 'undefined') {
+          let umd = self.auth.isFB() === true ? userData[Config.fbUserMetadataNS + 'user_metadata'] : userData['user_metadata'];
+          if (typeof umd['dob'] != 'undefined') {
+            let agd = new Date().getFullYear() - parseInt(umd['dob']['year']);
+            self.saveAgeGateData(agd, false, umd['dob']);
           }
+        }
+
+        self.evt.createUserAction("_Login").then(()=>{
+          self.evt.getThngContext().then(th=>{
+            console.log("getThngContext");
+            console.log(th);
+            if (typeof th != "undefined") {
+              if (typeof localStorage.myThng == 'undefined') {
+                self.saveThngContext(th);
+              }
+              resolve(th);
+            } else {
+              resolve(false);
+            }
+          });
+          localStorage.removeItem('loginStarted');
         });
-        localStorage.removeItem('loginStarted');
-      })
-    }
+
+
+      } else {
+        resolve(false);
+      }
+    });
+
   }
 
   setBeginTS(): void {
@@ -904,42 +989,59 @@ export class AppProvider {
    * @param userData
    *
    */
-  completeReg(userData: any): void {
-    let regEvtUserId:any;
-    let regAuth0UserId:any;
+  completeReg(userData: any): Promise<any> {
 
-    if (this.auth.isFB()) {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      let regEvtUserId:any;
+      let regAuth0UserId:any;
 
-      regEvtUserId = userData[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
-      regAuth0UserId = 'facebook';
+      if (self.auth.isFB()) {
 
-    } else {
+        regEvtUserId = userData[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
+        regAuth0UserId = 'facebook';
 
-      regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
-      regAuth0UserId = userData.user_id.replace('auth0|', '');
+      } else {
 
-    }
+        regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+        regAuth0UserId = userData.user_id.replace('auth0|', '');
+
+      }
 
 
-    if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
-      console.log("reg start detected");
+      if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
+        console.log("reg start detected");
 
-      if (localStorage.regStarted === regAuth0UserId) {
+        if (localStorage.regStarted === regAuth0UserId) {
 
-        //valid registration to complete
-        console.log("valid registration to complete");
-        this.evt.createThngAction(
-          "_Activated", {
-            customFields: {
-              registeredUserIdType: 'evt',
-              registeredUserId: regEvtUserId
-            }
-          }, true).then( //called with anon user
-            es=>{
+          //valid registration to complete
+          console.log("valid registration to complete");
+          resolve(self.evt.createThngAction(
+            "_Activated", {
+              customFields: {
+                registeredUserIdType: 'evt',
+                registeredUserId: regEvtUserId
+              }
+            }, true).then( //called with anon user
+              es=>{
               localStorage.removeItem("regStarted");
             }
-          );
+          ));
+        }
+
+      } else {
+
+        resolve(false);
+
       }
-    }
+
+    });
+
+  }
+
+  clearLocalHistory() {
+    localStorage.removeItem('courseHistory');
+    localStorage.removeItem('courses');
+    localStorage.removeItem('progressArr');
   }
 }

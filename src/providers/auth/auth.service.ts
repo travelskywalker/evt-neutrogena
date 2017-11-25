@@ -171,6 +171,7 @@ export class AuthService {
     localStorage.removeItem('id_token');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('evrythngInfo');
+    localStorage.removeItem('courseHistory');
 
   }
 
@@ -253,6 +254,10 @@ export class AuthService {
     if (typeof usrMetaData.deleted != 'undefined') {
       umd["deleted"] = usrMetaData.deleted;
     }
+    if (typeof usrMetaData.dob != 'undefined') {
+      umd["dob"] = usrMetaData.dob;
+    }
+
     let auth0Manage = new auth0.Management({
       domain: Config.auth0.domain,
       token: localStorage.getItem('id_token')

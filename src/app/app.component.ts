@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, LoadingController } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -28,8 +28,7 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
-    , public evt: EvtProvider,
-      private loading: LoadingController ) {
+    , public evt: EvtProvider ) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -44,33 +43,8 @@ export class MyApp {
       //redirect to context switcher for mobile vs desktop
       this.nav.setRoot(HomePage);
 
-    } else if (!this.evt.hasUserContext()) {
-
-      //redirect to scan if evt user has not been established yet
-      this.nav.setRoot(HomePage);
-
-    } else {
-
-      let self = this;
-      let loading = self.loading.create({
-        spinner: 'crescent',
-        content: `Please wait...`,
-        enableBackdropDismiss: true
-      })
-      loading.present();
-      this.app.initCourses().then(()=> {
-        this.app.initProgArr().then(()=> {
-          console.log("Last completed:" + this.app.getLastCompletedCourse());
-          this.app.setActiveCourse(this.app.getLastCompletedCourse());
-          this.app.completeLogin(); //if login() is called
-          loading.dismiss();
-
-          this.nav.setRoot(HomePage);
-        })
-      })
-
     }
-
+    this.app.initCourses();
   }
 
   ngAfterViewInit(){
@@ -93,7 +67,7 @@ export class MyApp {
 
     } else if (this.app.hasReorderNotice()) {
       this.show = true;
-      this.text = 'Re-order your NEUTROGENA© Visibility Clear® Light Theraphy Acne Mask';
+      this.text = 'Re-order your NEUTROGENA© Visibility Clear® Light Therapy Acne Mask';
       this.noLink = false;
       this.ext_url = {
         name: Config.neutrogena_reorder_url.name,

@@ -21,7 +21,7 @@ export class SubCourseComponent {
   @Input('title') title ?: string = "Sleep well";
   @Input('duration') duration ?: number = 30;
   @Input('enabled') enabled ?: boolean = false;
-  @Input('progress') progress ?: number = 0;
+  @Input('progress') progress ?: number;
   @ViewChild('prog') prog : ElementRef;
   @ViewChild('courseElem') courseElem : ElementRef;
   @Output('begin') bgn = new EventEmitter;
@@ -37,7 +37,6 @@ export class SubCourseComponent {
   	tes['title'] = this.title;
   	/* this assigns the progress and title 	*
   	 * to the top element */
-
     let courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
     this.hideCourse(courseElem);
   	this.bgn.emit(tes);
@@ -59,25 +58,17 @@ export class SubCourseComponent {
   	this.duration = Object.keys(this.crs).length;
   	this.bgImg = "../assets/aura/images/hero/"+this.title+".jpg";
 
-  	/* THIS SHOULDNT BE RANDOM 				*
-  	 * Once the progress tracking system 	*
-  	 * has been implemented, fetch user 	*
-  	 * progress and then assign here 		*/
-  	if(this.auth0.loggedIn){
-      this.progress = this.appService.getCourseProgress(this.title);
+  	if(this.auth0.loggedIn()){
       if (typeof this.progress == 'undefined') {
+        //fallback only, progress data is already bound on the component selector see aura-main.html
         this.progress = Math.round(Math.random()*this.duration);
       }
-  	}else{
-  		this.progress = 0;
   	}
   }
 
   ngAfterViewInit(){
-  	let self = this;
-  	if(this.loggedIn()){
-  		self.render.setStyle(self.prog.nativeElement,"width",self.getProg()+"%");
-  	}
+  	//let self = this;
+    //this.render.setStyle(this.prog.nativeElement,"width",this.getProg()+"%");
 
     if (typeof this.appService.activeCourse != 'undefined'
       && typeof this.prog != 'undefined'
@@ -106,11 +97,16 @@ export class SubCourseComponent {
   	return Math.round((this.progress*100) / this.duration);
   }
 
+  getProgPct() {
+    return this.getProg() + '%';
+  }
+
   toSignUp(){
   	this.nav.push(SignUpPage);
   }
 
   getProgLabel() {
+
     if (this.getProg() == 0) {
       return "Begin";
     } else {

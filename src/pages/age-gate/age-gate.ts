@@ -79,10 +79,10 @@ export class AgeGatePage {
       this.showAlert('Please input your birth date.');
     }
     else{
+
       let currentDate = new Date().getFullYear();
-      console.log((currentDate - this.selectedDate.year) > 18);
       let ageGated = currentDate - this.selectedDate.year;
-      console.log("Selected:" + this.selectedDate);
+
       if( ageGated > 18){
 
         this.invalidAge = false;
@@ -93,8 +93,10 @@ export class AgeGatePage {
         this.navCtrl.setRoot(AuraMainPage,{age_gate:true});
       }
       else{
+
         this.app.saveAgeGateData(ageGated, this.cookiesOn, this.selectedDate);
         this.invalidAge = true;
+
       }
     }
   }

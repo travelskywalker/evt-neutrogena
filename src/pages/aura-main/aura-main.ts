@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams, Slides, LoadingController } from '
 
 import { Config } from "../../config/environment";
 import { AppProvider } from "../../providers/app/app";
+//import { AuthService } from '../../providers/auth/auth.service';
 
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
 import { LoginPage } from "../../pages/login/login";
@@ -40,38 +41,63 @@ export class AuraMainPage {
   addLesson: number = 0;
   labelIntro = "Start this course";
   aura_url = Config.aura_url;
+  progressKeys: any;
+  progressArr: any = {};
+
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
               public loading: LoadingController
-              //private render: Renderer2,
-              //private viewCtrl : ViewController,
-              //private scr : ScriptService
   ) {
+
   }
 
   ionViewWillEnter() {
 
-    if (this.app.evt.hasUserContext() && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())) {
+  }
 
-      console.log("ionViewWillEnter Aura Home");
-      if (!this.app.hasActiveCourse()) {
+  ionViewDidLoad() {
+
+    //clear timer from content page
+    this.app.stopLessonTimer();
+
+    //set hero aura content title and lessons
+    this.initActiveCourse();
+
+    //set hero aura content label
+    this.initLabelIntro();
+
+    //to enter this page, a user must have an evt user context, has either a product or thng context and
+    //is age gated with valid age. Otherwise, take the user to the scan page
+    if (this.app.evt.hasUserContext()
+      && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())
+      && this.app.isValidAge()) {
+
+      if (!this.app.hasActiveCourse() || this.navParams.get('reload')) {
 
         let self = this;
         let loading = self.loading.create({
           spinner: 'crescent',
           content: `Please wait...`,
-          enableBackdropDismiss: true
+          enableBackdropDismiss: false,
+          dismissOnPageChange: true,
+          showBackdrop: true
         })
         loading.present();
-        this.app.initCourses().then(()=> {
-          this.app.initProgArr().then(()=> {
-            console.log("Last completed:" + this.app.getLastCompletedCourse());
-            this.app.setActiveCourse(this.app.getLastCompletedCourse());
-            loading.dismiss();
-            this.navCtrl.setRoot("AuraMainPage");
-          })
-        })
+
+        this.app.initProgArr().then((res)=> {
+
+          console.log("Last played:" + this.navParams.get('lastplayed'), this.app.progressArr);
+          let lastActiveCourse = this.navParams.get('lastplayed') ? this.navParams.get('lastplayed') : this.app.getLastActiveCourse();
+          this.app.setActiveCourse(lastActiveCourse);
+
+          this.initActiveCourse();
+          this.initProgressState();
+          this.courseTitle = lastActiveCourse;
+
+          loading.dismiss();
+
+        });
       }
 
     } else {
@@ -79,25 +105,27 @@ export class AuraMainPage {
       this.navCtrl.setRoot(HomePage);
 
     }
-  }
-
-  ionViewDidLoad() {
-    //clear timer from content page
-    this.app.stopLessonTimer();
-    this.initActiveCourse();
-    this.initLabelIntro();
 
   }
 
   initActiveCourse() {
 
+    this.initProgressState();
+
     this.courseTitle = this.app.getCurrentCourse();
-    //this.day = this.app.getCurrentLesson();
+    this.initLabelIntro();
+
     this.popDays();
-    //this.app.setActiveCourse(this.courseTitle);
 
   }
 
+  initProgressState() {
+    this.progressKeys = Object.keys(this.app.getCourses());
+    this.progressKeys.forEach((val)=>{
+      this.progressArr[val] = typeof this.app.progressArr[val] == 'undefined' ?  0
+        : this.app.progressArr[val].length
+    });
+  }
   /* Add buttons depending on number of days *
    * Animate for effect to the current day 	 */
   popDays(){
@@ -134,7 +162,7 @@ export class AuraMainPage {
  * transfers the data from the sub-course to 	  *
  * the top area (slider of buttons).     	 	  */
   tryMe($event){
-    console.log(JSON.stringify($event));
+    //console.log(JSON.stringify($event));
     let courseTitle = $event.title;
     delete $event['title'];
     delete $event['progress'];
@@ -147,12 +175,12 @@ export class AuraMainPage {
 
   /* Go to the aura content */
   intoTheContent(stat,ind:number = 1){
-    console.log(ind);
     console.log(this.app.nextLesson(this.courseTitle));
+
     if (ind >= this.app.nextLesson(this.courseTitle)
       && this.app.isNextLessonLocked(this.courseTitle)) {
 
-      this.navCtrl.push(LoginPage);
+      this.navCtrl.setRoot(LoginPage);
 
     } else {
       //console.log(this.activeCourse[ind]);

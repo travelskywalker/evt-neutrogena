@@ -51,12 +51,25 @@ export class HomePage {
     console.log(this.platform.is('mobile'));
     this.mobileVersion = this.platform.is('mobile');
 
-    if (this.evt.hasUserContext() && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')) {
+    if (this.evt.hasUserContext()
+      && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+      && this.app.isValidAge()
+    ) {
+      //everything checks out goes to aura content
       this.navCtrl.setRoot(AuraMainPage);
+
+    } else if (this.evt.hasUserContext()
+      && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+      && !this.app.isValidAge()
+    ) {
+
+      //has evt user and thng (or product) but no valid age, take it age gate
+      if (this.navCtrl.last().component.name != 'AgeGatePage') {
+        this.navCtrl.setRoot(AgeGatePage);
+      }
+
     }
   }
-
-
 
   scan(){
     let self = this;

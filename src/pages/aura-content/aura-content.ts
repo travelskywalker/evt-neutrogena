@@ -78,16 +78,6 @@ export class AuraContentPage{
 
     node.src = url;
     node.type = 'text/javascript';
-    // let jsScript = document.getElementById('aura-widget');
-    //
-    // if(jsScript){
-    //   console.log(jsScript);
-    //   jsScript.removeAttribute('data-content-id');
-    //   jsScript.setAttribute('data-content-id',contentId);
-    // }
-    // else{
-    //   document.getElementsByTagName('page-aura-content')[0].appendChild(node);
-    // }
     document.getElementsByTagName('page-aura-content')[0].appendChild(node);
 
   }
@@ -98,7 +88,7 @@ export class AuraContentPage{
   //ngAfterViewInit(){
   ionViewWillEnter() {
     let self = this;
-    self.pmc.toggleView(false);
+    self.pmc.toggleView(false, this.module);
 
     // this.loadScript('../assets/scripts/widget.js',this.module.id);
   	/* check if iframe has loaded */
@@ -138,45 +128,8 @@ export class AuraContentPage{
 
   controlButtons(ifStartPlayClassList?: any){
     this.app.playLesson(this.module, this.pmc, ifStartPlayClassList);
-    //this.startLessonTimer(element);
   }
-  //startLessonTimer(element) {
-  //  let timer = Observable.timer(1000, 1000);
-  //  let alive: boolean = true;
-  //  this.lessonTimer =
-  //    timer
-  //    .takeWhile(() => alive)
-  //    .subscribe((val) => {
-  //
-  //      //if (val >= (val * 60 * 10)) { //Todo: put this in config
-  //      if (val == (this.app.lessonTimeLimit)) { //Todo: put this in config
-  //        //if 10 mins, trigger a _LessonCompleted action
-  //      	this.pmc.toggleView(true, this.module.course);
-  //        element.click();
-  //          this.lessonTimer.unsubscribe();
-  //      }
-  //    })
-  //
-  //}
 
-  /* If page leave is triggered before audio finishes playing, *
-   * make sure to pause/stop all aura audio					 */
-  ionViewDidLeave(){
-  	//audio.ontimeupdate = null;
-
-  }
-  ionViewWillLeave(){
-    // alert('XX');
-
-
-    //
-    // this.RemoveJsCss("//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js", "js");
-    // this.RemoveJsCss("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "js");
-    // this.RemoveJsCss("https://www.gstatic.com/firebasejs/4.4.0/firebase.js", "js");
-    // this.RemoveJsCss("https://fonts.googleapis.com/css?family=Lato:300,400,700", "css");
-    // this.RemoveJsCss("http://app.aurahealth.io/static/style.css", "css");
-    // this.RemoveJsCss("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "css");
-  }
   RemoveJsCss(filename, filetype){
       var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
       var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for

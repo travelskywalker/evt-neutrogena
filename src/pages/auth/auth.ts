@@ -51,21 +51,42 @@ export class AuthPage {
 
     } else {
 
+      let load = this.loader.create({
+        spinner: 'crescent',
+        dismissOnPageChange: true,
+        showBackdrop: true,
+        content: `Please wait...`,
+        enableBackdropDismiss:false});
+
+      load.present();
+
       let authData = this.URLToArray(data);
-      //console.log(authData);
       this.auth0.result(authData).then(res => {
         console.log(res);
 
-        this.app.completeReg(res);
-        this.app.completeLogin(); //if login() is called
+        this.app.completeReg(res).then(reg=> {
+          if (reg === false) {
+            //try logging in
+            this.app.completeLogin(res).then(login=>{
+              if (login !== false) {
 
-        //if (this.evt.hasUserContext()) {
-          /**
-           * has THNG in localStorage
-           */
-        this.navCtrl.setRoot(AuraMainPage);
+                this.navCtrl.setRoot('AuraMainPage');
 
-        //}
+              } else {
+
+                this.navCtrl.setRoot(HomePage);
+
+              }
+
+            })
+
+          } else {
+
+            this.navCtrl.setRoot('AuraMainPage')
+          }
+
+        })
+
 
       }).catch(err => {
         console.log(err);
