@@ -174,10 +174,11 @@ export class AppProvider {
     return this.hasValidUserAge;
   }
 
-  saveAgeGateData(ageGated: any, cookiesOn: any, selectedDate: JSON) {
+  saveAgeGateData(ageGated?: any, cookiesOn?: any, selectedDate?: JSON) {
     /**
      * Save age gating info for user into Cookie
      */
+
     if(cookiesOn){ // remember the user, for 24 hours or more, used 7 days
       Cookie.set('agd', ageGated, Config.age_gate_expiry);
       Cookie.set('age_gate',"true", Config.age_gate_expiry);
@@ -188,6 +189,28 @@ export class AppProvider {
       Cookie.set('agd', ageGated);
       Cookie.set('age_gate',"true");
       Cookie.set('birthdate',JSON.stringify(selectedDate));
+    }
+
+    if (this.hasLoggedIn()) {
+      //save the birthdate, dob for relog-in use.
+      let self = this;
+      this.auth.updateUser({dob: selectedDate}).then(res=>{
+        self.auth.setUserMetadata(res['user_metadata']);
+      })
+
+    }
+  }
+
+  getCookieDOB() {
+    return Cookie.get('birthdate');
+  }
+
+  getCookieAge(precalc?: boolean=false) {
+    if (precalc == true) {
+      return parseInt(Cookie.get("agd"));
+    } else{
+      let currentDate = new Date().getFullYear();
+      return (currentDate - this.getCookieDOB().year);
     }
   }
 
@@ -306,7 +329,7 @@ export class AppProvider {
     this.setCurrentLesson(lessonData.day);
     this.setCurrentCourse(lessonData.course);
   }
-  
+
   startLessonTimer(lessonData: any, pmc?: any, ifStartPlayClassList?: any) {
     let timer = Observable.timer(1000, 1000);
     let alive: boolean = true;
@@ -802,25 +825,48 @@ export class AppProvider {
     localStorage.removeItem("myProduct");
   }
 
-  completeLogin() {
-    if (typeof localStorage.loginStarted != 'undefined') {
-      console.log("finalizeLogin");
-      let self = this;
-      this.auth.setEVTInfo();
-      this.resetThngContext();
-      this.evt.createUserAction("_Login").then(()=>{
-        self.evt.getThngContext().then(th=>{
-          console.log("getThngContext");
-          console.log(th);
-          if (typeof th != "undefined") {
-            if (typeof localStorage.myThng == 'undefined') {
-              self.saveThngContext(th);
-            }
+  completeLogin(userData?:any): Promise<any> {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      if (typeof localStorage.loginStarted != 'undefined') {
+        console.log("finalizeLogin");
+        //set evt user info
+        self.auth.setEVTInfo();
+
+        //reset the THNG context
+        self.resetThngContext();
+
+        //set the age gate data from auth0 user metadata
+        if (typeof userData != 'undefined') {
+          let umd = self.auth.isFB() === true ? userData[Config.fbUserMetadataNS + 'user_metadata'] : userData['user_metadata'];
+          if (typeof umd['dob'] != 'undefined') {
+            let agd = new Date().getFullYear() - parseInt(umd['dob']['year']);
+            self.saveAgeGateData(agd, false, umd['dob']);
           }
+        }
+
+        self.evt.createUserAction("_Login").then(()=>{
+          self.evt.getThngContext().then(th=>{
+            console.log("getThngContext");
+            console.log(th);
+            if (typeof th != "undefined") {
+              if (typeof localStorage.myThng == 'undefined') {
+                self.saveThngContext(th);
+              }
+              resolve(th);
+            } else {
+              resolve(false);
+            }
+          });
+          localStorage.removeItem('loginStarted');
         });
-        localStorage.removeItem('loginStarted');
-      })
-    }
+
+
+      } else {
+        resolve(false);
+      }
+    });
+
   }
 
   setBeginTS(): void {
@@ -904,42 +950,53 @@ export class AppProvider {
    * @param userData
    *
    */
-  completeReg(userData: any): void {
-    let regEvtUserId:any;
-    let regAuth0UserId:any;
+  completeReg(userData: any): Promise<any> {
 
-    if (this.auth.isFB()) {
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      let regEvtUserId:any;
+      let regAuth0UserId:any;
 
-      regEvtUserId = userData[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
-      regAuth0UserId = 'facebook';
+      if (self.auth.isFB()) {
 
-    } else {
+        regEvtUserId = userData[Config.fbUserMetadataNS + 'user_metadata'].evrythngUserData.evrythngUser;
+        regAuth0UserId = 'facebook';
 
-      regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
-      regAuth0UserId = userData.user_id.replace('auth0|', '');
+      } else {
 
-    }
+        regEvtUserId = userData.user_metadata.evrythngUserData.evrythngUser;
+        regAuth0UserId = userData.user_id.replace('auth0|', '');
+
+      }
 
 
-    if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
-      console.log("reg start detected");
+      if (typeof localStorage.regStarted != 'undefined' && regEvtUserId && regAuth0UserId) {
+        console.log("reg start detected");
 
-      if (localStorage.regStarted === regAuth0UserId) {
+        if (localStorage.regStarted === regAuth0UserId) {
 
-        //valid registration to complete
-        console.log("valid registration to complete");
-        this.evt.createThngAction(
-          "_Activated", {
-            customFields: {
-              registeredUserIdType: 'evt',
-              registeredUserId: regEvtUserId
-            }
-          }, true).then( //called with anon user
-            es=>{
+          //valid registration to complete
+          console.log("valid registration to complete");
+          return self.evt.createThngAction(
+            "_Activated", {
+              customFields: {
+                registeredUserIdType: 'evt',
+                registeredUserId: regEvtUserId
+              }
+            }, true).then( //called with anon user
+              es=>{
               localStorage.removeItem("regStarted");
             }
           );
+        }
+
+      } else {
+
+        resolve(false);
+
       }
-    }
+
+    });
+
   }
 }

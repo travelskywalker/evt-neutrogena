@@ -253,6 +253,10 @@ export class AuthService {
     if (typeof usrMetaData.deleted != 'undefined') {
       umd["deleted"] = usrMetaData.deleted;
     }
+    if (typeof usrMetaData.dob != 'undefined') {
+      umd["dob"] = usrMetaData.dob;
+    }
+
     let auth0Manage = new auth0.Management({
       domain: Config.auth0.domain,
       token: localStorage.getItem('id_token')

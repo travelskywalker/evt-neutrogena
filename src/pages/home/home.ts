@@ -55,8 +55,16 @@ export class HomePage {
       && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
       && this.app.isValidAge()
     ) {
-
+      //everything checks out goes to aura content
       this.navCtrl.setRoot(AuraMainPage);
+
+    } else if (this.evt.hasUserContext()
+      && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+      && !this.app.isValidAge()
+    ) {
+
+      //has evt user and thng (or product) but no valid age, take it age gate
+      this.navCtrl.setRoot(AgeGatePage);
 
     }
   }
