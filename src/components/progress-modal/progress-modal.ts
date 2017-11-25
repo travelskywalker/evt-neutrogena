@@ -16,7 +16,8 @@ import { AppProvider } from "../../providers/app/app";
 })
 export class ProgressModalComponent {
 
-  @Input('day') day ?: number = 1;
+  @Input('day') day ?: number;
+  @Input('course') course?: string;
   @Input('length') length ?: number = 10;
   @Input('show') show ?: boolean = false;
   constructor(private nav: NavController, private render: Renderer2,
@@ -25,17 +26,16 @@ export class ProgressModalComponent {
 
   ngOnInit(){
 
-    this.length = this.app.getCourseDuration(this.app.currentCourse);
+    this.length = this.app.getCourseDuration(this.course);
   	console.log("progress set" , this.day, this.length);
 
   }
 
-  toHome(){
+  toHome(course?: string){
 
-    this.app.initProgArr().then(()=>{
-      this.app.setActiveCourse(this.app.getLastCompletedCourse());
-      this.nav.setRoot(AuraMainPage);
-    });
+    this.app.clearLocalHistory();
+    this.app.setActiveCourse(course);
+    this.nav.setRoot(AuraMainPage, {reload: true, lastplayed: course});
 
   }
 
@@ -43,7 +43,11 @@ export class ProgressModalComponent {
   toggleView(stat: boolean = !this.show, course?: any){
 
   	this.show = stat;
-    this.day = course.day;
+
+    //this.course = course.course;
+    //let progCnt = this.app.getCourseProgress(this.course);
+    //this.day = progCnt > 0 && progCnt == this.day ? progCnt+1 : this.day;
+
   	if(!this.show){
   		this.render.setStyle(this.elem.nativeElement,"display","none");
   	}else{

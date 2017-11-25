@@ -89,6 +89,7 @@ export class AuraContentPage{
   ionViewWillEnter() {
     let self = this;
     self.pmc.toggleView(false, this.module);
+
     // this.loadScript('../assets/scripts/widget.js',this.module.id);
   	/* check if iframe has loaded */
   	document.getElementById("aura-widget-div").onload = function(e){

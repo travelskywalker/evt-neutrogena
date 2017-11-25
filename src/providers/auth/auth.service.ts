@@ -171,6 +171,7 @@ export class AuthService {
     localStorage.removeItem('id_token');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('evrythngInfo');
+    localStorage.removeItem('courseHistory');
 
   }
 

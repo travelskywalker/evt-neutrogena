@@ -59,8 +59,8 @@
 
 	<section class="sliders">
 		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">
-			<ion-slide *ngFor = "let crs of app?.progressKeys; let i=index">
-				<sub-course [title]="crs" [progress]="25" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app?.getCourseData(crs)"></sub-course>
+			<ion-slide *ngFor = "let crs of progressKeys; let i=index">
+				<sub-course [title]="crs" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>
 			</ion-slide>
 			<!--ion-slide>
 				<sub-course [title]="'Mindfulness'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>

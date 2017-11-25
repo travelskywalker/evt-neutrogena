@@ -6,7 +6,7 @@
 		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>
 		<span class="progress" *ngIf="loggedIn()" [ngClass]="{'no-prog':(getProg() == 0)}">
 			<div class="main-bar">
-				<div class="progress-bar" #prog></div>
+				<div class="progress-bar" #prog [ngStyle]="{'width': getProgPct()}"></div>
 			</div>
 			<p class="completion">{{getProg()}}% Complete</p>
 		</span>

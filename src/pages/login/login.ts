@@ -57,7 +57,8 @@ export class LoginPage {
   	// should pop this page and then go to previous
   	console.log("dismiss");
   	if(this.navCtrl.canGoBack()){
-  		this.navCtrl.pop();
+
+  		this.navCtrl.popTo(AuraMainPage);
   	}
   	else{
   		this.navCtrl.setRoot(HomePage);

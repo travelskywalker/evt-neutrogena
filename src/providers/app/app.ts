@@ -21,7 +21,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 */
 @Injectable()
 export class AppProvider {
-	progressArr ?: Array<any> = [];
+	progressArr ?: any = {};
 	progressKeys ?: Array<any> = [];
 	private courses ?: Array<any> = [];
   //array of lessons in a course
@@ -60,7 +60,7 @@ export class AppProvider {
 
   /* GET the aura variable containing the content details, path..etc. */
   toGroup():Promise<any>{
-  	let mast = [];
+  	let mast = {};
 	  let promises = aura.map(ar=>{
 			let crs = ar.Course.trim();
 			if(mast.hasOwnProperty(crs)){
@@ -90,9 +90,9 @@ export class AppProvider {
 
   /* set the active course for the top component in the main page */
   setActiveCourse(courseTitle?: any){
-    console.log("Activecourse is set");
+
+    console.log("Activecourse is set", courseTitle);
   	this.activeCourse = this.getCourseData(courseTitle);
-    console.log(this.activeCourse);
     this.activeCourseState[courseTitle] = this.getCourseState(courseTitle);
     this.activeDur = this.getCourseDuration(courseTitle);
     this.currentCourse = courseTitle;
@@ -118,45 +118,66 @@ export class AppProvider {
      * initialize courses
      */
   	let self = this;
-  	return this.toGroup().then(res=>{
-      console.log("initCourses");
-      console.log(res);
-      self.courses = res;
-      console.log(self.courses);
 
-      self.currentCourse = 'Mindfulness';
-      self.activeCourse = res['Mindfulness'];
-      self.activeDur = Object.keys(self.activeCourse).length;
+    if (typeof localStorage.courses != 'undefined') {
+      console.log('courses from storage')
+      return new Promise(function(resolve) {
+        self.courses = JSON.parse(localStorage.courses);
+        resolve(true);
+      })
+    } else {
+      return this.toGroup().then(res=>{
+        console.log("initCourses");
+        console.log(typeof res, JSON.stringify(res));
+        self.courses = res;
+        localStorage.courses = JSON.stringify(res);
+      })
+    }
 
-      if (this.evt.hasUserContext()) {
-        return this.initProgArr();
-      }
-  	})
+
   }
 
-  initProgArr(): Promise<any> {
-    /**
-     *
-     * @type {AppProvider}
-     *
-     * Get data from EVT and store it a progress array in-memory
-     */
-  	let self = this;
-    return this.getProgressStateFromEvt().then(customFields =>{
-      console.log("COURSE HISTORY");
-      console.log(self.courseHistory);
-      self.courseHistory.forEach((val)=>{
-        if (typeof self.progressArr[val.courseNumber] === 'undefined') {
-          self.progressArr[val.courseNumber] = [];
-        }
-        if (self.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
-          self.progressArr[val.courseNumber].push(val.lessonNumber);
-        }
+  getCourses() {
+    return this.courses;
+  }
 
+  /**
+   * Get data from EVT and store it a progress array in-memory
+   * @returns Promise<any>
+   */
+  initProgArr(): Promise<any> {
+
+  	let self = this;
+    if (typeof localStorage.courseHistory != 'undefined') {
+      console.log('progressArr from storage')
+      return new Promise(function(resolve) {
+
+        self.courseHistory = JSON.parse(localStorage.courseHistory);
+        let progArr = self._initProgArr();
+        resolve(progArr);
+
+      })
+
+    } else {
+
+      return self.getProgressStateFromEvt().then(customFields =>{
+         self._initProgArr();
       });
 
-    });
+    }
+  }
 
+  private _initProgArr(): any {
+    this.courseHistory.forEach((val)=>{
+      if (typeof this.progressArr[val.courseNumber] === 'undefined') {
+        this.progressArr[val.courseNumber] = [];
+      }
+      if (this.progressArr[val.courseNumber].indexOf(val.lessonNumber) === -1) {
+        this.progressArr[val.courseNumber].push(val.lessonNumber);
+      }
+
+    });
+    return this.progressArr;
   }
 
   static isAgeGated() {
@@ -205,12 +226,12 @@ export class AppProvider {
     return Cookie.get('birthdate');
   }
 
-  getCookieAge(precalc?: boolean=false) {
+  getCookieAge(precalc: boolean = false) {
     if (precalc == true) {
       return parseInt(Cookie.get("agd"));
     } else{
       let currentDate = new Date().getFullYear();
-      return (currentDate - this.getCookieDOB().year);
+      return (currentDate - new Date(this.getCookieDOB()).getFullYear());
     }
   }
 
@@ -349,7 +370,8 @@ export class AppProvider {
           && this.playToggleMap[lessonData.course][lessonData.id]==1)) {
           this.completeLesson(lessonData);
           pmc.toggleView(true, lessonData);
-          this.lessonTimer.unsubscribe();
+          this.stopLessonTimer(lessonData, true);
+
           console.log('timer end');
         }
       })
@@ -379,11 +401,16 @@ export class AppProvider {
 
   }
 
-  stopLessonTimer(lessonData?: any) {
+  stopLessonTimer(lessonData?: any, reset: boolean=false) {
     if (typeof this.lessonTimer !== 'undefined') {
       if (typeof lessonData != 'undefined')  {
         //ensure that the play toggle is also marked as zero, when stop is called from content page
         this.playToggleMap[lessonData.course][lessonData.id] = 0;
+        if (reset) {
+          //reached the end of the audio and timer is reset to 0
+          this.playTimerMap[lessonData.course][lessonData.id] = 0;
+        }
+
       }
       this.lessonTimer.unsubscribe();
     }
@@ -393,11 +420,13 @@ export class AppProvider {
     /**
      * App helper to put Lesson completed data to EVT
      */
+
     if (this.hasLessonCompleted(lessonData)) {
       return;
     }
 
     let self = this;
+    localStorage.removeItem('courseHistory');
     return this.evt.createThngAction('_LessonCompleted',
       {
         "customFields": {
@@ -511,21 +540,29 @@ export class AppProvider {
     return str.tephash();
   }
 
-  getLessonsRemainingToday(course?: any) {
-    /**
-     * Check total remaining new lessons for the day
-     * w/o params shows total for all courses
-     *
-     */
+  /**
+   *
+   * Check total remaining new lessons for the day
+   * w/o params shows total for all courses
+   *
+   * @param course
+   * @returns {number}
+   */
+  getLessonsRemainingToday(course?: any): number {
+
     if (typeof course == 'undefined') {
       return (Config.totalDailyLessonLimit - this.getLessonsCompletedToday());
     } else {
       if (this.courses[course] != 'undefined') {
         let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
+
         if (this.hasLoggedIn()) {
           return (remCnt >= 0 ? remCnt : 0);
+
         } else {
-          if (this.nextLesson(course) <= Config.anonUserLessonLimit) {
+          //add 1 for locked lesson day
+          let remCntPlusLocked = remCnt + 1;
+          if (remCntPlusLocked >= Config.anonUserLessonLimit) {
             return 1;
           } else {
             return 0;
@@ -612,12 +649,14 @@ export class AppProvider {
     let crsLastLesson = 0;
     let crsNextLesson = 1;
     if (typeof this.progressArr[course] != 'undefined') {
+      console.log('course state this.progressArr');
       crsProgress = this.getCourseProgress(course);
       crsDuration = this.getCourseDuration(course);
       crsLastLesson = this.getCurrentLesson(course);
 
       if (crsDuration > crsLastLesson) {
         crsNextLesson = crsLastLesson + this.getAdditionalLesson(course);
+        console.log('course state getAdditionalLesson', this.getAdditionalLesson(course));
       } else {
         crsNextLesson = crsLastLesson;
       }
@@ -629,14 +668,14 @@ export class AppProvider {
       crsNextLesson = 1;
     }
     let st = [crsProgress, crsDuration, crsLastLesson, crsNextLesson];
-    console.log('course state: ');
+    console.log('course state: ', course, st);
     console.log(st);
-    this.activeCourseState[course] = st;
+    //this.activeCourseState[course] = st;
     return st;
   }
 
 
-  nextLesson(course?: any) {
+  nextLesson(course?: any): any {
     /**
      * current course state helper
      */
@@ -765,7 +804,7 @@ export class AppProvider {
     }
   }
 
-  getLastCompletedCourse() {
+  getLastActiveCourse() {
     if (typeof this.getLastCompletedLesson() != 'undefined' && this.getLastCompletedLesson().lessonNumber > 0) {
       return this.getLastCompletedLesson()['courseNumber'];
     } else {
@@ -977,7 +1016,7 @@ export class AppProvider {
 
           //valid registration to complete
           console.log("valid registration to complete");
-          return self.evt.createThngAction(
+          resolve(self.evt.createThngAction(
             "_Activated", {
               customFields: {
                 registeredUserIdType: 'evt',
@@ -987,7 +1026,7 @@ export class AppProvider {
               es=>{
               localStorage.removeItem("regStarted");
             }
-          );
+          ));
         }
 
       } else {
@@ -998,5 +1037,11 @@ export class AppProvider {
 
     });
 
+  }
+
+  clearLocalHistory() {
+    localStorage.removeItem('courseHistory');
+    localStorage.removeItem('courses');
+    localStorage.removeItem('progressArr');
   }
 }

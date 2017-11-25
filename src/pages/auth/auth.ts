@@ -63,7 +63,6 @@ export class AuthPage {
       let authData = this.URLToArray(data);
       this.auth0.result(authData).then(res => {
         console.log(res);
-        let self = this;
 
         this.app.completeReg(res).then(reg=> {
           if (reg === false) {
