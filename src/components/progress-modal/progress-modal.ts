@@ -34,7 +34,7 @@ export class ProgressModalComponent {
   toHome(course?: string){
 
     this.app.clearLocalHistory();
-    this.app.setActiveCourse(course);
+    //this.app.setActiveCourse(course);
     this.nav.setRoot(AuraMainPage, {reload: true, lastplayed: course});
 
   }
