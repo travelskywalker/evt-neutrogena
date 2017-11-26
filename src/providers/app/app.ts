@@ -502,7 +502,8 @@ export class AppProvider {
       localStorage.setItem(this.getLSKey(course), crsCnt.toString());
       localStorage.setItem(this.getLSKey(), totCnt.toString());
       //refresh the progress
-      this.initProgArr();
+      localStorage.removeItem('courseHistory');
+      localStorage.removeItem('lessonCtr');
     }
   }
 
