@@ -221,6 +221,12 @@ export class AuraMainPage {
     }
   }
 
+  toSignUp() {
+    if (this.labelIntro == "Sign in to access content") {
+      this.navCtrl.push("SignUpPage");
+    }
+  }
+
   getDayBtnIcon() {
     if (this.app.isNextLessonLocked(this.courseTitle)) {
       return "lock";
