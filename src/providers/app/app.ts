@@ -945,7 +945,14 @@ export class AppProvider {
     if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
       //only for logged in
       let usr = JSON.parse(localStorage.userInfo);
-      let userCreatedAt = new Date(usr.created_at);
+      let userCreatedAt;
+      if (this.auth.isFB()) {
+        //OIDC-conformant authentication, passwordless
+        userCreatedAt = new Date(usr[Config.fbUserMetadataNS + 'user_metadata'].created_at);
+      } else {
+        userCreatedAt = new Date(usr.created_at);
+      }
+
       return userCreatedAt;
     }
   }
