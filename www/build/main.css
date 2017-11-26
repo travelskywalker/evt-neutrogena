@@ -25589,25 +25589,22 @@ aura-foot div.body ion-row ion-col {
 aura-foot div.body ion-row ion-col div {
   display: inline-table;
   position: relative;
+  width: 100%;
 }
 
 aura-foot div.body ion-row ion-col div img {
   display: block;
   clear: both;
-  max-height: 26px;
-  margin-top: 7px;
+  max-height: 25px;
+  margin: 7px auto 0 auto;
 }
 
 aura-foot div.body ion-row ion-col div p {
   margin: 0;
   color: #808184;
   font-size: 9px;
-  line-height: 17px;
+  line-height: 15px;
   text-align: center;
-}
-
-aura-foot div.body ion-row ion-col div p:nth-child(2) {
-  margin-left: -5px;
 }
 
 aura-head {

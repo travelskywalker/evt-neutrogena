@@ -3130,18 +3130,20 @@ var HomePage = (function () {
         }
         console.log(this.platform.is('mobile'));
         this.mobileVersion = this.platform.is('mobile');
-        if (this.evt.hasUserContext()
-            && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
-            && this.app.isValidAge()) {
-            //everything checks out goes to aura content
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
-        }
-        else if (this.evt.hasUserContext()
-            && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
-            && !this.app.isValidAge()) {
-            //has evt user and thng (or product) but no valid age, take it age gate
-            if (this.navCtrl.last().component.name != 'AgeGatePage') {
-                this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__["a" /* AgeGatePage */]);
+        if (this.platform.is('mobile')) {
+            if (this.evt.hasUserContext()
+                && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+                && this.app.isValidAge()) {
+                //everything checks out goes to aura content
+                this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__aura_main_aura_main__["a" /* AuraMainPage */]);
+            }
+            else if (this.evt.hasUserContext()
+                && (this.evt.hasLocalThng() || this.evt.hasLocalProduct() || typeof localStorage.loginStarted != 'undefined')
+                && !this.app.isValidAge()) {
+                //has evt user and thng (or product) but no valid age, take it age gate
+                if (this.navCtrl.last().component.name != 'AgeGatePage') {
+                    this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__age_gate_age_gate__["a" /* AgeGatePage */]);
+                }
             }
         }
     };
@@ -5792,11 +5794,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var AgeGatePage = (function () {
-    function AgeGatePage(navCtrl, navParams, alertCtrl, app) {
+    function AgeGatePage(navCtrl, navParams, alertCtrl, app, platform) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.alertCtrl = alertCtrl;
         this.app = app;
+        this.platform = platform;
         this.invalidAge = false;
         this.cookiesOn = false;
         this.selectedDate = {
@@ -5821,8 +5824,13 @@ var AgeGatePage = (function () {
             __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].set('cookie_notice', '1');
             this.noticeViewed = false;
         }
-        if (this.app.isValidAge()) {
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
+        if (this.platform.is('mobile')) {
+            if (this.app.isValidAge()) {
+                this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
+            }
+        }
+        else {
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__home_home__["a" /* HomePage */]);
         }
     };
     AgeGatePage.prototype.changedDate = function () {
@@ -5877,7 +5885,8 @@ AgeGatePage = __decorate([
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
+        __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */]])
 ], AgeGatePage);
 
 //# sourceMappingURL=age-gate.js.map
