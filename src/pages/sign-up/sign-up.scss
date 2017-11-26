@@ -1,7 +1,7 @@
 page-sign-up {
 	ion-content{
 		div.scroll-content{
-			background-color:rgb(240,240,240);	
+			background-color:rgb(240,240,240);
 		}
 	}
 	div.space-40{
@@ -125,6 +125,7 @@ page-sign-up {
 							}
 						}
 					}
+
 					&[type=password]{
 						&:after{
 							content:"Please must be 8+ characters and include 1 or more uppercase letter or number.";
@@ -141,6 +142,7 @@ page-sign-up {
 							top:100%;
 						}
 					}
+
 					&.focused{
 						box-shadow:1px 1px 0px 1px rgb(240,119,33);
 						&[type=password]{
@@ -158,6 +160,24 @@ page-sign-up {
 								text-align: left;
 							}
 						}
+            &[type=email]{
+              &.invalid{
+                &:after{
+                  content:"Please enter a valid email.";
+                  display: block;
+                  clear: both;
+                  width: 100%;
+                  font-family: 'HelveticaNeue-Bold';
+                  font-size: 9px;
+                  text-transform: uppercase;
+                  margin-top: 6px;
+                  text-indent: 10px;
+                  color: rgb(240,119,33);
+                  text-align: left;
+                }
+              }
+            }
+
 					}
 
 				}
