@@ -92,7 +92,6 @@ export class AuraMainPage {
           this.app.setActiveCourse(lastActiveCourse);
 
           this.initActiveCourse();
-          this.initProgressState();
           this.courseTitle = lastActiveCourse;
 
           loading.dismiss();
@@ -120,24 +119,34 @@ export class AuraMainPage {
   }
 
   initProgressState() {
-    this.progressKeys = Object.keys(this.app.getCourses());
+
+    if (typeof this.progressKeys == 'undefined') {
+      this.progressKeys = Object.keys(this.app.getCourses());
+    }
+
+    let pk = {};
     this.progressKeys.forEach((val)=>{
-      this.progressArr[val] = typeof this.app.progressArr[val] == 'undefined' ?  0
+      pk[val] = typeof this.app.progressArr[val] == 'undefined' ?  0
         : this.app.progressArr[val].length
     });
+    this.progressArr = pk;
+
   }
   /* Add buttons depending on number of days *
    * Animate for effect to the current day 	 */
   popDays(){
   	this.arrDay = this.app.getArrDay(this.courseTitle);
+    this.slideDayButtons();
+  }
 
+  slideDayButtons() {
     setTimeout(()=>{
-    	try{
-    		this.btnSlide.slideTo(this.app.nextLesson());
-    	}catch(e){
-    		//console.log(e);
-    	}
-    },100);
+      try{
+        this.btnSlide.slideTo(this.app.nextLesson());
+      }catch(e){
+        //console.log(e);
+      }
+    },300);
   }
 
 /* Expand description */
