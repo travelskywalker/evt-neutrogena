@@ -51,6 +51,7 @@ export class AppProvider {
    */
   public reorderViewManager?: any;
   public hiddenPar?: any;
+  public lessonCtr: any;
   constructor(
     public http: Http,
     public evt: EvtProvider,
@@ -177,6 +178,7 @@ export class AppProvider {
       }
 
     });
+    this._setCourseCounters();
     return this.progressArr;
   }
 
@@ -514,13 +516,30 @@ export class AppProvider {
     /**
      * Get the tally of completed Lessons for the day
      */
+    let dt = this.getFullDayFromTS();
     if (typeof course == 'undefined') {
+
+      if (typeof this.lessonCtr['total'] != 'undefined' && typeof this.lessonCtr['total'][dt] != 'undefined'){
+        return parseInt(this.lessonCtr['total'][dt]);
+      }
+
+      //fallback for overall local ctr.
       return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
+
     } else {
+
       if (typeof this.courses[course] == 'undefined') {
         return 0;
+      } else if (typeof this.lessonCtr != 'undefined') {
+
+
+        if (typeof this.lessonCtr[course] != 'undefined' && typeof this.lessonCtr[course][dt] != 'undefined'){
+          return parseInt(this.lessonCtr[course][dt]);
+        }
       }
+      //fallback on local ctr
       return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
+
     }
   }
 
@@ -542,6 +561,69 @@ export class AppProvider {
 
   /**
    *
+   * set the Lesson counter in localStorage after courseHistory have been refreshed
+   *
+   * @private
+   */
+  _setCourseCounters() {
+    if (typeof this.courseHistory != 'undefined') {
+      let lessonCtr = {'total': {}};
+      let dayContext;
+      let courseContext;
+      let dtTotal = 'total';
+
+      this.courseHistory.forEach((val)=>{
+        courseContext  = val.courseNumber;
+        dayContext = this.getFullDayFromTS(val.timeCompleted);
+
+        if (typeof lessonCtr[courseContext] == 'undefined') {
+          lessonCtr[courseContext] = {};
+          lessonCtr[courseContext][dayContext] = 1;
+        } else {
+          if (typeof lessonCtr[courseContext][dayContext] == 'undefined') {
+            lessonCtr[courseContext][dayContext] = 1;
+          } else {
+            lessonCtr[courseContext][dayContext] += 1;
+          }
+        }
+
+        if (typeof lessonCtr[dtTotal][dayContext] == 'undefined') {
+          lessonCtr[dtTotal][dayContext] = 1;
+        } else {
+          lessonCtr[dtTotal][dayContext] += 1;
+        }
+
+      });
+      this.lessonCtr = lessonCtr;
+      localStorage.lessonCtr = JSON.stringify(lessonCtr);
+    }
+  }
+
+  /**
+   *
+   * Get day context in format YYYYMMDD from a given timestamp. Defaults to today.
+   *
+   * @param ts
+   * @returns {string|any}
+   */
+  getFullDayFromTS(ts?: any): string {
+    let dayContext; let dt;
+    if (typeof ts == 'undefined') {
+      //today
+      dt = new Date();
+
+    } else {
+      //ts provided
+      dt = new Date(parseInt(ts) * 1000);
+
+    }
+    dayContext = '' + dt.getFullYear() + dt.getMonth() + dt.getDate();
+    return dayContext;
+  }
+
+
+  /**
+   *
    * Check total remaining new lessons for the day
    * w/o params shows total for all courses
    *
@@ -550,13 +632,24 @@ export class AppProvider {
    */
   getLessonsRemainingToday(course?: any): number {
 
+    let totalRemCnt = (Config.totalDailyLessonLimit - this.getLessonsCompletedToday());
     if (typeof course == 'undefined') {
-      return (Config.totalDailyLessonLimit - this.getLessonsCompletedToday());
+
+      return totalRemCnt;
+
     } else {
+
+      if (totalRemCnt <= 0) {
+        //no more lessons for the entire day on all courses;
+        console.log("no more lessons for today");
+        return 0;
+      }
+
       if (this.courses[course] != 'undefined') {
         let remCnt = (Config.courseDailyLessonLimit - this.getLessonsCompletedToday(course));
 
         if (this.hasLoggedIn()) {
+
           return (remCnt >= 0 ? remCnt : 0);
 
         } else {
@@ -787,9 +880,9 @@ export class AppProvider {
     	arrDay.push({day:iDay,status:st});
     }
 
-    console.log("lastLesson" + this.lastLesson(course));
-    console.log(arrDay);
-    console.log("hasNextLesson:" + this.hasNextLesson(course));
+    //console.log("lastLesson" + this.lastLesson(course));
+    //console.log(arrDay);
+    //console.log("hasNextLesson:" + this.hasNextLesson(course));
     return arrDay;
   }
 
