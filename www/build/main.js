@@ -963,6 +963,9 @@ var AppProvider = (function () {
                         localStorage.removeItem("regStarted");
                     }));
                 }
+                else {
+                    resolve(false);
+                }
             }
             else {
                 resolve(false);
@@ -5826,7 +5829,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var SignUpPage = (function () {
-    function SignUpPage(navCtrl, navParams, render, auth0, formBuilder, loader, evt, app) {
+    function SignUpPage(navCtrl, navParams, render, auth0, formBuilder, loader, evt, app, alertCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.render = render;
@@ -5835,6 +5838,7 @@ var SignUpPage = (function () {
         this.loader = loader;
         this.evt = evt;
         this.app = app;
+        this.alertCtrl = alertCtrl;
         this.invalidReg = false;
         this.emailTaken = false;
         this.formGroup = this.formBuilder.group({
@@ -5918,6 +5922,7 @@ var SignUpPage = (function () {
                             console.log(err, 'thng error');
                         });
                     }
+                    _this.showAlert("Your registration was successful");
                     _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
                 })
                     .catch(function (err) {
@@ -5948,6 +5953,13 @@ var SignUpPage = (function () {
     SignUpPage.prototype.toLogin = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
     };
+    SignUpPage.prototype.showAlert = function (text) {
+        var alert = this.alertCtrl.create({
+            message: text,
+            buttons: ['Ok']
+        });
+        alert.present();
+    };
     return SignUpPage;
 }());
 SignUpPage = __decorate([
@@ -5961,7 +5973,8 @@ SignUpPage = __decorate([
         __WEBPACK_IMPORTED_MODULE_9__angular_forms__["a" /* FormBuilder */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
         __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */]])
+        __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]])
 ], SignUpPage);
 
 //# sourceMappingURL=sign-up.js.map
