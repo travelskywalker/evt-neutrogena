@@ -37,9 +37,9 @@
 			</ion-slide>
 		</ion-slides>
 		<!--/div-->
-		<p class="label-intro">
-			{{labelIntro}}
-		</p>
+		<p class="label-intro" (tap)="toSignUp()">
+      {{labelIntro}}
+    </p>
 
 		<div class="expandable">
 			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
