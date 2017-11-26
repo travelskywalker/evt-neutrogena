@@ -207,6 +207,7 @@ var AppProvider = (function () {
                 _this.progressArr[val.courseNumber].push(val.lessonNumber);
             }
         });
+        this._setCourseCounters();
         return this.progressArr;
     };
     AppProvider.isAgeGated = function () {
@@ -445,12 +446,9 @@ var AppProvider = (function () {
          * For a given course and day, is it the last one?
          */
         var self = this;
-        return this.toGroup().then(function (res) {
-            if (typeof self.courses == 'undefined' || self.courses.length < 0) {
-                self.courses = res;
-            }
-            var courseLen = Object.keys(self.courses[course]).length;
-            return (courseLen <= lessonDay);
+        return new Promise(function (resolve) {
+            //if lesson day is the length or course or has an overflow (more than intended for some stupid reason), then its the last lesson
+            resolve(self.getCourseDuration(course) <= lessonDay);
         });
     };
     AppProvider.prototype.setCurrentCourse = function (course) {
@@ -497,20 +495,32 @@ var AppProvider = (function () {
             localStorage.setItem(this.getLSKey(course), crsCnt.toString());
             localStorage.setItem(this.getLSKey(), totCnt.toString());
             //refresh the progress
-            this.initProgArr();
+            localStorage.removeItem('courseHistory');
+            localStorage.removeItem('lessonCtr');
         }
     };
     AppProvider.prototype.getLessonsCompletedToday = function (course) {
         /**
          * Get the tally of completed Lessons for the day
          */
+        var dt = this.getFullDayFromTS();
         if (typeof course == 'undefined') {
+            if (typeof this.lessonCtr['total'] != 'undefined' && typeof this.lessonCtr['total'][dt] != 'undefined') {
+                return parseInt(this.lessonCtr['total'][dt]);
+            }
+            //fallback for overall local ctr.
             return (parseInt(localStorage.getItem(this.getLSKey())) || 0);
         }
         else {
             if (typeof this.courses[course] == 'undefined') {
                 return 0;
             }
+            else if (typeof this.lessonCtr != 'undefined') {
+                if (typeof this.lessonCtr[course] != 'undefined' && typeof this.lessonCtr[course][dt] != 'undefined') {
+                    return parseInt(this.lessonCtr[course][dt]);
+                }
+            }
+            //fallback on local ctr
             return (parseInt(localStorage.getItem(this.getLSKey(course))) || 0);
         }
     };
@@ -520,7 +530,8 @@ var AppProvider = (function () {
          * @type {string}
          */
         var str = "";
-        var usr = typeof this.evt.getUser() != 'undefined' ? this.evt.getUser().id : '';
+        var usrData = this.evt.getUserContextKeys(!this.hasLoggedIn());
+        var usr = typeof usrData != 'undefined' ? usrData[1] : '';
         if (typeof course == 'undefined') {
             str = "lcCnt" + usr + this.today.toDateString();
         }
@@ -531,6 +542,66 @@ var AppProvider = (function () {
     };
     /**
      *
+     * set the Lesson counter in localStorage after courseHistory have been refreshed
+     *
+     * @private
+     */
+    AppProvider.prototype._setCourseCounters = function () {
+        var _this = this;
+        if (typeof this.courseHistory != 'undefined') {
+            var lessonCtr_1 = { 'total': {} };
+            var dayContext_1;
+            var courseContext_1;
+            var dtTotal_1 = 'total';
+            this.courseHistory.forEach(function (val) {
+                courseContext_1 = val.courseNumber;
+                dayContext_1 = _this.getFullDayFromTS(val.timeCompleted);
+                if (typeof lessonCtr_1[courseContext_1] == 'undefined') {
+                    lessonCtr_1[courseContext_1] = {};
+                    lessonCtr_1[courseContext_1][dayContext_1] = 1;
+                }
+                else {
+                    if (typeof lessonCtr_1[courseContext_1][dayContext_1] == 'undefined') {
+                        lessonCtr_1[courseContext_1][dayContext_1] = 1;
+                    }
+                    else {
+                        lessonCtr_1[courseContext_1][dayContext_1] += 1;
+                    }
+                }
+                if (typeof lessonCtr_1[dtTotal_1][dayContext_1] == 'undefined') {
+                    lessonCtr_1[dtTotal_1][dayContext_1] = 1;
+                }
+                else {
+                    lessonCtr_1[dtTotal_1][dayContext_1] += 1;
+                }
+            });
+            this.lessonCtr = lessonCtr_1;
+            localStorage.lessonCtr = JSON.stringify(lessonCtr_1);
+        }
+    };
+    /**
+     *
+     * Get day context in format YYYYMMDD from a given timestamp. Defaults to today.
+     *
+     * @param ts
+     * @returns {string|any}
+     */
+    AppProvider.prototype.getFullDayFromTS = function (ts) {
+        var dayContext;
+        var dt;
+        if (typeof ts == 'undefined') {
+            //today
+            dt = new Date();
+        }
+        else {
+            //ts provided
+            dt = new Date(parseInt(ts) * 1000);
+        }
+        dayContext = '' + dt.getFullYear() + dt.getMonth() + dt.getDate();
+        return dayContext;
+    };
+    /**
+     *
      * Check total remaining new lessons for the day
      * w/o params shows total for all courses
      *
@@ -538,10 +609,16 @@ var AppProvider = (function () {
      * @returns {number}
      */
     AppProvider.prototype.getLessonsRemainingToday = function (course) {
+        var totalRemCnt = (__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
         if (typeof course == 'undefined') {
-            return (__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].totalDailyLessonLimit - this.getLessonsCompletedToday());
+            return totalRemCnt;
         }
         else {
+            if (totalRemCnt <= 0) {
+                //no more lessons for the entire day on all courses;
+                console.log("no more lessons for today");
+                return 0;
+            }
             if (this.courses[course] != 'undefined') {
                 var remCnt = (__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].courseDailyLessonLimit - this.getLessonsCompletedToday(course));
                 if (this.hasLoggedIn()) {
@@ -755,9 +832,9 @@ var AppProvider = (function () {
             var st = !(iDay == this.nextLesson(course));
             arrDay.push({ day: iDay, status: st });
         }
-        console.log("lastLesson" + this.lastLesson(course));
-        console.log(arrDay);
-        console.log("hasNextLesson:" + this.hasNextLesson(course));
+        //console.log("lastLesson" + this.lastLesson(course));
+        //console.log(arrDay);
+        //console.log("hasNextLesson:" + this.hasNextLesson(course));
         return arrDay;
     };
     AppProvider.prototype.getLastCompletedLesson = function () {
@@ -895,7 +972,14 @@ var AppProvider = (function () {
         if (this.hasLoggedIn() && typeof localStorage.userInfo != 'undefined') {
             //only for logged in
             var usr = JSON.parse(localStorage.userInfo);
-            var userCreatedAt = new Date(usr.created_at);
+            var userCreatedAt = void 0;
+            if (this.auth.isFB()) {
+                //OIDC-conformant authentication, passwordless
+                userCreatedAt = new Date(usr[__WEBPACK_IMPORTED_MODULE_8__config_environment__["a" /* Config */].fbUserMetadataNS + 'user_metadata'].created_at);
+            }
+            else {
+                userCreatedAt = new Date(usr.created_at);
+            }
             return userCreatedAt;
         }
     };
@@ -2356,7 +2440,7 @@ var ProgressModalComponent = (function () {
     };
     ProgressModalComponent.prototype.toHome = function (course) {
         this.app.clearLocalHistory();
-        this.app.setActiveCourse(course);
+        //this.app.setActiveCourse(course);
         this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_2__pages_aura_main_aura_main__["a" /* AuraMainPage */], { reload: true, lastplayed: course });
     };
     /* toggle visibility of this component */
@@ -4025,7 +4109,6 @@ var AuraMainPage = (function () {
                     var lastActiveCourse = _this.navParams.get('lastplayed') ? _this.navParams.get('lastplayed') : _this.app.getLastActiveCourse();
                     _this.app.setActiveCourse(lastActiveCourse);
                     _this.initActiveCourse();
-                    _this.initProgressState();
                     _this.courseTitle = lastActiveCourse;
                     loading_1.dismiss();
                 });
@@ -4043,17 +4126,24 @@ var AuraMainPage = (function () {
     };
     AuraMainPage.prototype.initProgressState = function () {
         var _this = this;
-        this.progressKeys = Object.keys(this.app.getCourses());
+        if (typeof this.progressKeys == 'undefined') {
+            this.progressKeys = Object.keys(this.app.getCourses());
+        }
+        var pk = {};
         this.progressKeys.forEach(function (val) {
-            _this.progressArr[val] = typeof _this.app.progressArr[val] == 'undefined' ? 0
+            pk[val] = typeof _this.app.progressArr[val] == 'undefined' ? 0
                 : _this.app.progressArr[val].length;
         });
+        this.progressArr = pk;
     };
     /* Add buttons depending on number of days *
      * Animate for effect to the current day 	 */
     AuraMainPage.prototype.popDays = function () {
-        var _this = this;
         this.arrDay = this.app.getArrDay(this.courseTitle);
+        this.slideDayButtons();
+    };
+    AuraMainPage.prototype.slideDayButtons = function () {
+        var _this = this;
         setTimeout(function () {
             try {
                 _this.btnSlide.slideTo(_this.app.nextLesson());
@@ -4061,7 +4151,7 @@ var AuraMainPage = (function () {
             catch (e) {
                 //console.log(e);
             }
-        }, 100);
+        }, 300);
     };
     /* Expand description */
     AuraMainPage.prototype.expand = function () {
@@ -4150,7 +4240,7 @@ __decorate([
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
+        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro">\n			{{labelIntro}}\n		</p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false">\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/rexmupas/Documents/EVT/Neutrogena/code/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
@@ -5227,7 +5317,7 @@ var SubCourseComponent = (function () {
             this.hideCourse(courseElem);
         }
         else {
-            if (this.title == 'Mindfulness') {
+            if (this.title === 'Mindfulness' || this.hero === this.title) {
                 var courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
                 this.hideCourse(courseElem);
             }
@@ -5268,6 +5358,10 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('title'),
     __metadata("design:type", String)
 ], SubCourseComponent.prototype, "title", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('hero'),
+    __metadata("design:type", String)
+], SubCourseComponent.prototype, "hero", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])('duration'),
     __metadata("design:type", Number)
