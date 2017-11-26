@@ -25760,20 +25760,20 @@ notice > section.body button[ion-button] ion-icon {
 }
 
 progress-modal {
-  z-index: 99;
+  z-index: 999;
   position: fixed;
   display: inline-block;
-  height: calc(100% - 50px);
+  height: 100%;
   width: 100%;
-  padding: 16px 20px;
-  top: 50px;
+  padding: 70px 20px;
+  top: 0;
   left: 0;
   background-color: rgba(50, 50, 50, 0.4);
 }
 
 progress-modal .overlay {
   content: "";
-  z-index: 98;
+  z-index: 998;
   display: none;
   position: relative;
   top: 0;
@@ -25802,11 +25802,11 @@ progress-modal div.container > * {
 }
 
 progress-modal div.container > h3 {
-  padding: 185px 0 0;
+  padding: 20vh 0 0;
   color: #bd0894;
   line-height: 16px;
   font-family: 'HelveticaNeue-Light';
-  font-size: 30px;
+  font-size: 9vw;
   text-transform: uppercase;
 }
 
@@ -25843,11 +25843,15 @@ progress-modal div.container > button[ion-button] {
   color: #fff;
   text-transform: uppercase;
   font-family: 'HelveticaNeue-Light';
-  font-size: 15px;
+  font-size: 18px;
   line-height: 17px;
   display: block;
   margin: 60px auto 0;
   background-color: transparent;
+}
+
+progress-modal div.container > button[ion-button] > span {
+  font-weight: 500;
 }
 
 reorder-modal {
