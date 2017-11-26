@@ -544,7 +544,8 @@ export class AppProvider {
      * @type {string}
      */
     let str = "";
-    let usr = typeof this.evt.getUser() != 'undefined' ? this.evt.getUser().id : '';
+    let usrData = this.evt.getUserContextKeys(!this.hasLoggedIn());
+    let usr = typeof usrData != 'undefined' ? usrData[1] : '';
 
     if (typeof course == 'undefined') {
       str = "lcCnt" + usr + this.today.toDateString();
