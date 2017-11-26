@@ -19,6 +19,7 @@ import { SignUpPage } from "../../pages/sign-up/sign-up";
 export class SubCourseComponent {
   @Input('bgImg') bgImg ?: string = "../assets/images/courseImage.png";
   @Input('title') title ?: string = "Sleep well";
+  @Input('hero') hero ?: string;
   @Input('duration') duration ?: number = 30;
   @Input('enabled') enabled ?: boolean = false;
   @Input('progress') progress ?: number;
@@ -64,6 +65,7 @@ export class SubCourseComponent {
         this.progress = Math.round(Math.random()*this.duration);
       }
   	}
+
   }
 
   ngAfterViewInit(){
@@ -79,7 +81,7 @@ export class SubCourseComponent {
 
     } else {
 
-      if (this.title == 'Mindfulness') {
+      if (this.title === 'Mindfulness' || this.hero === this.title) {
 
         let courseElem = this.courseElem.nativeElement.parentElement.parentElement.parentElement;
         this.hideCourse(courseElem) ;
