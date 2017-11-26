@@ -447,17 +447,11 @@ export class AppProvider {
     /**
      * For a given course and day, is it the last one?
      */
-
     let self = this;
-    return this.toGroup().then(
-      res=> {
-        if (typeof self.courses == 'undefined' || self.courses.length < 0) {
-          self.courses = res;
-        }
-        let courseLen = Object.keys(self.courses[course]).length;
-        return (courseLen <= lessonDay);
-      }
-    );
+    return new Promise((resolve)=>{
+      //if lesson day is the length or course or has an overflow (more than intended for some stupid reason), then its the last lesson
+      resolve(self.getCourseDuration(course) <= lessonDay);
+    })
   }
 
   setCurrentCourse(course: string) {
