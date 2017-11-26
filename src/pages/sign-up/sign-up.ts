@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 import { EvtProvider} from '../../providers/evt/evt';
 import { AppProvider } from "../../providers/app/app";
@@ -37,7 +37,8 @@ export class SignUpPage {
   				private formBuilder: FormBuilder,
   				private loader : LoadingController,
           private evt: EvtProvider,
-          private app: AppProvider
+          private app: AppProvider,
+          private alertCtrl: AlertController
   ) {
   	this.formGroup = this.formBuilder.group({
   		firstName: ['', Validators.required],
@@ -128,6 +129,7 @@ export class SignUpPage {
                 console.log(err,'thng error')
             })
           }
+          this.showAlert("Your registration was successful");
 		  		this.navCtrl.setRoot(LoginPage);
 		  	})
 		  	.catch(err=>{
@@ -160,4 +162,13 @@ export class SignUpPage {
   toLogin(){
   	this.navCtrl.push(LoginPage);
   }
+
+  showAlert(text) {
+    let alert = this.alertCtrl.create({
+      message: text,
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
 }
