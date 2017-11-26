@@ -1027,6 +1027,11 @@ export class AppProvider {
               localStorage.removeItem("regStarted");
             }
           ));
+
+        } else {
+
+          resolve(false);
+
         }
 
       } else {
