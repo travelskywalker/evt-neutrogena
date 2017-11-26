@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,AlertController, Platform } from 'ionic-angular';
 // import { AuthService } from "../../providers/auth/auth.service";
 
 import { Cookie } from "ng2-cookies";
@@ -24,7 +24,8 @@ export class AgeGatePage {
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
           public alertCtrl: AlertController,
-          public app: AppProvider
+          public app: AppProvider,
+          public platform: Platform
   				) {
 
     this.selectedDate = {
@@ -52,9 +53,18 @@ export class AgeGatePage {
       this.noticeViewed = false;
     }
 
-    if (this.app.isValidAge()) {
-      this.navCtrl.setRoot(AuraMainPage);
+    if (this.platform.is('mobile')) {
+
+      if (this.app.isValidAge()) {
+        this.navCtrl.setRoot(AuraMainPage);
+      }
+
+    } else {
+
+      this.navCtrl.setRoot(HomePage);
+
     }
+
   }
 
   changedDate(){
