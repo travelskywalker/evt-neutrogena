@@ -66,6 +66,7 @@ export class LoginPage {
   }
 
   toSignup(){
+this.navCtrl.pop();
   	this.navCtrl.push(SignUpPage);
   }
 

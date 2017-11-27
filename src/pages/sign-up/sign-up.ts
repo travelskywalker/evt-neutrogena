@@ -160,6 +160,7 @@ export class SignUpPage {
   }
 
   toLogin(){
+    this.navCtrl.pop();
   	this.navCtrl.push(LoginPage);
   }
 
