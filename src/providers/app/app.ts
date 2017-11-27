@@ -169,6 +169,7 @@ export class AppProvider {
   }
 
   private _initProgArr(): any {
+    localStorage.setItem('courseHistory', JSON.stringify(this.courseHistory));
     this.courseHistory.forEach((val)=>{
       if (typeof this.progressArr[val.courseNumber] === 'undefined') {
         this.progressArr[val.courseNumber] = [];
@@ -180,6 +181,13 @@ export class AppProvider {
     });
     this._setCourseCounters();
     return this.progressArr;
+  }
+
+  isCourseHistoryMatch(): boolean{
+    if(this.courseHistory == JSON.parse(localStorage.courseHistory))
+      return true;
+    else
+      return false;
   }
 
   static isAgeGated() {
@@ -706,6 +714,12 @@ export class AppProvider {
 
     })
 
+  }
+
+  subscribeCourseHistory(){
+    this.evt.getUserCustomFields().then((customFields)=> {
+      customFields.courseHistor
+    });
   }
 
   hasStartedCourse(course: any): boolean {

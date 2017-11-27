@@ -6,7 +6,7 @@ import { IonicPage, NavController, NavParams, Slides, LoadingController } from '
 import { Config } from "../../config/environment";
 import { AppProvider } from "../../providers/app/app";
 //import { AuthService } from '../../providers/auth/auth.service';
-
+import { Observable } from "rxjs";
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
 import { LoginPage } from "../../pages/login/login";
 import { HomePage } from "../../pages/home/home";
@@ -162,7 +162,17 @@ export class AuraMainPage {
   }
 
   ngOnInit(){
-  	this.app.initProgArr()
+    let timer = Observable.timer(0, 1000);
+    let alive: boolean = true;
+    let self = this;
+    //console.log('poll filter: ', filter);
+
+    alive = this.app.isCourseHistoryMatch();
+    timer
+    .takeWhile(() => alive)
+    .subscribe(() => {
+      this.app.initProgArr()
+    });
   }
 
   sliderChanged(event = null){
