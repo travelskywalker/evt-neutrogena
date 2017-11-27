@@ -12,7 +12,7 @@
 		</p>
 
 		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
-		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">
+		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns" (ionSlideDidChange)="sliderChanged($event)">
 			<ion-slide *ngFor="let dy of arrDay">
 				<div [ngClass]="{'play': true, 'end': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">
 					<ion-col [ngClass]="{'rng': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">
@@ -58,7 +58,7 @@
 	<p class="more-courses">Additional Courses</p>
 
 	<section class="sliders">
-		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)">
+		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>
 			<ion-slide *ngFor = "let crs of progressKeys; let i=index">
 				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>
 			</ion-slide>
