@@ -18,7 +18,9 @@
 .scroll-content{
 	margin-top: 0 !important;
 }
-
+.menu-inner{
+  width:calc(100vw * 0.7) !important;
+}
 .vertical-center {
 	align-content: center;
 	display: flex;
@@ -26,7 +28,7 @@
 	flex-direction: column;
 }
 ion-menu{
-	
+
 	div.menu-inner{
 		button[ion-button]{
 			background-color: transparent;
@@ -35,10 +37,13 @@ ion-menu{
 			font-family: HelveticaNeue-Light;
 			box-shadow: none;
 			border:0;
-			font-size: 21px;
+
 			padding:0;
 			margin: 21px 21px 0 0;
 			height: auto;
+      &#btnClose{
+          	font-size: 35px;
+      }
 		}
 	}
 

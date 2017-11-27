@@ -50,6 +50,17 @@ export class EvtProvider {
   	});
   }
 
+
+  getAction(actionType:string='', anonUser: boolean=false){
+    let usr;
+    if (anonUser) {
+      usr = this.getAnonUser();
+    } else {
+      usr = this.getUser();
+    }
+
+    return usr.action(actionType).read();
+  }
   /**
    *
    * Create a THNG action for a given user mode - anon or registered

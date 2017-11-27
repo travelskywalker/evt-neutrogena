@@ -6,7 +6,7 @@ import { IonicPage, NavController, NavParams, Slides, LoadingController } from '
 import { Config } from "../../config/environment";
 import { AppProvider } from "../../providers/app/app";
 //import { AuthService } from '../../providers/auth/auth.service';
-
+import { Observable } from "rxjs";
 import { AuraContentPage } from "../../pages/aura-content/aura-content";
 import { LoginPage } from "../../pages/login/login";
 import { HomePage } from "../../pages/home/home";
@@ -23,7 +23,7 @@ import { HomePage } from "../../pages/home/home";
   templateUrl: 'aura-main.html',
 })
 export class AuraMainPage {
-	@ViewChild(Slides) slider: Slides;
+	@ViewChild('Slides') slider: Slides;
 	@ViewChild('btns') btnSlide : Slides;
 	expanded: boolean = false;
 	def : string = "down";
@@ -34,6 +34,7 @@ export class AuraMainPage {
   noticeClass?:string = 'pink';
   loggedIn: boolean;
 	courses ?: any;
+  alive: boolean = true;
 	activeCourse ?: [{desc:string,id:string,path:string,title:string, course:string, author: string}] = [
     {desc:"",id:"",path:"",title:"", course: "", author: ""}
   ];
@@ -162,7 +163,28 @@ export class AuraMainPage {
   }
 
   ngOnInit(){
-  	this.app.initProgArr()
+    let timer = Observable.timer(0, 1000);
+    let self = this;
+    //console.log('poll filter: ', filter);
+    timer
+    .takeWhile(() => this.alive)
+    .subscribe(() => {
+      self.app.getLessonCompletedFromEVT().then((res)=> {
+          if(typeof localStorage.lessonCompleteTime != 'undefined'){
+            if((res.timestamp != localStorage.lessonCompleteTime )){
+              console.log('getLessonCompletedFromEVT', res);
+              localStorage.setItem('lessonCompleteTime', res.timestamp)
+              this.app.initProgArr();
+            }
+          else{
+            localStorage.setItem('lessonCompleteTime', res.timestamp)
+          }
+            
+        }
+      });
+    });
+
+    this.app.initProgArr();
   }
 
   sliderChanged(event = null){
@@ -177,6 +199,19 @@ export class AuraMainPage {
     else{
       this.slider.lockSwipeToPrev(false);
       this.slider.lockSwipeToNext(false);
+    }
+
+    if(this.btnSlide.isBeginning()){
+      this.btnSlide.lockSwipeToPrev(true);
+      this.btnSlide.lockSwipeToNext(false);
+    }
+    else if(this.btnSlide.isEnd()){
+      this.btnSlide.lockSwipeToNext(true);
+      this.btnSlide.lockSwipeToPrev(false);
+    }
+    else{
+      this.btnSlide.lockSwipeToPrev(false);
+      this.btnSlide.lockSwipeToNext(false);
     }
 
   }
@@ -195,6 +230,8 @@ export class AuraMainPage {
   	this.courseTitle = courseTitle;
     this.initLabelIntro();
   	//this.dur = this.app.progressKeys.length;
+    this.btnSlide.lockSwipeToNext(false);
+    this.btnSlide.lockSwipeToPrev(false);
   	this.popDays();
   }
 
