@@ -52,10 +52,11 @@ export class EvtProvider {
 
 
   getAction(actionType:string='', anonUser: boolean=false){
-    let slf = this;
-    let usr = this.getUser();
+    let usr;
     if (anonUser) {
       usr = this.getAnonUser();
+    } else {
+      usr = this.getUser();
     }
 
     return usr.action(actionType).read();
