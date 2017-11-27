@@ -251,6 +251,7 @@ export class AppProvider {
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
       }else if (typeof result[0].results[0].product !== "undefined"){
         localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+        this.evt.setLocalStorageTimeout();
       }
     }
 

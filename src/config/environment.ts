@@ -70,5 +70,6 @@ export const Config = {
   anonUserDaysToSignInNotice: 2, //days until an anon user will see a pop-up to sign-in / sign-up
   thngDaysLifeSpan: 30, //the number of days that the activator is meant for. expires cookie and a new one is set
   dayToReorderNotice: 23, //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
-  fbUserMetadataNS: 'http://evt-neutrogena-test.netlify.com/' //namespace used on rules for FB log-in
+  fbUserMetadataNS: 'http://evt-neutrogena-test.netlify.com/', //namespace used on rules for FB log-in
+  scanRevertExpiry: 24 // hours until the app sets the scan as homepage instead of the aura content page
 };

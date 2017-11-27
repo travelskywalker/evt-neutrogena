@@ -298,6 +298,7 @@ export class EvtProvider {
           //has myThng customField
           return userC.thng(cf.myThng).read(th=>{
             localStorage.myThng = JSON.stringify(th);
+            self.setLocalStorageTimeout();
           });
 
         } else if (typeof localStorage.myProduct != 'undefined') {
@@ -427,7 +428,7 @@ export class EvtProvider {
    * @returns {any}
    */
   createThng(thngData: any, anonUser: boolean=false): Promise<any> {
-
+    let slf = this;
     let usr = this.getUser();
     if (anonUser) {
       usr = this.getAnonUser();
@@ -441,6 +442,7 @@ export class EvtProvider {
         }
       }).then(()=>{
         localStorage.myThng = JSON.stringify(th);
+        slf.setLocalStorageTimeout();
       });
 
     })
@@ -502,7 +504,7 @@ export class EvtProvider {
    * @private
    */
   private _updateMyThng(usr: any, thngData: any): Promise<any> {
-
+    let slf = this;
     return usr.update({
 
       customFields: {
@@ -512,7 +514,8 @@ export class EvtProvider {
     }).then(()=>{
 
       localStorage.myThng = JSON.stringify(thngData);
-      console.log('myTHng updated')
+      slf.setLocalStorageTimeout();
+      console.log('myTHng updated');
 
     }).catch(err=> {
 
@@ -595,6 +598,11 @@ export class EvtProvider {
     this.userC = null;
     this.anonEvtUser = null;
     this.evtUser = null;
+  }
+
+  setLocalStorageTimeout(){
+    let dt_now = new Date();
+    localStorage.localExpire = new Date(dt_now.getTime() + Config.scanRevertExpiry * 3600000); // add 1 day's worth of milliseconds
   }
 
 }

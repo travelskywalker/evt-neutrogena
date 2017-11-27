@@ -29,6 +29,7 @@ export class MyApp {
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
     , public evt: EvtProvider ) {
+    this.checkThngExpiry();
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -91,5 +92,16 @@ export class MyApp {
 
     });
 
+  }
+
+  checkThngExpiry(){
+    /* remove myThng if it has expired already */
+    let curDate = new Date();
+    let expDate = new Date(localStorage.localExpire);
+    console.log(curDate >= expDate);
+    if(curDate >= expDate){
+      localStorage.removeItem('myThng');
+      localStorage.removeItem('localExpire');
+    }
   }
 }
