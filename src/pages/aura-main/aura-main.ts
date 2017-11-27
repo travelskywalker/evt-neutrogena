@@ -23,7 +23,7 @@ import { HomePage } from "../../pages/home/home";
   templateUrl: 'aura-main.html',
 })
 export class AuraMainPage {
-	@ViewChild(Slides) slider: Slides;
+	@ViewChild('Slides') slider: Slides;
 	@ViewChild('btns') btnSlide : Slides;
 	expanded: boolean = false;
 	def : string = "down";
@@ -177,6 +177,19 @@ export class AuraMainPage {
     else{
       this.slider.lockSwipeToPrev(false);
       this.slider.lockSwipeToNext(false);
+    }
+
+    if(this.btnSlide.isBeginning()){
+      this.btnSlide.lockSwipeToPrev(true);
+      this.btnSlide.lockSwipeToNext(false);
+    }
+    else if(this.btnSlide.isEnd()){
+      this.btnSlide.lockSwipeToNext(true);
+      this.btnSlide.lockSwipeToPrev(false);
+    }
+    else{
+      this.btnSlide.lockSwipeToPrev(false);
+      this.btnSlide.lockSwipeToNext(false);
     }
 
   }
