@@ -1,4 +1,4 @@
-<ion-menu [content]="content" side="right">
+<ion-menu [content]="content"  type="overlay" side="right" (ionOpen)="menuOpened()" (ionClose)="menuClosed()">
   <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>
   <side-menu></side-menu>
 </ion-menu>
@@ -8,4 +8,3 @@
 
 <notice [title]="text" [class]="'pink'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>
 </notice>
-

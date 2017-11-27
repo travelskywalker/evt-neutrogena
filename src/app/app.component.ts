@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform ,MenuController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -28,7 +28,7 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
-    , public evt: EvtProvider ) {
+    , public evt: EvtProvider,private menu: MenuController ) {
     this.checkThngExpiry();
     this.initializeApp();
 
@@ -47,7 +47,12 @@ export class MyApp {
     }
     this.app.initCourses();
   }
+  ionViewDidEnter() {
+      this.menu.swipeEnable(true);
 
+      // If you have more than one side menu, use the id like below
+      // this.menu.swipeEnable(false, 'menu1');
+    }
   ngAfterViewInit(){
 
     this.nav.viewDidEnter.subscribe((data) => {
@@ -58,7 +63,26 @@ export class MyApp {
         }
      });
   }
+  menuOpened(){
+    try{
+      this.menu.swipeEnable(false);
+    }
+    catch(error){
+      this.menu.swipeEnable(false);
+    }
 
+
+  }
+  menuClosed(){
+    try{
+        this.menu.swipeEnable(true);
+    }
+    catch(error){
+        this.menu.swipeEnable(true);
+    }
+
+
+  }
   noticePopUp(){
     if(this.app.hasSignInNotice()){
 

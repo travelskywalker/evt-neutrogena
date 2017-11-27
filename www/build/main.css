@@ -25516,6 +25516,10 @@ ion-navbar.toolbar {
   margin-top: 0 !important;
 }
 
+.menu-inner {
+  width: calc(100vw * 0.7) !important;
+}
+
 .vertical-center {
   -webkit-align-content: center;
   -ms-flex-line-pack: center;
@@ -25543,10 +25547,13 @@ ion-menu div.menu-inner button[ion-button] {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: 0;
-  font-size: 21px;
   padding: 0;
   margin: 21px 21px 0 0;
   height: auto;
+}
+
+ion-menu div.menu-inner button[ion-button]#btnClose {
+  font-size: 35px;
 }
 
 .hidden {
