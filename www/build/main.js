@@ -212,10 +212,10 @@ var AppProvider = (function () {
         return this.progressArr;
     };
     AppProvider.prototype.isCourseHistoryMatch = function () {
-        if (this.courseHistory == JSON.parse(localStorage.courseHistory))
-            return true;
-        else
+        if ((typeof localStorage.courseHistory != 'undefined') && (this.courseHistory == JSON.parse(localStorage.courseHistory)))
             return false;
+        else
+            return true;
     };
     AppProvider.isAgeGated = function () {
         return __WEBPACK_IMPORTED_MODULE_2_ng2_cookies__["Cookie"].get("age_gate");
@@ -281,6 +281,7 @@ var AppProvider = (function () {
             }
             else if (typeof result[0].results[0].product !== "undefined") {
                 localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+                this.evt.setLocalStorageTimeout();
             }
         }
     };
@@ -685,6 +686,9 @@ var AppProvider = (function () {
                 return customFields;
             }
         });
+    };
+    AppProvider.prototype.getLessonCompletedFromEVT = function () {
+        return this.evt.getAction('_LessonCompleted');
     };
     AppProvider.prototype.subscribeCourseHistory = function () {
         this.evt.getUserCustomFields().then(function (customFields) {
@@ -3072,7 +3076,8 @@ var Config = {
     anonUserDaysToSignInNotice: 2,
     thngDaysLifeSpan: 30,
     dayToReorderNotice: 23,
-    fbUserMetadataNS: 'http://evt-neutrogena-test.netlify.com/' //namespace used on rules for FB log-in
+    fbUserMetadataNS: 'http://evt-neutrogena-test.netlify.com/',
+    scanRevertExpiry: 24 // hours until the app sets the scan as homepage instead of the aura content page
 };
 //# sourceMappingURL=environment.js.map
 
@@ -3360,6 +3365,7 @@ var MyApp = (function () {
         this.text = "";
         this.show = false;
         this.noLink = true;
+        this.checkThngExpiry();
         this.initializeApp();
         // used for an example of ngFor and navigation
         this.pages = [
@@ -3409,6 +3415,17 @@ var MyApp = (function () {
             _this.app.setBeginTS();
             console.log("EVT");
         });
+    };
+    MyApp.prototype.checkThngExpiry = function () {
+        /* remove myThng if it has expired already */
+        var curDate = new Date();
+        var expDate = new Date(localStorage.localExpire);
+        console.log(curDate >= expDate);
+        if (curDate >= expDate) {
+            localStorage.removeItem('myThng');
+            localStorage.removeItem('myProduct');
+            localStorage.removeItem('localExpire');
+        }
     };
     return MyApp;
 }());
@@ -3549,6 +3566,16 @@ var EvtProvider = (function () {
         return userC.then(function (usr) {
             usr.action(actionType).create(action).then(console.log(actionType)).catch(function (err) { return console.error(err); });
         });
+    };
+    EvtProvider.prototype.getAction = function (actionType, anonUser) {
+        if (actionType === void 0) { actionType = ''; }
+        if (anonUser === void 0) { anonUser = false; }
+        var slf = this;
+        var usr = this.getUser();
+        if (anonUser) {
+            usr = this.getAnonUser();
+        }
+        return usr.action(actionType).read();
     };
     /**
      *
@@ -3761,6 +3788,7 @@ var EvtProvider = (function () {
                     //has myThng customField
                     return userC.thng(cf.myThng).read(function (th) {
                         localStorage.myThng = JSON.stringify(th);
+                        self.setLocalStorageTimeout();
                     });
                 }
                 else if (typeof localStorage.myProduct != 'undefined') {
@@ -3883,6 +3911,7 @@ var EvtProvider = (function () {
      */
     EvtProvider.prototype.createThng = function (thngData, anonUser) {
         if (anonUser === void 0) { anonUser = false; }
+        var slf = this;
         var usr = this.getUser();
         if (anonUser) {
             usr = this.getAnonUser();
@@ -3895,6 +3924,7 @@ var EvtProvider = (function () {
                 }
             }).then(function () {
                 localStorage.myThng = JSON.stringify(th);
+                slf.setLocalStorageTimeout();
             });
         })
             .catch(function (err) {
@@ -3947,12 +3977,14 @@ var EvtProvider = (function () {
      * @private
      */
     EvtProvider.prototype._updateMyThng = function (usr, thngData) {
+        var slf = this;
         return usr.update({
             customFields: {
                 myThng: thngData.id
             }
         }).then(function () {
             localStorage.myThng = JSON.stringify(thngData);
+            slf.setLocalStorageTimeout();
             console.log('myTHng updated');
         }).catch(function (err) {
             console.log('update myTHng err', err);
@@ -4022,14 +4054,18 @@ var EvtProvider = (function () {
         this.anonEvtUser = null;
         this.evtUser = null;
     };
+    EvtProvider.prototype.setLocalStorageTimeout = function () {
+        var dt_now = new Date();
+        localStorage.localExpire = new Date(dt_now.getTime() + __WEBPACK_IMPORTED_MODULE_3__config_environment__["a" /* Config */].scanRevertExpiry * 3600000); // add 1 day's worth of milliseconds
+    };
     return EvtProvider;
 }());
 EvtProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]) === "function" && _b || Object])
 ], EvtProvider);
 
+var _a, _b;
 //# sourceMappingURL=evt.js.map
 
 /***/ }),
@@ -4086,6 +4122,7 @@ var AuraMainPage = (function () {
         this.dur = 10;
         this.arrDay = [];
         this.noticeClass = 'pink';
+        this.alive = true;
         this.activeCourse = [
             { desc: "", id: "", path: "", title: "", course: "", author: "" }
         ];
@@ -4111,8 +4148,8 @@ var AuraMainPage = (function () {
             && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())
             && this.app.isValidAge()) {
             if (!this.app.hasActiveCourse() || this.navParams.get('reload')) {
-                var self_1 = this;
-                var loading_1 = self_1.loading.create({
+                var self = this;
+                var loading_1 = self.loading.create({
                     spinner: 'crescent',
                     content: "Please wait...",
                     enableBackdropDismiss: false,
@@ -4183,15 +4220,25 @@ var AuraMainPage = (function () {
     AuraMainPage.prototype.ngOnInit = function () {
         var _this = this;
         var timer = __WEBPACK_IMPORTED_MODULE_4_rxjs__["Observable"].timer(0, 1000);
-        var alive = true;
         var self = this;
         //console.log('poll filter: ', filter);
-        alive = this.app.isCourseHistoryMatch();
         timer
-            .takeWhile(function () { return alive; })
+            .takeWhile(function () { return _this.alive; })
             .subscribe(function () {
-            _this.app.initProgArr();
+            self.app.getLessonCompletedFromEVT().then(function (res) {
+                if (typeof localStorage.lessonCompleteTime != 'undefined') {
+                    if ((res.timestamp != localStorage.lessonCompleteTime)) {
+                        console.log('getLessonCompletedFromEVT', res);
+                        localStorage.setItem('lessonCompleteTime', res.timestamp);
+                        _this.app.initProgArr();
+                    }
+                    else {
+                        localStorage.setItem('lessonCompleteTime', res.timestamp);
+                    }
+                }
+            });
         });
+        this.app.initProgArr();
     };
     AuraMainPage.prototype.sliderChanged = function (event) {
         if (event === void 0) { event = null; }
@@ -4206,6 +4253,18 @@ var AuraMainPage = (function () {
         else {
             this.slider.lockSwipeToPrev(false);
             this.slider.lockSwipeToNext(false);
+        }
+        if (this.btnSlide.isBeginning()) {
+            this.btnSlide.lockSwipeToPrev(true);
+            this.btnSlide.lockSwipeToNext(false);
+        }
+        else if (this.btnSlide.isEnd()) {
+            this.btnSlide.lockSwipeToNext(true);
+            this.btnSlide.lockSwipeToPrev(false);
+        }
+        else {
+            this.btnSlide.lockSwipeToPrev(false);
+            this.btnSlide.lockSwipeToNext(false);
         }
     };
     /* This is triggered by the sub-course component *
@@ -4277,23 +4336,21 @@ var AuraMainPage = (function () {
     return AuraMainPage;
 }());
 __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('Slides'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _a || Object)
 ], AuraMainPage.prototype, "slider", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Slides */]) === "function" && _b || Object)
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/nathan/Documents/evt/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro" (tap)="toSignUp()">\n      {{labelIntro}}\n    </p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)">\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/nathan/Documents/evt/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
+        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/nathan/Documents/evt/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns" (ionSlideDidChange)="sliderChanged($event)">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro" (tap)="toSignUp()">\n      {{labelIntro}}\n    </p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/nathan/Documents/evt/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]) === "function" && _f || Object])
 ], AuraMainPage);
 
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=aura-main.js.map
 
 /***/ }),

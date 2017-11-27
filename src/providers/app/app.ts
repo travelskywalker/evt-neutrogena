@@ -184,10 +184,10 @@ export class AppProvider {
   }
 
   isCourseHistoryMatch(): boolean{
-    if(this.courseHistory == JSON.parse(localStorage.courseHistory))
-      return true;
-    else
+    if((typeof localStorage.courseHistory != 'undefined') && (this.courseHistory == JSON.parse(localStorage.courseHistory)))
       return false;
+    else
+      return true;
   }
 
   static isAgeGated() {
@@ -259,6 +259,7 @@ export class AppProvider {
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
       }else if (typeof result[0].results[0].product !== "undefined"){
         localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+        this.evt.setLocalStorageTimeout();
       }
     }
 
@@ -714,6 +715,10 @@ export class AppProvider {
 
     })
 
+  }
+
+  getLessonCompletedFromEVT(){
+    return this.evt.getAction('_LessonCompleted');
   }
 
   subscribeCourseHistory(){
