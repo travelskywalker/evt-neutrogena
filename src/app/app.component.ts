@@ -101,6 +101,7 @@ export class MyApp {
     console.log(curDate >= expDate);
     if(curDate >= expDate){
       localStorage.removeItem('myThng');
+      localStorage.removeItem('myProduct');
       localStorage.removeItem('localExpire');
     }
   }
