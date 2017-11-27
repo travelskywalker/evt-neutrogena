@@ -208,6 +208,8 @@ export class AuraMainPage {
   	this.courseTitle = courseTitle;
     this.initLabelIntro();
   	//this.dur = this.app.progressKeys.length;
+    this.btnSlide.lockSwipeToNext(false);
+    this.btnSlide.lockSwipeToPrev(false);
   	this.popDays();
   }
 
