@@ -25553,7 +25553,7 @@ ion-menu div.menu-inner button[ion-button] {
 }
 
 ion-menu div.menu-inner button[ion-button]#btnClose {
-  font-size: 35px;
+  font-size: 25px;
 }
 
 .hidden {
