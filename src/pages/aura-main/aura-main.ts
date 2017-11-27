@@ -165,6 +165,22 @@ export class AuraMainPage {
   	this.app.initProgArr()
   }
 
+  sliderChanged(event = null){
+    if(this.slider.isBeginning()){
+      this.slider.lockSwipeToPrev(true);
+      this.slider.lockSwipeToNext(false);
+    }
+    else if(this.slider.isEnd()){
+      this.slider.lockSwipeToNext(true);
+      this.slider.lockSwipeToPrev(false);
+    }
+    else{
+      this.slider.lockSwipeToPrev(false);
+      this.slider.lockSwipeToNext(false);
+    }
+
+  }
+
 
  /* This is triggered by the sub-course component *
  * when it is tapped (begin / continue) and 	  *
