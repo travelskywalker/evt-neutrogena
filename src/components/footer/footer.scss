@@ -1,5 +1,28 @@
 footer {
 
+	#footer-desktop{
+		color:rgb(240,119,33);
+		text-align: center;
+		&>.footer-links{
+			width: 100%;
+			display: inline-block;
+			padding:0 43px;
+
+			&>a{
+				color:rgb(240,119,33);
+				display: inline-block;
+				margin: 11px 11px 0 0;
+				font-size: 9.4px;
+			}
+		}
+
+		&>.disclaimer{
+			font-size: 9px;
+			line-height: 14px;
+			padding:0 43px;
+		}
+	}
+
 	#footer{
 		color:rgb(113,27,125);
 		text-align: center;
@@ -22,4 +45,5 @@ footer {
 			padding:0 43px;
 		}
 	}
+	
 }
