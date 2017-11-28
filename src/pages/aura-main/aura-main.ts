@@ -44,7 +44,7 @@ export class AuraMainPage {
   aura_url = Config.aura_url;
   progressKeys: any;
   progressArr: any = {};
-
+  updateTimer: any;
   constructor(private app:AppProvider,
               public navCtrl: NavController,
               public navParams: NavParams,
@@ -163,10 +163,13 @@ export class AuraMainPage {
   }
 
   ngOnInit(){
-    let timer = Observable.timer(0, 1000);
+    if (typeof  this.updateTimer != 'undefined') {
+      this.updateTimer.unsubscribe();
+    }
+    this.updateTimer = Observable.timer(1000, 1000);
     let self = this;
     //console.log('poll filter: ', filter);
-    timer
+    this.updateTimer
     .takeWhile(() => localStorage.alive === "true")
     .subscribe(() => {
       self.app.getLessonCompletedFromEVT().then((res)=> {
@@ -179,7 +182,7 @@ export class AuraMainPage {
           else{
             localStorage.setItem('lessonCompleteTime', res.timestamp)
           }
-            
+
         }
       }).catch(err=>console.log(err));
     });
