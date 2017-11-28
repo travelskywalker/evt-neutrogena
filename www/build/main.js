@@ -4459,6 +4459,7 @@ var LoginPage = (function () {
         }
     };
     LoginPage.prototype.toSignup = function () {
+        this.navCtrl.pop();
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__sign_up_sign_up__["a" /* SignUpPage */]);
     };
     /**
@@ -6184,6 +6185,7 @@ var SignUpPage = (function () {
         this.app.startReg('facebook');
     };
     SignUpPage.prototype.toLogin = function () {
+        this.navCtrl.pop();
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
     };
     SignUpPage.prototype.showAlert = function (text) {
