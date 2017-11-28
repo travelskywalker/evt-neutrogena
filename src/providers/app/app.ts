@@ -169,6 +169,7 @@ export class AppProvider {
   }
 
   private _initProgArr(): any {
+    localStorage.setItem('courseHistory', JSON.stringify(this.courseHistory));
     this.courseHistory.forEach((val)=>{
       if (typeof this.progressArr[val.courseNumber] === 'undefined') {
         this.progressArr[val.courseNumber] = [];
@@ -180,6 +181,13 @@ export class AppProvider {
     });
     this._setCourseCounters();
     return this.progressArr;
+  }
+
+  isCourseHistoryMatch(): boolean{
+    if((typeof localStorage.courseHistory != 'undefined') && (this.courseHistory == JSON.parse(localStorage.courseHistory)))
+      return false;
+    else
+      return true;
   }
 
   static isAgeGated() {
@@ -251,6 +259,7 @@ export class AppProvider {
         localStorage.setItem('myThng', JSON.stringify(result[0].results[0].thng));
       }else if (typeof result[0].results[0].product !== "undefined"){
         localStorage.setItem('myProduct', JSON.stringify(result[0].results[0].product));
+        this.evt.setLocalStorageTimeout();
       }
     }
 
@@ -706,6 +715,16 @@ export class AppProvider {
 
     })
 
+  }
+
+  getLessonCompletedFromEVT(){
+    return this.evt.getAction('_LessonCompleted');
+  }
+
+  subscribeCourseHistory(){
+    this.evt.getUserCustomFields().then((customFields)=> {
+      customFields.courseHistor
+    });
   }
 
   hasStartedCourse(course: any): boolean {

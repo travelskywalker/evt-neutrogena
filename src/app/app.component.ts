@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform ,MenuController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -28,7 +28,8 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
-    , public evt: EvtProvider ) {
+    , public evt: EvtProvider,private menu: MenuController ) {
+    this.checkThngExpiry();
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -46,7 +47,12 @@ export class MyApp {
     }
     this.app.initCourses();
   }
+  ionViewDidEnter() {
+      this.menu.swipeEnable(true);
 
+      // If you have more than one side menu, use the id like below
+      // this.menu.swipeEnable(false, 'menu1');
+    }
   ngAfterViewInit(){
 
     this.nav.viewDidEnter.subscribe((data) => {
@@ -57,7 +63,26 @@ export class MyApp {
         }
      });
   }
+  menuOpened(){
+    try{
+      this.menu.swipeEnable(false);
+    }
+    catch(error){
+      this.menu.swipeEnable(false);
+    }
 
+
+  }
+  menuClosed(){
+    try{
+        this.menu.swipeEnable(true);
+    }
+    catch(error){
+        this.menu.swipeEnable(true);
+    }
+
+
+  }
   noticePopUp(){
     if(this.app.hasSignInNotice()){
 
@@ -91,5 +116,17 @@ export class MyApp {
 
     });
 
+  }
+
+  checkThngExpiry(){
+    /* remove myThng if it has expired already */
+    let curDate = new Date();
+    let expDate = new Date(localStorage.localExpire);
+    console.log(curDate >= expDate);
+    if(curDate >= expDate){
+      localStorage.removeItem('myThng');
+      localStorage.removeItem('myProduct');
+      localStorage.removeItem('localExpire');
+    }
   }
 }
