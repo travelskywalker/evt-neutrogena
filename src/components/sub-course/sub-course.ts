@@ -4,7 +4,7 @@ import { NavController } from "ionic-angular";
 import { AuthService } from "../../providers/auth/auth.service";
 import { AppProvider } from "../../providers/app/app";
 
-import { SignUpPage } from "../../pages/sign-up/sign-up";
+import { LoginPage } from "../../pages/login/login";
 
 /**
  * Generated class for the SubCourseComponent component.
@@ -104,7 +104,7 @@ export class SubCourseComponent {
   }
 
   toSignUp(){
-  	this.nav.push(SignUpPage);
+  	this.nav.push(LoginPage);
   }
 
   getProgLabel() {
