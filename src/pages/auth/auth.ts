@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { ScanPage } from "../scan/scan";
+import { LoginPage } from "../login/login";
 import { AuraMainPage } from "../aura-main/aura-main";
 import { AgeGatePage } from '../age-gate/age-gate';
 import { AuthService } from "../../providers/auth/auth.service";
@@ -64,28 +65,34 @@ export class AuthPage {
       this.auth0.result(authData).then(res => {
         console.log(res);
 
-        this.app.completeReg(res).then(reg=> {
-          if (reg === false) {
-            //try logging in
-            this.app.completeLogin(res).then(login=>{
-              if (login !== false) {
+        if(res == "deleted_user"){
+          this.navCtrl.setRoot(LoginPage, {isUserDeleted: true});
+        }else{
 
-                this.navCtrl.setRoot('AuraMainPage');
+          this.app.completeReg(res).then(reg=> {
+            if (reg === false) {
+              //try logging in
+              this.app.completeLogin(res).then(login=>{
+                if (login !== false) {
 
-              } else {
+                  this.navCtrl.setRoot('AuraMainPage');
 
-                this.navCtrl.setRoot(HomePage);
+                } else {
 
-              }
+                  this.navCtrl.setRoot(HomePage);
 
-            })
+                }
 
-          } else {
+              })
 
-            this.navCtrl.setRoot('AuraMainPage')
-          }
+            } else {
 
-        })
+              this.navCtrl.setRoot('AuraMainPage')
+            }
+
+          })
+
+        }
 
 
       }).catch(err => {
