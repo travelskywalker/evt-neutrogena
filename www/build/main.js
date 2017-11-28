@@ -3007,10 +3007,10 @@ AppModule = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
 var Config = {
     production: false,
-    evt_app: "UNFlt65VdIwXzmNbndPc7LBKTPoQ68ROhq0nTdvXieu66esipebEBNXdL3NpcsMfbon8xOfhppVS60IN",
+    evt_app: "rGenOhFlJnk80ELN0xUzuNJtik5nYaxmZcF6fpE0OKwZdLkTS7yEF6zxvbrQtOxnVg3MvBgo2gWXcx2F",
     evt_base_url: "https://api-eu.evrythng.com",
-    projectId: "U3NNqQhUe6s7QraRakG4fpNc",
-    appId: "UG7N6Q2yVMsrtNRaak34fprg",
+    projectId: "UnSptk5ne6s7QNRawgMDtDge",
+    appId: "UHbKt2qUe6s7QrwaRgMg9gkd",
     auth0: {
         clientID: '67JAI87YgeGyMWDBKZHedJ9LccRcjBC7',
         domain: 'evtjandj.eu.auth0.com',
