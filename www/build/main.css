@@ -27472,6 +27472,21 @@ page-login section.main form ion-row ion-input[type=email].error:after {
   position: relative;
 }
 
+page-login section.main form ion-row ion-input[type=email].deleted-user:after {
+  content: "This account has been deleted";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
 page-login section.main form ion-row ion-input[type=password].error:after {
   content: "Password Incorrect";
   display: block;
