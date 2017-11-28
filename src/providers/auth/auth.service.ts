@@ -237,6 +237,7 @@ export class AuthService {
     localStorage.removeItem('anonEvrythngInfo');
     localStorage.removeItem('regStarted');
     localStorage.removeItem('myProduct');
+    localStorage.removeItem('alive');
     this.webAuth.logout({
       returnTo: Config.auth0.redirectUri,
       clientID: Config.auth0.clientID

@@ -66,7 +66,6 @@ export class LoginPage {
   }
 
   toSignup(){
-this.navCtrl.pop();
   	this.navCtrl.push(SignUpPage);
   }
 
@@ -108,8 +107,13 @@ this.navCtrl.pop();
    * @constructor
    */
   FBauth(){
-    this.app.startLogin();
-  	this.auth0.fbAuth();
+    if(typeof localStorage.myThng != "undefined"){
+      this.auth0.fbAuth();
+      this.app.startReg('facebook');
+    }else{
+      this.app.startLogin();
+      this.auth0.fbAuth();
+    }
   }
 
   passwordReset(){

@@ -50,7 +50,7 @@ export class AuraMainPage {
               public navParams: NavParams,
               public loading: LoadingController
   ) {
-
+    localStorage.alive = true;
   }
 
   ionViewWillEnter() {
@@ -167,7 +167,7 @@ export class AuraMainPage {
     let self = this;
     //console.log('poll filter: ', filter);
     timer
-    .takeWhile(() => this.alive)
+    .takeWhile(() => localStorage.alive === "true")
     .subscribe(() => {
       self.app.getLessonCompletedFromEVT().then((res)=> {
           if(typeof localStorage.lessonCompleteTime != 'undefined'){
@@ -181,7 +181,7 @@ export class AuraMainPage {
           }
             
         }
-      });
+      }).catch(err=>console.log(err));
     });
 
     this.app.initProgArr();

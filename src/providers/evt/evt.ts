@@ -59,7 +59,9 @@ export class EvtProvider {
       usr = this.getUser();
     }
 
-    return usr.action(actionType).read();
+    if(usr){
+      return usr.action(actionType).read();
+    }
   }
   /**
    *
@@ -218,14 +220,17 @@ export class EvtProvider {
 
     let ls = this._getUserContextKeys();
 
-    let lsId = ls[1];
-    let lsApiKey = ls[0];
-
     if (typeof ls != 'undefined') {
+
+      let lsId = ls[1];
+      let lsApiKey = ls[0];
       return new EVT.User({
         id: lsId,
         apiKey: lsApiKey
       }, this.evtapp)
+    }
+    else{
+      return false;
     }
   }
 
@@ -395,6 +400,7 @@ export class EvtProvider {
   	return new Promise((resolve,reject)=>{
 	  	this.getUserContext().then(usr=>{
 	  		usr.$init.then(user=>{
+          console.log(user);
 		  		if(typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')){
 		  			resolve(user.customFields);
 		  		}
