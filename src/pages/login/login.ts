@@ -19,6 +19,7 @@ export class LoginPage {
 	private formGroup : FormGroup;
 	invalidLogin : boolean = false;
 	invalidPass : boolean = false;
+  isUserDeleted : boolean = false;
   constructor(	public navCtrl: NavController,
   				public navParams: NavParams,
   				private render: Renderer2,
@@ -33,8 +34,7 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SignUpPage');
-
+    if(this.navParams.get('isUserDeleted')) this.isUserDeleted = true;
   }
 
   ionViewWillEnter(){
@@ -93,6 +93,7 @@ export class LoginPage {
       //there is only 1 error state: invalid_user_password
       //
       if (this.auth0.parseErrCode(err) == 'invalid_user_password') {
+        self.isUserDeleted = false;
         self.invalidLogin = true;
         self.invalidPass = true;
       }

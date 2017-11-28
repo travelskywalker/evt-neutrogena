@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Config } from "../../config/environment";
 import { DomSanitizer} from '@angular/platform-browser';
-
+import { AppProvider } from "../../providers/app/app";
+import { Platform } from 'ionic-angular';
 /**
  * Generated class for the FooterComponent component.
  *
@@ -15,9 +16,10 @@ import { DomSanitizer} from '@angular/platform-browser';
 export class FooterComponent {
 
 	links: any = [];
-
- 	constructor(private dom:DomSanitizer) {
+	mobileVersion : boolean;
+ 	constructor(private dom:DomSanitizer, public app: AppProvider, public platform: Platform,) {
  		console.log(this);
+		this.mobileVersion = this.platform.is('mobile');
  	}
 
  	ngOnInit(){

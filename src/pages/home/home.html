@@ -48,8 +48,8 @@
     <span class="guide-text-instructions">
       <p>Scan the QR code</p>
       <p><b>OR</b></p>
-      <p>Scan the NEUTROGENA©&reg; logo on your</p>
-      <p>NEUTROGENA©&reg; Visibly Clear&reg; Light Therapy</p>
+      <p>Scan the NEUTROGENA®&reg; logo on your</p>
+      <p>NEUTROGENA®&reg; Visibly Clear&reg; Light Therapy</p>
       <p>Acne Mask Activator</p>
     </span>
 
@@ -80,30 +80,30 @@
   </section>
 
   <section  id="client-content" class="client-content">
-      <h3 padding>This site is best viewed on mobile.</h3>
-
-      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>
-      <div>
+      <div class="content-after">
         <p class="prominent">
-          Scan the QR code or visit
-           <a href="//{{config.desktop_scan_url.link}}"
-              [title]="config.desktop_scan_url.name"
-              [target]="config.desktop_scan_url.target">{{config.desktop_scan_url.name}}</a> on your mobile browser to continue with the experience.
-        </p>
+            Visit
+            <a href="//{{config.desktop_scan_url.link}}"
+                [title]="config.desktop_scan_url.name"
+                [target]="config.desktop_scan_url.target">{{config.desktop_scan_url.name}}</a> on your 
+          </p>
+          <p class="prominent">
+            mobile browser to continue with the experience.
+          </p>
 
-        <p>
-          Alternatively visit
-          <a href="//{{config.neutrogena_url.link}}"
-             [title]="config.neutrogena_url.name"
-             [target]="config.neutrogena_url.target">{{config.neutrogena_url.name}}</a> on any device to learn more about NEUTROGENA©.
-        </p>
+          <p>
+            Alternatively visit
+            <a href="//{{config.neutrogena_url.link}}"
+              [title]="config.neutrogena_url.name"
+              [target]="config.neutrogena_url.target">{{config.neutrogena_url.name}}</a> on 
+          </p>
+          <p>
+            any device to learn more about NEUTROGENA®.
+          </p>
       </div>
 
+      <footer></footer>
+
   </section>
-
-
-
-
-  <footer></footer>
 
 </ion-content>

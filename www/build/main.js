@@ -102,6 +102,17 @@ var AppProvider = (function () {
          */
         this.playTimerMap = [];
     }
+    AppProvider.prototype.isDesktopView = function () {
+        var ua = navigator.userAgent;
+        var isDesktop = false;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua))
+            isDesktop = false;
+        else if (/Chrome/i.test(ua))
+            isDesktop = true;
+        else
+            isDesktop = true;
+        return isDesktop;
+    };
     /* GET the aura variable containing the content details, path..etc. */
     AppProvider.prototype.toGroup = function () {
         var _this = this;
@@ -1081,11 +1092,10 @@ var AppProvider = (function () {
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _c || Object])
 ], AppProvider);
 
+var _a, _b, _c;
 //# sourceMappingURL=app.js.map
 
 /***/ }),
@@ -1229,13 +1239,14 @@ var AuthService = (function () {
                         reject(err);
                     }
                     else {
-                        self._removeLocalUserData();
-                        try {
-                            reject(umd.deleted ? "deleted user" : "");
-                        }
-                        catch (err) {
-                            reject(err);
-                        }
+                        resolve("deleted_user");
+                        // self._removeLocalUserData();
+                        // try {
+                        //   // console.log("user is ", user);
+                        //   // reject(umd.deleted ? "deleted user" : "");
+                        // } catch (err) {
+                        //   reject(err);
+                        // }
                     }
                 });
             }
@@ -1322,6 +1333,7 @@ var AuthService = (function () {
         localStorage.removeItem('anonEvrythngInfo');
         localStorage.removeItem('regStarted');
         localStorage.removeItem('myProduct');
+        localStorage.removeItem('alive');
         this.webAuth.logout({
             returnTo: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.redirectUri,
             clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.clientID
@@ -2401,7 +2413,7 @@ __decorate([
 ], AuraContentPage.prototype, "pmc", void 0);
 AuraContentPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<progress-modal [day]="module?.day" [course]="module?.course"></progress-modal>\n<ion-content >\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link" (load)="isframeLoaded()"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n\n      <p class="author">\n        by {{module?.author}}\n      </p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
+        selector: 'page-aura-content',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<progress-modal [day]="module?.day" [course]="module?.course"></progress-modal>\n<ion-content >\n    <!-- <div id="aura-widget-div" #aura></div> -->\n    <iframe id="aura-widget-div" [src]="module?.link" (load)="isframeLoaded()"></iframe>\n\n    <section class="description">\n    	<p class="title">\n    		Description\n    	</p>\n    	<p class="body">\n    		{{module?.description}}\n    	</p>\n\n      <p class="author">\n        by {{module?.author}}\n      </p>\n    </section>\n\n    <footer></footer>\n</ion-content>\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/aura-content/aura-content.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -2493,7 +2505,7 @@ __decorate([
 ], ProgressModalComponent.prototype, "show", void 0);
 ProgressModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'progress-modal',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome(course)">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
+        selector: 'progress-modal',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/'<!-- Generated template for the ProgressModalComponent component -->\n<div class="container">\n  <h3 class="congrats">\n  Congratulations\n  </h3>\n  <h4 class="completion">\n  	DAY {{day}} COMPLETE\n  </h4>\n  <p>\n  	You\'ve completed<br/>\n  	<a class="rng">{{day}}</a> out of <a class="rng">{{length}}</a> sessions.\n  </p>\n  <button ion-button class="done" (tap)="toHome(course)">\n  	Done\n  </button>\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/progress-modal/progress-modal.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
         __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
@@ -2592,7 +2604,7 @@ var ForgotPasswordPage = (function () {
 }());
 ForgotPasswordPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail,\'mailed\':emailSent}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()" [disabled]="!formGroup.valid || emailSent">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
+        selector: 'page-forgot-password',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Forgot Your Password</p>\n	<p class="form-desc">Verify your email and we will send you instructions on how to reset your password.</p>\n	<form [formGroup]="formGroup" id="forgotpw-form" #forgotPw>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidEmail,\'mailed\':emailSent}"></ion-input>\n		</ion-row>\n		<button ion-button id="reset" class="go-back" (tap)="reset_pass()" [disabled]="!formGroup.valid || emailSent">Reset Password</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signup_btn" class="fbLogin" (tap)="toSignup()">Sign up</button>\n	</form>\n	\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/forgot-password/forgot-password.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -2674,7 +2686,7 @@ var ScanPage = (function () {
 }());
 ScanPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-scan',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/scan/scan.html"*/'<ion-content padding id="homeMobile">\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/scan/scan.html"*/,
+        selector: 'page-scan',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/scan/scan.html"*/'<ion-content padding id="homeMobile">\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/scan/scan.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_2__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
@@ -2767,7 +2779,7 @@ var DeleteAccountPage = (function () {
 }());
 DeleteAccountPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="safeDelete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
+        selector: 'page-delete-account',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/delete-account/delete-account.html"*/'<ion-content>\n\n<section class="main">\n	<p class="form-title">Are you sure you want to delete your account?</p>\n	<p class="form-desc">This will erase your information and progress.</p>\n\n	<button ion-button id="cancel" class="go-back" (tap)="cancel()">No, go back</button>\n	<a (tap)="safeDelete()" id="delete" class="go-ahead">Yes, delete my account please.</a>\n\n</section>\n\n<footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/delete-account/delete-account.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
 ], DeleteAccountPage);
@@ -2853,7 +2865,7 @@ __decorate([
 ], ReorderModalComponent.prototype, "show", void 0);
 ReorderModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'reorder-modal',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/'<!-- Generated template for the ReorderModalComponent component -->\n<div class="container">\n  <h1 class="completion">\n    REORDER OPTIONS\n  </h1>\n\n  <div class="notes"><span>Select the retailer you would like to purchase from</span></div>\n  <span *ngFor="let r of reorder_links; let i=index">\n\n\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" (tap)="reorder(r)">{{r?.name}}</a>-->\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" onclick="alert(1)">-->\n        <button ion-button (tap)="reorder(r)">\n          {{r?.name}}\n        </button>\n      <!--</a>-->\n  </span>\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/
+        selector: 'reorder-modal',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/'<!-- Generated template for the ReorderModalComponent component -->\n<div class="container">\n  <h1 class="completion">\n    REORDER OPTIONS\n  </h1>\n\n  <div class="notes"><span>Select the retailer you would like to purchase from</span></div>\n  <span *ngFor="let r of reorder_links; let i=index">\n\n\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" (tap)="reorder(r)">{{r?.name}}</a>-->\n      <!--<a [href]="r?.link" [target]="r?.target" [title]="r?.name" onclick="alert(1)">-->\n        <button ion-button (tap)="reorder(r)">\n          {{r?.name}}\n        </button>\n      <!--</a>-->\n  </span>\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/reorder-modal/reorder-modal.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */], __WEBPACK_IMPORTED_MODULE_1__providers_evt_evt__["a" /* EvtProvider */], __WEBPACK_IMPORTED_MODULE_2__providers_app_app__["a" /* AppProvider */]])
 ], ReorderModalComponent);
@@ -3055,8 +3067,8 @@ var Config = {
         target: "_blank"
     },
     desktop_scan_url: {
-        link: "scan.neutrogena.co.uk",
-        name: "scan.neutrogena.co.uk",
+        link: "www.scan.neutrogena.co.uk",
+        name: "www.scan.neutrogena.co.uk",
         target: "_blank"
     },
     neutrogena_url: {
@@ -3309,7 +3321,7 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the NEUTROGENA©&reg; logo on your</p>\n      <p>NEUTROGENA©&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <h3 padding>This site is best viewed on mobile.</h3>\n\n      <ion-img src="../assets/images/desktop_qr.png" #desktop_qr> </ion-img>\n      <div>\n        <p class="prominent">\n          Scan the QR code or visit\n           <a href="//{{config.desktop_scan_url.link}}"\n              [title]="config.desktop_scan_url.name"\n              [target]="config.desktop_scan_url.target">{{config.desktop_scan_url.name}}</a> on your mobile browser to continue with the experience.\n        </p>\n\n        <p>\n          Alternatively visit\n          <a href="//{{config.neutrogena_url.link}}"\n             [title]="config.neutrogena_url.name"\n             [target]="config.neutrogena_url.target">{{config.neutrogena_url.name}}</a> on any device to learn more about NEUTROGENA©.\n        </p>\n      </div>\n\n  </section>\n\n\n\n\n  <footer></footer>\n\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/home/home.html"*/'\n<!--ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header-->\n\n<!-- No headers. We\'ll create\n  a component for this instead -->\n\n<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-content id="homeMobile" *ngIf="mobileVersion">\n  <!--button ion-button secondary menuToggle>Toggle Menu</button-->\n  <section id="client-logo" [ngClass] = "{ \'hidden\':scanFailed,\'client-logo\':true }">\n    <!--<span id="neutrogena-logo" class="placeholder" #neuLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <p>in partnership with </p>\n    <!--<span id="aura-logo" class="placeholder" #auraLogo>\n    </span>-->\n    <ion-img src="../assets/images/logo_aura.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n  <section class="scan_failed" *ngIf="scanFailed">\n    <h2>It looks like that didn\'t work</h2>\n    <h3>Please try again to enter site</h3>\n  </section>\n\n  <section id="guide-scan-container" class="">\n\n    <span class="guide-images">\n\n      <div id="qr-image" class="placeholder">\n        <img src="../assets/images/qrcode.png"/>\n      </div>\n\n      <div id="logo-image" class="placeholder">\n        <img src="../assets/images/activator.png"/>\n      </div>\n\n    </span>\n\n    <span class="guide-text-instructions">\n      <p>Scan the QR code</p>\n      <p><b>OR</b></p>\n      <p>Scan the NEUTROGENA®&reg; logo on your</p>\n      <p>NEUTROGENA®&reg; Visibly Clear&reg; Light Therapy</p>\n      <p>Acne Mask Activator</p>\n    </span>\n\n  </section>\n\n  <section id="scan-button-container" #scanContainer>\n\n    <button ion-button id="scan-button" #scanButton (tap)="scan()">\n\n    </button>\n\n  </section>\n\n\n  <footer></footer>\n\n</ion-content>\n\n\n\n<ion-content id="homeDesktop" padding *ngIf="!mobileVersion">\n\n  <section id="client-logo" class="client-logo">\n\n    <ion-img src="../assets/images/logo_neutrogena.png" id="neutrogena-logo" #neuLogo></ion-img>\n    <span></span>\n    <ion-img src="../assets/images/logo_aura_blue@3x.png" id="aura-logo" #auraLogo></ion-img>\n  </section>\n\n  <section  id="client-content" class="client-content">\n      <div class="content-after">\n        <p class="prominent">\n            Visit\n            <a href="//{{config.desktop_scan_url.link}}"\n                [title]="config.desktop_scan_url.name"\n                [target]="config.desktop_scan_url.target">{{config.desktop_scan_url.name}}</a> on your \n          </p>\n          <p class="prominent">\n            mobile browser to continue with the experience.\n          </p>\n\n          <p>\n            Alternatively visit\n            <a href="//{{config.neutrogena_url.link}}"\n              [title]="config.neutrogena_url.name"\n              [target]="config.neutrogena_url.target">{{config.neutrogena_url.name}}</a> on \n          </p>\n          <p>\n            any device to learn more about NEUTROGENA®.\n          </p>\n      </div>\n\n      <footer></footer>\n\n  </section>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
@@ -3457,7 +3469,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/app/app.html"*/'<ion-menu [content]="content"  type="overlay" side="right" (ionOpen)="menuOpened()" (ionClose)="menuClosed()">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/app/app.html"*/'<ion-menu [content]="content"  type="overlay" side="right" (ionOpen)="menuOpened()" (ionClose)="menuClosed()">\n  <button ion-button id="btnClose" menuClose><ion-icon name="close"></ion-icon></button>\n  <side-menu></side-menu>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<notice [title]="text" [class]="\'pink\'" [noLink]="noLink" [ext_url]="ext_url"  *ngIf="show" #notice>\n</notice>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
         __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
@@ -3600,7 +3612,9 @@ var EvtProvider = (function () {
         else {
             usr = this.getUser();
         }
-        return usr.action(actionType).read();
+        if (usr) {
+            return usr.action(actionType).read();
+        }
     };
     /**
      *
@@ -3738,13 +3752,16 @@ var EvtProvider = (function () {
             return this.evtUser;
         }
         var ls = this._getUserContextKeys();
-        var lsId = ls[1];
-        var lsApiKey = ls[0];
         if (typeof ls != 'undefined') {
+            var lsId = ls[1];
+            var lsApiKey = ls[0];
             return new EVT.User({
                 id: lsId,
                 apiKey: lsApiKey
             }, this.evtapp);
+        }
+        else {
+            return false;
         }
     };
     /* return evt user context as a promise */
@@ -3892,6 +3909,7 @@ var EvtProvider = (function () {
         return new Promise(function (resolve, reject) {
             _this.getUserContext().then(function (usr) {
                 usr.$init.then(function (user) {
+                    console.log(user);
                     if (typeof user.customFields !== "undefined" && user.customFields.hasOwnProperty('myThng')) {
                         resolve(user.customFields);
                     }
@@ -4087,10 +4105,10 @@ var EvtProvider = (function () {
 }());
 EvtProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]) === "function" && _b || Object])
 ], EvtProvider);
 
+var _a, _b;
 //# sourceMappingURL=evt.js.map
 
 /***/ }),
@@ -4156,6 +4174,7 @@ var AuraMainPage = (function () {
         this.labelIntro = "Start this course";
         this.aura_url = __WEBPACK_IMPORTED_MODULE_2__config_environment__["a" /* Config */].aura_url;
         this.progressArr = {};
+        localStorage.alive = true;
     }
     AuraMainPage.prototype.ionViewWillEnter = function () {
     };
@@ -4173,8 +4192,8 @@ var AuraMainPage = (function () {
             && (this.app.evt.hasLocalProduct() || this.app.evt.hasLocalThng())
             && this.app.isValidAge()) {
             if (!this.app.hasActiveCourse() || this.navParams.get('reload')) {
-                var self_1 = this;
-                var loading_1 = self_1.loading.create({
+                var self = this;
+                var loading_1 = self.loading.create({
                     spinner: 'crescent',
                     content: "Please wait...",
                     enableBackdropDismiss: false,
@@ -4248,7 +4267,7 @@ var AuraMainPage = (function () {
         var self = this;
         //console.log('poll filter: ', filter);
         timer
-            .takeWhile(function () { return _this.alive; })
+            .takeWhile(function () { return localStorage.alive === "true"; })
             .subscribe(function () {
             self.app.getLessonCompletedFromEVT().then(function (res) {
                 if (typeof localStorage.lessonCompleteTime != 'undefined') {
@@ -4261,7 +4280,7 @@ var AuraMainPage = (function () {
                         localStorage.setItem('lessonCompleteTime', res.timestamp);
                     }
                 }
-            });
+            }).catch(function (err) { return console.log(err); });
         });
         this.app.initProgArr();
     };
@@ -4364,22 +4383,20 @@ var AuraMainPage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('Slides'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */]) === "function" && _a || Object)
 ], AuraMainPage.prototype, "slider", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('btns'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */]) === "function" && _b || Object)
 ], AuraMainPage.prototype, "btnSlide", void 0);
 AuraMainPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns" (ionSlideDidChange)="sliderChanged($event)">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro" (tap)="toSignUp()">\n      {{labelIntro}}\n    </p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
+        selector: 'page-aura-main',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/aura-main/aura-main.html"*/'<aura-head></aura-head>\n<reorder-modal #reorder></reorder-modal>\n<ion-content >\n\n	<section class="track-preview {{courseTitle}}">\n		<a class="progress-days">\n			Day {{app?.nextLesson(courseTitle)}} of {{app?.getCourseDuration(courseTitle)}}\n			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->\n		</a>\n		<p class="section-title">\n			{{courseTitle}}\n		</p>\n\n		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->\n		<ion-slides slidesPerView="auto" spaceBetween="27" zoom="false" #btns class="btns" (ionSlideDidChange)="sliderChanged($event)">\n			<ion-slide *ngFor="let dy of arrDay">\n				<div [ngClass]="{\'play\': true, \'end\': !app?.hasNextLesson(courseTitle) && (dy?.day >= arrDay.length)}">\n					<ion-col [ngClass]="{\'rng\': true}" (tap)="intoTheContent(!dy?.status,dy?.day)">\n						Day {{dy?.day}}\n						<img src="../assets/images/tick.png"/>\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide *ngIf="app?.nextLesson(courseTitle) <= app?.courseDuration(courseTitle) && app?.lastLesson(courseTitle) < app?.nextLesson(courseTitle)">\n				<div class="play">\n					<ion-col [ngClass]="{\'rng\': dy?.status}" (tap)="intoTheContent(true, app?.nextLesson(courseTitle))">\n						<ion-icon name="{{getDayBtnIcon()}}"></ion-icon>\n						Day {{app?.nextLesson(courseTitle)}}\n					</ion-col>\n				</div>\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n			<ion-slide>\n				&nbsp;\n			</ion-slide>\n		</ion-slides>\n		<!--/div-->\n		<p class="label-intro" (tap)="toSignUp()">\n      {{labelIntro}}\n    </p>\n\n		<div class="expandable">\n			<a class="desc-trigger" (tap)="expand()">Description <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>\n			<!--<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse()">-->\n			<p class="content" [ngClass]="{\'show\':expanded}" *ngIf="app?.hasActiveCourse() || courseTitle">\n				{{app?.getLessonData(courseTitle, app?.nextLesson(courseTitle))?.desc?.trunc(300)}}\n			</p>\n      <br>\n      <div>\n        <a class="link" [href]="aura_url.link" [title]="aura_url.name" [target]="aura_url.target">About AURA</a>\n      </div>\n		</div>\n\n\n	</section>\n	<p class="more-courses">Additional Courses</p>\n\n	<section class="sliders">\n		<ion-slides slidesPerView="auto" spaceBetween="20" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>\n			<ion-slide *ngFor = "let crs of progressKeys; let i=index">\n				<sub-course [title]="crs" [hero]="courseTitle" [progress]="progressArr[crs]" [enabled]="true" (begin)="tryMe($event)" [activeCourse]="app.getCourseData(crs)"></sub-course>\n			</ion-slide>\n			<!--ion-slide>\n				<sub-course [title]="\'Mindfulness\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide>\n			<ion-slide>\n				<sub-course [title]="\'Focus\'" [progress]="0" [enabled]="false" (begin)="tryMe($event)"></sub-course>\n			</ion-slide-->\n\n		</ion-slides>\n	</section>\n\n    <footer></footer>\n</ion-content>\n\n<aura-foot [reorder]="reorder"></aura-foot>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/aura-main/aura-main.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]) === "function" && _f || Object])
 ], AuraMainPage);
 
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=aura-main.js.map
 
 /***/ }),
@@ -4427,13 +4444,15 @@ var LoginPage = (function () {
         this.app = app;
         this.invalidLogin = false;
         this.invalidPass = false;
+        this.isUserDeleted = false;
         this.formGroup = this.formBuilder.group({
             email: ['', __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].compose([__WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)])],
             password: ['', __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* Validators */].required],
         });
     }
     LoginPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad SignUpPage');
+        if (this.navParams.get('isUserDeleted'))
+            this.isUserDeleted = true;
     };
     LoginPage.prototype.ionViewWillEnter = function () {
         if (this.app.hasLoggedIn()) {
@@ -4459,7 +4478,6 @@ var LoginPage = (function () {
         }
     };
     LoginPage.prototype.toSignup = function () {
-        this.navCtrl.pop();
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__sign_up_sign_up__["a" /* SignUpPage */]);
     };
     /**
@@ -4488,6 +4506,7 @@ var LoginPage = (function () {
             //there is only 1 error state: invalid_user_password
             //
             if (_this.auth0.parseErrCode(err) == 'invalid_user_password') {
+                self.isUserDeleted = false;
                 self.invalidLogin = true;
                 self.invalidPass = true;
             }
@@ -4500,8 +4519,14 @@ var LoginPage = (function () {
      * @constructor
      */
     LoginPage.prototype.FBauth = function () {
-        this.app.startLogin();
-        this.auth0.fbAuth();
+        if (typeof localStorage.myThng != "undefined") {
+            this.auth0.fbAuth();
+            this.app.startReg('facebook');
+        }
+        else {
+            this.app.startLogin();
+            this.auth0.fbAuth();
+        }
     };
     LoginPage.prototype.passwordReset = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__forgot_password_forgot_password__["a" /* ForgotPasswordPage */]);
@@ -4510,17 +4535,12 @@ var LoginPage = (function () {
 }());
 LoginPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-login',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/login/login.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Log In</p>\n	<p class="form-desc">Let\'s get started with your free mindulness sessions. Sign up <a class="linker" (tap)="toSignup()">here</a></p>\n	<form [formGroup]="formGroup" id="login-form" #loginForm>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidLogin}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidPass}"></ion-input>\n		</ion-row>\n		<ion-row class="extra-top">\n			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>\n		</ion-row>\n		<button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/login/login.html"*/,
+        selector: 'page-login',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/login/login.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Log In</p>\n	<p class="form-desc">Let\'s get started with your free mindulness sessions. Sign up <a class="linker" (tap)="toSignup()">here</a></p>\n	<form [formGroup]="formGroup" id="login-form" #loginForm>\n		<ion-row>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidLogin, \'deleted-user\':isUserDeleted}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{\'error\':invalidPass}"></ion-input>\n		</ion-row>\n		<ion-row class="extra-top">\n			<a class="linker" (tap)="passwordReset()">Forgot your password?</a>\n		</ion-row>\n		<button ion-button id="login" class="getStarted" (tap)="login()" [disabled]="!formGroup.valid">Log In</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="loginFB" class="fbLogin" (tap)="FBauth()">Log in with Facebook</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/login/login.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _g || Object])
 ], LoginPage);
 
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=login.js.map
 
 /***/ }),
@@ -4534,11 +4554,12 @@ LoginPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scan_scan__ = __webpack_require__(289);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__age_gate_age_gate__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_auth_auth_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_auth_auth_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_evt_evt__ = __webpack_require__(39);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4548,6 +4569,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -4602,22 +4624,27 @@ var AuthPage = (function () {
             var authData = this.URLToArray(data);
             this.auth0.result(authData).then(function (res) {
                 console.log(res);
-                _this.app.completeReg(res).then(function (reg) {
-                    if (reg === false) {
-                        //try logging in
-                        _this.app.completeLogin(res).then(function (login) {
-                            if (login !== false) {
-                                _this.navCtrl.setRoot('AuraMainPage');
-                            }
-                            else {
-                                _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */]);
-                            }
-                        });
-                    }
-                    else {
-                        _this.navCtrl.setRoot('AuraMainPage');
-                    }
-                });
+                if (res == "deleted_user") {
+                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__login_login__["a" /* LoginPage */], { isUserDeleted: true });
+                }
+                else {
+                    _this.app.completeReg(res).then(function (reg) {
+                        if (reg === false) {
+                            //try logging in
+                            _this.app.completeLogin(res).then(function (login) {
+                                if (login !== false) {
+                                    _this.navCtrl.setRoot('AuraMainPage');
+                                }
+                                else {
+                                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */]);
+                                }
+                            });
+                        }
+                        else {
+                            _this.navCtrl.setRoot('AuraMainPage');
+                        }
+                    });
+                }
             }).catch(function (err) {
                 console.log(err);
                 //GO TO ERROR PAGE
@@ -4638,25 +4665,20 @@ var AuthPage = (function () {
     AuthPage.prototype.gotoNexPage = function () {
         /*check if age gate*/
         if (this.app.isValidAge())
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__aura_main_aura_main__["a" /* AuraMainPage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__aura_main_aura_main__["a" /* AuraMainPage */]);
         else
-            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__age_gate_age_gate__["a" /* AgeGatePage */]);
+            this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__age_gate_age_gate__["a" /* AgeGatePage */]);
     };
     return AuthPage;
 }());
 AuthPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-auth',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/auth/auth.html"*/'<!--\n  Generated template for the AuthPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/auth/auth.html"*/,
+        selector: 'page-auth',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/auth/auth.html"*/'<!--\n  Generated template for the AuthPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/auth/auth.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_7__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_6__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_8__providers_evt_evt__["a" /* EvtProvider */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_8__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__providers_app_app__["a" /* AppProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_7__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_9__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _g || Object])
 ], AuthPage);
 
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=auth.js.map
 
 /***/ }),
@@ -4748,7 +4770,7 @@ var ResetPasswordPage = (function () {
 }());
 ResetPasswordPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-reset-password',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/reset-password/reset-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Reset your Password</p>\n	<p class="form-desc">Enter a new password</p>\n	<p [ngClass]="{\'reset\':successfulReset, \'instructions\':true}">Password must be 8+ characters and include 1 or more uppercase letter or number.</p>\n	<form [formGroup]="formGroup" id="login-form" #loginForm>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password (8+ characters)" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{\'error\':(checkDirty() && !checkMatch())}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="confirm" placeholder="Confirm Password (8+ characters)" (ionFocus)="focused($event)" [(ngModel)]="confirm" (ionBlur)="blurred($event)" [ngClass]="{\'error\':(checkDirty() && !checkMatch())}"></ion-input>\n		</ion-row>\n		<button ion-button id="resetPass" class="getStarted" (tap)="resetPw()" [disabled]="!formGroup.valid || !checkDirty() || !checkMatch() || successfulReset">Reset Password</button>\n	</form>\n	<p class="reset-successful" *ngIf="successfulReset">\n		<b>Password reset.</b>\n		Log in <a (tap)="toLoginPage()">here</a>.\n	</p>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/reset-password/reset-password.html"*/,
+        selector: 'page-reset-password',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/reset-password/reset-password.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Reset your Password</p>\n	<p class="form-desc">Enter a new password</p>\n	<p [ngClass]="{\'reset\':successfulReset, \'instructions\':true}">Password must be 8+ characters and include 1 or more uppercase letter or number.</p>\n	<form [formGroup]="formGroup" id="login-form" #loginForm>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password (8+ characters)" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{\'error\':(checkDirty() && !checkMatch())}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="confirm" placeholder="Confirm Password (8+ characters)" (ionFocus)="focused($event)" [(ngModel)]="confirm" (ionBlur)="blurred($event)" [ngClass]="{\'error\':(checkDirty() && !checkMatch())}"></ion-input>\n		</ion-row>\n		<button ion-button id="resetPass" class="getStarted" (tap)="resetPw()" [disabled]="!formGroup.valid || !checkDirty() || !checkMatch() || successfulReset">Reset Password</button>\n	</form>\n	<p class="reset-successful" *ngIf="successfulReset">\n		<b>Password reset.</b>\n		Log in <a (tap)="toLoginPage()">here</a>.\n	</p>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/reset-password/reset-password.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
@@ -4925,7 +4947,7 @@ var ScanComponent = (function () {
 }());
 ScanComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'scan',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/scan/scan.html"*/'<!-- Generated template for the ScanComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/scan/scan.html"*/
+        selector: 'scan',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/scan/scan.html"*/'<!-- Generated template for the ScanComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/scan/scan.html"*/
     }),
     __metadata("design:paramtypes", [])
 ], ScanComponent);
@@ -5064,7 +5086,7 @@ var SideMenuComponent = (function () {
 }());
 SideMenuComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'side-menu',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/side-menu/side-menu.html"*/'<!-- Generated template for the SideMenuComponent component -->\n<ion-content>\n  <ion-list>\n  	<!-- unused <button menuClose class="main" ion-item >My Account</button> -->\n  	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>\n  	<button menuClose class="main dbl" ion-item *ngIf="loggedIn()" (tap)="myAccount()">My Account</button>\n  	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>\n    <a target="_blank" *ngFor="let p of links" [href]="p?.link">\n    	<button menuClose ion-item>\n    		{{p?.title}}\n    	</button>\n    </a>\n  </ion-list>\n\n  <section class="footer">\n  	<ion-row class="container">\n  		<ion-col class="neutrogena">\n  			<img src="../assets/images/logo_neutrogena.png"/>\n  		</ion-col>\n  		<ion-col class="aura">\n  			<img src="../assets/images/logo_aura_blue.png"/>\n  		</ion-col>\n  	</ion-row>\n  </section>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/side-menu/side-menu.html"*/
+        selector: 'side-menu',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/side-menu/side-menu.html"*/'<!-- Generated template for the SideMenuComponent component -->\n<ion-content>\n  <ion-list>\n  	<!-- unused <button menuClose class="main" ion-item >My Account</button> -->\n  	<button menuClose class="main" ion-item *ngIf="!loggedIn()" (tap)="login()">Log In</button>\n  	<button menuClose class="main dbl" ion-item *ngIf="loggedIn()" (tap)="myAccount()">My Account</button>\n  	<button menuClose class="main" ion-item *ngIf="loggedIn()" (tap)="logout()">Log Out</button>\n    <a target="_blank" *ngFor="let p of links" [href]="p?.link">\n    	<button menuClose ion-item>\n    		{{p?.title}}\n    	</button>\n    </a>\n  </ion-list>\n\n  <section class="footer">\n  	<ion-row class="container">\n  		<ion-col class="neutrogena">\n  			<img src="../assets/images/logo_neutrogena.png"/>\n  		</ion-col>\n  		<ion-col class="aura">\n  			<img src="../assets/images/logo_aura_blue.png"/>\n  		</ion-col>\n  	</ion-row>\n  </section>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/side-menu/side-menu.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_7__providers_evt_evt__["a" /* EvtProvider */]])
 ], SideMenuComponent);
@@ -5216,7 +5238,7 @@ __decorate([
 ], NoticeComponent.prototype, "ext_url", void 0);
 NoticeComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'notice',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/notice/notice.html"*/'<!-- Generated template for the NoticeComponent component -->\n<section class="body" [ngStyle]="style">\n	<button ion-button id="btnClose" ><ion-icon (click)="destroy()" name="close"></ion-icon></button>\n	<span class="title" *ngIf="noLink">\n		{{title}}\n	</span>\n  <span class="title" *ngIf="!noLink" (tap)="goToPage(ext_url)">\n    <a class="title" [href]="ext_url?.link" [target]="ext_url?.target" [title]="ext_url?.name">\n		{{title}}\n    </a>\n	</span>\n	<div class="body">\n		<ng-content>\n\n		</ng-content>\n	</div>\n</section>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/notice/notice.html"*/
+        selector: 'notice',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/notice/notice.html"*/'<!-- Generated template for the NoticeComponent component -->\n<section class="body" [ngStyle]="style">\n	<button ion-button id="btnClose" ><ion-icon (click)="destroy()" name="close"></ion-icon></button>\n	<span class="title" *ngIf="noLink">\n		{{title}}\n	</span>\n  <span class="title" *ngIf="!noLink" (tap)="goToPage(ext_url)">\n    <a class="title" [href]="ext_url?.link" [target]="ext_url?.target" [title]="ext_url?.name">\n		{{title}}\n    </a>\n	</span>\n	<div class="body">\n		<ng-content>\n\n		</ng-content>\n	</div>\n</section>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/notice/notice.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
 ], NoticeComponent);
@@ -5273,6 +5295,8 @@ FooterComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_environment__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(10);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5285,6 +5309,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the FooterComponent component.
  *
@@ -5292,10 +5318,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var FooterComponent = (function () {
-    function FooterComponent(dom) {
+    function FooterComponent(dom, app, platform) {
         this.dom = dom;
+        this.app = app;
+        this.platform = platform;
         this.links = [];
         console.log(this);
+        this.mobileVersion = this.platform.is('mobile');
     }
     FooterComponent.prototype.ngOnInit = function () {
         this.links = [
@@ -5321,11 +5350,12 @@ var FooterComponent = (function () {
 }());
 FooterComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'footer',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/footer/footer.html"*/'<section id="footer" #footer>\n    \n	<nav id="footer-links" class="footer-links">\n	  <a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}\n	  </a>\n	</nav>\n\n\n	<p class="disclaimer" id="disclaimer"> \n	  This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.\n	</p>\n</section>'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/footer/footer.html"*/
+        selector: 'footer',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/footer/footer.html"*/'\n<section id="footer-desktop" #footerDesktop *ngIf="!mobileVersion;else footerTemplate">\n\n	<nav id="footer-links" class="footer-links">\n		<a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}\n		</a>\n	</nav>\n\n	<p class="disclaimer" id="disclaimer"> \n		This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.\n	</p>\n\n</section>\n<ng-template #footerTemplate>\n    <section id="footer" #footer>\n    \n			<nav id="footer-links" class="footer-links">\n				<a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}\n				</a>\n			</nav>\n\n\n			<p class="disclaimer" id="disclaimer"> \n				This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.\n			</p>\n		</section>\n</ng-template>\n\n\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/footer/footer.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["l" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["l" /* Platform */]) === "function" && _c || Object])
 ], FooterComponent);
 
+var _a, _b, _c;
 //# sourceMappingURL=footer.js.map
 
 /***/ }),
@@ -5379,7 +5409,7 @@ SubCourseComponentModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_app_app__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(41);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5466,7 +5496,7 @@ var SubCourseComponent = (function () {
         return this.getProg() + '%';
     };
     SubCourseComponent.prototype.toSignUp = function () {
-        this.nav.push(__WEBPACK_IMPORTED_MODULE_4__pages_sign_up_sign_up__["a" /* SignUpPage */]);
+        this.nav.push(__WEBPACK_IMPORTED_MODULE_4__pages_login_login__["a" /* LoginPage */]);
     };
     SubCourseComponent.prototype.getProgLabel = function () {
         if (this.getProg() == 0) {
@@ -5509,11 +5539,11 @@ __decorate([
 ], SubCourseComponent.prototype, "progress", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('prog'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
 ], SubCourseComponent.prototype, "prog", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ViewChild */])('courseElem'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _b || Object)
 ], SubCourseComponent.prototype, "courseElem", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["S" /* Output */])('begin'),
@@ -5525,11 +5555,12 @@ __decorate([
 ], SubCourseComponent.prototype, "crs", void 0);
 SubCourseComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'sub-course',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container" #courseElem>\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">{{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog [ngStyle]="{\'width\': getProgPct()}"></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<!--<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>-->\n	<button ion-button class="begin" (tap)="begin(crs)">{{getProgLabel()}}</button>\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/sub-course/sub-course.html"*/
+        selector: 'sub-course',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/sub-course/sub-course.html"*/'<!-- Generated template for the SubCourseComponent component -->\n<div class="container" #courseElem>\n	<span class="image-container" [ngStyle]="{\'background-image\':\'url(\'+bgImg+\')\'}">\n		<p class="title">{{title}}</p>\n		<p class="duration">{{duration}} days</p>\n		<p class="sign-in" *ngIf="!loggedIn()" (tap)="toSignUp()">Sign in to track progress</p>\n		<span class="progress" *ngIf="loggedIn()" [ngClass]="{\'no-prog\':(getProg() == 0)}">\n			<div class="main-bar">\n				<div class="progress-bar" #prog [ngStyle]="{\'width\': getProgPct()}"></div>\n			</div>\n			<p class="completion">{{getProg()}}% Complete</p>\n		</span>\n	</span>\n	<!--<button ion-button class="begin" (tap)="begin(crs)" [disabled]="!loggedIn() || !enabled">{{getProgLabel()}}</button>-->\n	<button ion-button class="begin" (tap)="begin(crs)">{{getProgLabel()}}</button>\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/sub-course/sub-course.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_app_app__["a" /* AppProvider */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _f || Object])
 ], SubCourseComponent);
 
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=sub-course.js.map
 
 /***/ }),
@@ -5645,7 +5676,7 @@ var AuraHeadComponent = (function () {
 }());
 AuraHeadComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'aura-head',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/aura-head/aura-head.html"*/'<!-- Generated template for the AuraHeadComponent component -->\n<div class="body">\n\n	<ion-row>\n\n		<ion-col col-7>\n			<span><img src="../assets/images/neutrogena_white.png"/></span>\n			<span><img src="../assets/images/auraLogo_white.png"/></span>\n		</ion-col>\n\n		<ion-col col-5 (tap)="myAccount()">\n\n      <a *ngIf = "!logged">Sign In</a>\n			<a *ngIf = "logged">Hi, {{name}}</a>\n			<span><img src="../assets/images/person.png"/></span>\n\n		</ion-col>\n\n	</ion-row>\n\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/aura-head/aura-head.html"*/
+        selector: 'aura-head',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/aura-head/aura-head.html"*/'<!-- Generated template for the AuraHeadComponent component -->\n<div class="body">\n\n	<ion-row>\n\n		<ion-col col-7>\n			<span><img src="../assets/images/neutrogena_white.png"/></span>\n			<span><img src="../assets/images/auraLogo_white.png"/></span>\n		</ion-col>\n\n		<ion-col col-5 (tap)="myAccount()">\n\n      <a *ngIf = "!logged">Sign In</a>\n			<a *ngIf = "logged">Hi, {{name}}</a>\n			<span><img src="../assets/images/person.png"/></span>\n\n		</ion-col>\n\n	</ion-row>\n\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/aura-head/aura-head.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], AuraHeadComponent);
@@ -5800,7 +5831,7 @@ __decorate([
 ], AuraFootComponent.prototype, "reorder", void 0);
 AuraFootComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'aura-foot',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder">\n  			<a (tap)="logAction()" [href]="neutrogena_reorder_url.link" [title]="neutrogena_reorder_url.name" [target]="" target="neutrogena_reorder_url.target">\n          <img src="../assets/images/reorder.png"/>\n  			</a>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
+        selector: 'aura-foot',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/'<div class="body">\n  <ion-row>\n  	<ion-col col-6>\n  		<div class="home" (tap)="toHome()">\n  			<img src="../assets/images/pink_house.png"/>\n  			<p>Home</p>\n  		</div>\n  	</ion-col>\n  	<ion-col col-6>\n  		<div class="reorder">\n  			<a (tap)="logAction()" [href]="neutrogena_reorder_url.link" [title]="neutrogena_reorder_url.name" [target]="" target="neutrogena_reorder_url.target">\n          <img src="../assets/images/reorder.png"/>\n  			</a>\n  			<p>Re-Order</p>\n  		</div>\n  	</ion-col>\n  </ion-row>\n</div>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/components/aura-foot/aura-foot.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ViewController */],
@@ -6006,7 +6037,7 @@ var AgeGatePage = (function () {
 }());
 AgeGatePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-age-gate',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/age-gate/age-gate.html"*/'<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-header>\n        <ion-navbar>\n            <ion-buttons end>\n              <button ion-button class="xbtn" (tap)="dismissThis()"></button>\n            </ion-buttons>\n        </ion-navbar>\n    </ion-header>\n\n<ion-content class="has-header">\n\n<section padding class="main" >\n\n  <ion-img src="../assets/images/logo_neutrogena.png"></ion-img>\n<div *ngIf="!invalidAge">\n	<p class="content">Please enter your date of birth:</p>\n\n\n		<ion-row>\n\n<input type="text" maxlength="2" placeholder="MM" [(ngModel)]="selectedDate.month" [readonly]=\'true\'/>\n<input type="text" maxlength="2" placeholder="DD" [(ngModel)]="selectedDate.day" [readonly]=\'true\'/>\n<input type="text" maxlength="4" placeholder="YYYY" [(ngModel)]="selectedDate.year" [readonly]=\'true\'/>\n\n<ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="inputDate" (ionChange)="changedDate()"></ion-datetime>\n			</ion-row>\n<p class="content small width-70">By submitting your data, you are accepting our Privacy Policy and Cookie Policy.</p>\n	<ion-row>\n    <ion-item >\n    <ion-label>\nPlease remember me on this site.</ion-label>\n    <ion-checkbox [(ngModel)]="cookiesOn"></ion-checkbox>\n  </ion-item>\n  </ion-row>\n  <button ion-button (click)="submitAge()">Enter</button>\n</div>\n<div class=\'invalid-age-container\' *ngIf="invalidAge">\n  <h3>Unfortunately,</h3>\n  <p class="content">only users </p>\n<p class="content color-orange">18 YEARS OR OLDER </p>\n<p class="content">can enter this site.</p>\n</div>\n</section>\n\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/age-gate/age-gate.html"*/,
+        selector: 'page-age-gate',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/age-gate/age-gate.html"*/'<notice [title]="\'Cookie Notice\'" [class]="\'black\'" *ngIf="!noticeViewed">\n\n  This site uses cookies as described in our <a>Cookie Policy</a>. Please continue to use our website if you agree to our use of cookies.\n</notice>\n<ion-header>\n        <ion-navbar>\n            <ion-buttons end>\n              <button ion-button class="xbtn" (tap)="dismissThis()"></button>\n            </ion-buttons>\n        </ion-navbar>\n    </ion-header>\n\n<ion-content class="has-header">\n\n<section padding class="main" >\n\n  <ion-img src="../assets/images/logo_neutrogena.png"></ion-img>\n<div *ngIf="!invalidAge">\n	<p class="content">Please enter your date of birth:</p>\n\n\n		<ion-row>\n\n<input type="text" maxlength="2" placeholder="MM" [(ngModel)]="selectedDate.month" [readonly]=\'true\'/>\n<input type="text" maxlength="2" placeholder="DD" [(ngModel)]="selectedDate.day" [readonly]=\'true\'/>\n<input type="text" maxlength="4" placeholder="YYYY" [(ngModel)]="selectedDate.year" [readonly]=\'true\'/>\n\n<ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="inputDate" (ionChange)="changedDate()"></ion-datetime>\n			</ion-row>\n<p class="content small width-70">By submitting your data, you are accepting our Privacy Policy and Cookie Policy.</p>\n	<ion-row>\n    <ion-item >\n    <ion-label>\nPlease remember me on this site.</ion-label>\n    <ion-checkbox [(ngModel)]="cookiesOn"></ion-checkbox>\n  </ion-item>\n  </ion-row>\n  <button ion-button (click)="submitAge()">Enter</button>\n</div>\n<div class=\'invalid-age-container\' *ngIf="invalidAge">\n  <h3>Unfortunately,</h3>\n  <p class="content">only users </p>\n<p class="content color-orange">18 YEARS OR OLDER </p>\n<p class="content">can enter this site.</p>\n</div>\n</section>\n\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/age-gate/age-gate.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -6199,19 +6230,12 @@ var SignUpPage = (function () {
 }());
 SignUpPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-sign-up',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/sign-up/sign-up.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Sign Up</p>\n	<p class="form-desc">Let\'s get started with your free mindulness sessions.</p>\n	<form [formGroup]="formGroup" id="sign-up-form" #signUpForm>\n		<ion-row>\n			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row [ngClass]="{\'taken\':emailTaken, \'invalid\': !formGroup.controls.email.valid}">\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'taken\':emailTaken, \'invalid\': !formGroup.controls.email.valid}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<div class="space-40"></div>\n		<p class="form-desc log">Already registered? Log in <a class="linker" (tap)="toLogin()">here</a>.</p>\n		<button ion-button id="signUp" class="getStarted" (tap)="signup()" [disabled]="!formGroup.valid">Get Started</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signUpFB" class="fbReg" (tap)="FBauth()">Sign Up with Facebook</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/sign-up/sign-up.html"*/,
+        selector: 'page-sign-up',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/sign-up/sign-up.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">Sign Up</p>\n	<p class="form-desc">Let\'s get started with your free mindulness sessions.</p>\n	<form [formGroup]="formGroup" id="sign-up-form" #signUpForm>\n		<ion-row>\n			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<ion-row [ngClass]="{\'taken\':emailTaken, \'invalid\': !formGroup.controls.email.valid}">\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{\'taken\':emailTaken, \'invalid\': !formGroup.controls.email.valid}"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)"></ion-input>\n		</ion-row>\n		<div class="space-40"></div>\n		<p class="form-desc log">Already registered? Log in <a class="linker" (tap)="toLogin()">here</a>.</p>\n		<button ion-button id="signUp" class="getStarted" (tap)="signup()" [disabled]="!formGroup.valid">Get Started</button>\n		<div class="space-40"><a>OR</a></div>\n		<button ion-button id="signUpFB" class="fbReg" (tap)="FBauth()">Sign Up with Facebook</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/sign-up/sign-up.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */],
-        __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_9__angular_forms__["a" /* FormBuilder */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */],
-        __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */],
-        __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Renderer2 */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_9__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__angular_forms__["a" /* FormBuilder */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_app_app__["a" /* AppProvider */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _j || Object])
 ], SignUpPage);
 
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 //# sourceMappingURL=sign-up.js.map
 
 /***/ }),
@@ -6317,7 +6341,7 @@ var MyAccountPage = (function () {
 }());
 MyAccountPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-my-account',template:/*ion-inline-start:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/my-account/my-account.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">My Account</p>\n	<form [formGroup]="formGroup" id="my-account-form" #signUpForm [ngClass]="{\'fbreg\':FBreg}">\n		<ion-row>\n			<ion-label>First Name</ion-label>\n			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-label>Last Name</ion-label>\n			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-label>Email Address</ion-label>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row *ngIf="!FBreg">\n			<ion-label>Password</ion-label>\n			<ion-input type="text" formControlName="password" placeholder="********" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" readonly></ion-input>\n		</ion-row>\n		<p class="fb-edit" *ngIf="FBreg">You can edit first name, last name, and email address on your Facebook <a (tap)="toFB()" class="linker">account page</a>.</p>\n		<button ion-button id="saveChanges" class="getStarted" (tap)="updateUser()" *ngIf="!FBreg">Save Changes</button>\n		<button ion-button id="logout" class="getStarted" (tap)="logout()">Log out</button>\n		<div class="space-40"><hr></div>\n		<button ion-button id="deleteAccount" class="fbReg" (tap)="deleteAccount()">Delete Account</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/jeremiebeltran/Documents/EVT/evt-neutrogena/src/pages/my-account/my-account.html"*/,
+        selector: 'page-my-account',template:/*ion-inline-start:"/Users/raysantos/evt-neutrogena/src/pages/my-account/my-account.html"*/'<ion-content>\n\n<section class="main">\n	<button ion-button class="xbtn" (tap)="dismissThis()"></button>\n	<p class="form-title">My Account</p>\n	<form [formGroup]="formGroup" id="my-account-form" #signUpForm [ngClass]="{\'fbreg\':FBreg}">\n		<ion-row>\n			<ion-label>First Name</ion-label>\n			<ion-input type="text" formControlName="firstName" placeholder="First Name" (ionFocus)="focused($event)" [(ngModel)]="firstName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-label>Last Name</ion-label>\n			<ion-input type="text" formControlName="lastName" placeholder="Last Name" (ionFocus)="focused($event)" [(ngModel)]="lastName" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row>\n			<ion-label>Email Address</ion-label>\n			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [readonly]="FBreg"></ion-input>\n		</ion-row>\n		<ion-row *ngIf="!FBreg">\n			<ion-label>Password</ion-label>\n			<ion-input type="text" formControlName="password" placeholder="********" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" readonly></ion-input>\n		</ion-row>\n		<p class="fb-edit" *ngIf="FBreg">You can edit first name, last name, and email address on your Facebook <a (tap)="toFB()" class="linker">account page</a>.</p>\n		<button ion-button id="saveChanges" class="getStarted" (tap)="updateUser()" *ngIf="!FBreg">Save Changes</button>\n		<button ion-button id="logout" class="getStarted" (tap)="logout()">Log out</button>\n		<div class="space-40"><hr></div>\n		<button ion-button id="deleteAccount" class="fbReg" (tap)="deleteAccount()">Delete Account</button>\n	</form>\n\n</section>\n<footer></footer>\n</ion-content>\n'/*ion-inline-end:"/Users/raysantos/evt-neutrogena/src/pages/my-account/my-account.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__providers_auth_auth_service__["a" /* AuthService */],
