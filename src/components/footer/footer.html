@@ -1,12 +1,29 @@
-<section id="footer" #footer>
-    
+
+<section id="footer-desktop" #footerDesktop *ngIf="!mobileVersion;else footerTemplate">
+
 	<nav id="footer-links" class="footer-links">
-	  <a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}
-	  </a>
+		<a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}
+		</a>
 	</nav>
 
-
 	<p class="disclaimer" id="disclaimer"> 
-	  This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.
+		This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.
 	</p>
+
 </section>
+<ng-template #footerTemplate>
+    <section id="footer" #footer>
+    
+			<nav id="footer-links" class="footer-links">
+				<a *ngFor="let a of links" target="_blank" [href]="a?.href">{{a?.text}}
+				</a>
+			</nav>
+
+
+			<p class="disclaimer" id="disclaimer"> 
+				This site is best viewed with Internet Explorer 7.0 or higher. &copy; Johnson & Johnson Limited 2017. This site is published by Johnson & Johnson Ltd, which is solely responsible for its contents. It is intended for a UK audience. Site last updated on: 21 September 2017.
+			</p>
+		</section>
+</ng-template>
+
+

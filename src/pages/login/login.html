@@ -6,7 +6,7 @@
 	<p class="form-desc">Let's get started with your free mindulness sessions. Sign up <a class="linker" (tap)="toSignup()">here</a></p>
 	<form [formGroup]="formGroup" id="login-form" #loginForm>
 		<ion-row>
-			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin}"></ion-input>
+			<ion-input type="email" formControlName="email" placeholder="email@email.com" (ionFocus)="focused($event)" [(ngModel)]="email" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidLogin, 'deleted-user':isUserDeleted}"></ion-input>
 		</ion-row>
 		<ion-row>
 			<ion-input type="password" formControlName="password" placeholder="Password" (ionFocus)="focused($event)" [(ngModel)]="password" (ionBlur)="blurred($event)" [ngClass]="{'error':invalidPass}"></ion-input>

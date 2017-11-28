@@ -25690,6 +25690,30 @@ aura-head div.body ion-row ion-col[col-5] a {
   font-family: 'HelveticaNeue-Light';
 }
 
+footer #footer-desktop {
+  color: #f07721;
+  text-align: center;
+}
+
+footer #footer-desktop > .footer-links {
+  width: 100%;
+  display: inline-block;
+  padding: 0 43px;
+}
+
+footer #footer-desktop > .footer-links > a {
+  color: #f07721;
+  display: inline-block;
+  margin: 11px 11px 0 0;
+  font-size: 9.4px;
+}
+
+footer #footer-desktop > .disclaimer {
+  font-size: 9px;
+  line-height: 14px;
+  padding: 0 43px;
+}
+
 footer #footer {
   color: #711b7d;
   text-align: center;
@@ -26045,8 +26069,8 @@ side-menu ion-content > .scroll-content > ion-list button.main > .item-inner ion
 }
 
 side-menu ion-content > .scroll-content section.footer {
-  position: absolute;
-  bottom: 29px;
+  position: relative;
+  bottom: 0;
   left: 0;
   display: inline-block;
   width: 100%;
@@ -26406,7 +26430,7 @@ page-age-gate section.main ion-row ion-item ion-label {
 page-age-gate section.main input {
   width: 65px;
   text-align: center;
-  padding: 15px 20px;
+  padding: 15px 10px;
   border-radius: 10px;
   border: none;
   margin: 20px 10px;
@@ -27247,10 +27271,6 @@ page-home ion-content#homeDesktop div.scroll-content section.client-logo #aura-l
 }
 
 page-home ion-content#homeDesktop div.scroll-content section#client-content {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
@@ -27265,63 +27285,78 @@ page-home ion-content#homeDesktop div.scroll-content section#client-content {
   -ms-flex-direction: column;
   flex-direction: column;
   overflow: visible;
+  background-image: url("../assets/images/Happiness.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 80%;
+  -webkit-box-shadow: inset 0 0 0 2000px rgba(126, 25, 128, 0.65);
+  box-shadow: inset 0 0 0 2000px rgba(126, 25, 128, 0.65);
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content > ion-img {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > ion-img {
   background-color: transparent;
   contain: inherit;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content > ion-img img {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > ion-img img {
   height: 35vmin;
   margin: 0 auto;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content > div p {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > p, page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after p a {
   text-align: center;
-  color: #f07721;
-  font-size: 2vh;
+  color: white;
+  font-size: 2.525rem;
+  line-height: 5px;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#client-content > div p.prominent, page-home ion-content#homeDesktop div.scroll-content section#client-content div p.prominent a {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > p.prominent, page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after p.prominent a {
   text-align: center;
-  font-size: 2vh;
-  font-weight: bold;
+  font-size: 3.54167rem;
+  font-weight: 500;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span {
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > p:nth-child(1) {
+  padding-top: 3em;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content > div.content-after > p:nth-child(2) {
+  padding-bottom: 1em;
+}
+
+page-home ion-content#homeDesktop div.scroll-content section#client-content#guide-scan-container > span {
   display: inline-block;
   width: 100%;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-images > div {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#guide-scan-container > span.guide-images > div {
   display: inline-block;
   height: 103px;
   width: 103px;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-images > div:first-of-type {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#guide-scan-container > span.guide-images > div:first-of-type {
   margin: 0 26px 0 0;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-text-instructions {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#guide-scan-container > span.guide-text-instructions {
   padding: 32px 0 0;
   color: #ee6b1e;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#guide-scan-container > span.guide-text-instructions > p {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#guide-scan-container > span.guide-text-instructions > p {
   margin: 0 auto;
   font-size: 14px;
   line-height: 17px;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#scan-button-container {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#scan-button-container {
   text-align: center;
   display: inline-block;
   width: 100%;
 }
 
-page-home ion-content#homeDesktop div.scroll-content section#scan-button-container > #scan-button {
+page-home ion-content#homeDesktop div.scroll-content section#client-content#scan-button-container > #scan-button {
   width: 127px;
   height: 127px;
   display: inline-table;
@@ -27339,6 +27374,7 @@ page-home ion-content#homeDesktop div.scroll-content footer {
   position: absolute;
   bottom: 0;
   width: 100%;
+  padding-bottom: 2em;
 }
 
 page-login ion-content div.scroll-content {
@@ -27459,6 +27495,21 @@ page-login section.main form ion-row ion-input input {
 
 page-login section.main form ion-row ion-input[type=email].error:after {
   content: "Email incorrect";
+  display: block;
+  clear: both;
+  width: 100%;
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-indent: 10px;
+  color: #f07721;
+  text-align: left;
+  position: relative;
+}
+
+page-login section.main form ion-row ion-input[type=email].deleted-user:after {
+  content: "This account has been deleted";
   display: block;
   clear: both;
   width: 100%;

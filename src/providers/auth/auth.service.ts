@@ -107,7 +107,6 @@ export class AuthService {
       /* Proceed with authentication */
       else if (typeof authResult.access_token != 'undefined'){
 
-
         this.webAuth.client.userInfo(authResult.access_token,function(err, user){
 
           /* Successful auth */
@@ -133,13 +132,14 @@ export class AuthService {
             reject(err);
 
           } else {
-
-            self._removeLocalUserData();
-            try {
-              reject(umd.deleted ? "deleted user" : "");
-            } catch (err) {
-              reject(err);
-            }
+            resolve("deleted_user");
+            // self._removeLocalUserData();
+            // try {
+            //   // console.log("user is ", user);
+            //   // reject(umd.deleted ? "deleted user" : "");
+            // } catch (err) {
+            //   reject(err);
+            // }
           }
         })
       }
@@ -237,6 +237,7 @@ export class AuthService {
     localStorage.removeItem('anonEvrythngInfo');
     localStorage.removeItem('regStarted');
     localStorage.removeItem('myProduct');
+    localStorage.removeItem('alive');
     this.webAuth.logout({
       returnTo: Config.auth0.redirectUri,
       clientID: Config.auth0.clientID
