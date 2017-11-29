@@ -1272,10 +1272,11 @@ var AppProvider = (function () {
 }());
 AppProvider = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_6__providers_evt_evt__["a" /* EvtProvider */],
+        __WEBPACK_IMPORTED_MODULE_9__providers_auth_auth_service__["a" /* AuthService */]])
 ], AppProvider);
 
-var _a, _b, _c;
 //# sourceMappingURL=app.js.map
 
 /***/ }),
@@ -1531,6 +1532,8 @@ var AuthService = (function () {
         localStorage.removeItem('regStarted');
         localStorage.removeItem('myProduct');
         localStorage.removeItem('alive');
+        localStorage.removeItem('courseHistory');
+        localStorage.removeItem('lessonCtr');
         this.webAuth.logout({
             returnTo: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.redirectUri,
             clientID: __WEBPACK_IMPORTED_MODULE_0__config_environment__["a" /* Config */].auth0.clientID
