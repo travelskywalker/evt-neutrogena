@@ -226,13 +226,15 @@ page-home {
                       &>p, p a{
                         text-align: center;
                         color:rgba(255,255,255,1);
-                        font-size: 2.525rem;
-                        line-height: 5px;
+                        font-size: calc(0.25vw + 2.25vh);
+                        line-height: 1.2;
+                        margin-top: 0;
+                        margin-bottom: 0;
                       }
 
                       &> p.prominent, p.prominent a {
                         text-align: center;
-                        font-size: 3.54167rem;
+                        font-size: calc(0.75vw + 2.25vh);
                         font-weight: 500;
                       }
                       
