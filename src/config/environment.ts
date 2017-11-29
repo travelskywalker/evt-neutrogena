@@ -63,7 +63,7 @@ export const Config = {
     target: "_blank"
   },
   age_gate_expiry: 30,
-  lessonCompletionTimeLimit: 2, //seconds till content consumption completion event is triggered
+  lessonCompletionTimeLimit: 10 * 60, //seconds till content consumption completion event is triggered
   totalDailyLessonLimit: 10, //lesson completion count
   courseDailyLessonLimit: 1, //lesson completion count
   anonUserLessonLimit: 1, //lesson count allowed for anonymous user
