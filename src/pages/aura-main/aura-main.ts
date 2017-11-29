@@ -208,6 +208,9 @@ export class AuraMainPage {
       this.slider.lockSwipeToNext(false);
     }
 
+  }
+
+  btnChanged(event = null){
     if(this.btnSlide.isBeginning()){
       this.btnSlide.lockSwipeToPrev(true);
       this.btnSlide.lockSwipeToNext(false);
@@ -220,7 +223,6 @@ export class AuraMainPage {
       this.btnSlide.lockSwipeToPrev(false);
       this.btnSlide.lockSwipeToNext(false);
     }
-
   }
 
 
