@@ -57,6 +57,10 @@ export class AuraMainPage {
 
   }
 
+  ionViewWillLeave(){
+     localStorage.removeItem("alive");
+  }
+
   ionViewDidLoad() {
 
     //clear timer from content page
