@@ -170,7 +170,7 @@ export class AuraMainPage {
     if (typeof  this.updateTimer != 'undefined') {
       this.updateTimer.unsubscribe();
     }
-    this.updateTimer = Observable.timer(1000, 2000);
+    this.updateTimer = Observable.timer(1000, 1000);
     let self = this;
     //console.log('poll filter: ', filter);
     this.updateTimer
