@@ -59,6 +59,22 @@ export class AppProvider {
   ) {
   }
 
+  isDesktopView(){
+    let ua = navigator.userAgent;
+    let isDesktop:boolean = false;
+
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua))
+       isDesktop = false; 
+
+    else if(/Chrome/i.test(ua))
+       isDesktop = true; 
+
+    else
+       isDesktop = true; 
+
+    return isDesktop;
+  }
+
   /* GET the aura variable containing the content details, path..etc. */
   toGroup():Promise<any>{
   	let mast = {};
