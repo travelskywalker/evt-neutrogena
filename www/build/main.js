@@ -3416,8 +3416,8 @@ var Config = {
         target: "_blank"
     },
     desktop_scan_url: {
-        link: "www.scan.neutrogena.co.uk",
-        name: "www.scan.neutrogena.co.uk",
+        link: "scan.neutrogena.co.uk",
+        name: "scan.neutrogena.co.uk",
         target: "_blank"
     },
     neutrogena_url: {
@@ -3431,7 +3431,7 @@ var Config = {
         target: "_blank"
     },
     age_gate_expiry: 30,
-    lessonCompletionTimeLimit: 2,
+    lessonCompletionTimeLimit: 10 * 60,
     totalDailyLessonLimit: 10,
     courseDailyLessonLimit: 1,
     anonUserLessonLimit: 1,

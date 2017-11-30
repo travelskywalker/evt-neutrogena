@@ -48,8 +48,8 @@ export const Config = {
     target: "_blank"
   },
   desktop_scan_url: {
-    link: "www.scan.neutrogena.co.uk",
-    name: "www.scan.neutrogena.co.uk",
+    link: "scan.neutrogena.co.uk",
+    name: "scan.neutrogena.co.uk",
     target: "_blank"
   },
   neutrogena_url: {
