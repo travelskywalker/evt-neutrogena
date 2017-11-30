@@ -238,6 +238,8 @@ export class AuthService {
     localStorage.removeItem('regStarted');
     localStorage.removeItem('myProduct');
     localStorage.removeItem('alive');
+    localStorage.removeItem('courseHistory');
+    localStorage.removeItem('lessonCtr');
     this.webAuth.logout({
       returnTo: Config.auth0.redirectUri,
       clientID: Config.auth0.clientID

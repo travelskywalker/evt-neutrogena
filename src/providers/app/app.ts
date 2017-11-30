@@ -165,7 +165,7 @@ export class AppProvider {
   initProgArr(): Promise<any> {
 
   	let self = this;
-    if (typeof localStorage.courseHistory != 'undefined') {
+    if (typeof localStorage.courseHistory != 'undefined' && localStorage.courseHistory !== "[]") {
       console.log('progressArr from storage')
       return new Promise(function(resolve) {
 
