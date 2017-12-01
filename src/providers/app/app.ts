@@ -64,13 +64,13 @@ export class AppProvider {
     let isDesktop:boolean = false;
 
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua))
-       isDesktop = false; 
+       isDesktop = false;
 
     else if(/Chrome/i.test(ua))
-       isDesktop = true; 
+       isDesktop = true;
 
     else
-       isDesktop = true; 
+       isDesktop = true;
 
     return isDesktop;
   }
@@ -1175,9 +1175,14 @@ export class AppProvider {
 
   }
 
+  /**
+   * Common method to remove locally stored progress tracking data
+   *
+   */
   clearLocalHistory() {
     localStorage.removeItem('courseHistory');
     localStorage.removeItem('courses');
     localStorage.removeItem('progressArr');
+    localStorage.removeItem('lessonCtr');
   }
 }

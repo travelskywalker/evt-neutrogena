@@ -167,6 +167,12 @@ export class AuraMainPage {
   }
 
   ngOnInit(){
+
+    this.initUpdateProgTimer();
+    this.app.initProgArr();
+  }
+
+  initUpdateProgTimer() {
     if (typeof  this.updateTimer != 'undefined') {
       this.updateTimer.unsubscribe();
     }
@@ -174,24 +180,34 @@ export class AuraMainPage {
     let self = this;
     //console.log('poll filter: ', filter);
     this.updateTimer
-    .takeWhile(() => localStorage.alive === "true")
-    .subscribe(() => {
-      self.app.getLessonCompletedFromEVT().then((res)=> {
-          if(typeof localStorage.lessonCompleteTime != 'undefined'){
-            if((res.timestamp != localStorage.lessonCompleteTime )){
-              console.log('getLessonCompletedFromEVT', res);
-              localStorage.setItem('lessonCompleteTime', res.timestamp)
-              this.app.initProgArr();
+      .takeWhile(() => localStorage.alive === "true")
+      .subscribe(() => {
+        self.app.getLessonCompletedFromEVT().then((res)=> {
+          if (typeof res != 'undefined' && typeof res[0] != 'undefined'  ) {
+            let updateLessonCompletedTs = res[0].timestamp;
+            if(typeof localStorage.lessonCompleteTime != 'undefined'){
+
+              if((updateLessonCompletedTs > localStorage.lessonCompleteTime )){
+                console.log('new lesson completed', updateLessonCompletedTs);
+                localStorage.setItem('lessonCompleteTime', updateLessonCompletedTs)
+                this.app.clearLocalHistory();
+                this.app.initProgArr().then((res)=>{
+                  //setActive ensure that
+                  this.app.setActiveCourse(this.courseTitle);
+                  this.initActiveCourse();
+                })
+              }
+
+            } else{
+              localStorage.setItem('lessonCompleteTime', updateLessonCompletedTs)
             }
-          else{
-            localStorage.setItem('lessonCompleteTime', res.timestamp)
+          } else {
+            localStorage.setItem('lessonCompleteTime', '0');
           }
 
-        }
-      }).catch(err=>console.log(err));
-    });
 
-    this.app.initProgArr();
+        }).catch(err=>console.log(err));
+      });
   }
 
   sliderChanged(event = null){

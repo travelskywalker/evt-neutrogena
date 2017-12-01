@@ -111,8 +111,8 @@ export class AuraContentPage{
 
          if (typeof self.listener == 'undefined') {
            console.log('playBtn', playBtn);
+           self.listener = e;
            playBtn.addEventListener('click',function(e){
-             self.listener = e;
              let ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
              let ifStartPlayClassList = fp.contentWindow.document.getElementById('play-btn').classList;
              console.log('ifStartPlay', ifStartPlay);

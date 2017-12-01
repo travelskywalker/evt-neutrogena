@@ -1263,10 +1263,15 @@ var AppProvider = (function () {
             }
         });
     };
+    /**
+     * Common method to remove locally stored progress tracking data
+     *
+     */
     AppProvider.prototype.clearLocalHistory = function () {
         localStorage.removeItem('courseHistory');
         localStorage.removeItem('courses');
         localStorage.removeItem('progressArr');
+        localStorage.removeItem('lessonCtr');
     };
     return AppProvider;
 }());
@@ -2572,8 +2577,8 @@ var AuraContentPage = (function () {
                 var playBtn = fp.contentWindow.document.querySelector('div.audio.play');
                 if (typeof self.listener == 'undefined') {
                     console.log('playBtn', playBtn);
+                    self.listener = e;
                     playBtn.addEventListener('click', function (e) {
-                        self.listener = e;
                         var ifStartPlay = fp.contentWindow.document.getElementById('play-btn').classList.contains('fa-play');
                         var ifStartPlayClassList = fp.contentWindow.document.getElementById('play-btn').classList;
                         console.log('ifStartPlay', ifStartPlay);
@@ -4021,7 +4026,6 @@ var EvtProvider = (function () {
                     lsApiKey = usr.evrythngApiKey;
                 });
             }
-            console.log(lsId, lsApiKey);
         }
         else {
             if (this.auth.loggedIn()) {
@@ -4617,6 +4621,10 @@ var AuraMainPage = (function () {
         //this.popDays();
     };
     AuraMainPage.prototype.ngOnInit = function () {
+        this.initUpdateProgTimer();
+        this.app.initProgArr();
+    };
+    AuraMainPage.prototype.initUpdateProgTimer = function () {
         var _this = this;
         if (typeof this.updateTimer != 'undefined') {
             this.updateTimer.unsubscribe();
@@ -4628,19 +4636,29 @@ var AuraMainPage = (function () {
             .takeWhile(function () { return localStorage.alive === "true"; })
             .subscribe(function () {
             self.app.getLessonCompletedFromEVT().then(function (res) {
-                if (typeof localStorage.lessonCompleteTime != 'undefined') {
-                    if ((res.timestamp != localStorage.lessonCompleteTime)) {
-                        console.log('getLessonCompletedFromEVT', res);
-                        localStorage.setItem('lessonCompleteTime', res.timestamp);
-                        _this.app.initProgArr();
+                if (typeof res != 'undefined' && typeof res[0] != 'undefined') {
+                    var updateLessonCompletedTs = res[0].timestamp;
+                    if (typeof localStorage.lessonCompleteTime != 'undefined') {
+                        if ((updateLessonCompletedTs > localStorage.lessonCompleteTime)) {
+                            console.log('new lesson completed', updateLessonCompletedTs);
+                            localStorage.setItem('lessonCompleteTime', updateLessonCompletedTs);
+                            _this.app.clearLocalHistory();
+                            _this.app.initProgArr().then(function (res) {
+                                //setActive ensure that
+                                _this.app.setActiveCourse(_this.courseTitle);
+                                _this.initActiveCourse();
+                            });
+                        }
                     }
                     else {
-                        localStorage.setItem('lessonCompleteTime', res.timestamp);
+                        localStorage.setItem('lessonCompleteTime', updateLessonCompletedTs);
                     }
+                }
+                else {
+                    localStorage.setItem('lessonCompleteTime', '0');
                 }
             }).catch(function (err) { return console.log(err); });
         });
-        this.app.initProgArr();
     };
     AuraMainPage.prototype.sliderChanged = function (event) {
         if (event === void 0) { event = null; }

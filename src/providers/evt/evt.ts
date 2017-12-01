@@ -120,7 +120,6 @@ export class EvtProvider {
           lsApiKey = usr.evrythngApiKey;
         })
       }
-      console.log(lsId, lsApiKey);
     } else {
       if (this.auth.loggedIn()) {
         console.log('user context is registered');
