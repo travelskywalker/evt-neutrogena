@@ -126,6 +126,11 @@ export class AuraContentPage{
 
   }
 
+  ionViewWillLeave() {
+    //remove timer on lost focus
+    this.app.stopLessonTimer(this.module);
+  }
+
   controlButtons(ifStartPlayClassList?: any){
     this.app.playLesson(this.module, this.pmc, ifStartPlayClassList);
   }
