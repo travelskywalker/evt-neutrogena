@@ -128,6 +128,7 @@ export class AuraContentPage{
 
   ionViewWillLeave() {
     //remove timer on lost focus
+    this.listener = null;
     this.app.stopLessonTimer(this.module);
   }
 
