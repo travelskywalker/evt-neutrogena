@@ -50,7 +50,6 @@ export class AuraMainPage {
               public navParams: NavParams,
               public loading: LoadingController
   ) {
-    localStorage.alive = true;
   }
 
   ionViewWillEnter() {
@@ -173,6 +172,8 @@ export class AuraMainPage {
   }
 
   initUpdateProgTimer() {
+    localStorage.alive = true;
+    localStorage.ctdn = 25;
     if (typeof  this.updateTimer != 'undefined') {
       this.updateTimer.unsubscribe();
     }
@@ -180,14 +181,17 @@ export class AuraMainPage {
     let self = this;
     //console.log('poll filter: ', filter);
     this.updateTimer
-      .takeWhile(() => localStorage.alive === "true")
+      .takeWhile(() => localStorage.alive === "true" && typeof localStorage.ctdn !== "undefined" && localStorage.ctdn >= 0)
       .subscribe(() => {
+        self.cdPoll();
         self.app.getLessonCompletedFromEVT().then((res)=> {
           if (typeof res != 'undefined' && typeof res[0] != 'undefined'  ) {
             let updateLessonCompletedTs = res[0].timestamp;
             if(typeof localStorage.lessonCompleteTime != 'undefined'){
 
               if((updateLessonCompletedTs > localStorage.lessonCompleteTime )){
+                localStorage.removeItem("alive");
+                localStorage.removeItem("ctdn");
                 console.log('new lesson completed', updateLessonCompletedTs);
                 localStorage.setItem('lessonCompleteTime', updateLessonCompletedTs)
                 this.app.clearLocalHistory();
@@ -311,5 +315,15 @@ export class AuraMainPage {
     } else {
       return "play";
     }
+  }
+
+  cdPoll(){
+    let nv = localStorage.ctdn-1;
+    if(nv <= 0){
+      localStorage.removeItem("ctdn");
+      return ;
+    }
+    localStorage.ctdn = nv;
+
   }
 }
