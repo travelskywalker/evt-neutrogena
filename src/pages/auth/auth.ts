@@ -65,6 +65,11 @@ export class AuthPage {
       this.auth0.result(authData).then(res => {
         console.log(res);
 
+        if(localStorage.regFB === "true"){
+          this.app.startReg('facebook');
+          localStorage.removeItem('regFB');
+        }
+        
         if(res == "deleted_user"){
           this.navCtrl.setRoot(LoginPage, {isUserDeleted: true});
         }else{

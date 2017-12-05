@@ -108,13 +108,8 @@ export class LoginPage {
    * @constructor
    */
   FBauth(){
-    if(typeof localStorage.myThng != "undefined"){
-      this.auth0.fbAuth();
-      this.app.startReg('facebook');
-    }else{
-      this.app.startLogin();
-      this.auth0.fbAuth();
-    }
+    this.app.startLogin();
+    this.auth0.fbAuth();
   }
 
   passwordReset(){

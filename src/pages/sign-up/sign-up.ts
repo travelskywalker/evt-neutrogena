@@ -156,7 +156,7 @@ export class SignUpPage {
     //FB registration will redirect to FB then back to app, at this point there is no registration ID, until
     //it is back to the callback URL (auth module or route :data) which does not distinguish login vs registration thus
     //we use 'facebook' as registration ID of auth0 instead.
-    this.app.startReg('facebook');
+    //this.app.startReg('facebook');
   }
 
   toLogin(){

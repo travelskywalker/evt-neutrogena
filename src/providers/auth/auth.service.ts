@@ -94,6 +94,7 @@ export class AuthService {
   // Parse the authentication result
   result(authResult) {
     let self = this;
+    self._removeLocalUserData();
     return new Promise((resolve,reject)=>{
       /* The user did not allow auth0 to access his/her data */
       if(authResult.error){
@@ -115,6 +116,10 @@ export class AuthService {
 
             localStorage.setItem('access_token', authResult.access_token);
             localStorage.setItem('id_token', authResult.id_token);
+
+            if(typeof umd.reg !== "undefined" && umd.reg == "true"){
+              localStorage.regFB = true;
+            }
 
             console.log("auth result is ", authResult);
             console.log(user);
@@ -172,6 +177,7 @@ export class AuthService {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('evrythngInfo');
     localStorage.removeItem('courseHistory');
+    localStorage.removeItem('lessonCtr');
 
   }
 
