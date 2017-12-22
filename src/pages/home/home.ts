@@ -10,8 +10,6 @@ import { Config } from '../../config/environment';
 import { AuraMainPage } from '../aura-main/aura-main';
 import { AgeGatePage } from '../age-gate/age-gate';
 import { AppProvider } from "../../providers/app/app";
-
-import { Camera, CameraOptions } from "@ionic-native/camera";
 /*
  *  This is the scan page. Where scanning happens.
  *
@@ -29,14 +27,14 @@ export class HomePage {
   noticeViewed : boolean;
   isNotLoggedIn: boolean = true;
   config: any = Config;
+  pic: any;
   constructor(
     public platform: Platform,
     public navCtrl: NavController,
     public evt: EvtProvider,
     public app: AppProvider,
     private auth0: AuthService,
-    private loader: LoadingController,
-    private camera: Camera
+    private loader: LoadingController
   ) {
     this.isNotLoggedIn = !this.auth0.loggedIn();
   }
@@ -79,23 +77,17 @@ export class HomePage {
 
   }
 
-  takePic(){
-    let opts : CameraOptions = {
-      quality:100,
-      destinationType:this.camera.DestinationType.DATA_URL,
-      encodingType:this.camera.EncodingType.JPEG,
-      mediaType:this.camera.MediaType.PICTURE
-    };
+  takePic($event){
+    //console.log($event,this.pic);
+    let self = this;
+    if($event.target.files && $event.target.files[0]){
+      let rdr = new FileReader(); 
+      rdr.onload = function(e){
+        self.pic = e.target['result'];
+      }
+      rdr.readAsDataURL($event.target.files[0]);
+    }
 
-    this.camera.getPicture(opts).then((imageData) => {
-     // imageData is either a base64 encoded string or a file URI
-     // If it's base64:
-     let base64Image = 'data:image/jpeg;base64,' + imageData;
-     console.log(imageData,base64Image);
-    }, (err) => {
-     // Handle error
-     console.log(err);
-    });
   }
 
   scan(){

@@ -35,7 +35,7 @@
 
     <span class="guide-images">
 
-      <div id="qr-image" class="placeholder" (tap)="takePic()">
+      <div id="qr-image" class="placeholder">
         <img src="../assets/images/qrcode.png"/>
       </div>
 
@@ -63,6 +63,12 @@
 
   </section>
 
+  <section id="scan-button-container">
+
+    <input type="file" accept="image/*;capture=camera" (change)="takePic($event)"/>
+
+  </section>
+  <ion-img [src]="pic" id="prev"></ion-img>
 
   <footer></footer>
 
