@@ -29,6 +29,8 @@ import { ScriptService } from '../providers/app/script.service';
 /* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
 
+import { Camera, CameraOptions } from "@ionic-native/camera";
+
 const pages = [
             MyApp,
             HomePage,
@@ -77,7 +79,8 @@ const pages = [
     EvtProvider,
     AppProvider,
     AuthService,
-    ScriptService
+    ScriptService,
+    Camera
   ]
 })
 export class AppModule {}
