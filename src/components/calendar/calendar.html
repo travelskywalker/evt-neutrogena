@@ -1,0 +1,16 @@
+<!-- Generated template for the CalendarComponent component -->
+<div>
+  <b class="lbl">{{moStr}} {{yr}} <button class="left" (tap)="prevMonth()">&lt;</button><button class="ryt" (tap)="nextMonth()">&gt;</button></b>
+  <span class="weekdays">
+  	<div>S</div>
+  	<div>M</div>
+  	<div>T</div>
+  	<div>W</div>
+  	<div>T</div>
+  	<div>F</div>
+  	<div>S</div>
+  </span>
+  <span class="daysOfOurLives">
+  	<div *ngFor="let dd of dayArr" [ngClass]="{'selfie':selfieData?.indexOf(dd) >= 0}">{{dd}}</div>
+  </span>
+</div>

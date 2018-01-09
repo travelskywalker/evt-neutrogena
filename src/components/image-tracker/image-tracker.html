@@ -1,0 +1,14 @@
+<!-- Generated template for the ImageTrackerComponent component -->
+<div>
+  <p class="title">Image Tracker</p>
+  <ion-slides slidesPerView="auto" spaceBetween="13" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>
+	<ion-slide *ngFor = "let pho of photoProg; let i=index;let x;">
+		<p class="dayctr">Day {{i}}</p>
+		<div class="photo-main"></div>
+	</ion-slide>
+	<ion-slide>
+		<p class="dayctr">Day {{photoProg?.length+1}}</p>
+		<div class="photo-main"></div>
+	</ion-slide>
+  </ion-slides>
+</div>

@@ -9,8 +9,11 @@ import { AuraHeadComponentModule } from './aura-head/aura-head.module';
 import { AuraFootComponentModule } from './aura-foot/aura-foot.module';
 import { ProgressModalComponentModule } from './progress-modal/progress-modal.module';
 import { ReorderModalComponentModule } from './reorder-modal/reorder-modal.module';
+import { CalendarComponentModule } from './calendar/calendar.module';
+import { ImageTrackerComponentModule } from './image-tracker/image-tracker.module';
 @NgModule({
-	declarations: [ScanComponent,],
+	declarations: [ScanComponent,
+    ],
 	imports: [SideMenuComponentModule],
 	exports: [ScanComponent,
     SideMenuComponentModule,
@@ -21,6 +24,8 @@ import { ReorderModalComponentModule } from './reorder-modal/reorder-modal.modul
     AuraFootComponentModule,
     ProgressModalComponentModule,
     ReorderModalComponentModule,
+    CalendarComponentModule,
+    ImageTrackerComponentModule,
   ]
 })
 export class ComponentsModule {}

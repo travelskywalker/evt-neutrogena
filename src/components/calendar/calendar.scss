@@ -1,0 +1,64 @@
+calendar {
+
+	&>div{
+		background-color: rgba(190,190,190,0.4);
+		padding-top:34px;
+		padding-bottom:25px;
+		b.lbl{
+			display: block;
+			font-family: HelveticaNeue-Bold;
+			line-height: 17px;
+			font-size: 16px;
+			color:rgb(189,8,148);
+			clear: both;
+			width: 100%;
+			text-align: left !important;
+			padding-left: 6vw;
+			text-transform: uppercase;
+		}
+
+		span{
+			width:100%;
+			display: table;
+			font-size:14px;
+			line-height: 17px;
+			text-align: center;
+			&.weekdays{
+				font-weight: bolder;
+				color:rgb(113,27,125);
+				font-family: HelveticaNeue-Bold;
+				padding-top:calc(31px - 3.5725vw);
+			}
+
+			&.daysOfOurLives{
+				font-family: HelveticaNeue-Light;
+				color:rgb(240,119,33);
+			}
+			&>div{
+				display: table-cell;
+				width: 14.285vw;
+				float: left;
+				height: 8.1425vw;
+				vertical-align: middle;
+				padding-top:3.5725vw;
+				&.selfie{
+					position: relative;
+					z-index: 2;
+					color:#fff;
+					&::before{
+						z-index: -1;
+						content:"";
+						display: block;
+						position: absolute;
+						top: 3vw;
+					    left: 3.75vw;
+					    height: 6.5vw;
+					    width: 6.5vw;
+						background-color:rgb(189,8,148);
+						border-radius: 100%;
+					}
+				}
+			}
+		}
+	}
+}

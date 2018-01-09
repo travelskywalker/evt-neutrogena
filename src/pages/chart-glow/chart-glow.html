@@ -1,0 +1,35 @@
+<aura-head></aura-head>
+<ion-content>
+	
+
+	<section class="track-preview">
+		<a class="progress-days">
+			Day 16 of 30
+			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->
+		</a>
+		<p class="section-title">
+			Chart Your Glow
+		</p>
+
+		<a class="launch-preview">Preview Video Example</a>
+		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
+		<button ion-button class="vid">Sign In</button>
+		<!--/div-->
+
+		<div class="expandable">
+			<a class="desc-trigger" (tap)="expand()">About Chart Your Glow <ion-icon name="ios-arrow-{{def}}"></ion-icon></a>
+			<!--<p class="content" [ngClass]="{'show':expanded}" *ngIf="app?.hasActiveCourse()">-->
+			<p class="content" [ngClass]="{'show':expanded}">
+				Check on your daily glow with Chart Your Glow. Take a photo each time you use your Neutrogena&reg; Visibly Clear&reg; Light Therapy Acne Mask and we'll do the rest. Get glowing.
+			</p>
+      <br>
+		</div>
+
+
+	</section>
+	<image-tracker></image-tracker>
+	<calendar></calendar>
+
+	<footer></footer>
+</ion-content>
+<aura-foot></aura-foot>

@@ -19,6 +19,7 @@ import { AgeGatePage } from '../pages/age-gate/age-gate';
 import { AuraContentPage } from '../pages/aura-content/aura-content';
 import { AuraMainPage } from '../pages/aura-main/aura-main';
 import { ScanPage } from '../pages/scan/scan';
+import { ChartGlowPage } from '../pages/chart-glow/chart-glow';
 
 /* Providers */
 import { EvtProvider } from '../providers/evt/evt';
@@ -42,7 +43,8 @@ const pages = [
             ResetPasswordPage,
             AuraContentPage,
             AuraMainPage,
-            ScanPage
+            ScanPage,
+            ChartGlowPage
           ];
 
 @NgModule({
@@ -65,6 +67,7 @@ const pages = [
         { component: ResetPasswordPage, name: 'ResetPasswordPage', segment: 'reset-password' },
         { component: AuraContentPage, name: 'AuraContentPage', segment: 'aura-content' },
         { component: AuraMainPage, name: 'AuraMainPage', segment: 'aura' },
+        { component: ChartGlowPage, name: 'ChartGlowPage', segment: 'chart-your-glow' },
       ]
     }),
   ],
