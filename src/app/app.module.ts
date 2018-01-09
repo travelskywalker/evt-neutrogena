@@ -20,6 +20,7 @@ import { AuraContentPage } from '../pages/aura-content/aura-content';
 import { AuraMainPage } from '../pages/aura-main/aura-main';
 import { ScanPage } from '../pages/scan/scan';
 import { ChartGlowPage } from '../pages/chart-glow/chart-glow';
+import { VideoModalPage } from '../pages/video-modal/video-modal';
 
 /* Providers */
 import { EvtProvider } from '../providers/evt/evt';
@@ -44,7 +45,8 @@ const pages = [
             AuraContentPage,
             AuraMainPage,
             ScanPage,
-            ChartGlowPage
+            ChartGlowPage,
+            VideoModalPage
           ];
 
 @NgModule({
@@ -84,5 +86,3 @@ const pages = [
   ]
 })
 export class AppModule {}
-
-
