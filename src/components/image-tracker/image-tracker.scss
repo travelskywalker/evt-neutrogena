@@ -16,6 +16,10 @@ image-tracker {
 
 			ion-slide{
 
+				&.buffer{
+					opacity: 0;
+				}
+
 				p.dayctr{
 					font-size: 12px;
 					color:rgb(190,190,190);
@@ -29,34 +33,32 @@ image-tracker {
 					display: block;
 					height:35.833vw;
 					width:35.833vw;
-					outline:1px dashed rgb(113,27,125);
-					&::before{
-						content:"+";
-						font-size: 56.4px;
-						position: absolute;
-						display: inline-block;
-						top:calc(28px);
-						left:0;
-						bottom:0;
-						right:0;
-						margin: auto;
-						color:rgb(190,190,190);
-						font-family: 'HelveticaNeue-Bold';
+					background-size:100% auto;
+				}
+
+				&.more-pic{
+					div.photo-main{
+						background-image:url('../assets/images/uploadBox.png');
 					}
 				}
 
 				&:first-of-type{
 				}
-				padding-left:30px;
+				padding-left:10vw;
 				//transform:translate3d(0,0,0) translateX(30px) !important;
 				&:not(.space-10){
-					width:calc(35.833vw) !important;
+					width:calc(35.833vw);
 				}
 				&.space-10{
 					width:2.6vw;
 				}
 				&:last-of-type{
-					margin-right: 30px;
+					margin-right: 8vw !important;
+					padding-right: 10vw !important;
+					width:53.7495vw;
+					div.photo-main{
+						width: 53.7495vw;
+					}
 				}
 				
 
