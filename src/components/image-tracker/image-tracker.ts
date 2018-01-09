@@ -26,7 +26,6 @@ export class ImageTrackerComponent {
   }
 
   ngOnInit(){
-  	this.photoProg = ["http://masterbeautyphotography.com/wp-content/uploads/2016/06/Bridget_0156-web.jpg","https://www.slrlounge.com/wp-content/uploads/2016/04/Julia-kuzmenko-fashion-beauty-photography-retouching-studio-tutorial-model-MUA-slrlounge-kishore-sawh-3-800x1152.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLlSgQp9jjmjsDpUkb3Wax2ymctEQ-JVhvPpgLhXJ1gfIaJfNu"];
   }
 
 
@@ -52,6 +51,11 @@ export class ImageTrackerComponent {
 
   }
 
+  unlockSlides(){
+  	this.slider.lockSwipeToNext(false);
+  	this.slider.lockSwipeToPrev(false);
+  }
+
   takePic($event){
     //console.log($event,this.pic);
     let self = this;
@@ -68,6 +72,7 @@ export class ImageTrackerComponent {
 
   // *********** Upload file to Cloudinary ******************** //
 	uploadFile(file) {
+		console.log(file);
 		let self = this;
   var url = `https://api.cloudinary.com/v1_1/${self.cloudName}/image/upload`;
   var xhr = new XMLHttpRequest();
@@ -98,19 +103,26 @@ export class ImageTrackerComponent {
       img.alt = response.public_id;
       document.getElementById('gallery').appendChild(img);*/
       console.log(response);
+      self.photoProg.push(response.secure_url);
+      self.unlockSlides();
+      setTimeout(()=>{
+	  	self.slider.slideTo(self.photoProg.length+1);
+	  },500);
     }
   };
 
   let tstamp = Date.now().toString();
+  let pid = file.name+"_"+self.photoProg.length;
   fd.append('file', file);
-  fd.append('public_id', 'test');
+  fd.append('public_id', pid);
   fd.append('timestamp', tstamp);
   fd.append('api_key', '299675785887213'); // Optional - add tag for image admin in Cloudinary
 
-  let signed = sha1('public_id=test&timestamp='+tstamp+"BBImHLi3cw-Y_NynlbMU3HYyhH0");
-  console.log(signed);
+  let signed = sha1('public_id='+pid+'&timestamp='+tstamp+"BBImHLi3cw-Y_NynlbMU3HYyhH0");
   fd.append('signature', signed); // Optional - add tag for image admin in Cloudinary
   xhr.send(fd);
+
+
 }
 
 /* *********** Handle selected files ******************** //
