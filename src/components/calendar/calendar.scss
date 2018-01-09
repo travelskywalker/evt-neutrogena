@@ -37,15 +37,16 @@ calendar {
 			&>div{
 				display: table-cell;
 				width: 14.285vw;
-				float: left;
-				height: 8.1425vw;
-				vertical-align: middle;
-				padding-top:3.5725vw;
+			    float: left;
+			    height: calc(8.1425vw - 2.5vw);
+			    vertical-align: middle;
+			    margin-top: 1.5vw;
+			    margin-bottom:1.5vw;
 				&.selfie{
 					position: relative;
 					z-index: 2;
 					color:#fff;
-					&::before{
+					/*&::before{
 						z-index: -1;
 						content:"";
 						display: block;
@@ -56,7 +57,11 @@ calendar {
 					    width: 6.5vw;
 						background-color:rgb(189,8,148);
 						border-radius: 100%;
-					}
+					}*/
+				    background-image: url('../assets/images/ellipse.png');
+				    background-position: center;
+				    background-size: auto 100%;
+				    background-repeat: no-repeat;
 				}
 			}
 		}
