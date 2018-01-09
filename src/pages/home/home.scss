@@ -312,7 +312,16 @@ page-home {
       }
   }
 
-
+#prev{
+  min-height: 20vh;
+  min-width:20vh;
+  display: flex;
+  text-align: center;
+  img{
+    margin: auto;
+    object-fit: contain;
+  }
+}
 
 
 }

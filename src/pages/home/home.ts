@@ -27,6 +27,7 @@ export class HomePage {
   noticeViewed : boolean;
   isNotLoggedIn: boolean = true;
   config: any = Config;
+  pic: any;
   constructor(
     public platform: Platform,
     public navCtrl: NavController,
@@ -72,6 +73,19 @@ export class HomePage {
 
       }
 
+    }
+
+  }
+
+  takePic($event){
+    //console.log($event,this.pic);
+    let self = this;
+    if($event.target.files && $event.target.files[0]){
+      let rdr = new FileReader(); 
+      rdr.onload = function(e){
+        self.pic = e.target['result'];
+      }
+      rdr.readAsDataURL($event.target.files[0]);
     }
 
   }
