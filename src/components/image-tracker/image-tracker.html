@@ -8,7 +8,9 @@
 	</ion-slide>
 	<ion-slide class="more-pic">
 		<p class="dayctr">Day {{photoProg?.length+1}}</p>
-		<div class="photo-main"></div>
+		<div class="photo-main">
+   	 		<input type="file" accept="image/*;capture=camera" (change)="takePic($event)"/>
+   	 	</div>
 	</ion-slide>
 	<ion-slide class="buffer">
 		<p class="dayctr">Day {{photoProg?.length+1}}</p>
