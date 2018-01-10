@@ -4,7 +4,9 @@
   <ion-slides slidesPerView="auto" spaceBetween="13" zoom="false" (ionSlideDidChange)="sliderChanged($event)" #Slides>
 	<ion-slide *ngFor = "let pho of photoProg; let i=index;let x;">
 		<p class="dayctr">Day {{i+1}}</p>
-		<div class="photo-main" [ngStyle]="{'background-image':'url('+pho+')'}"></div>
+		<div class="photo-main"><!-- [ngStyle]="{'background-image':'url('+pho+')'}" -->
+			<img [src]="pho"/>
+		</div>
 	</ion-slide>
 	<ion-slide class="more-pic">
 		<p class="dayctr">Day {{photoProg?.length+1}}</p>
