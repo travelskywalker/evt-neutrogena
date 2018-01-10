@@ -103,7 +103,7 @@ export class ImageTrackerComponent {
 	    tempImg.src = rdr.result;
 	    tempImg.onload = function() {
 	      	var MAX_WIDTH = 400;
-	        var MAX_HEIGHT = 300;
+	        var MAX_HEIGHT = 400;
 	        var tempW = tempImg.width;
 	        var tempH = tempImg.height;
 	        if (tempW > tempH) {
@@ -123,7 +123,7 @@ export class ImageTrackerComponent {
 	        canvas.height = tempH;
 	        var ctx = canvas.getContext("2d");
 	        ctx.drawImage(tempImg, 0, 0, tempW, tempH);
-	        var dataURL = canvas.toDataURL("image/jpeg");
+	        var dataURL = canvas.toDataURL("image/png");
 	        //var data = 'image='+dataURL;
 
 		  xhr.onreadystatechange = function(e) {
