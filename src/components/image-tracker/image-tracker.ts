@@ -126,10 +126,10 @@ export class ImageTrackerComponent {
 	        canvas.width = tempW;
 	        canvas.height = tempH;
 	        var ctx = canvas.getContext("2d");
-	        //ctx.drawImage(tempImg, 0, 0, tempW, tempH);
+	        ctx.drawImage(tempImg, 0, 0, tempW, tempH);
 
-	        //var dataURL = canvas.toDataURL("image/png");
-	        var dataURL = self.exifProc(orientation,ctx,canvas,tempImg);
+	        var dataURL = canvas.toDataURL("image/png");
+	        //var dataURL = self.exifProc(orientation,ctx,canvas,tempImg);
 	        //var data = 'image='+dataURL;
 
 		  xhr.onreadystatechange = function(e) {
