@@ -234,7 +234,7 @@ exifProc(orientation,ctx,canvas,exifImg){
   }
   else{
 	  ctx.translate(-canvas.width * 0.5, -canvas.height * 0.5);
-	  ctx.drawImage(exifImg, 0, 0);
+  		ctx.drawImage(exifImg, 0, 0, canvas.width, canvas.height);
   }
   return canvas.toDataURL("image/png");
 }
