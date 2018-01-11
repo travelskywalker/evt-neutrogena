@@ -5,7 +5,7 @@
 	<ion-slide *ngFor = "let pho of photoProg; let i=index;let x;">
 		<p class="dayctr">Day {{i+1}}</p>
 		<div class="photo-main"><!-- [ngStyle]="{'background-image':'url('+pho+')'}" -->
-			<img [src]="pho"/>
+			<img class="i{{i}}" [src]="pho"/>
 		</div>
 	</ion-slide>
 	<ion-slide class="more-pic">
