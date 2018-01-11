@@ -225,7 +225,7 @@ exifProc(orientation,ctx,canvas,exifImg){
     case 8:
         // 90° rotate left
         ctx.rotate(-0.5 * Math.PI);
-        ctx.translate(-canvas.width, 0);
+        //ctx.translate(-canvas.width, 0);
         break;
   }
 
@@ -233,7 +233,7 @@ exifProc(orientation,ctx,canvas,exifImg){
   	ctx.drawImage(exifImg, 0, 0, canvas.width, canvas.height);
   }
   else{
-	  ctx.translate(-canvas.width * 0.5, -canvas.height * 0.5);
+	 // ctx.translate(-canvas.width * 0.5, -canvas.height * 0.5);
   		ctx.drawImage(exifImg, 0, 0, canvas.width, canvas.height);
   }
   return canvas.toDataURL("image/png");
