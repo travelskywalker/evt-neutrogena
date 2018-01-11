@@ -3,7 +3,7 @@ import { Slides, LoadingController } from 'ionic-angular';
 
 
 var sha1 = require('sha1');
-declare var EXIF;
+import * as loadImage from 'blueimp-load-image';
 /**
  * Generated class for the ImageTrackerComponent component.
  *
@@ -28,6 +28,7 @@ export class ImageTrackerComponent {
   }
 
   ngOnInit(){
+    console.log(loadImage);
   }
 
 
@@ -82,9 +83,9 @@ export class ImageTrackerComponent {
       enableBackdropDismiss:true});
     load.present();
     let orientation;
-		EXIF.getData(file,function(){
+		/*EXIF.getData(file,function(){
 			orientation =  EXIF.getTag(this, "Orientation");
-		})
+		})*/
 		let self = this;
   var url = `https://api.cloudinary.com/v1_1/${self.cloudName}/image/upload`;
   var xhr = new XMLHttpRequest();
@@ -101,7 +102,50 @@ export class ImageTrackerComponent {
   data.total: ${e.total}`);
   });*/
 
-      let rdr = new FileReader(); 
+    let ldr = loadImage(file,
+      function(img){
+        let dataURL = img.toDataURL("image/png");
+        xhr.onreadystatechange = function(e) {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            // File uploaded successfully
+            var response = JSON.parse(xhr.responseText);
+            // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+            /*var url = response.secure_url;
+            // Create a thumbnail of the uploaded image, with 150px width
+            var tokens = url.split('/');
+            tokens.splice(-2, 0, 'w_150,c_scale');
+            var img = new Image(); // HTML5 Constructor
+            img.src = tokens.join('/');
+            img.alt = response.public_id;
+            document.getElementById('gallery').appendChild(img);*/
+            console.log(response);
+            self.photoProg.push(response.secure_url);
+            //self.exifProc(response.secure_url,self.photoProg.length-1);
+            self.unlockSlides();
+            setTimeout(()=>{
+            self.slider.slideTo(self.photoProg.length+1);
+          },500);
+            load.dismiss();
+          }
+        }
+
+        let tstamp = Date.now().toString();
+        let pid = file.name+"_"+self.photoProg.length;
+        let secret = "BBImHLi3cw-Y_NynlbMU3HYyhH0"
+        //let secret = "uJkQIneMpHgAJkqho1NLFroqGUg";
+        fd.append('file', dataURL);
+        fd.append('public_id', pid);
+        fd.append('timestamp', tstamp);
+        fd.append('api_key', '299675785887213'); // 572517737342669 Optional - add tag for image admin in Cloudinary
+
+        let signed = sha1('public_id='+pid+'&timestamp='+tstamp+secret);
+        fd.append('signature', signed); // Optional - add tag for image admin in Cloudinary
+        xhr.send(fd);
+      }
+      ,
+      {orientation:1,maxWidth:400,maxHeight:400});
+
+     /* let rdr = new FileReader(); 
       rdr.onloadend = function(){
 	    var tempImg = new Image();
 	    tempImg.src = rdr.result;
@@ -144,7 +188,7 @@ export class ImageTrackerComponent {
 		      var img = new Image(); // HTML5 Constructor
 		      img.src = tokens.join('/');
 		      img.alt = response.public_id;
-		      document.getElementById('gallery').appendChild(img);*/
+		      document.getElementById('gallery').appendChild(img);
 		      console.log(response);
 		      self.photoProg.push(response.secure_url);
 		      //self.exifProc(response.secure_url,self.photoProg.length-1);
@@ -173,7 +217,7 @@ export class ImageTrackerComponent {
   	}
 
       rdr.readAsDataURL(file);
-
+*/
 
 }
 
