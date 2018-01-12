@@ -82,7 +82,6 @@ export class ImageTrackerComponent {
       content: `Please wait...`,
       enableBackdropDismiss:true});
     load.present();
-    let orientation;
 		/*EXIF.getData(file,function(){
 			orientation =  EXIF.getTag(this, "Orientation");
 		})*/
@@ -102,9 +101,17 @@ export class ImageTrackerComponent {
   data.total: ${e.total}`);
   });*/
 
-    let ldr = loadImage(file,
+  loadImage.parseMetaData(file, function(data){
+       let oren = 0;
+       if(data.exif){
+         oren = data.exif.get('Orientation');
+       }
+
+    loadImage(file,
+
       function(img){
-        let dataURL = img.toDataURL("image/png");
+        let base64data = img.toDataURL("image/jpeg");
+        //let img_src = base64data.replace(/^data\:image\/\w+\;base64\,/, '');
         xhr.onreadystatechange = function(e) {
           if (xhr.readyState == 4 && xhr.status == 200) {
             // File uploaded successfully
@@ -133,7 +140,7 @@ export class ImageTrackerComponent {
         let pid = file.name+"_"+self.photoProg.length;
         let secret = "BBImHLi3cw-Y_NynlbMU3HYyhH0"
         //let secret = "uJkQIneMpHgAJkqho1NLFroqGUg";
-        fd.append('file', dataURL);
+        fd.append('file', base64data);
         fd.append('public_id', pid);
         fd.append('timestamp', tstamp);
         fd.append('api_key', '299675785887213'); // 572517737342669 Optional - add tag for image admin in Cloudinary
@@ -141,9 +148,16 @@ export class ImageTrackerComponent {
         let signed = sha1('public_id='+pid+'&timestamp='+tstamp+secret);
         fd.append('signature', signed); // Optional - add tag for image admin in Cloudinary
         xhr.send(fd);
+      },
+
+      {
+        canvas:true,
+        orientation:oren,
+        maxWidth:400,
+        maxHeight:400
       }
-      ,
-      {orientation:1,maxWidth:400,maxHeight:400});
+     )
+  });
 
      /* let rdr = new FileReader(); 
       rdr.onloadend = function(){
