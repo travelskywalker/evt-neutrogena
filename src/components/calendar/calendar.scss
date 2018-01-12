@@ -21,27 +21,26 @@ calendar {
 			    height: 5vw;
 			    margin: 0 1vw 2.5vw 2vw;
 			    display: inline-block;
-			    &>span{
-				    font-family: 'HelveticaNeue-Bold';
-				    color: rgb(189, 8, 148);
-				    border-radius: 100%;
-				    display: inline-table;
-				    height: 5vw;
-				    width: 5vw;
-				    background-color: white;
-				    font-size: 3vw;
-
-			    }
+			    	img{
+			    		max-height: 110%;
+			    	}
 
 			    &.today{
 			    	float: right;
 			    	margin-right: 6vw;
 			    	&>span{
+					    font-family: 'HelveticaNeue-Bold';
+					    color: rgb(189, 8, 148);
+					    border-radius: 100%;
+					    display: inline-table;
+					    height: 5vw;
 			    		width:15vw;
 			    		border-radius:2vw;
 			    		text-transform: uppercase;
 			    		padding:0.25vw;
 			    		border:1px solid #AAA;
+					    background-color: white;
+					    font-size: 3vw;
 			    	}
 			    }
 			}
