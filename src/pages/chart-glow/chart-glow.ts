@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, Modal, ModalOptions } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ModalOptions } from 'ionic-angular';
 import { VideoModalPage } from '../video-modal/video-modal';
 /**
  * Generated class for the ChartGlowPage page.

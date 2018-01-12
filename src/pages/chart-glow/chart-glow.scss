@@ -19,7 +19,7 @@ page-chart-glow {
       a.progress-days {
         color: rgb(240,119,33);
         line-height: 17px;
-        font-size: 2.8vw;
+        font-size: 3.2vw;
         font-family: 'HelveticaNeue-Bold';
         text-decoration: none;
         margin-left: 33px;
@@ -42,7 +42,7 @@ page-chart-glow {
       }
 
       a.launch-preview {
-        font-size: 3vw;
+        font-size: 3.2vw;
         text-decoration: underline;
         margin-top: 6.2vw;
         margin-bottom: 6.2vw;
@@ -73,14 +73,14 @@ page-chart-glow {
       div {
         &.expandable {
           margin-left: 33px;
-          margin-top: 2vw;
-          font-size: 3vw;
+          margin-top: 3.5vh;
+          font-size: 3.2vw;
           color: #fff;
           text-shadow: 0 0 2px #333;
           line-height: 17px;
 
           a.desc-trigger {
-            font-size: 3vw;
+            font-size: 3.2vw;
             display: block;
             clear: both;
             color: #fff;
@@ -102,10 +102,10 @@ page-chart-glow {
             display: none;
 
             &.show {
-              line-height: 2.8vw;
+              line-height: 3.2vw;
               margin-top: 1vw;
               width: calc(100% - 5vw);
-              font-size: 2.8vw;
+              font-size: 3vw;
               display: inline-block;
             }
           }
