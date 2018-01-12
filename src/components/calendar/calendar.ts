@@ -97,5 +97,14 @@ export class CalendarComponent {
 		this.buildDayArray();
 	}
 
+	goToday(){
+
+	  this.yr = this.tday.getFullYear();
+	  this.mo = this.tday.getUTCMonth()+1;
+	  this.moPad = this.pad(this.mo);
+	  this.moStr = this.monthNames[this.mo-1];
+	  this.wkd = new Date(this.yr+"-"+this.moPad+"-01").getUTCDay();
+	  this.buildDayArray();
+	}
 
 }

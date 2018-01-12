@@ -1,6 +1,6 @@
 <!-- Generated template for the CalendarComponent component -->
 <div>
-  <b class="lbl">{{moStr}} {{yr}} <button class="left" (tap)="prevMonth()">&lt;</button><button class="ryt" (tap)="nextMonth()">&gt;</button></b>
+  <b class="lbl">{{moStr}} {{yr}} <button ion-button class="left" (tap)="prevMonth()"><ion-icon name="arrow-back"></ion-icon></button><button ion-button class="ryt" (tap)="nextMonth()"><ion-icon name="arrow-forward"></ion-icon></button> <button ion-button class="today" (tap)="goToday()">Today</button></b>
   <span class="weekdays">
   	<div>S</div>
   	<div>M</div>

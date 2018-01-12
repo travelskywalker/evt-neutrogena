@@ -15,6 +15,36 @@ calendar {
 			text-align: left !important;
 			padding-left: 6vw;
 			text-transform: uppercase;
+			button[ion-button]{	
+			    background: none;
+			    padding: 0;
+			    height: 5vw;
+			    margin: 0 1vw 2.5vw 2vw;
+			    display: inline-block;
+			    &>span{
+				    font-family: 'HelveticaNeue-Bold';
+				    color: rgb(189, 8, 148);
+				    border-radius: 100%;
+				    display: inline-table;
+				    height: 5vw;
+				    width: 5vw;
+				    background-color: white;
+				    font-size: 3vw;
+
+			    }
+
+			    &.today{
+			    	float: right;
+			    	margin-right: 6vw;
+			    	&>span{
+			    		width:15vw;
+			    		border-radius:2vw;
+			    		text-transform: uppercase;
+			    		padding:0.25vw;
+			    		border:1px solid #AAA;
+			    	}
+			    }
+			}
 		}
 
 		span{
@@ -38,10 +68,10 @@ calendar {
 				display: table-cell;
 				width: 14.285vw;
 			    float: left;
-			    height: calc(8.1425vw - 2.25vw);
+			    height: calc(8.1425vw - 2.75vw);
 			    vertical-align: middle;
-			    margin-top: 1vw;
-			    margin-bottom:2vw;
+			    margin-top: 0.5vw;
+			    margin-bottom: 2vw;
 				&.selfie{
 					position: relative;
 					z-index: 2;

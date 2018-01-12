@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ModalOptions } from 'ionic-angular';
 import { VideoModalPage } from '../video-modal/video-modal';
+import { LoginPage } from '../login/login';
 /**
  * Generated class for the ChartGlowPage page.
  *
@@ -43,6 +44,11 @@ export class ChartGlowPage {
     let viewModal = this.modalCtrl.create(VideoModalPage, {data : videoData}, videoModalOptions);
     viewModal.present();
     console.log("openModal");
+  }
+
+
+  toSignup() {
+    this.navCtrl.push(LoginPage);
   }
 
 }
