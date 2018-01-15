@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ModalOptions } from 'ionic-angular';
 import { VideoModalPage } from '../video-modal/video-modal';
 import { LoginPage } from '../login/login';
+
+import { CalendarComponent } from "../../components/calendar/calendar";
 /**
  * Generated class for the ChartGlowPage page.
  *
@@ -16,6 +18,7 @@ import { LoginPage } from '../login/login';
 })
 export class ChartGlowPage {
 
+	@ViewChild(CalendarComponent) cal: CalendarComponent;
 	expanded: boolean = false;
 	def : string = "down";
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController ) {
@@ -29,6 +32,10 @@ export class ChartGlowPage {
   	this.expanded = !this.expanded;
   	if(this.expanded) this.def = "up";
   	else this.def = "down";
+  }
+
+  ngAfterViewInit(){
+  	console.log(this.cal);
   }
 
   openModal(){
@@ -49,6 +56,12 @@ export class ChartGlowPage {
 
   toSignup() {
     this.navCtrl.push(LoginPage);
+  }
+
+  updateCalendar($event){
+  	console.log($event);
+  	this.cal.fetchCYGfromStorage();
+  	this.cal.buildCalendarHist();
   }
 
 }

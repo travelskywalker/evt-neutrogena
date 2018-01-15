@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, ViewController,LoadingController } from "ionic-angular";
 
 import { AuraMainPage } from "../../pages/aura-main/aura-main";
+import { ChartGlowPage } from "../../pages/chart-glow/chart-glow";
 
 import { AppProvider } from "../../providers/app/app";
 import { ReorderModalComponent } from "../../components/reorder-modal/reorder-modal";
@@ -86,6 +87,11 @@ export class AuraFootComponent {
 
   logAction(): void {
     this.appState.evt.createUserAction('_Reorder', {}, !this.appState.hasLoggedIn());
+  }
+
+  toSkinTracker(){
+    this.nav.setRoot(ChartGlowPage);
+    
   }
 
 }

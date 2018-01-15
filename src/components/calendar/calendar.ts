@@ -25,6 +25,7 @@ export class CalendarComponent {
   wkd: any = new Date(this.yr+"-"+this.moPad+"-01").getUTCDay();
   dayArr : Array<any> = [];
   selfieData: Array<any> = [];
+  cygHistory: Array<any> = [];
 
   constructor() {
     console.log('Hello CalendarComponent Component',this);
@@ -32,8 +33,8 @@ export class CalendarComponent {
 
   ngOnInit(){
   	console.log('init - calendar');
+    this.fetchCYGfromStorage();
     this.buildDayArray();
-
   }
 
    pad(n){
@@ -69,8 +70,10 @@ export class CalendarComponent {
 		}
 		for(let c=1;c<=this.nDays(this.mo);c++){
 			this.dayArr.push(c);
-			if(Math.random()*100 < 35) this.selfieData.push(c);
+			//if(Math.random()*100 < 35) this.selfieData.push(c);
 		}
+		//console.log(this.mo);
+		this.buildCalendarHist();
 	}
 
 	prevMonth(){
@@ -106,5 +109,21 @@ export class CalendarComponent {
 	  this.wkd = new Date(this.yr+"-"+this.moPad+"-01").getUTCDay();
 	  this.buildDayArray();
 	}
+  
+  fetchCYGfromStorage(){
+    if(localStorage.cygHistory && JSON.parse(localStorage.cygHistory)){
+      this.cygHistory = JSON.parse(localStorage.cygHistory);
+    }
+  }
+
+  buildCalendarHist(){
+  	let self = this;
+    this.cygHistory.map((val,ind)=>{
+    	let trgDt = new Date(parseInt(val.timestamp));
+    	if(trgDt.getUTCMonth()+1 == self.mo && trgDt.getFullYear() == self.yr){
+    		self.selfieData.push(trgDt.getDate());
+    	}
+    });
+  }
 
 }
