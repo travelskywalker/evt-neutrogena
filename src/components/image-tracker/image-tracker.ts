@@ -57,6 +57,7 @@ export class ImageTrackerComponent {
   canUploadPhoto(){
     let self = this;
     self.canIHasToday().then(i=>{
+      console.log(i);
       if(i){
         self.canAddTodaysPhoto = false;
       }
@@ -67,16 +68,20 @@ export class ImageTrackerComponent {
   }
 
   canIHasToday():PromiseLike<any>{
-    let localCpy :Array<any>= JSON.parse(localStorage.cygHistory);
     let self = this;
     return new Promise((resolve,reject)=>{
-      resolve(localCpy.find((val)=>{
-        let v1 = self.toLocaleDateString(val.timestamp);
-        let v2 = self.toLocaleDateString(self.tstamp);
-        //console.log(v1,v2,v1==v2);
-        return v1==v2;
-      })
-      );
+      if(typeof localStorage.cygHistory == "undefined"){
+        resolve(false);
+      }else{
+        let localCpy :Array<any>= JSON.parse(localStorage.cygHistory);
+        resolve(localCpy.find((val)=>{
+          let v1 = self.toLocaleDateString(val.timestamp);
+          let v2 = self.toLocaleDateString(self.tstamp);
+          //console.log(v1,v2,v1==v2);
+          return v1==v2;
+        })
+        );
+      }
     })
   }
 
