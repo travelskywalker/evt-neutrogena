@@ -17,7 +17,7 @@ import { EvtProvider } from "../../providers/evt/evt";
   templateUrl: 'image-tracker.html'
 })
 export class ImageTrackerComponent {
-  tstamp = Date.now().toString();
+  tstamp = Date.now();
 	//cloudName:string = 'demoengmntprty';
   cygHistory:Array<any> = [];
 	cloudName:string = 'jandjstaging';
@@ -45,13 +45,42 @@ export class ImageTrackerComponent {
     this.evt.getUserCustomFields().then((cF)=>{
       
       self.photoProg = cF.photoHistory || [];
-      this.fetchCYGfromStorage();
+      if(self.photoProg.length < 1){
+        this.fetchCYGfromStorage();
+      }
+      else{
+        localStorage.cygHistory = JSON.stringify(self.photoProg);
+        self.uploaded.emit(self.cloudName);
+      }
       setTimeout(()=>{
         self.slider.slideTo(self.photoProg.length-1);
       },500);
       //console.log(cF,this.today);
       self.canUploadPhoto();
     });
+  }
+
+  patchEVTUserCF(){
+    let self = this;
+    this.evt.getUserCustomFields().then((cF)=>{
+      let nCF = cF || [];
+      nCF.photoHistory = self.photoProg;
+      console.log(nCF);
+      return nCF;
+    })
+    .catch(console.info)
+    .then((cF)=>{
+      let upData = {
+        customFields:cF
+      };
+      console.log(upData);
+      self.evt.getUserContext().then(usr=>{
+        console.log(usr);
+        usr.update(upData).then(console.log).catch(console.info);
+      })
+      .catch(console.info);
+    })
+    .catch(console.info);
   }
 
   canUploadPhoto(){
@@ -147,6 +176,7 @@ export class ImageTrackerComponent {
               var response = JSON.parse(xhr.responseText);
               console.log(response);
               self.photoProg.push({photoUrl:response.secure_url,timestamp:self.tstamp});
+              self.patchEVTUserCF();
               self.unlockSlides();
               setTimeout(()=>{
                 self.slider.slideTo(self.photoProg.length-1);
@@ -164,7 +194,7 @@ export class ImageTrackerComponent {
           //let secret = "BBImHLi3cw-Y_NynlbMU3HYyhH0";
           fd.append('file', base64data);
           fd.append('public_id', pid);
-          fd.append('timestamp', self.tstamp);
+          fd.append('timestamp', self.tstamp.toString());
           fd.append('api_key', '572517737342669'); // 299675785887213 Optional - add tag for image admin in Cloudinary
 
           let signed = sha1('public_id='+pid+'&timestamp='+self.tstamp+secret);
