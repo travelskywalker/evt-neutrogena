@@ -68,6 +68,15 @@ page-chart-glow {
         background-color: transparent;
         box-shadow: none;
         font-family: 'HelveticaNeue-Bold';
+
+        input[type=file]{
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    height: 100%;
+		    width: 100%;
+		    opacity: 0;
+        }
       }
 
       div {

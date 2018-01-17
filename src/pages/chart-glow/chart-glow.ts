@@ -4,6 +4,10 @@ import { VideoModalPage } from '../video-modal/video-modal';
 import { LoginPage } from '../login/login';
 
 import { CalendarComponent } from "../../components/calendar/calendar";
+import { ImageTrackerComponent } from "../../components/image-tracker/image-tracker";
+
+import { IdomooProvider } from "../../providers/idomoo/idomoo";
+import { AuthService } from "../../providers/auth/auth.service";
 /**
  * Generated class for the ChartGlowPage page.
  *
@@ -19,9 +23,11 @@ import { CalendarComponent } from "../../components/calendar/calendar";
 export class ChartGlowPage {
 
 	@ViewChild(CalendarComponent) cal: CalendarComponent;
+	@ViewChild(ImageTrackerComponent) imt: ImageTrackerComponent;
 	expanded: boolean = false;
 	def : string = "down";
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private idomoo: IdomooProvider, private auth0: AuthService) {
+  	console.log(idomoo.accountId);
   }
 
   ionViewDidLoad() {
@@ -32,6 +38,10 @@ export class ChartGlowPage {
   	this.expanded = !this.expanded;
   	if(this.expanded) this.def = "up";
   	else this.def = "down";
+  }
+
+  isLogged():boolean{
+  	return this.auth0.loggedIn();
   }
 
   ngAfterViewInit(){

@@ -27,6 +27,7 @@ import { EvtProvider } from '../providers/evt/evt';
 import { AppProvider } from '../providers/app/app';
 import { AuthService } from '../providers/auth/auth.service';
 import { ScriptService } from '../providers/app/script.service';
+import { IdomooProvider } from '../providers/idomoo/idomoo';
 
 /* Custom Modules */
 import { ComponentsModule } from '../components/components.module';
@@ -82,7 +83,8 @@ const pages = [
     EvtProvider,
     AppProvider,
     AuthService,
-    ScriptService
+    ScriptService,
+    IdomooProvider
   ]
 })
 export class AppModule {}

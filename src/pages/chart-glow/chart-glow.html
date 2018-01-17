@@ -13,7 +13,8 @@
 
 		<a class="launch-preview" (click)="openModal()">Preview Video Example</a>
 		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
-		<button ion-button class="vid" (tap)="toSignup()">Sign In</button>
+		<button ion-button class="vid" (tap)="toSignup()" *ngIf="!isLogged()">Sign In</button>
+		<button ion-button class="vid" *ngIf="isLogged()"><input type="file" accept="image/*" (change)="imt?.takePic($event)" capture="camera" [disabled]="!imt?.canAddTodaysPhoto"/>Take Photo</button>
 		<!--/div-->
 
 		<div class="expandable">

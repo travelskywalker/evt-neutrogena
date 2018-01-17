@@ -2,7 +2,7 @@ import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Slides, LoadingController } from 'ionic-angular';
 
 
-var sha1 = require('sha1');
+//var sha1 = require('sha1');
 import * as loadImage from 'blueimp-load-image';
 
 import { EvtProvider } from "../../providers/evt/evt";
@@ -21,6 +21,7 @@ export class ImageTrackerComponent {
 	//cloudName:string = 'demoengmntprty';
   cygHistory:Array<any> = [];
 	cloudName:string = 'jandjstaging';
+  uploadPreset: string = 's5ubcqvn';
   text: string;
   photoProg: Array<any> = [];
   canAddTodaysPhoto: boolean = false;
@@ -190,15 +191,18 @@ export class ImageTrackerComponent {
           }
 
           let pid = file.name+"_"+self.tstamp;
-          let secret = "uJkQIneMpHgAJkqho1NLFroqGUg"
-          //let secret = "BBImHLi3cw-Y_NynlbMU3HYyhH0";
           fd.append('file', base64data);
           fd.append('public_id', pid);
           fd.append('timestamp', self.tstamp.toString());
-          fd.append('api_key', '572517737342669'); // 299675785887213 Optional - add tag for image admin in Cloudinary
+          fd.append('tags','browser_upload');
+          fd.append('upload_preset',self.uploadPreset);
 
-          let signed = sha1('public_id='+pid+'&timestamp='+self.tstamp+secret);
-          fd.append('signature', signed); // Optional - add tag for image admin in Cloudinary
+          /* no longer need signed uploads */
+          //let secret = "uJkQIneMpHgAJkqho1NLFroqGUg"
+          //let secret = "BBImHLi3cw-Y_NynlbMU3HYyhH0";
+          //fd.append('api_key', '572517737342669'); // 299675785887213 Optional - add tag for image admin in Cloudinary
+          //let signed = sha1('public_id='+pid+'&timestamp='+self.tstamp+secret);
+          //fd.append('signature', signed); // Optional - add tag for image admin in Cloudinary
           xhr.send(fd);
         },
 
