@@ -31,15 +31,15 @@ export interface idmRequestBdy {
 export class IdomooProvider {
 
 	outFormat: string = "VIDEO_MP4_V_X264_640X360_800_A_AAC_128";
-	storyboardId: number = 13442;//15614;
-	accountId: number = 2282;//2474;
-	reqBdy: idmRequestBdy;
-	secret: string = "RWf6jfWyVSe644c28ec48697446aa93288b9a925451YoxkSmH7h";//"8DGLDfTkKM8dd2cf8339c7f286c28687e8b0aa6e533TTTjSNDar";
+	storyboardId: number = 15614;//13442;
+	accountId: number = 2474;//2282;
+	reqBdy: any;
+	secret: string = "8DGLDfTkKM8dd2cf8339c7f286c28687e8b0aa6e533TTTjSNDar";//"RWf6jfWyVSe644c28ec48697446aa93288b9a925451YoxkSmH7h";
 	link: string = "https://usa-api.idomoo.com/api/cg";
 	vidLink: string = "";
   constructor(public http: Http) {
-    console.log('Hello IdomooProvider Provider');
-    this.reqBdy = 
+  	let self = this;
+    self.reqBdy = 
   	{
 	    response_format: "json",
 	    video: {
@@ -69,9 +69,13 @@ export class IdomooProvider {
 	    }
 	}
 	//this.test();
+	self.getUserPhotosFromStorage().then(res=>{
+		self.reqBdy.video.data = res;
+		self.testD();
+	}).catch(console.info);
   }
 
-  test(){
+  testD(){
   	let self = this;
   	//this.reqBdy.video.authentication_token = 
   	let loc = this.reqBdy;
@@ -83,11 +87,26 @@ export class IdomooProvider {
   	this.http.post(this.link, this.reqBdy, rq).toPromise()
   			.then(r=>{
   				let res = r.json();
+  				console.log(res);
   				self.vidLink = res.video.output_formats[0].links[0].url;
   				console.log(self.vidLink);
+  				localStorage.vid = self.vidLink;
   			})
   			.catch(console.error);
+  }
 
+  getUserPhotosFromStorage(){
+  	let dataMap : Array<{key:string,val:string}> = [];
+  	let cyg :Array<any> = eval(localStorage.cygHistory);
+  	let self = this;
+  	return new Promise((resolve,reject)=>{
+  		cyg.forEach((val,ind)=>{
+	  		dataMap.push({"key":"IMAGE_"+(ind+1),"val":val['photoUrl']});
+	  		dataMap.push({"key":"TEXT_"+(ind+1),"val":"DAY "+(ind+1)});
+	  	});	
+  		resolve(dataMap);
+  	})
+  	
   }
 
   utf8toISO(str:string){
