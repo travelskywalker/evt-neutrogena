@@ -29,20 +29,23 @@ video-preview {
 	}
 
 	#expand-this{
-		height:40vh;
+		height:45vh;
 		width:100%;
 		display:block;
 		clear:both;
 		-webkit-transition: height 0.1s linear 0s;
     	transition: height 0.1s linear 0s;
     	position: relative;
-    	&>iframe{
-    		height:30vh;
-    		width:80vw;
-    		margin:3vw 10vw 2vw;
-    		display: block;
-    		border:none;
-    		overflow:hidden;
+    	&>div.idm-player{
+	    	//iframe{
+	    		height:30vh !important;
+	    		width:80vw !important;
+	    		margin:3vw 10vw 2vw !important;
+	    		display: block !important;
+	    		border:none;
+	    		overflow:hidden;
+	    	//}
+
     	}
     	a{
     		opacity:0;
@@ -70,7 +73,7 @@ video-preview {
 	#expand-this.hidden-depths{
 		height:0;
 		*{
-			display: none;
+			display: none !important;
 		}
 	}
 
