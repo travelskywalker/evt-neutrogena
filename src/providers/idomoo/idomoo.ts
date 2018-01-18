@@ -22,22 +22,21 @@ export interface idmRequestBdy {
 		}],
 		storyboard_id: number,
 		account_id: number,
-		authentication_token: string,
-		landing_page_id: number
+		authentication_token: string//,
+		//landing_page_id: number
 	}
 }
 
 @Injectable()
 export class IdomooProvider {
 
-	outFormat: string = "VIDEO_HLS_V_X264_1280X720_1600_A_AAC_128";
-	storyboardId: number = 15614;
-	accountId: number = 2474;
-	landPageId: number = 3054;
+	outFormat: string = "VIDEO_MP4_V_X264_640X360_800_A_AAC_128";
+	storyboardId: number = 13442;//15614;
+	accountId: number = 2282;//2474;
 	reqBdy: idmRequestBdy;
-	secret: string = "8DGLDfTkKM8dd2cf8339c7f286c28687e8b0aa6e533TTTjSNDar";
+	secret: string = "RWf6jfWyVSe644c28ec48697446aa93288b9a925451YoxkSmH7h";//"8DGLDfTkKM8dd2cf8339c7f286c28687e8b0aa6e533TTTjSNDar";
 	link: string = "https://usa-api.idomoo.com/api/cg";
-
+	vidLink: string = "";
   constructor(public http: Http) {
     console.log('Hello IdomooProvider Provider');
     this.reqBdy = 
@@ -51,30 +50,43 @@ export class IdomooProvider {
 	        ],
 	        "data": [
 	        	{
-	        		"key":"IMAGE_1",
-	        		"val":"https://res.cloudinary.com/jandjstaging/image/upload/v1516066381/Happiness.jpg_1516066358854.jpg"
-	        	},
-
+	                "key": "TEXT1",
+	                "val": "YOLO! "
+	            },
+	            {
+	                "key": "hgjiygku",
+	                "val": "https://res.cloudinary.com/jandjstaging/image/upload/v1516066381/Happiness.jpg_1516066358854.jpg"
+	            },
+	            {
+	                "key": "IMAGE1",
+	                "val": "https://res.cloudinary.com/jandjstaging/image/upload/v1516066381/Happiness.jpg_1516066358854.jpg"
+	            }
 	        	],
 	        "storyboard_id": this.storyboardId,
 	        "account_id": this.accountId,
-		    "authentication_token": "w0dvjVQZSNrFEZoeqRGjbA--",
-		    "landing_page_id":this.landPageId
+		    "authentication_token": this.secret,//"w0dvjVQZSNrFEZoeqRGjbA--",
+		   // "landing_page_id":this.landPageId
 	    }
 	}
-	this.test();
+	//this.test();
   }
 
   test(){
-
+  	let self = this;
   	//this.reqBdy.video.authentication_token = 
   	let loc = this.reqBdy;
   	let buildSignature = loc.video.data[0].key + loc.video.data[0].val + this.secret;
-  	this.reqBdy.video.authentication_token = this.signStr(buildSignature);
+  	//this.reqBdy.video.authentication_token = this.signStr(buildSignature);
   	let hdr = new Headers();
   	hdr.append("Content-Type","application/json");
   	let rq = new RequestOptions({headers: hdr});
-  	this.http.post(this.link, this.reqBdy, rq).toPromise().then(console.info).catch(console.error);
+  	this.http.post(this.link, this.reqBdy, rq).toPromise()
+  			.then(r=>{
+  				let res = r.json();
+  				self.vidLink = res.video.output_formats[0].links[0].url;
+  				console.log(self.vidLink);
+  			})
+  			.catch(console.error);
 
   }
 

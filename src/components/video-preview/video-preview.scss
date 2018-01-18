@@ -1,0 +1,72 @@
+video-preview {
+
+	div.expandable{
+		width:100%;
+		display:block;
+		clear: both;
+		position:relative;
+		text-align:center;
+		padding-bottom:20px;
+		&>a{
+			font-size:4.5vw;
+			font-family:'HelveticaNeue-Light';
+			color:rgb(121,26,127);
+			text-transform:uppercase;
+			text-decoration:none;
+			margin:2vh 2vw;
+		}
+
+
+		&>img{
+			max-height:3vw;
+			&.invert{
+				transform:rotateZ(180deg);
+			}
+		}
+	}
+
+	#expand-this{
+		height:35vh;
+		width:100%;
+		display:block;
+		clear:both;
+		-webkit-transition: height 0.1s linear 0s;
+    	transition: height 0.1s linear 0s;
+    	position: relative;
+    	&>video{
+    		height:25vh;
+    		width:80vw;
+    		margin:3vw 10vw 2vw;
+    		display: block;
+    	}
+    	a{
+    		opacity:0;
+    		color:transparent;
+    		text-decoration:none;
+	    	button[ion-button]{
+	    		background-image: url('../assets/images/signup_btn.png');
+	    		background-size:100% auto;
+	    		background-repeat:no-repeat;
+	    		background-color:transparent;
+		        display: block;
+		        margin:auto;
+		        color: #fff;
+		        line-height:17px;
+		        font-size:4vw;
+		        font-family:'HelveticaNeue-Light';
+		        text-transform:uppercase;
+	    		span{
+
+	    		}
+	    	}
+	    }
+	}
+
+	#expand-this.hidden-depths{
+		height:0;
+		*{
+			display: none;
+		}
+	}
+
+}

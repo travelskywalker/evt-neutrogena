@@ -1,4 +1,4 @@
-import { Component , Renderer} from '@angular/core';
+import { Component , Renderer2, ViewChild, ElementRef} from '@angular/core';
 import { IonicPage, NavController, NavParams,ViewController } from 'ionic-angular';
 
 /**
@@ -14,9 +14,15 @@ import { IonicPage, NavController, NavParams,ViewController } from 'ionic-angula
   templateUrl: 'video-modal.html',
 })
 export class VideoModalPage {
+  @ViewChild('vid') vid : ElementRef;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,public render: Renderer2) {
+      this.render.addClass(viewCtrl.pageRef().nativeElement, 'custom-popup');
+  }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,public renderer: Renderer) {
-      this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'custom-popup', true);
+  ngAfterViewInit(){
+    //this.vid.nativeElement.play(); //autoplay;
+    this.render.setProperty(this.vid.nativeElement,"autoplay",true);
+    this.render.setProperty(this.vid.nativeElement,"loop",true);
   }
 
   ionViewDidLoad() {

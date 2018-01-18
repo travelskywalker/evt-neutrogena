@@ -11,6 +11,7 @@ import { ProgressModalComponentModule } from './progress-modal/progress-modal.mo
 import { ReorderModalComponentModule } from './reorder-modal/reorder-modal.module';
 import { CalendarComponentModule } from './calendar/calendar.module';
 import { ImageTrackerComponentModule } from './image-tracker/image-tracker.module';
+import { VideoPreviewComponentModule } from './video-preview/video-preview.module';
 @NgModule({
 	declarations: [ScanComponent,
     ],
@@ -26,6 +27,7 @@ import { ImageTrackerComponentModule } from './image-tracker/image-tracker.modul
     ReorderModalComponentModule,
     CalendarComponentModule,
     ImageTrackerComponentModule,
+    VideoPreviewComponentModule,
   ]
 })
 export class ComponentsModule {}

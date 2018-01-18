@@ -61,6 +61,7 @@ export class ImageTrackerComponent {
     });
   }
 
+/* transfer to EVT service */
   patchEVTUserCF(){
     let self = this;
     this.evt.getUserCustomFields().then((cF)=>{
