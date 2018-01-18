@@ -21,7 +21,10 @@ export class VideoModalPage {
 
   ngAfterViewInit(){
     //this.vid.nativeElement.play(); //autoplay;
-    this.render.setProperty(this.vid.nativeElement,"autoplay",true);
+    setTimeout(()=>{
+      this.vid.nativeElement.play();
+    },1000)
+    //this.render.setProperty(this.vid.nativeElement,"autoplay",true);
     this.render.setProperty(this.vid.nativeElement,"loop",true);
   }
 

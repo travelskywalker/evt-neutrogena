@@ -6,7 +6,7 @@ video-preview {
 		clear: both;
 		position:relative;
 		text-align:center;
-		padding-bottom:20px;
+		padding-bottom:0;
 		&>a{
 			font-size:4.5vw;
 			font-family:'HelveticaNeue-Light';
@@ -23,21 +23,26 @@ video-preview {
 				transform:rotateZ(180deg);
 			}
 		}
+		&.hidden-depths{
+			padding-bottom:20px;
+		}
 	}
 
 	#expand-this{
-		height:35vh;
+		height:40vh;
 		width:100%;
 		display:block;
 		clear:both;
 		-webkit-transition: height 0.1s linear 0s;
     	transition: height 0.1s linear 0s;
     	position: relative;
-    	&>video{
-    		height:25vh;
+    	&>iframe{
+    		height:30vh;
     		width:80vw;
     		margin:3vw 10vw 2vw;
     		display: block;
+    		border:none;
+    		overflow:hidden;
     	}
     	a{
     		opacity:0;

@@ -1,17 +1,18 @@
 <!-- Generated template for the VideoPreviewComponent component -->
 <div>
-  <div class="expandable" (tap)="toggleView()">
+  <div class="expandable" (tap)="toggleView()"[ngClass]="{'hidden-depths':!expanded}">
   	<img [src]="assets?.arr" [ngClass]="{'invert':expanded}"/>
   	<a class="text">Preview Video</a>
   	<img [src]="assets?.arr" [ngClass]="{'invert':expanded}"/>
   </div>
   <div id="expand-this" [ngClass]="{'hidden-depths':!expanded}">
 
-	  <video width="auto" controls>
+	  <!--video width="auto" controls>
 	    <source [src]="assets?.vid" type="video/mp4">
 
 	    Your browser does not support HTML5 video.
-	  </video>
+	  </video-->
+    <iframe id="aura-widget-div" [src]="assets?.link" (load)="isframeLoaded()"></iframe>
   	<a href="{{assets?.vid}}" download><button ion-button>Download to Camera Roll</button></a>
   </div>
 </div>
