@@ -29,7 +29,7 @@
 
 	</section>
 	<image-tracker (uploaded)="updateCalendar($event)"></image-tracker>
-	<video-preview></video-preview>
+	<video-preview *ngIf="photoCount > 1"></video-preview>
 	<calendar></calendar>
 
 	<footer></footer>

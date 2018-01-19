@@ -6,6 +6,7 @@ import { Slides, LoadingController } from 'ionic-angular';
 import * as loadImage from 'blueimp-load-image';
 
 import { EvtProvider } from "../../providers/evt/evt";
+import { AuthService } from "../../providers/auth/auth.service";
 /**
  * Generated class for the ImageTrackerComponent component.
  *
@@ -27,16 +28,17 @@ export class ImageTrackerComponent {
   canAddTodaysPhoto: boolean = false;
   @ViewChild('Slides') slider: Slides;
   @Output() uploaded: EventEmitter<any> = new EventEmitter();
+  isLoggedIn: boolean = false;
 
-  constructor(private loader: LoadingController, private evt: EvtProvider) {
+  constructor(private loader: LoadingController, private evt: EvtProvider, private a0: AuthService) {
     console.log('Hello ImageTrackerComponent Component');
     this.text = 'Hello World';
   }
 
   ngOnInit(){
-    //console.log(loadImage);
+    this.isLoggedIn = this.a0.loggedIn();
+    console.log(!this.isLoggedIn);
   }
-
 
   ngAfterViewInit(){
   	/*setTimeout(()=>{
@@ -44,15 +46,14 @@ export class ImageTrackerComponent {
   	},300);*/
     let self = this;
     this.evt.getUserCustomFields().then((cF)=>{
-      
       self.photoProg = cF.photoHistory || [];
       if(self.photoProg.length < 1){
         this.fetchCYGfromStorage();
       }
       else{
         localStorage.cygHistory = JSON.stringify(self.photoProg);
-        self.uploaded.emit(self.cloudName);
       }
+      self.uploaded.emit(false);
       setTimeout(()=>{
         self.slider.slideTo(self.photoProg.length-1);
       },500);
@@ -65,7 +66,7 @@ export class ImageTrackerComponent {
   patchEVTUserCF(){
     let self = this;
     this.evt.getUserCustomFields().then((cF)=>{
-      let nCF = cF || [];
+      let nCF = cF || {};
       nCF.photoHistory = self.photoProg;
       console.log(nCF);
       return nCF;
@@ -101,7 +102,7 @@ export class ImageTrackerComponent {
   canIHasToday():PromiseLike<any>{
     let self = this;
     return new Promise((resolve,reject)=>{
-      if(typeof localStorage.cygHistory == "undefined"){
+      if(typeof localStorage.cygHistory == "undefined" || localStorage.cygHistory === "{}"){
         resolve(false);
       }else{
         let localCpy :Array<any>= JSON.parse(localStorage.cygHistory);
@@ -183,7 +184,7 @@ export class ImageTrackerComponent {
               setTimeout(()=>{
                 self.slider.slideTo(self.photoProg.length-1);
                 localStorage.cygHistory = JSON.stringify(self.photoProg);
-                self.uploaded.emit(self.cloudName);
+                self.uploaded.emit(true);
                 self.canAddTodaysPhoto = false;
                 self.canUploadPhoto();
               },500);
@@ -223,9 +224,13 @@ export class ImageTrackerComponent {
   }
 
   fetchCYGfromStorage(){
-    if(localStorage.cygHistory && JSON.parse(localStorage.cygHistory)){
-      this.photoProg = this.cygHistory = JSON.parse(localStorage.cygHistory);
+    if(localStorage.cygHistory && localStorage.cygHistory !== "{}" && JSON.parse(localStorage.cygHistory)){
+      this.photoProg = JSON.parse(localStorage.cygHistory);
     }
+  }
+
+  getPhotoCount(){
+    return this.photoProg.length;
   }
 
 }

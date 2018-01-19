@@ -20,6 +20,7 @@ calendar {
 			    padding: 0;
 			    height: 5vw;
 			    margin: 0 1vw 2.5vw 2vw;
+			    box-shadow: none;
 			    display: inline-block;
 			    	img{
 			    		max-height: 110%;
@@ -69,8 +70,8 @@ calendar {
 			    float: left;
 			    height: calc(8.1425vw - 2.75vw);
 			    vertical-align: middle;
-			    margin-top: 0.5vw;
-			    margin-bottom: 2vw;
+			    margin-top: 1vw;
+			    margin-bottom: 2.5vw;
 				&.selfie{
 					position: relative;
 					z-index: 2;

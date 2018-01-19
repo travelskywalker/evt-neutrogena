@@ -111,7 +111,7 @@ export class CalendarComponent {
 	}
   
   fetchCYGfromStorage(){
-    if(localStorage.cygHistory && JSON.parse(localStorage.cygHistory)){
+    if(localStorage.cygHistory && localStorage.cygHistory !== "{}" && JSON.parse(localStorage.cygHistory)){
       this.cygHistory = JSON.parse(localStorage.cygHistory);
     }
   }

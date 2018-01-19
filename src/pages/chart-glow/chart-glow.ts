@@ -5,8 +5,8 @@ import { LoginPage } from '../login/login';
 
 import { CalendarComponent } from "../../components/calendar/calendar";
 import { ImageTrackerComponent } from "../../components/image-tracker/image-tracker";
+import { VideoPreviewComponent } from "../../components/video-preview/video-preview";
 
-import { IdomooProvider } from "../../providers/idomoo/idomoo";
 import { AuthService } from "../../providers/auth/auth.service";
 /**
  * Generated class for the ChartGlowPage page.
@@ -24,10 +24,12 @@ export class ChartGlowPage {
 
 	@ViewChild(CalendarComponent) cal: CalendarComponent;
 	@ViewChild(ImageTrackerComponent) imt: ImageTrackerComponent;
+	@ViewChild(VideoPreviewComponent) vp: VideoPreviewComponent;
 	expanded: boolean = false;
 	def : string = "down";
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private idomoo: IdomooProvider, private auth0: AuthService) {
-  	console.log(idomoo.accountId);
+  	photoCount: number = 0;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private auth0: AuthService) {
   }
 
   ionViewDidLoad() {
@@ -46,6 +48,7 @@ export class ChartGlowPage {
 
   ngAfterViewInit(){
   	console.log(this.cal);
+  	this.photoCount = this.imt.getPhotoCount();
   }
 
   openModal(){
@@ -72,6 +75,12 @@ export class ChartGlowPage {
   	console.log($event);
   	this.cal.fetchCYGfromStorage();
   	this.cal.buildCalendarHist();
+  	this.photoCount = this.imt.getPhotoCount();
+  	if($event){
+  		this.vp.expanded = false;
+  		this.vp.resetPlayer();
+  	}
+  	
   }
 
 }

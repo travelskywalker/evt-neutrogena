@@ -178,6 +178,7 @@ export class AuthService {
     localStorage.removeItem('evrythngInfo');
     localStorage.removeItem('courseHistory');
     localStorage.removeItem('lessonCtr');
+    localStorage.removeItem('cygHistory');
 
   }
 
@@ -245,6 +246,7 @@ export class AuthService {
     localStorage.removeItem('myProduct');
     localStorage.removeItem('alive');
     localStorage.removeItem('courseHistory');
+    localStorage.removeItem('cygHistory');
     localStorage.removeItem('lessonCtr');
     this.webAuth.logout({
       returnTo: Config.auth0.redirectUri,
