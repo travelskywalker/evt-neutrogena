@@ -76,7 +76,7 @@ export class ChartGlowPage {
   	this.cal.fetchCYGfromStorage();
   	this.cal.buildCalendarHist();
   	this.photoCount = this.imt.getPhotoCount();
-  	if($event){
+  	if($event && this.photoCount > 1){
   		this.vp.expanded = false;
   		this.vp.resetPlayer();
   	}

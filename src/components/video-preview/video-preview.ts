@@ -17,6 +17,7 @@ export class VideoPreviewComponent {
   text: string;
   assets: Array<any> = [];
   expanded: boolean = false;
+  generated: boolean = false;
   @ViewChild('plyr') plyr : ElementRef;
 
   constructor(private idomoo: IdomooProvider, private render: Renderer2) {
@@ -35,7 +36,8 @@ export class VideoPreviewComponent {
 
   toggleView(){
   	this.expanded = !this.expanded;
-  	if(this.expanded){
+  	if(this.expanded && !this.generated){
+  		this.generated = true;
   		this.assets['vid'] = localStorage.vid;
   		this.idomoo.generateVid().then(res=>{
   			console.log(res);

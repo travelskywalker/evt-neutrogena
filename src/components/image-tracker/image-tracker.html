@@ -11,7 +11,7 @@
 	<ion-slide class="more-pic">
 		<p class="dayctr">Day {{photoProg?.length+1}}</p>
 		<div class="photo-main">
-   	 		<input type="file" accept="image/*" (change)="takePic($event)" capture="camera" [disabled]="!canAddTodaysPhoto || !isLoggedIn"/>
+   	 		<input type="file" accept="image/*" (change)="takePic($event)" capture="camera" [disabled]="!canAddTodaysPhoto"/> <!--  || !isLoggedIn -->
    	 	</div>
 	</ion-slide>
 	<ion-slide class="buffer">

@@ -1,14 +1,14 @@
 export const Config = {
   production: false,
-  evt_app: "rGenOhFlJnk80ELN0xUzuNJtik5nYaxmZcF6fpE0OKwZdLkTS7yEF6zxvbrQtOxnVg3MvBgo2gWXcx2F",
+  evt_app: "UNFlt65VdIwXzmNbndPc7LBKTPoQ68ROhq0nTdvXieu66esipebEBNXdL3NpcsMfbon8xOfhppVS60IN",
   evt_base_url: "https://api-eu.evrythng.com",
-  projectId: "UnSptk5ne6s7QNRawgMDtDge",
-  appId: "UHbKt2qUe6s7QrwaRgMg9gkd",
+  projectId: "U3NNqQhUe6s7QraRakG4fpNc",
+  appId: "UG7N6Q2yVMsrtNRaak34fprg",
   auth0:{
-    clientID: '67JAI87YgeGyMWDBKZHedJ9LccRcjBC7',
-    domain: 'evtjandj.eu.auth0.com',
+    clientID: '9boVWoN5VPtWpjRrzzsoXWtxzW5J1wNX',
+    domain: 'jandjtest.eu.auth0.com',
     responseType: 'token id_token',
-    audience: 'https://evtjandj.eu.auth0.com/userinfo',
+    audience: 'https://jandjtest.eu.auth0.com/userinfo',
     redirectUri: window.location.origin,//'http://localhost:8100',
     scope: 'openid'
   },
@@ -70,6 +70,6 @@ export const Config = {
   anonUserDaysToSignInNotice: 2, //days until an anon user will see a pop-up to sign-in / sign-up
   thngDaysLifeSpan: 30, //the number of days that the activator is meant for. expires cookie and a new one is set
   dayToReorderNotice: 23, //day N of 30 (THNG life span) days before a logged-in user will see a pop-up since sign-up
-  fbUserMetadataNS: 'http://evt-neutrogena-test.netlify.com/', //namespace used on rules for FB log-in
+  fbUserMetadataNS: 'http://neutrogena-dev.netlify.com/', //namespace used on rules for FB log-in
   scanRevertExpiry: 24 // hours until the app sets the scan as homepage instead of the aura content page
 };
