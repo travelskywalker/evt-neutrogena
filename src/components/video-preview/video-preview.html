@@ -5,15 +5,15 @@
   	<a class="text">Preview Video</a>
   	<img [src]="assets?.arr" [ngClass]="{'invert':expanded}"/>
   </div>
-  <div id="expand-this" [ngClass]="{'hidden-depths':!expanded}">
+  <div id="expand-this" #xpand [ngClass]="{'hidden-depths':!expanded,'inactive':!iframeLoad}">
 
 	  <!--video width="auto" controls>
 	    <source [src]="assets?.vid" type="video/mp4">
 
 	    Your browser does not support HTML5 video.
 	  </video-->
-    <!--iframe id="aura-widget-div" [src]="assets?.link" (load)="isframeLoaded()"></iframe-->
-    <div class="idm-player" #plyr></div>
-  	<a href="{{assets?.vid}}" download id="idomoo_download_link"><button ion-button>Download to Camera Roll</button></a>
+    <iframe id="idm" [src]="assets?.link" (load)="isframeLoaded()" #plyr></iframe>
+    <!--div class="idm-player" #plyr></div-->
+  	<a href="{{assets?.vid}}" download id="idomoo_download_link" (tap)="DL()"><button ion-button>Download to Camera Roll</button></a>
   </div>
 </div>

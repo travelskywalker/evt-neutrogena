@@ -11,6 +11,7 @@ import { HomePage } from '../pages/home/home';
 
 import { EvtProvider } from "../providers/evt/evt";
 import { AppProvider } from "../providers/app/app";
+import { IdomooProvider } from "../providers/idomoo/idomoo";
 
 @Component({
   templateUrl: 'app.html'
@@ -28,7 +29,8 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen
     , public app: AppProvider
-    , public evt: EvtProvider,private menu: MenuController ) {
+    , public evt: EvtProvider,private menu: MenuController,
+      public idomoo: IdomooProvider) {
     this.checkThngExpiry();
     this.initializeApp();
 

@@ -1,6 +1,9 @@
 import { Component, ViewChild, Renderer2, ElementRef } from '@angular/core';
 
+import { DomSanitizer } from '@angular/platform-browser';
+
 import { IdomooProvider } from '../../providers/idomoo/idomoo';
+import { EvtProvider } from '../../providers/evt/evt';
 
 /**
  * Generated class for the VideoPreviewComponent component.
@@ -19,47 +22,58 @@ export class VideoPreviewComponent {
   expanded: boolean = false;
   generated: boolean = false;
   @ViewChild('plyr') plyr : ElementRef;
+  @ViewChild('xpand') xpand : ElementRef;
 
-  constructor(private idomoo: IdomooProvider, private render: Renderer2) {
+  constructor(public idomoo: IdomooProvider, public render: Renderer2, private sanitizer: DomSanitizer, private evt: EvtProvider) {
   }
 
   ngAfterViewInit(){
     this.assets['arr'] = "../assets/images/down-arrow.png";
+    this.assets['link'] = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/images/Selflove.jpg");
     console.log(this.plyr.nativeElement.innerHTML);
   }
 
   isframeLoaded() {
-  	setTimeout(()=>{
-  		console.log("isframeLoaded");
-  	},500);
   }
 
   toggleView(){
+  	let self = this;
   	this.expanded = !this.expanded;
-  	if(this.expanded && !this.generated){
-  		this.generated = true;
-  		this.assets['vid'] = localStorage.vid;
+  	if(this.expanded){
+  		self.evt.createThngAction('_PreviewVideo');
+  		self.assets['vid'] = localStorage.vid;
   		this.idomoo.generateVid().then(res=>{
-  			console.log(res);
+    		this.assets['link'] = this.sanitizer.bypassSecurityTrustResourceUrl("//idoplayer.idomoo.com/17//index.html?u="+localStorage.vid+"&ga_enable=null&autostart=1");
+  			/*console.log(res);
 			let scr : HTMLScriptElement = document.createElement('script');
 			scr.type = "text/javascript";
 			scr.id = "idomooScript";
 			scr.src = "../assets/scripts/idomoo-player.js";
 
 			let dlLink = document.getElementById('idomoo_download_link');
-			dlLink.insertBefore(scr,dlLink.childNodes[0]);
+			self.render.appendChild(self.xpand.nativeElement,scr);*/
+			//dlLink.insertBefore(scr,dlLink.childNodes[0]);
 		});
   	}
 
   }
 
-  resetPlayer(){
-  	document.getElementById('idomooScript').remove();
-  	this.render.setProperty(this.plyr.nativeElement,'innerHTML',"");
+  unloadIdomooPlyr(){
+  	let scr = document.getElementById('idomooScript');
+  	console.log(scr);
+  	if(scr){
+  		this.render.removeChild(this.xpand.nativeElement,scr);
+  		this.render.setProperty(this.plyr.nativeElement,'innerHTML','');
+  	}
   }
 
-  dL(){
-  	
+  resetPlayer(){
+  	//this.render.setProperty(this.plyr.nativeElement,'innerHTML',"");
+  	this.assets['link'] = this.sanitizer.bypassSecurityTrustResourceUrl("../assets/images/Selflove.jpg");
+  }
+
+  DL(){
+  	this.evt.createThngAction('_DownloadVideo');	
   }
 
 }

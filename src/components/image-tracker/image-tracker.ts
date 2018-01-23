@@ -92,6 +92,9 @@ export class ImageTrackerComponent {
       console.log(i);
       if(i){
         self.canAddTodaysPhoto = false;
+        //self.canAddTodaysPhoto = true;
+        //self.tstamp = self.getNextAvailablePushDate();
+        //console.log('shouldve used ',self.getNextAvailablePushDate());
       }
       else{
         self.canAddTodaysPhoto = true;
@@ -138,6 +141,12 @@ export class ImageTrackerComponent {
   	this.slider.lockSwipeToPrev(false);
   }
 
+  takePhotoAction($event){
+    //console.log($event);
+    this.evt.createThngAction('_TakePhoto');
+  }
+
+/* initiate picture */
   takePic($event){
     let self = this;
     if($event.target.files && $event.target.files[0]){
@@ -179,6 +188,13 @@ export class ImageTrackerComponent {
               var response = JSON.parse(xhr.responseText);
               console.log(response);
               self.photoProg.push({photoUrl:response.secure_url,timestamp:self.tstamp});
+
+              self.evt.createThngAction('_AddPhoto', {
+                "customFields": {
+                  "photoUrl": response.secure_url
+                }
+              });
+
               self.patchEVTUserCF();
               self.unlockSlides();
               setTimeout(()=>{
@@ -221,6 +237,12 @@ export class ImageTrackerComponent {
 
   toLocaleDateString(dt){
     return new Date(parseInt(dt)).toLocaleDateString();
+  }
+
+  getNextAvailablePushDate(){
+    let dy = JSON.parse(localStorage.cygHistory);
+    let tmpD = new Date().setDate(new Date(dy[dy.length-1]['timestamp']).getDate() + 1);
+    return tmpD;
   }
 
   fetchCYGfromStorage(){

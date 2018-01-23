@@ -20,22 +20,29 @@ export class ProgressModalComponent {
   @Input('course') course?: string;
   @Input('length') length ?: number = 10;
   @Input('show') show ?: boolean = false;
+  @Input('skin') skin ?: boolean = false;
   constructor(private nav: NavController, private render: Renderer2,
               private elem:ElementRef, private app: AppProvider) {
   }
 
   ngOnInit(){
 
-    this.length = this.app.getCourseDuration(this.course);
-  	console.log("progress set" , this.day, this.length);
+    if(!this.skin){
+      this.length = this.app.getCourseDuration(this.course);
+    	console.log("progress set" , this.day, this.length);
+    }
 
   }
 
   toHome(course?: string){
 
-    this.app.clearLocalHistory();
-    //this.app.setActiveCourse(course);
-    this.nav.setRoot(AuraMainPage, {reload: true, lastplayed: course});
+    if(this.skin){
+      this.toggleView(false);
+    }else{
+      this.app.clearLocalHistory();
+      //this.app.setActiveCourse(course);
+      this.nav.setRoot(AuraMainPage, {reload: true, lastplayed: course}); 
+    }
 
   }
 

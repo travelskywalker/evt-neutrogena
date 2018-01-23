@@ -29,24 +29,26 @@ video-preview {
 	}
 
 	#expand-this{
-		height:50vh;
+		height:40vh;
 		width:100%;
 		display:block;
 		clear:both;
 		-webkit-transition: height 0.1s linear 0s;
     	transition: height 0.1s linear 0s;
+	    		z-index:3;
     	position: relative;
-    	&>div.idm-player{
-	    	//iframe{
+    	//&>div.idm-player{
+	    	iframe{
 	    		height:30vh !important;
 	    		width:80vw !important;
 	    		margin:3vw 10vw 2vw !important;
 	    		display: block !important;
 	    		border:none;
 	    		overflow:hidden;
-	    	//}
+	    		position: relative;
+	    	}
 
-    	}
+    	//}
     	a{
     		opacity:0;
     		color:transparent;

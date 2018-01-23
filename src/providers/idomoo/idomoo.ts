@@ -8,23 +8,6 @@ import 'rxjs/add/operator/map';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-export interface idmRequestBdy {
-	response_format: string,
-	video: {
-		output_formats: [
-		{
-			format: string
-		}],
-		data: [{
-			key:string,
-			val:string
-		}],
-		storyboard_id: number,
-		account_id: number,
-		authentication_token: string//,
-		//landing_page_id: number
-	}
-}
 
 @Injectable()
 export class IdomooProvider {
@@ -82,6 +65,7 @@ export class IdomooProvider {
   				self.vidLink = res.video.output_formats[0].links[0].url;
   				console.log(self.vidLink);
   				localStorage.vid = self.vidLink;
+  				self.storeLastPhoto();
   			})
   			.catch(console.error);
   }
@@ -100,9 +84,20 @@ export class IdomooProvider {
   	
   }
 
+  getLastPhoto(){
+  	let lastPhoto = JSON.parse(localStorage.cygHistory);
+  	return lastPhoto[lastPhoto.length-1]['photoUrl'];
+  }
+
+  storeLastPhoto(){
+  	localStorage.lastPhoto = this.getLastPhoto();
+  }
 
   generateVid():PromiseLike<any>{
   	let self = this;
+  	if(localStorage.lastPhoto == this.getLastPhoto()){
+  		return Promise.resolve("same");
+  	}
 	return self.getUserPhotosFromStorage().then(res=>{
 		self.reqBdy.video.data = res;
 		return self.testD();

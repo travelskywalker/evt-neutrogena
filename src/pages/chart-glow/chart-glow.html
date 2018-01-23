@@ -1,10 +1,11 @@
 <aura-head></aura-head>
+<progress-modal [day]="photoCount" [skin]="true" [length]="30" [show]="false"></progress-modal>
 <ion-content>
 
 
 	<section class="track-preview">
 		<a class="progress-days">
-			Day 16 of 30
+			Day {{photoCount + 1}} of 30
 			<!--Day {{day < app?.activeDur ? (day+addLesson):day}} of {{app?.activeDur}}-->
 		</a>
 		<p class="section-title">
@@ -14,7 +15,7 @@
 		<a class="launch-preview" (click)="openModal()">Preview Video Example</a>
 		<!--div class="day-tracker container" (scroll)="evtScroll($event)"-->
 		<button ion-button class="vid" (tap)="toSignup()" *ngIf="!isLogged()">Sign In</button>
-		<button ion-button class="vid" *ngIf="isLogged()"><input type="file" accept="image/*" (change)="imt?.takePic($event)" capture="camera" [disabled]="!imt?.canAddTodaysPhoto"/>Take Photo</button>
+		<button ion-button class="vid" *ngIf="isLogged()"><input type="file" accept="image/*" (change)="imt?.takePic($event)" capture="camera" [disabled]="!imt?.canAddTodaysPhoto" (tap)="imt?.takePhotoAction($event)"/>Take Photo</button>
 		<!--/div-->
 
 		<div class="expandable">
@@ -29,7 +30,7 @@
 
 	</section>
 	<image-tracker (uploaded)="updateCalendar($event)"></image-tracker>
-	<video-preview *ngIf="photoCount > 1"></video-preview>
+	<video-preview [ngClass]="{'hidden':photoCount <= 1}"></video-preview>
 	<calendar></calendar>
 
 	<footer></footer>
